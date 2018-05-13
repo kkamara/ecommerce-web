@@ -9,6 +9,8 @@ class Product extends Model
 {
     use SoftDeletes;
 
+    protected $guarded = [];
+
     protected $dates = ['deleted_at'];
 
     public function path()
@@ -16,8 +18,8 @@ class Product extends Model
         return $this->attributes['slug'];
     }
 
-    public function image_path()
+    public function getImagePathAttribute()
     {
-        return $this->attributes['image_path'] ?? '/image/products/default/not-found.jpg';
+        return $this->attributes['image_path'] ?? 'image/products/default/not-found.jpg';
     }
 }

@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('street_address3')->nullable();
             $table->string('street_address4')->nullable();
             $table->string('county')->nullable();
+            $table->string('city');
             $table->string('country');
             $table->string('postcode');
             $table->rememberToken();
