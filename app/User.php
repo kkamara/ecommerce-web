@@ -32,6 +32,16 @@ class User extends Authenticatable
 
     public function path()
     {
-        return $this->attributes['slug'];
+        return url('/users/'.$this->attributes['slug']);
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->attributes['first_name'] .' ' . $this->attributes['last_name'];
+    }
+
+    public function company()
+    {
+        return $this->hasOne('App\Company', 'user_id');
     }
 }

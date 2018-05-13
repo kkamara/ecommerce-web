@@ -15,11 +15,21 @@ class Product extends Model
 
     public function path()
     {
-        return $this->attributes['slug'];
+        return url('/products/'.$this->attributes['slug']);
     }
 
     public function getImagePathAttribute()
     {
         return $this->attributes['image_path'] ?? 'image/products/default/not-found.jpg';
+    }
+
+    public function company()
+    {
+        return $this->belongsTo('App\Company', 'company_id');
+    }
+
+    public function getCostAttribute()
+    {
+        return "£".number_format($this->attributes['cost'], 2);
     }
 }

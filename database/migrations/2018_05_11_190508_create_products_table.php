@@ -15,13 +15,16 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('user_id')
-                  ->references('id')->on('users')
+            $table->integer('company_id')
+                  ->references('id')->on('companies')
                   ->onDelete('cascade');
             $table->string('slug');
             $table->string('name');
+            $table->string('short_description');
+            $table->text('long_description')->nullable();
+            $table->text('product_details')->nullable();
             $table->string('image_path')->nullable();
-            $table->integer('cost');
+            $table->float('cost', 8, 2);
             $table->boolean('shippable')->default(0);
             $table->boolean('free_delivery')->default(0);
             $table->timestamps();
