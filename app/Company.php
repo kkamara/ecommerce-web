@@ -13,7 +13,7 @@ class Company extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function path()
+    public function getPathAttribute()
     {
         return url('/companies/'.$this->attributes['slug']);
     }

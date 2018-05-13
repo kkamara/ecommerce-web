@@ -44,9 +44,18 @@ class ProductController extends Controller
      * @param  \App\r  $r
      * @return \Illuminate\Http\Response
      */
-    public function show(r $r)
+    public function show($productSlug)
     {
-        //
+        $product = Product::where('slug', $productSlug)->first();
+
+        if($product !== null)
+        {
+            return redirect('/');
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**

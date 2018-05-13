@@ -13,7 +13,7 @@ class Product extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function path()
+    public function getPathAttribute()
     {
         return url('/products/'.$this->attributes['slug']);
     }

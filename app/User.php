@@ -30,7 +30,7 @@ class User extends Authenticatable
 
     protected $dates = ['deleted_at'];
 
-    public function path()
+    public function getPathAttribute()
     {
         return url('/users/'.$this->attributes['slug']);
     }
