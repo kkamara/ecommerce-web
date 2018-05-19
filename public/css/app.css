@@ -10416,3 +10416,7 @@ a.text-dark:focus {
   margin-bottom: 50px;
 }
 
+img {
+  cursor: pointer;
+}
+

@@ -20,7 +20,7 @@ class Product extends Model
 
     public function getImagePathAttribute()
     {
-        return $this->attributes['image_path'] ?? 'image/products/default/not-found.jpg';
+        return $this->attributes['image_path'] ?? '/image/products/default/not-found.jpg';
     }
 
     public function company()

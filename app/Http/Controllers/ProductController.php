@@ -50,7 +50,9 @@ class ProductController extends Controller
 
         if($product !== null)
         {
-            return redirect('/');
+            return view('product.show', [
+                'title' => $product->name
+            ])->with(compact('product'));
         }
         else
         {
