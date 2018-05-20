@@ -13,7 +13,7 @@ use Faker\Generator as Faker;
 |
 */
 
-
+// Factories should be run individually in the order of which they are defined
 $factory->define(App\User::class, function (Faker $faker) {
 
     $name = array(
@@ -65,10 +65,35 @@ $factory->define(App\Product::class, function(Faker $faker) {
         'long_description' => $faker->paragraph(4),
         'product_details' => $faker->paragraph(5),
         'slug' => str_slug($name, '-'),
-        'image_path' => 'image/products/default/not-found.jpg',
+        'image_path' => '/image/products/default/not-found.jpg',
         'cost' => $faker->randomNumber(2),
         'shippable' => rand(0, 1),
         'free_delivery' => rand(0, 1),
     ];
 });
 
+$factory->define(App\ProductReview::class, function (Faker $faker) {
+    $user = App\User::inRandomOrder()->first();
+    $product = App\Product::inRandomOrder()->first();
+
+    return [
+        'user_id' => $user->id,
+        'product_id' => $product->id,
+        'score' => rand(0, 5),
+        'content' => (rand(0, 1) === 1) ? $faker->paragraphs(rand(0,5)) : null,
+    ];
+});
+
+$factory->define(App\OrderHistory::class, function(Faker $faker) {
+    $user = App\User::inRandomOrder()->first();
+    $product = App\Product::inRandomOrder()->first();
+
+    return [
+        'user_id' => $user->id,
+        'product_id' => $product->id,
+    ];
+});
+
+$factory->define(App\ProductReview::class, function(Faker $faker) {});
+
+$factory->define(App\Cart::class, function(Faker $faker) {});

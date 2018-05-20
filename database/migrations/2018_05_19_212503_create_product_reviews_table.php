@@ -22,7 +22,7 @@ class CreateProductReviewsTable extends Migration
                   ->references('id')->on('products')
                   ->onDelete('cascade');
             $table->smallinteger('score');
-            $table->text('content');
+            $table->text('content')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
