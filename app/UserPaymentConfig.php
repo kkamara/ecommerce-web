@@ -10,4 +10,9 @@ class UserPaymentConfig extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function orderHistory()
+    {
+        return $this->hasOne('App\OrderHistory');
+    }
 }

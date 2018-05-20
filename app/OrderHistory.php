@@ -15,6 +15,11 @@ class OrderHistory extends Model
 
     public function product()
     {
-        return $this->hasOne('App\Product');
+        return $this->belongs('App\Product');
+    }
+
+    public function userPaymentConfig()
+    {
+        return $this->belongsTo('App\UserPaymentConfig', 'user_payment_config_id');
     }
 }

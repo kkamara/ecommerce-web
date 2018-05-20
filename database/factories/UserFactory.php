@@ -87,7 +87,7 @@ $factory->define(App\Product::class, function(Faker $faker) {
         'product_details' => $faker->paragraph(5),
         'slug' => str_slug($name, '-'),
         'image_path' => '/image/products/default/not-found.jpg',
-        'cost' => $faker->randomFloat(2),
+        'cost' => $faker->randomNumber(2),
         'shippable' => mt_rand(0, 1),
         'free_delivery' => mt_rand(0, 1),
     ];
@@ -113,6 +113,7 @@ $factory->define(App\OrderHistory::class, function(Faker $faker) {
         'user_id' => $user->id,
         'product_id' => $product->id,
         'cost' => $product->cost,
+        'user_payment_config_id' => $user->userPaymentConfig[0]->id,
     ];
 });
 
