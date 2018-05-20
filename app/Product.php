@@ -28,8 +28,13 @@ class Product extends Model
         return $this->belongsTo('App\Company', 'company_id');
     }
 
-    public function getCostAttribute()
+    public function getFormattedCostAttribute()
     {
         return "£".number_format($this->attributes['cost'], 2);
+    }
+
+    public function getCostAttribute()
+    {
+        return $this->attributes['cost'];
     }
 }

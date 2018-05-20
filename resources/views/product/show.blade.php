@@ -36,7 +36,7 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <h3>
-                        {{ $product->cost }}
+                        {{ $product->formatted_cost }}
                     </h3>
                     <small>
                         @if($product->shippable)

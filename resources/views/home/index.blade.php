@@ -13,7 +13,7 @@
             <h5 class="mb-1">{{ $product->name }}</h5>
             <h3>
                 <strong>
-                    {{ $product->cost }}
+                    {{ $product->formatted_cost }}
                 </strong>
             </h3>
             </div>

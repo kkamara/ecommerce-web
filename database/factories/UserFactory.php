@@ -80,7 +80,7 @@ $factory->define(App\ProductReview::class, function (Faker $faker) {
         'user_id' => $user->id,
         'product_id' => $product->id,
         'score' => rand(0, 5),
-        'content' => (rand(0, 1) === 1) ? $faker->paragraphs(rand(0,5)) : null,
+        'content' => (rand(0, 1) === 1) ? $faker->paragraph(rand(0,5)) : null,
     ];
 });
 
@@ -91,9 +91,16 @@ $factory->define(App\OrderHistory::class, function(Faker $faker) {
     return [
         'user_id' => $user->id,
         'product_id' => $product->id,
+        'cost' => $product->cost,
     ];
 });
 
-$factory->define(App\ProductReview::class, function(Faker $faker) {});
+$factory->define(App\Cart::class, function(Faker $faker) {
+    $user = App\User::inRandomOrder()->first();
+    $product = App\Product::inRandomOrder()->first();
 
-$factory->define(App\Cart::class, function(Faker $faker) {});
+    return [
+        'user_id' => $user->id,
+        'product_id' => $product->id,
+    ];
+});
