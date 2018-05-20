@@ -16,7 +16,7 @@ class CreateOrderHistoryTable extends Migration
         Schema::create('order_history', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')
-                  ->references('id')->on('user_id')
+                  ->references('id')->on('users')
                   ->onDelete('cascade');
             $table->integer('product_id')
                   ->references('id')->on('products')
