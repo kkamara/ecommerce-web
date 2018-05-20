@@ -12,4 +12,4 @@
 */
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/products/{productSlug}', 'ProductController@show')->name('home');
+Route::get('/products/{product}', 'ProductController@show')->name('home');

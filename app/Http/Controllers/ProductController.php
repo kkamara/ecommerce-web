@@ -44,20 +44,11 @@ class ProductController extends Controller
      * @param  \App\r  $r
      * @return \Illuminate\Http\Response
      */
-    public function show($productSlug)
+    public function show(Product $product)
     {
-        $product = Product::where('slug', $productSlug)->first();
-
-        if($product !== null)
-        {
-            return view('product.show', [
-                'title' => $product->name
-            ])->with(compact('product'));
-        }
-        else
-        {
-            return abort(404);
-        }
+        return view('product.show', [
+            'title' => $product->name
+        ])->with(compact('product'));
     }
 
     /**

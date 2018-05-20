@@ -18,7 +18,6 @@ class CreateProductsTable extends Migration
             $table->integer('company_id')
                   ->references('id')->on('companies')
                   ->onDelete('cascade');
-            $table->string('slug');
             $table->string('name');
             $table->string('short_description');
             $table->text('long_description')->nullable();
