@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
 use Illuminate\Http\Request;
+use App\Product;
+use Auth;
 
 class ProductController extends Controller
 {
@@ -22,9 +23,16 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Product $product)
     {
-        //
+        if(Auth::check())
+        {
+
+        }
+        else
+        {
+            addProductToCacheCart();
+        }
     }
 
     /**

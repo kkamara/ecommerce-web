@@ -51,7 +51,7 @@
                     @endif
                 </li>
                 <li class="list-group-item">
-                    <a href='#' class='btn btn-primary'>
+                    <a href='{{ route('productAdd', $product->id) }}' class='btn btn-primary'>
                         Add to cart
                     </a>
                 </li>

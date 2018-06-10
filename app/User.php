@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App;
@@ -58,5 +59,15 @@ class User extends Authenticatable
     public function userPaymentConfig()
     {
         return $this->hasMany('App\UserPaymentConfig', 'user_id');
+    }
+
+    public function addProductToDbCart()
+    {
+
+    }
+
+    public function moveCacheCartToDbCart()
+    {
+
     }
 }
