@@ -15,6 +15,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        view()->composer('layouts.navbar', function($view) {
+
+            $view->with('cartCount', \App\Cart::count());
+
+        });
     }
 
     /**

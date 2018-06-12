@@ -18,7 +18,8 @@
     @include('layouts.navbar')
 
     <div class="container" id='app'>
-
+        @include('layouts.flashes')
+        
         @section('content')
 
         @show

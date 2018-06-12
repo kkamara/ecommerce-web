@@ -57,6 +57,14 @@
                         </a>
                     </li>
                 @endif
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <span>
+                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                        </span>
+                        <span>Cart ({{ $cartCount }})</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
