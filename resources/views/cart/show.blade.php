@@ -10,26 +10,44 @@
             <form action="{{ route('cartUpdate') }}" method='POST'>
                 {{ method_field('PUT') }}
                 {{ csrf_field() }}
-                <ul class="list-group">
-                    @foreach($cart as $k => $item)
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($cart as $k => $item)
 
-                    <li class='list-group-item'>
-                        <a href="{{ route('productShow', $item['product']->id) }}">
-                            {{ $item['product']->name }}
-                        </a>
+                        <tr>
+                            <td>
+                                <a href="{{ route('productShow', $item['product']->id) }}">
+                                    {{ $item['product']->name }}
+                                </a>
+                            </td>
 
-                        <span class='pull-right'>
-                            <input class='form-control' type='number' name='amount-{{ $item['product']->id }}' value="{{ $item['amount'] }}"/>
-                        </span>
-                    </li>
-                    <br/>
-                    @endforeach
-                    <li class="list-group-item">
-                        <div class="pull-right">
-                            Total: {{ $cartCount }}
-                        </div>
-                    </li>
-                </ul>
+                            <td>
+                                {{ $item['product']->formatted_cost }}
+                            </td>
+
+                            <td>
+                                <input class='form-control' type='number' name='amount-{{ $item['product']->id }}' value="{{ $item['amount'] }}"/>
+                            </td>
+                        </tr>
+                        @endforeach
+                        <tr>
+                            <th>Total:</th>
+                            <td>
+                                {{ $cartPrice }}
+                            </td>
+                            <td>
+                                {{ $cartCount }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 <br/>
                 <div class="pull-right">
                     <input type='submit' href="" class="btn btn-primary" value='Update details'>

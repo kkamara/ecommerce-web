@@ -35,6 +35,31 @@ class Cart extends Model
         }
     }
 
+    public static function price()
+    {
+        if(Auth::check())
+        {
+            // return static::selectRaw('')
+            //     ->where('year','month')
+            //     ->all()->count();
+        }
+        else
+        {
+            $price = 0;
+            $cacheCart = getCacheCart();
+
+            if($cacheCart !== NULL)
+            {
+                foreach($cacheCart as $cc)
+                {
+                    $price += $cc['product']->cost * $cc['amount'];
+                }
+            }
+
+            return "£".number_format($price, 2);
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User');

@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(['layouts.navbar', 'cart.show'], function($view) {
             $view->with('cartCount', \App\Cart::count());
         });
+
+        view()->composer('cart.show', function($view) {
+            $view->with('cartPrice', \App\Cart::price());
+        });
     }
 
     /**
