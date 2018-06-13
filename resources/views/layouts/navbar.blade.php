@@ -58,7 +58,7 @@
                     </li>
                 @endif
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('cartShow') }}">
                         <span>
                             <i class="fa fa-cart-plus" aria-hidden="true"></i>
                         </span>

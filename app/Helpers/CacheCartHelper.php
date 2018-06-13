@@ -1,7 +1,7 @@
 <?php
 
 function addProductToCacheCart($product)
-{  
+{
     $expiresAt = now()->addMinutes(120);
 
     $cacheCart = Cache::get('cc');
@@ -27,7 +27,7 @@ function addProductToCacheCart($product)
                     'amount'  => 1,
                 );
                 array_push($cacheCart, $newItem);
-                Cache::put('cc', $cacheCart, $expiresAt);    
+                Cache::put('cc', $cacheCart, $expiresAt);
             }
         }
     }
@@ -41,4 +41,26 @@ function addProductToCacheCart($product)
         );
         Cache::put('cc', $cacheCart, $expiresAt);
     }
+}
+
+function getCacheCart()
+{
+    $cacheCart = Cache::get('cc');
+
+    $array = array();
+
+    if(isset($cacheCart))
+    {
+        foreach($cacheCart as $cc)
+        {
+            $item = App\Cart::where('id', $cc['product'])->first();
+            $amount = $cc['amount'];
+
+            array_push($array, array(
+                'product' => $item,
+                'amount'  => $amount
+            ));
+        }
+    }
+    return $array;
 }

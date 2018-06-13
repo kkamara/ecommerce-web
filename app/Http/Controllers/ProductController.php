@@ -33,7 +33,7 @@ class ProductController extends Controller
         {
             addProductToCacheCart($product);
 
-            return redirect()->back()->with('flashSuccess', $product->name.' added to cart');
+            return redirect()->route('productShow', $product->id)->with('flashSuccess', $product->name.' added to cart');
         }
     }
 

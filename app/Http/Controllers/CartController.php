@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Cart;
 use Illuminate\Http\Request;
+use App\Cart;
+use Auth;
 
 class CartController extends Controller
 {
@@ -44,9 +45,18 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        if(Auth::check())
+        {
+            // $cart = Cart::all();
+        }
+        else
+        {
+            $cart = getCacheCart();
+        }
+
+        return view('cart.show', compact('cart'))->withTitle('Cart');
     }
 
     /**

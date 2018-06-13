@@ -11,7 +11,7 @@
     <!-- Styles -->
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel='stylesheet' href="{{ asset('css/app.css') }}">
-<link rel='stylesheet' href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 
@@ -19,7 +19,7 @@
 
     <div class="container" id='app'>
         @include('layouts.flashes')
-        
+
         @section('content')
 
         @show

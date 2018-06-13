@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\OrderHistory;
 use Illuminate\Http\Request;
+use App\OrderHistory;
+use Auth;
 
 class OrderHistoryController extends Controller
 {
@@ -24,7 +25,14 @@ class OrderHistoryController extends Controller
      */
     public function create()
     {
-        //
+        if(Auth::check())
+        {
+
+        }
+        else
+        {
+            // redirect to sign up page
+        }
     }
 
     /**
