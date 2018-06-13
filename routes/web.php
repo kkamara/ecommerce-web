@@ -21,6 +21,7 @@ Route::get('/products/{product}/add', 'ProductController@create')->name('product
 |--------------------------------------------------------------------------
 */
 Route::get('/cart', 'CartController@show')->name('cartShow');
+Route::put('/cart/update', 'CartController@update')->name('cartUpdate');
 
 /*
 |--------------------------------------------------------------------------

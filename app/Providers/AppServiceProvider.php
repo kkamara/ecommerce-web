@@ -16,10 +16,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        view()->composer('layouts.navbar', function($view) {
-
+        view()->composer(['layouts.navbar', 'cart.show'], function($view) {
             $view->with('cartCount', \App\Cart::count());
-
         });
     }
 

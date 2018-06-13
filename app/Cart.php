@@ -20,9 +20,18 @@ class Cart extends Model
         }
         else
         {
-            $cacheCartCount = Cache::get('cc');
-// dd($cacheCartCount);
-            return count($cacheCartCount) ?? 0;
+            $count = 0;
+            $cacheCart = Cache::get('cc');
+
+            if($cacheCart !== NULL)
+            {
+                foreach($cacheCart as $cc)
+                {
+                    $count += $cc['amount'];
+                }
+            }
+
+            return $count;
         }
     }
 

@@ -7,25 +7,34 @@
             <h3 class='lead'><strong>Your Cart</strong></h3>
             <hr/>
             @if(! empty($cart))
-            <ul class="list-group">
-                @foreach($cart as $k => $item)
+            <form action="{{ route('cartUpdate') }}" method='POST'>
+                {{ method_field('PUT') }}
+                {{ csrf_field() }}
+                <ul class="list-group">
+                    @foreach($cart as $k => $item)
 
-                <li class='list-group-item'>
-                    <a href="{{ route('productShow', $item['product']->product->id) }}">
-                        {{ $item['product']->product->name }}
-                    </a>
+                    <li class='list-group-item'>
+                        <a href="{{ route('productShow', $item['product']->id) }}">
+                            {{ $item['product']->name }}
+                        </a>
 
-                    <span class='pull-right'>
-                        <input class='form-control' type='number' value="{{ $item['amount'] }}"/>
-                    </span>
-                </li>
+                        <span class='pull-right'>
+                            <input class='form-control' type='number' name='amount-{{ $item['product']->id }}' value="{{ $item['amount'] }}"/>
+                        </span>
+                    </li>
+                    <br/>
+                    @endforeach
+                    <li class="list-group-item">
+                        <div class="pull-right">
+                            Total: {{ $cartCount }}
+                        </div>
+                    </li>
+                </ul>
                 <br/>
-                @endforeach
-            </ul>
-            <br/>
-            <div class="pull-right">
-                <a href="" class="btn btn-primary">Update details</a>
-            </div>
+                <div class="pull-right">
+                    <input type='submit' href="" class="btn btn-primary" value='Update details'>
+                </div>
+            </form>
             @else
             <p>Your cart is empty.</p>
             @endif
