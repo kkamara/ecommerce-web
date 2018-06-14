@@ -31,7 +31,7 @@ class OrderHistoryController extends Controller
         }
         else
         {
-            // redirect to sign up page
+            return redirect('login/?fromOrder=true')->with('flashDanger', 'Please login or register to proceed with checkout');
         }
     }
 

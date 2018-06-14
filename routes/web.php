@@ -29,3 +29,12 @@ Route::put('/cart/update', 'CartController@update')->name('cartUpdate');
 |--------------------------------------------------------------------------
 */
 Route::get('/order/create', 'OrderHistoryController@create')->name('orderCreate');
+
+/*
+|--------------------------------------------------------------------------
+| User Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/login', 'Auth\LoginController@create')->name('loginHome');
+Route::put('/login/create', 'Auth\LoginController@store')->name('loginCreate');
+Route::get('/register', 'Auth\RegisterController@createUser')->name('registerHome');

@@ -36,4 +36,23 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function create()
+    {
+        return view('login.create', array(
+            'title' => 'Login',
+            'fromOrder' => request('fromOrder')
+        ));
+    }
+
+    public function store()
+    {
+        // login
+        // if login then redirect to checkout page if was prompted to login/register
+        // if normal login then redirect to home
+        // redirect back if false
+    }
+
+    public function edit() {}
+    public function update() {}
 }

@@ -69,4 +69,13 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    public function createUser(Request $request)
+    {
+        return view('register.create', array(
+            'title' => 'Register'
+        ));
+    }
+
+    public function storeUser(Request $request) {}
 }

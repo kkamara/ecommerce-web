@@ -77,7 +77,7 @@ function updateCacheCartAmount($request)
         {
             array_push($array, array(
                 'product' => $product_id,
-                'amount'  => $amount,
+                'amount'  => (int) $amount,
             ));
         }
     }
