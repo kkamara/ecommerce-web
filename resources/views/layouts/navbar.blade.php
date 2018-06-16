@@ -37,11 +37,11 @@
             <ul class="navbar-nav mr-right">
                 @if(Auth::check())
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Logout</a>
+                        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                     </li>
                 @else
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('registerHome') }}">
                             <span>
                                 <i class="fa fa-user-plus" aria-hidden="true"></i>
                             </span>
@@ -49,7 +49,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('loginHome') }}">
                             <span>
                                 <i class="fa fa-sign-in" aria-hidden="true"></i>
                             </span>

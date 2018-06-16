@@ -27,7 +27,7 @@ class OrderHistoryController extends Controller
     {
         if(Auth::check())
         {
-
+            return view('order_history.create', array('title'=>'Create Order'));
         }
         else
         {

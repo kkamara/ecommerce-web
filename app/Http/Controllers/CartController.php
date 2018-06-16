@@ -47,7 +47,9 @@ class CartController extends Controller
     {
         if(Auth::check())
         {
-            // $cart = Cart::all();
+            $user = auth()->user();
+
+            $cart = $user->getDbCart();
         }
         else
         {

@@ -12,15 +12,20 @@ class Cart extends Model
 
     public static function count()
     {
+        $count = 0;
+
         if(Auth::check())
         {
-            // return static::selectRaw('')
-            //     ->where('year','month')
-            //     ->all()->count();
+            $user = auth()->user();
+            $cacheCart = $user->getDbCart();
+
+            foreach($cacheCart as $cc)
+            {
+                $count += $cc['amount'];
+            }
         }
         else
         {
-            $count = 0;
             $cacheCart = Cache::get('cc');
 
             if($cacheCart !== NULL)
@@ -30,22 +35,27 @@ class Cart extends Model
                     $count += $cc['amount'];
                 }
             }
-
-            return $count;
         }
+
+        return $count;
     }
 
     public static function price()
     {
+        $price = 0;
+
         if(Auth::check())
         {
-            // return static::selectRaw('')
-            //     ->where('year','month')
-            //     ->all()->count();
+            $user = auth()->user();
+            $cacheCart = $user->getDbCart();
+
+            foreach($cacheCart as $cc)
+            {
+                $price += $cc['product']->cost * $cc['amount'];
+            }
         }
         else
         {
-            $price = 0;
             $cacheCart = getCacheCart();
 
             if($cacheCart !== NULL)
@@ -55,9 +65,9 @@ class Cart extends Model
                     $price += $cc['product']->cost * $cc['amount'];
                 }
             }
-
-            return "£".number_format($price, 2);
         }
+
+        return "£".number_format($price, 2);
     }
 
     public function user()
@@ -68,5 +78,38 @@ class Cart extends Model
     public function product()
     {
         return $this->belongsTo('App\Product');
+    }
+
+    public function getDbCart()
+    {
+        $products = \App\Cart::where('user_id', $this->attributes['id'])->get();
+
+        if(! $products->isEmpty())
+        {
+            $cart = array();
+
+            foreach($products as $product)
+            {
+                $id = 'item-'.$product->product_id;
+
+                if(! isset($cart[$id]))
+                {
+                    $cart[$id] = array(
+                        'product' => $product->product,
+                        'amount' => 1,
+                    );
+                }
+                else
+                {
+                    $cart[$id]['amount'] += 1;
+                }
+            }
+
+            return $cart;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Validator;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -25,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -34,7 +37,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('delete');
     }
 
     public function create()
@@ -45,14 +48,60 @@ class LoginController extends Controller
         ));
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+
         // login
         // if login then redirect to checkout page if was prompted to login/register
         // if normal login then redirect to home
         // redirect back if false
+
+        if(empty($validator->errors()->all()))
+        {
+            $creds = array(
+                'email' => request('email'),
+                'password' => request('password'),
+            );
+
+            if(Auth::attempt($creds))
+            {
+                $user = auth()->user();
+                $cacheCart = getCacheCart();
+
+                $user->moveCacheCartToDbCart($cacheCart);
+
+                return redirect()->route('orderCreate');
+            }
+            else
+            {
+                return view('login.create', array(
+                    'title' => 'Login',
+                    'input' => $request->input(),
+                    'errors' => array('Invalid login credentials provided'),
+                ));
+            }
+        }
+        else
+        {
+            return view('login.create', array(
+                'title' => 'Login',
+                'input' => $request->input(),
+                'errors' => $validator->errors()->all(),
+            ));
+        }
     }
 
     public function edit() {}
     public function update() {}
+
+    public function delete()
+    {
+        Auth::logout();
+
+        return redirect()->route('home');
+    }
 }

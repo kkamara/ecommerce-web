@@ -20,7 +20,6 @@
                     </thead>
                     <tbody>
                         @foreach($cart as $k => $item)
-
                         <tr>
                             <td>
                                 <a href="{{ route('productShow', $item['product']->id) }}">

@@ -21,7 +21,6 @@ class CreateCartTable extends Migration
             $table->integer('product_id')
                   ->references('id')->on('products')
                   ->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

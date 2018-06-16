@@ -76,16 +76,15 @@ $factory->define(App\Company::class, function(Faker $faker) {
 });
 
 $factory->define(App\Product::class, function(Faker $faker) {
-    $name = $faker->company;
+    $productName = $faker->company;
     $company = App\Company::inRandomOrder()->first();
 
     return [
         'company_id' => $company->id,
-        'name' => $name,
+        'name' => $productName,
         'short_description' => substr($faker->paragraph(), 0, 191),
         'long_description' => $faker->paragraph(4),
         'product_details' => $faker->paragraph(5),
-        'slug' => str_slug($name, '-'),
         'image_path' => '/image/products/default/not-found.jpg',
         'cost' => $faker->randomNumber(2),
         'shippable' => mt_rand(0, 1),
