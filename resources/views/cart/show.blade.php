@@ -5,7 +5,6 @@
     <div class="row">
         <div class="col-md-8">
             <h3 class='lead'><strong>Your Cart</strong></h3>
-            <hr/>
             @if(! empty($cart))
             <form action="{{ route('cartUpdate') }}" method='POST'>
                 {{ method_field('PUT') }}
@@ -13,7 +12,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Product</th>
+                            <th>Item</th>
                             <th>Price</th>
                             <th>Amount</th>
                         </tr>

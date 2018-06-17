@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use App\Cart;
 
 class User extends Authenticatable
 {
@@ -78,7 +79,7 @@ class User extends Authenticatable
         {
             for($i=0; $i<$cc['amount']; $i++)
             {
-                \App\Cart::insert([
+                Cart::insert([
                     'user_id' => $this->attributes['id'],
                     'product_id' => $cc['product']->id,
                 ]);
@@ -90,7 +91,7 @@ class User extends Authenticatable
 
     public function getDbCart()
     {
-        $products = \App\Cart::where('user_id', $this->attributes['id'])->get();
+        $products = Cart::where('user_id', $this->attributes['id'])->get();
 
         if(! $products->isEmpty())
         {
@@ -118,6 +119,33 @@ class User extends Authenticatable
         else
         {
             return 0;
+        }
+    }
+
+    public function updateDbCartAmount($request)
+    {
+        $cacheCart = $this->getDbCart();
+
+        foreach($cacheCart as $cc)
+        {
+            $product_id = $cc['product']->id;
+            $amount = $request->get('amount-' . $product_id);
+
+            Cart::where([
+                'user_id' => $this->attributes['id'],
+                'product_id' => $product_id,
+            ])->delete();
+
+            if($amount !== NULL && $amount != 0)
+            {
+                for($i=0; $i<$amount; $i++)
+                {
+                    Cart::insert([
+                        'user_id' => $this->attributes['id'],
+                        'product_id' => $product_id,
+                    ]);
+                }
+            }
         }
     }
 }

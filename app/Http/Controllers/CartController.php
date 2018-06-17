@@ -81,14 +81,16 @@ class CartController extends Controller
     {
         if(Auth::check())
         {
-            //
+            $user = auth()->user();
+            $user->updateDbCartAmount($request);
         }
         else
         {
             updateCacheCartAmount($request);
         }
 
-        return redirect()->route('cartShow');
+        return redirect()->route('cartShow')
+                ->with('flashSuccess', 'Your cart was successfully updated!');
     }
 
     /**
