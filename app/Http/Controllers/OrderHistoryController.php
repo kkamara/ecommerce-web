@@ -27,7 +27,13 @@ class OrderHistoryController extends Controller
     {
         if(Auth::check())
         {
-            return view('order_history.create', array('title'=>'Create Order'));
+            $user = auth()->user();
+            $cachCart = $user->getDbCart();
+
+            return view('order_history.create', array(
+                'title' => 'Create Order',
+                'cart' => $cachCart,
+            ));
         }
         else
         {

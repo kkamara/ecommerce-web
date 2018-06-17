@@ -68,6 +68,11 @@ class User extends Authenticatable
         return $this->hasMany('App\UserPaymentConfig', 'user_id');
     }
 
+    public function userAddress()
+    {
+        return $this->hasMany('App\Address', 'user_id');
+    }
+
     public function addProductToDbCart()
     {
 

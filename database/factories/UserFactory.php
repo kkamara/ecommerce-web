@@ -28,6 +28,14 @@ $factory->define(App\User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(App\UsersAddress::class, function (Faker $faker) {
+    $user = App\User::inRandomOrder()->first();
+
+    return [
+        'user_id' => $user->id,
         'phone_number' => $faker->phonenumber,
         'building_name' => $faker->buildingnumber,
         'street_address1' => $faker->StreetAddress,
@@ -49,6 +57,20 @@ $factory->define(App\UserPaymentConfig::class, function(Faker $faker) {
         'card_number' => $card_number,
         'expiry_month' => mt_rand(1, 12),
         'expiry_year' => mt_rand(2020, 2024),
+        'phone_number' => $faker->phonenumber,
+        'building_name' => $faker->buildingnumber,
+        'street_address1' => $faker->StreetAddress,
+        'city' => $faker->city,
+        'country' => $faker->country,
+        'postcode' => $faker->postcode,
+    ];
+});
+
+$factory->define(App\UserPaymentAddress::class, function (Faker $faker) {
+    $userPaymentConfig = App\UserPaymentConfig::inRandomOrder()->first();
+
+    return [
+        'user_payment_config_id' => $userPaymentConfig->id,
         'phone_number' => $faker->phonenumber,
         'building_name' => $faker->buildingnumber,
         'street_address1' => $faker->StreetAddress,
