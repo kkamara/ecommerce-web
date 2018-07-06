@@ -68,7 +68,7 @@
                             </div>
                         </div>
                         @empty
-
+                        You have no delivery addresses connected to your account. Click here to add a delivery address.
                         @endforelse
                     </div>
                 </div>
@@ -77,6 +77,28 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3 class='lead'><strong>Select Billing Card</strong></h3>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        @forelse($billingCards as $card)
+                        <div class="col-md-4">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-body">
+
+                                    <p>{{ $card['card_holder_name'] }}</p>
+                                    <p>{{ $card['card_number'] }}</p>
+
+                                    <div class="form-group">
+                                        <label for="card{{ $card['id'] }}">Choose this card</label>
+                                        <input name='card{{ $card['id'] }}' type="checkbox">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                            You have no billing cards connected to your account. Click here to add a billing card.
+                        @endforelse
+                    </div>
                 </div>
             </div>
         </div>

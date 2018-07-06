@@ -34,6 +34,7 @@ class OrderHistoryController extends Controller
                 'title' => 'Create Order',
                 'cart' => $cachCart,
                 'addresses' => $user->userAddress,
+                'billingCards' => $user->userPaymentConfig,
             ));
         }
         else

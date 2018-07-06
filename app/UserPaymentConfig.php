@@ -22,4 +22,15 @@ class UserPaymentConfig extends Model
     {
         return $this->hasMany('App\UserPaymentAddress', 'user_payment_config_id');
     }
+
+    public function getCardNumberAttribute()
+    {
+        $cardNumber = $this->attributes['card_number'];
+        $length = strlen($cardNumber);
+
+        $cardNumber = substr($cardNumber, -4, strlen($cardNumber));
+        $cardNumber = str_pad($cardNumber, 16, "*", STR_PAD_LEFT);
+
+        return $cardNumber;
+    }
 }
