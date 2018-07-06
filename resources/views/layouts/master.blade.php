@@ -24,6 +24,7 @@
 
         @show
 
+        @include('layouts.footer')
     </div>
 
     @include('layouts.scripts')

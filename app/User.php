@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public function userAddress()
     {
-        return $this->hasMany('App\Address', 'user_id');
+        return $this->hasMany('App\UsersAddress', 'user_id');
     }
 
     public function addProductToDbCart()

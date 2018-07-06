@@ -9,7 +9,7 @@
             <form action="{{ route('cartUpdate') }}" method='POST'>
                 {{ method_field('PUT') }}
                 {{ csrf_field() }}
-                <table class="table table-striped">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Item</th>

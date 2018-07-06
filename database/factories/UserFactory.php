@@ -14,6 +14,7 @@ use Faker\Generator as Faker;
 */
 
 // Factories should be run individually in the order of which they are defined
+// Create and user only a single user or hardcode $userid field in each factory
 $factory->define(App\User::class, function (Faker $faker) {
 
     $name = array(

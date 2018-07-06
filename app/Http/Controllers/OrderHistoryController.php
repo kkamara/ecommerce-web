@@ -33,6 +33,7 @@ class OrderHistoryController extends Controller
             return view('order_history.create', array(
                 'title' => 'Create Order',
                 'cart' => $cachCart,
+                'addresses' => $user->userAddress,
             ));
         }
         else
