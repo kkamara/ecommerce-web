@@ -51,7 +51,36 @@ class OrderHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = auth()->user();
+
+        $input = $request->request;
+        $deliveryAddresses = $billingCards = array();
+
+        foreach($input as $k => $v)
+        {
+            if(strpos($k, 'address-') === 0)
+            {
+                $id = str_replace('address-', '', $k);
+
+                if(is_numeric($id))
+                    array_push($deliveryAddresses, (int) $id);
+            }
+            elseif(strpos($k, 'card-') === 0)
+            {
+                $id = str_replace('card-', '', $k);
+
+                if(is_numeric($id))
+                    array_push($billingCards, (int) $id);
+            }
+        }
+
+        $errors = $user->getOrderHistoryErrors(['delivery'=>$deliveryAddresses, 'billing'=>$billingCards]);
+
+        if(!empty($errors))
+        {
+            return redirect()->back()->with(compact('errors'));
+        }
+
     }
 
     /**

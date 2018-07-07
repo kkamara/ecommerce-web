@@ -2,6 +2,10 @@
 
 @section('content')
 
+@include('layouts.errors')
+
+<form method="POST" action="{{ route('orderStore') }}">
+        {{ csrf_field() }}
     <div class="row">
         <div class="col-md-8">
             <div class="row">
@@ -36,7 +40,7 @@
                         </tbody>
                     </table>
                     <a href="{{ route('cartShow') }}" class="btn btn-primary">
-                    1 Edit your items
+                        Edit your items
                     </a>
                 </div>
             </div>
@@ -61,8 +65,9 @@
                                     <p>{{ $address['postcode'] }}</p>
 
                                     <div class="form-group">
-                                        <label for="address-{{ $address['id'] }}">Choose this address</label>
-                                        <input name='address-{{ $address['id'] }}' type="checkbox">
+                                        <label>Choose this address
+                                            <input name='address-{{ $address['id'] }}' type="checkbox">
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -89,8 +94,9 @@
                                     <p>{{ $card['card_number'] }}</p>
 
                                     <div class="form-group">
-                                        <label for="card{{ $card['id'] }}">Choose this card</label>
-                                        <input name='card{{ $card['id'] }}' type="checkbox">
+                                        <label>Choose this card
+                                            <input name='card-{{ $card['id'] }}' type="checkbox">
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -105,16 +111,16 @@
         <div class="col-md-4">
             <ul class="list-group">
                 <li class="list-group-item">
-                    Charge: {{ $cartPrice }}
+                    Total Charge: {{ $cartPrice }}
                 </li>
                 <li class="list-group-item">
-                    <form method="POST" action="{{ route('orderStore') }}">
-                        {{ csrf_field() }}
+
                         <input type='submit' value="Pay Your Order" class='btn btn-success' style='display:block;margin:0px auto;'>
-                    </form>
+
                 </li>
             </ul>
         </div>
     </div>
+</form>
 
 @stop

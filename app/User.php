@@ -58,6 +58,31 @@ class User extends Authenticatable
         return $this->hasMany('App\OrderHistory', 'user_id');
     }
 
+    public function getOrderHistoryErrors($data)
+    {
+        $errors = array();
+
+        if(empty($data['delivery']))
+        {
+            array_push($errors, 'No delivery address chosen');
+        }
+        elseif(sizeof($data['delivery']) > 1)
+        {
+            array_push($errors, 'More than one delivery address has been selected');
+        }
+
+        if(empty($data['billing']))
+        {
+            array_push($errors, 'No billing card chosen');
+        }
+        elseif(sizeof($data['billing']) > 1)
+        {
+            array_push($errors, 'More than one billing card has been selected');
+        }
+
+        return $errors;
+    }
+
     public function productReviews()
     {
         return $this->hasMany('App\ProductReview', 'user_id');
