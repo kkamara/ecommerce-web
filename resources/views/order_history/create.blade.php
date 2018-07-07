@@ -73,7 +73,9 @@
                             </div>
                         </div>
                         @empty
-                        You have no delivery addresses connected to your account. Click here to add a delivery address.
+                        <div class="col-md-12">
+                            You have no delivery addresses connected to your account. Click here to add a delivery address.
+                        </div>
                         @endforelse
                     </div>
                 </div>
@@ -102,7 +104,9 @@
                             </div>
                         </div>
                         @empty
+                        <div class="col-md-12">
                             You have no billing cards connected to your account. Click here to add a billing card.
+                        </div>
                         @endforelse
                     </div>
                 </div>
