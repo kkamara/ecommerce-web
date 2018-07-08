@@ -68,7 +68,7 @@ class User extends Authenticatable
         }
         elseif(sizeof($data['delivery']) > 1)
         {
-            array_push($errors, 'More than one delivery address has been selected');
+            array_push($errors, 'Please select just one delivery address');
         }
 
         if(empty($data['billing']))
@@ -77,7 +77,7 @@ class User extends Authenticatable
         }
         elseif(sizeof($data['billing']) > 1)
         {
-            array_push($errors, 'More than one billing card has been selected');
+            array_push($errors, 'Please select just one billing card');
         }
 
         return $errors;
