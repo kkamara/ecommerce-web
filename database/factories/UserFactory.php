@@ -67,20 +67,6 @@ $factory->define(App\UserPaymentConfig::class, function(Faker $faker) {
     ];
 });
 
-$factory->define(App\UserPaymentAddress::class, function (Faker $faker) {
-    $userPaymentConfig = App\UserPaymentConfig::inRandomOrder()->first();
-
-    return [
-        'user_payment_config_id' => $userPaymentConfig->id,
-        'phone_number' => $faker->phonenumber,
-        'building_name' => $faker->buildingnumber,
-        'street_address1' => $faker->StreetAddress,
-        'city' => $faker->city,
-        'country' => $faker->country,
-        'postcode' => $faker->postcode,
-    ];
-});
-
 $factory->define(App\Company::class, function(Faker $faker) {
     $name = $faker->company;
     $user = App\User::inRandomOrder()->first();

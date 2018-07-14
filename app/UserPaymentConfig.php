@@ -18,11 +18,6 @@ class UserPaymentConfig extends Model
         return $this->hasOne('App\OrderHistory');
     }
 
-    public function userPaymentAddress()
-    {
-        return $this->hasMany('App\UserPaymentAddress', 'user_payment_config_id');
-    }
-
     public function getCardNumberAttribute()
     {
         $cardNumber = $this->attributes['card_number'];

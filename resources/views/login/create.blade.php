@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <div class="col-md-4 offset-md-4">
                         <div class="card-title">
-                            <a href="" class="btn btn-info btn-sm">
+                            <a href="{{ route('registerHome') }}" class="btn btn-info btn-sm">
                                 Click here to <strong>create an account</strong>
                             </a>
                         </div>

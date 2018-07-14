@@ -39,4 +39,5 @@ Route::post('/order/store', 'OrderHistoryController@store')->name('orderStore');
 Route::get('/login', 'Auth\LoginController@create')->name('loginHome');
 Route::put('/login/create', 'Auth\LoginController@store')->name('loginCreate');
 Route::get('/register', 'Auth\RegisterController@createUser')->name('registerHome');
+Route::post('/register/create', 'Auth\RegisterController@storeUser')->name('registerCreate');
 Route::get('/logout', 'Auth\LoginController@delete')->name('logout');
