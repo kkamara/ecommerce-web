@@ -17,4 +17,13 @@ class DeleteOrderHistoryTableProductIdColumn extends Migration
             $table->dropColumn('product_id');
         });
     }
+
+    public function down()
+    {
+        Schema::table('order_history', function($table) {
+            $table->integer('product_id')
+                  ->references('id')->on('products')
+                  ->onDelete('cascade');
+        });
+    }
 }

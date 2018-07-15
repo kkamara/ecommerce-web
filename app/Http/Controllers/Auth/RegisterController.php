@@ -82,8 +82,26 @@ class RegisterController extends Controller
     public function storeUser(Request $request) 
     {
         $validator = Validate::make($request->all(), [
-            'email' => 'required',
-            'password' => 'required',
+            'first_name' => 'required|string|max:191',
+            'last_name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+
+            'building_name' => 'required|string|max:191',
+            'street_address1' => 'required|max:191',
+            'street_address2' => 'max:191',
+            'street_address3' => 'max:191',
+            'street_address4' => 'max:191',
+            'postcode' => 'required|string|min: 6|max:191',
+            'city' => 'required|string|min: 4|max:191',
+            'country' => 'required|string|min: 4|max:191',
+            'phone_number_ext' => 'required|min: 2|max:191',
+            'phone_number' => 'required|min: 5|max:191',
+            'mobile_number_ext' => 'max:191',
+            'mobile_number' => 'max:191',
+
+            'card_holder_name' => 'required|min: 6|max: 191',
+            'card_number' => 'required|digits: 16'
         ]);
 
         return redirect()->back()->with('errors', $validator->errors()->all());

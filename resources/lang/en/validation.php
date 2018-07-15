@@ -141,6 +141,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'street_address1' => 'street address 1',
+        'street_address2' => 'street address 2',
+        'street_address3' => 'street address 3',
+        'street_address4' => 'street address 4',
+    ],
 
 ];
