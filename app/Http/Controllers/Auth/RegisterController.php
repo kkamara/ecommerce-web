@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Validator as Validate;
+use App\UserPaymentConfig;
+use App\UsersAddress;
 use App\User;
 
 class RegisterController extends Controller
@@ -79,7 +81,7 @@ class RegisterController extends Controller
         ));
     }
 
-    public function storeUser(Request $request) 
+    public function storeUser(Request $request)
     {
         $validator = Validate::make($request->all(), [
             'first_name' => 'required|string|max:191',
@@ -101,9 +103,57 @@ class RegisterController extends Controller
             'mobile_number' => 'max:191',
 
             'card_holder_name' => 'required|min: 6|max: 191',
-            'card_number' => 'required|digits: 16'
+            'card_number' => 'required|digits: 16',
+            'expiry_date' => 'required', // format 2018-01
         ]);
 
-        return redirect()->back()->with('errors', $validator->errors()->all());
+        if(empty($validator->errors()->all()))
+        {
+            $expiry_date = explode('-', request('expiry_date'));
+            $expiry_year = $expiry_date[0];
+            $expiry_month = $expiry_date[1];
+
+            $data = array(
+                'user' => array(
+                    'first_name' => request('first_name'),
+                    'last_name' => request('last_name'),
+                    'email' => request('email'),
+                    'password' => bcrypt('password'),
+                ),
+                'user_address' => array(
+                    'building_name' => request('building_name'),
+                    'street_address1' => request('street_address1'),
+                    'street_address2' => request('street_address2'),
+                    'street_address3' => request('street_address3'),
+                    'street_address4' => request('street_address4'),
+                    'postcode' => request('postcode'),
+                    'city' => request('city'),
+                    'country' => request('country'),
+                    'county' => request('county'), // nullable
+                    'phone_number_extension' => request('phone_number_ext'),
+                    'phone_number' => request('phone_number'),
+                    'mobile_number_extension' => request('mobile_number_ext'), // nullable
+                    'mobile_number' => request('mobile_number'), // nullable
+                ),
+                'user_payment_config' => array(
+                    'card_holder_name' => request('card_holder_name'),
+                    'card_number' => request('card_number'),
+                    'expiry_month' => $expiry_month,
+                    'expiry_year' => $expiry_year,
+                ),
+            );
+            $data['user_payment_config'] = array_merge($data['user_address'], $data['user_payment_config']);
+
+            // create user
+
+
+            // create user address
+
+            // create user payment config
+        }
+        else
+        {
+            return redirect()->back()->with('errors', $validator->errors()->all());
+        }
     }
 }
