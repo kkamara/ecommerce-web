@@ -81,6 +81,9 @@ class OrderHistoryController extends Controller
             return redirect()->back()->with(compact('errors'));
         }
 
+        // create order history
+
+        // create order history products
     }
 
     /**

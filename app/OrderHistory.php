@@ -22,4 +22,9 @@ class OrderHistory extends Model
     {
         return $this->belongsTo('App\UserPaymentConfig', 'user_payment_config_id');
     }
+
+    public function orderHistoryProducts()
+    {
+        return $this->hasOne('App\OrderHistoryProducts', 'order_history_id');
+    }
 }

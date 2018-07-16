@@ -38,6 +38,11 @@ class Product extends Model
         return $this->hasMany('App\ProductReviews', 'product_id');
     }
 
+    public function orderHistoryProducts()
+    {
+        return $this->hasMany('App\OrderHistoryProducts', 'product_id');
+    }
+
     public function getFormattedCostAttribute()
     {
         return "£".number_format($this->attributes['cost'], 2);
