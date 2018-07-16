@@ -20,31 +20,31 @@
                                 <div class="text-center">
                                     <div class="form-group">
                                         <label>First Name*:
-                                            <input type="text" class="form-control" name='first_name'>
+                                            <input value='text' type="text" class="form-control" name='first_name'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Last Name*:
-                                            <input type="text" class="form-control" name='last_name'>
+                                            <input value='text' type="text" class="form-control" name='last_name'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Email*:
-                                            <input type="email" class="form-control" name='email'>
+                                            <input value='user@mail.com' type="email" class="form-control" name='email'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Password*:
-                                            <input type="password" class="form-control" name='password'>
+                                            <input value='password' type="password" class="form-control" name='password'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Confirm Password*:
-                                            <input type="password" class="form-control" name='password_confirmation'>
+                                            <input value='password' type="password" class="form-control" name='password_confirmation'>
                                         </label>
                                     </div>
                                 </div>
@@ -59,13 +59,13 @@
                                 <div class="text-center">
                                     <div class="form-group">
                                         <label>Building Name/Number*:
-                                            <input type="text" class="form-control" name='building_name'>
+                                            <input value='text' type="text" class="form-control" name='building_name'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Street Address 1*:
-                                            <input type="text" class="form-control" name='street_address1'>
+                                            <input value='text' type="text" class="form-control" name='street_address1'>
                                         </label>
                                     </div>
 
@@ -89,31 +89,31 @@
 
                                     <div class="form-group">
                                         <label>Postcode*:
-                                            <input type="text" class="form-control" name='postcode'>
+                                            <input value='postcode' type="text" class="form-control" name='postcode'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>City*:
-                                            <input type="text" class="form-control" name='city'>
+                                            <input value='text' type="text" class="form-control" name='city'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Country*:
-                                            <input type="text" class="form-control" name='country'>
+                                            <input value='text' type="text" class="form-control" name='country'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Phone Number Extension*:
-                                            <input type="text" class="form-control" name='phone_number_ext'>
+                                            <input value='text' type="text" class="form-control" name='phone_number_ext'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Phone Number*:
-                                            <input type="text" class="form-control" name='phone_number'>
+                                            <input value='111111' type="text" class="form-control" name='phone_number'>
                                         </label>
                                     </div>
 
@@ -139,18 +139,18 @@
                                 <div class="text-center">
                                     <div class="form-group">
                                         <label>Card Holder Name*:
-                                            <input type="text" class="form-control" name='card_holder_name'>
+                                            <input value='card holder name' type="text" class="form-control" name='card_holder_name'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Card Number*:
-                                            <input type="text" class="form-control" name='card_number'>
+                                            <input value='1111222233334444' type="text" class="form-control" name='card_number'>
                                         </label>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for='expiry_month'>Expiry Date*:
+                                        <label>Expiry Date*:
                                             <input type="month" class="form-control" name='expiry_date'>
                                         </label>
                                     </div>
