@@ -48,7 +48,6 @@ class CartController extends Controller
         if(Auth::check())
         {
             $user = auth()->user();
-
             $cart = $user->getDbCart();
         }
         else

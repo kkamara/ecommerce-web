@@ -9,6 +9,9 @@ use Auth;
 class Cart extends Model
 {
     protected $table = 'cart';
+    protected $guarded = [];
+
+    public $timestamps = false;
 
     public static function count()
     {

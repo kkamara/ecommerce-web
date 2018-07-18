@@ -96,9 +96,12 @@ class User extends Authenticatable
         return $this->hasMany('App\UsersAddress', 'user_id');
     }
 
-    public function addProductToDbCart()
+    public function addProductToDbCart($product)
     {
-
+        \App\Cart::create([
+            'user_id' => $this->attributes['id'],
+            'product_id' => $product->id,
+        ]);
     }
 
     public function moveCacheCartToDbCart($cacheCart)

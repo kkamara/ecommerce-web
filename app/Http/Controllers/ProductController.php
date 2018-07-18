@@ -27,14 +27,16 @@ class ProductController extends Controller
     {
         if(Auth::check())
         {
-
+            $user = auth()->user();
+            $user->addProductToDbCart($product);
         }
         else
         {
             addProductToCacheCart($product);
-
-            return redirect()->route('productShow', $product->id)->with('flashSuccess', $product->name.' added to cart');
         }
+
+        return redirect()->route('productShow', $product->id)
+                         ->with('flashSuccess', $product->name.' added to cart');
     }
 
     /**
