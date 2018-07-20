@@ -96,6 +96,12 @@
                                     <p>{{ $card['card_number'] }}</p>
 
                                     <div class="form-group">
+                                        <label>CCV / CVC Number
+                                            <input type="password" maxlength='3' name='cvc-{{ $card['id'] }}'>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label>Choose this card
                                             <input name='card-{{ $card['id'] }}' type="checkbox">
                                         </label>

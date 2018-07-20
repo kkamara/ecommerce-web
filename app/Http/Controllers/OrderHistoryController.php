@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\OrderHistoryProducts;
 use Illuminate\Http\Request;
 use App\OrderHistory;
+use App\Cart;
 use Auth;
 
 class OrderHistoryController extends Controller
@@ -54,7 +56,7 @@ class OrderHistoryController extends Controller
         $user = auth()->user();
 
         $input = $request->request;
-        $deliveryAddresses = $billingCards = array();
+        $deliveryAddressIds = $billingCardIds = array();
 
         foreach($input as $k => $v)
         {
@@ -63,27 +65,58 @@ class OrderHistoryController extends Controller
                 $id = str_replace('address-', '', $k);
 
                 if(is_numeric($id))
-                    array_push($deliveryAddresses, (int) $id);
+                    array_push($deliveryAddressIds, (int) $id);
             }
             elseif(strpos($k, 'card-') === 0)
             {
                 $id = str_replace('card-', '', $k);
 
                 if(is_numeric($id))
-                    array_push($billingCards, (int) $id);
+                    array_push($billingCardIds, (int) $id);
             }
         }
 
-        $errors = $user->getOrderHistoryErrors(['delivery'=>$deliveryAddresses, 'billing'=>$billingCards]);
+        $errors = $user->getOrderHistoryErrors(['delivery'=>$deliveryAddressIds, 'billing'=>$billingCardIds]);
 
         if(!empty($errors))
         {
             return redirect()->back()->with(compact('errors'));
         }
 
+        if(request('cvc-'.$billingCardIds[0]) === NULL)
+        {
+            return redirect()->back()->with('errors', [
+                'Missing cvc for chosen billing card.'
+            ]);
+        }
+
         // create order history
+        $orderHistory = OrderHistory::create([
+            'user_id' => $user->id,
+            'reference_number' => OrderHistory::generateRefNum(),
+            'cost' => (float) str_replace('£', '', Cart::price()),
+            'user_payment_config_id' =>$billingCardIds[0],
+            'users_addresses_id' => $deliveryAddressIds[0],
+        ]);
 
         // create order history products
+        foreach($user->getDbCart() as $cart)
+        {
+            for($i=0; $i < $cart['amount']; $i++)
+            {
+                OrderHistoryProducts::create([
+                    'order_history_id' => $orderHistory->id,
+                    'product_id' => $cart['product']->id,
+                    'cost' => $cart['product']->cost,
+                    'shippable' => $cart['product']->shippable,
+                    'free_delivery' => $cart['product']->free_delivery,
+                ]);
+            }
+        }
+
+        return view('order_history.store')
+                ->with(compact('orderHistory'))
+                ->withTitle('Invoice');
     }
 
     /**
