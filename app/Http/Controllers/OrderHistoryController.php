@@ -104,23 +104,19 @@ class OrderHistoryController extends Controller
         // create order history products
         foreach($user->getDbCart() as $cart)
         {
-            for($i=0; $i < $cart['amount']; $i++)
-            {
-                OrderHistoryProducts::create([
-                    'order_history_id' => $orderHistory->id,
-                    'product_id' => $cart['product']->id,
-                    'cost' => $cart['product']->cost,
-                    'shippable' => $cart['product']->shippable,
-                    'free_delivery' => $cart['product']->free_delivery,
-                ]);
-            }
+            OrderHistoryProducts::create([
+                'order_history_id' => $orderHistory->id,
+                'product_id' => $cart['product']->id,
+                'amount' => $cart['amount'],
+                'cost' => $cart['product']->cost,
+                'shippable' => $cart['product']->shippable,
+                'free_delivery' => $cart['product']->free_delivery,
+            ]);
         }
 
         $user->deleteDbCart();
 
-        return view('order_history.store')
-                ->with(compact('orderHistory'))
-                ->withTitle('Invoice');
+        return redirect()->route('orderShow', $orderHistory->reference_number);
     }
 
     /**
@@ -129,9 +125,18 @@ class OrderHistoryController extends Controller
      * @param  \App\OrderHistory  $orderHistory
      * @return \Illuminate\Http\Response
      */
-    public function show(OrderHistory $orderHistory)
+    public function show($refNum)
     {
-        //
+        $user = auth()->user();
+
+        $orderHistory = OrderHistory::where([
+            'user_id' => $user->id,
+            'reference_number' => $refNum,
+        ])->firstOrFail();
+
+        return view('order_history.show')
+                ->with(compact('orderHistory'))
+                ->withTitle('Invoice');
     }
 
     /**

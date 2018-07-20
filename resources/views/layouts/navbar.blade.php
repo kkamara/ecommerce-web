@@ -24,22 +24,20 @@
                 </form>
             </ul>
             <ul class="navbar-nav mr-right">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        My Stuff
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Billing Cards</a>
-                        <a class="dropdown-item" href="#">Addresses</a>
-                        <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Order History</a>
-                        <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">User Settings</a>
-                    </div>
-                </li>
                 @if(Auth::check())
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            My Stuff
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">Billing Cards</a>
+                            <a class="dropdown-item" href="#">Addresses</a>
+                            <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Order History</a>
+                            <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">User Settings</a>
+                                <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                        </div>
                     </li>
                 @else
                     <li class="nav-item">

@@ -32,6 +32,6 @@ class OrderHistory extends Model
 
     public function orderHistoryProducts()
     {
-        return $this->hasOne('App\OrderHistoryProducts', 'order_history_id');
+        return $this->hasMany('App\OrderHistoryProducts', 'order_history_id');
     }
 }

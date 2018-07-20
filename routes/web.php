@@ -30,6 +30,7 @@ Route::put('/cart/update', 'CartController@update')->name('cartUpdate');
 */
 Route::get('/order/create', 'OrderHistoryController@create')->name('orderCreate');
 Route::post('/order/store', 'OrderHistoryController@store')->name('orderStore');
+Route::get('/order/invoice/{refNum}', 'OrderHistoryController@show')->name('orderShow');
 
 /*
 |--------------------------------------------------------------------------
