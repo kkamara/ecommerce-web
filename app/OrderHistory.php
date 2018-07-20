@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\orderHistoryProducts;
 
 class OrderHistory extends Model
 {
@@ -33,5 +34,22 @@ class OrderHistory extends Model
     public function orderHistoryProducts()
     {
         return $this->hasMany('App\OrderHistoryProducts', 'order_history_id');
+    }
+
+    public function usersAddresses()
+    {
+        return $this->belongsTo('App\UsersAddress', 'users_addresses_id');
+    }
+
+    public function getAmountTotalAttribute()
+    {
+        return OrderHistoryProducts::where([
+            'order_history_id' => $this->attributes['id'],
+        ])->sum('amount');
+    }
+
+    public function getFormattedCostAttribute()
+    {
+        return "£".number_format($this->attributes['cost'], 2);
     }
 }

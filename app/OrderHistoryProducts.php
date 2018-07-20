@@ -17,4 +17,9 @@ class OrderHistoryProducts extends Model
     {
         return $this->belongsTo('App\Product', 'product_id');
     }
+
+    public function getFormattedCostAttribute()
+    {
+        return "£".number_format($this->attributes['cost'], 2);
+    }
 }

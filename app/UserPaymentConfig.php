@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class UserPaymentConfig extends Model
 {
@@ -27,5 +28,10 @@ class UserPaymentConfig extends Model
         $cardNumber = str_pad($cardNumber, 16, "*", STR_PAD_LEFT);
 
         return $cardNumber;
+    }
+
+    public function getExpiryDateAttribute()
+    {
+        return Carbon::createFromDate($this->attributes['expiry_year'], $this->attributes['expiry_month'], 1)->format('m/Y');
     }
 }
