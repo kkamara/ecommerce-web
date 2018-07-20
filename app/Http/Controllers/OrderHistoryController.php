@@ -30,11 +30,13 @@ class OrderHistoryController extends Controller
         if(Auth::check())
         {
             $user = auth()->user();
-            $cachCart = $user->getDbCart();
+            $cart = $user->getDbCart();
+
+            if(empty($cart)) return redirect()->back()->with('flashDanger', 'Please add an item to cart before checking out.');
 
             return view('order_history.create', array(
                 'title' => 'Create Order',
-                'cart' => $cachCart,
+                'cart' => $cart,
                 'addresses' => $user->userAddress,
                 'billingCards' => $user->userPaymentConfig,
             ));
@@ -113,6 +115,8 @@ class OrderHistoryController extends Controller
                 ]);
             }
         }
+
+        $user->deleteDbCart();
 
         return view('order_history.store')
                 ->with(compact('orderHistory'))

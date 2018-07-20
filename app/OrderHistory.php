@@ -12,7 +12,6 @@ class OrderHistory extends Model
     public static function generateRefNum()
     {
         $param = str_shuffle("00000111112222233333444445555566666777778888899999");
-
         return substr($param, 0, 8);
     }
 

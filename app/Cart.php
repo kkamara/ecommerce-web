@@ -21,23 +21,17 @@ class Cart extends Model
         {
             $user = auth()->user();
             $cacheCart = $user->getDbCart();
-
-            foreach($cacheCart as $cc)
-            {
-                $count += $cc['amount'];
-            }
         }
         else
         {
             $cacheCart = Cache::get('cc');
+        }
 
-            if($cacheCart !== NULL)
-            {
-                foreach($cacheCart as $cc)
-                {
-                    $count += $cc['amount'];
-                }
-            }
+        if(empty($cacheCart)) return 0;
+
+        foreach($cacheCart as $cc)
+        {
+            $count += $cc['amount'];
         }
 
         return $count;
@@ -51,23 +45,17 @@ class Cart extends Model
         {
             $user = auth()->user();
             $cacheCart = $user->getDbCart();
-
-            foreach($cacheCart as $cc)
-            {
-                $price += $cc['product']->cost * $cc['amount'];
-            }
         }
         else
         {
             $cacheCart = getCacheCart();
+        }
 
-            if($cacheCart !== NULL)
-            {
-                foreach($cacheCart as $cc)
-                {
-                    $price += $cc['product']->cost * $cc['amount'];
-                }
-            }
+        if(empty($cacheCart)) return '£0.00';
+
+        foreach($cacheCart as $cc)
+        {
+            $price += $cc['product']->cost * $cc['amount'];
         }
 
         return "£".number_format($price, 2);

@@ -179,4 +179,9 @@ class User extends Authenticatable
             }
         }
     }
+
+    public function deleteDbCart()
+    {
+        \App\Cart::where('user_id', $this->attributes['id'])->delete();
+    }
 }
