@@ -95,7 +95,7 @@ class RegisterController extends Controller
             'street_address2' => 'max:191',
             'street_address3' => 'max:191',
             'street_address4' => 'max:191',
-            'postcode' => 'required|string|min: 6|max:191',
+            'postcode' => 'required|string|min: 5|max:191',
             'city' => 'required|string|min: 4|max:191',
             'country' => 'required|string|min: 4|max:191',
             'phone_number_ext' => 'required|min: 2|max:191',

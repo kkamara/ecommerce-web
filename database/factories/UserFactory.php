@@ -50,7 +50,7 @@ $factory->define(App\UserPaymentConfig::class, function(Faker $faker) {
     $user = App\User::inRandomOrder()->first();
 
     $param = str_shuffle("00000111112222233333444445555566666777778888899999");
-    $card_number   = substr($param, 0, 16);
+    $card_number   = mb_substr($param, 0, 16);
 
     return [
         'user_id' => $user->id,
@@ -58,6 +58,7 @@ $factory->define(App\UserPaymentConfig::class, function(Faker $faker) {
         'card_number' => $card_number,
         'expiry_month' => mt_rand(1, 12),
         'expiry_year' => mt_rand(2020, 2024),
+        'phone_number_extension' => '+'.mb_substr($param, 3,4),
         'phone_number' => $faker->phonenumber,
         'building_name' => $faker->buildingnumber,
         'street_address1' => $faker->StreetAddress,
