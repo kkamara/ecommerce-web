@@ -10,6 +10,11 @@ use Auth;
 
 class OrderHistoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['create']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +22,15 @@ class OrderHistoryController extends Controller
      */
     public function index()
     {
-        $this->middleware('auth')->except(['create']);
+        $user = auth()->user();
+
+        $orderHistory = OrderHistory::where([
+            'user_id' => $user->id,
+        ])->paginate(10);
+
+        return view('order_history.index', [
+            'title' => 'Invoices'
+        ])->with(compact('orderHistory'));
     }
 
     /**

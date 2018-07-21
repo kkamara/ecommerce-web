@@ -31,13 +31,14 @@ Route::put('/cart/update', 'CartController@update')->name('cartUpdate');
 Route::get('/order/create', 'OrderHistoryController@create')->name('orderCreate');
 Route::post('/order/store', 'OrderHistoryController@store')->name('orderStore');
 Route::get('/order/invoice/{refNum}', 'OrderHistoryController@show')->name('orderShow');
+Route::get('/order/invoice', 'OrderHistoryController@index')->name('orderHome');
 
 /*
 |--------------------------------------------------------------------------
 | User Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/login', 'Auth\LoginController@create')->name('loginHome');
+Route::get('/login', 'Auth\LoginController@create')->name('login');
 Route::put('/login/create', 'Auth\LoginController@store')->name('loginCreate');
 Route::get('/register', 'Auth\RegisterController@createUser')->name('registerHome');
 Route::post('/register/create', 'Auth\RegisterController@storeUser')->name('registerCreate');

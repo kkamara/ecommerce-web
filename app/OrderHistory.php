@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\orderHistoryProducts;
+use App\OrderHistoryProducts;
 
 class OrderHistory extends Model
 {

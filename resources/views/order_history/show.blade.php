@@ -108,6 +108,9 @@
             </div>
 
             <div class="card-footer">
+                <div class="float-left">
+                    <button class='btn btn-default' onclick='history.go(-1);'>Back</button>
+                </div>
                 <div class="float-right">
                     <button class='btn btn-primary' onclick='window.print();'>Print this page</button>
                 </div>

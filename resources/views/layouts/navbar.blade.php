@@ -33,10 +33,10 @@
                             <a class="dropdown-item" href="#">Billing Cards</a>
                             <a class="dropdown-item" href="#">Addresses</a>
                             <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Order History</a>
+                            <a class="dropdown-item" href="{{ route('orderHome') }}">Order History</a>
                             <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">User Settings</a>
-                                <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
+                            <a class="dropdown-item" href="#">User Settings</a>
+                            <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                         </div>
                     </li>
                 @else
@@ -49,7 +49,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                            <a class="nav-link" href="{{ route('loginHome') }}">
+                            <a class="nav-link" href="{{ route('login') }}">
                             <span>
                                 <i class="fa fa-sign-in" aria-hidden="true"></i>
                             </span>
