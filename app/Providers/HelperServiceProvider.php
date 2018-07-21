@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 
 require_once app_path('Helpers/CacheCartHelper.php');
+require_once app_path('Helpers/CommonHelper.php');
 
 class HelperServiceProvider extends ServiceProvider
 {

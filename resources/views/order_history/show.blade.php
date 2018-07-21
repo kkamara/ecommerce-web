@@ -98,7 +98,7 @@
                             </div>
 
                             <p>{{ $orderHistory->userPaymentConfig->card_holder_name }}</p>
-                            <p>{{ $orderHistory->userPaymentConfig->card_number }}</p>
+                            <p>{{ $orderHistory->userPaymentConfig->hidden_card_number }}</p>
                             <p>{{ $orderHistory->userPaymentConfig->expiry_date }}</p>
                         </div>
 
@@ -109,7 +109,7 @@
 
             <div class="card-footer">
                 <div class="float-left">
-                    <button class='btn btn-default' onclick='history.go(-1);'>Back</button>
+                    <a href='{{ route('orderHome') }}' class='btn btn-secondary'>Back</a>
                 </div>
                 <div class="float-right">
                     <button class='btn btn-primary' onclick='window.print();'>Print this page</button>

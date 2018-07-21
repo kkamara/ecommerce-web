@@ -19,7 +19,7 @@ class UserPaymentConfig extends Model
         return $this->hasOne('App\OrderHistory');
     }
 
-    public function getCardNumberAttribute()
+    public function getHiddenCardNumberAttribute()
     {
         $cardNumber = $this->attributes['card_number'];
         $length = strlen($cardNumber);
@@ -33,5 +33,10 @@ class UserPaymentConfig extends Model
     public function getExpiryDateAttribute()
     {
         return Carbon::createFromDate($this->attributes['expiry_year'], $this->attributes['expiry_month'], 1)->format('m/Y');
+    }
+
+    public function getEditExpiryDateAttribute()
+    {
+        return Carbon::createFromDate($this->attributes['expiry_year'], $this->attributes['expiry_month'], 1)->format('Y-m');
     }
 }

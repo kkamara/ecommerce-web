@@ -146,6 +146,8 @@ return [
         'street_address2' => 'street address 2',
         'street_address3' => 'street address 3',
         'street_address4' => 'street address 4',
+        'phone_number_ext' => 'phone number extension',
+        'mobile_number_ext' => 'mobile number extension',
     ],
 
 ];

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class UsersAddressController extends Controller
 {
-    public function __constructor()
+    public function __construct()
     {
         $this->middleware('auth');
     }
