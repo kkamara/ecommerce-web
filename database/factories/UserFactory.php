@@ -58,7 +58,7 @@ $factory->define(App\UserPaymentConfig::class, function(Faker $faker) {
         'card_number' => $card_number,
         'expiry_month' => mt_rand(1, 12),
         'expiry_year' => mt_rand(2020, 2024),
-        'phone_number_extension' => '+'.mb_substr($param, 3,4),
+        'phone_number_extension' => '+'.mb_substr($param, 2, 3),
         'phone_number' => $faker->phonenumber,
         'building_name' => $faker->buildingnumber,
         'street_address1' => $faker->StreetAddress,

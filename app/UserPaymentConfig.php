@@ -39,4 +39,14 @@ class UserPaymentConfig extends Model
     {
         return Carbon::createFromDate($this->attributes['expiry_year'], $this->attributes['expiry_month'], 1)->format('Y-m');
     }
+
+    public function getFormattedPhoneNumberAttribute()
+    {
+        return $this->attributes['phone_number_extension'] . ' ' . $this->attributes['phone_number'];
+    }
+
+    public function getFormattedMobileNumberAttribute()
+    {
+        return $this->attributes['mobile_number_extension'] . ' ' . $this->attributes['mobile_number'];
+    }
 }
