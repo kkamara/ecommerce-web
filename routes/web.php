@@ -43,3 +43,22 @@ Route::put('/login/create', 'Auth\LoginController@store')->name('loginCreate');
 Route::get('/register', 'Auth\RegisterController@createUser')->name('registerHome');
 Route::post('/register/create', 'Auth\RegisterController@storeUser')->name('registerCreate');
 Route::get('/logout', 'Auth\LoginController@delete')->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| Billing Card Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/billing', 'UserPaymentConfigController@index')->name('billingHome');
+Route::get('/billing/{userPaymentConfig}/edit', 'UserPaymentConfigController@edit')->name('billingEdit');
+Route::put('/billing/{userPaymentConfig}/update', 'UserPaymentConfigController@update')->name('billingUpdate');
+Route::get('/billing/{userPaymentConfig}/delete', 'UserPaymentConfigController@delete')->name('billingDelete');
+Route::delete('/billing/{userPaymentConfig}/destroy', 'UserPaymentConfigController@destroy')->name('billingDestroy');
+
+/*
+|--------------------------------------------------------------------------
+| Users Address Routes
+|--------------------------------------------------------------------------
+*/
+// Route::get('/cart', 'CartController@show')->name('cartShow');
+// Route::put('/cart/update', 'CartController@update')->name('cartUpdate');

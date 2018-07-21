@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\UserPaymentConfig;
 use Illuminate\Http\Request;
+use App\UserPaymentConfig;
+use Validator;
 
 class UserPaymentConfigController extends Controller
 {
+    public function __constructor()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +20,13 @@ class UserPaymentConfigController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+
+        $billingCards = UserPaymentConfig::where('user_id', $user->id)->paginate(10);
+
+        return view('user_payment_config.index', [
+            'title' => 'Billing Cards'
+        ])->with(compact('billingCards'));
     }
 
     /**
@@ -72,14 +84,47 @@ class UserPaymentConfigController extends Controller
         //
     }
 
+    public function delete(UserPaymentConfig $userPaymentConfig)
+    {
+        return view('user_payment_config.delete', [
+            'title' => 'Delete Billing Card',
+            'billingCard' => $userPaymentConfig,
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\UserPaymentConfig  $userPaymentConfig
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserPaymentConfig $userPaymentConfig)
+    public function destroy(UserPaymentConfig $userPaymentConfig, Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'choice' => 'required|boolean',
+        ]);
+
+        $user = auth()->user();
+
+        if(empty($validator->errors()->all()))
+        {
+            $choice = (bool) $request->input('choice');
+
+            if($choice !== FALSE)
+            {
+                UserPaymentConfig::destroy($userPaymentConfig->id);
+
+                return redirect()->route('billingHome')->with('flashSuccess', 'Billing card has been successfully deleted.');
+            }
+            else
+            {
+                return redirect()->route('billingHome')->with('flashSuccess', 'Billing card has not been deleted.');
+            }
+        }
+        else
+        {
+            return redirect()->back()->with('errors', $validator->errors()->all());
+        }
     }
 }
+
