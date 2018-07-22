@@ -86,10 +86,12 @@ $factory->define(App\Company::class, function(Faker $faker) {
 });
 
 $factory->define(App\Product::class, function(Faker $faker) {
-    $productName = $faker->company;
     $company = App\Company::inRandomOrder()->first();
+    $user = App\User::inRandomOrder()->first();
+    $productName = $faker->company;
 
     return [
+        'user_id' => $user->id,
         'company_id' => $company->id,
         'name' => $productName,
         'short_description' => substr($faker->paragraph(), 0, 191),
