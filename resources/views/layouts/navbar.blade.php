@@ -31,7 +31,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('billingHome') }}">Billing Cards</a>
-                            <a class="dropdown-item" href="#">Addresses</a>
+                            <a class="dropdown-item" href="{{ route('addressHome') }}">Addresses</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('orderHome') }}">Order History</a>
                             <div class="dropdown-divider"></div>

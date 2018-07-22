@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\UsersAddress;
 
 class UsersAddressController extends Controller
 {
@@ -18,7 +19,12 @@ class UsersAddressController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        $usersAddresses = UsersAddress::where('user_id', $user->id)->paginate(10);
+
+        return view('users_address.index', [
+            'title' => 'Addresses',
+        ])->with(compact('usersAddresses'));
     }
 
     /**

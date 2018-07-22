@@ -60,5 +60,8 @@ Route::delete('/billing/{userPaymentConfig}/destroy', 'UserPaymentConfigControll
 | Users Address Routes
 |--------------------------------------------------------------------------
 */
-// Route::get('/cart', 'CartController@show')->name('cartShow');
-// Route::put('/cart/update', 'CartController@update')->name('cartUpdate');
+Route::get('/address', 'UsersAddressController@index')->name('addressHome');
+Route::get('/address/{userPaymentConfig}/edit', 'UsersAddressController@edit')->name('addressEdit');
+Route::put('/address/{userPaymentConfig}/update', 'UsersAddressController@update')->name('addressUpdate');
+Route::get('/address/{userPaymentConfig}/delete', 'UsersAddressController@delete')->name('addressDelete');
+Route::delete('/address/{userPaymentConfig}/destroy', 'UsersAddressController@destroy')->name('addressDestroy');
