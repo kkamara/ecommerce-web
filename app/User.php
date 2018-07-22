@@ -56,6 +56,11 @@ class User extends Authenticatable
         return $this->hasMany('App\OrderHistory', 'user_id');
     }
 
+    public function product()
+    {
+        return $this->hasMany('App\Product', 'user_id');
+    }
+
     public function getOrderHistoryErrors($data)
     {
         $errors = array();
