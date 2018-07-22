@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\UsersAddress;
+use Validator;
 
 class UsersAddressController extends Controller
 {
@@ -34,7 +35,15 @@ class UsersAddressController extends Controller
      */
     public function create()
     {
-        //
+        $user = auth()->user();
+        if($usersAddress['user_id'] === $user->id)
+        {
+            //
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
@@ -45,7 +54,15 @@ class UsersAddressController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = auth()->user();
+        if($usersAddress['user_id'] === $user->id)
+        {
+            //
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
@@ -65,9 +82,17 @@ class UsersAddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(UsersAddress $usersAddress)
     {
-        //
+        $user = auth()->user();
+        if($usersAddress['user_id'] === $user->id)
+        {
+            //
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
@@ -77,9 +102,32 @@ class UsersAddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UsersAddress $usersAddress, Request $request)
     {
-        //
+        $user = auth()->user();
+        if($usersAddress['user_id'] === $user->id)
+        {
+            //
+        }
+        else
+        {
+            return abort(404);
+        }
+    }
+
+    public function delete(UsersAddress $usersAddress)
+    {
+        $user = auth()->user();
+        if($usersAddress['user_id'] === $user->id)
+        {
+            return view('users_address.delete', [
+                'title' => 'Delete Address',
+            ])->with(compact('usersAddress'));
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
@@ -88,8 +136,40 @@ class UsersAddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(UsersAddress $usersAddress, Request $request)
     {
-        //
+        $user = auth()->user();
+        if($usersAddress['user_id'] === $user->id)
+        {
+            $validator = Validator::make($request->all(), [
+                'choice' => 'required|boolean',
+            ]);
+
+            $user = auth()->user();
+
+            if(empty($validator->errors()->all()))
+            {
+                $choice = (bool) $request->input('choice');
+
+                if($choice !== FALSE)
+                {
+                    UsersAddress::destroy($usersAddress->id);
+
+                    return redirect()->route('addressHome')->with('flashSuccess', 'Address has been deleted successfully.');
+                }
+                else
+                {
+                    return redirect()->route('addressHome')->with('flashSuccess', 'Address has not been deleted.');
+                }
+            }
+            else
+            {
+                return redirect()->back()->with('errors', $validator->errors()->all());
+            }
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 }

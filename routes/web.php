@@ -61,7 +61,7 @@ Route::delete('/billing/{userPaymentConfig}/destroy', 'UserPaymentConfigControll
 |--------------------------------------------------------------------------
 */
 Route::get('/address', 'UsersAddressController@index')->name('addressHome');
-Route::get('/address/{userPaymentConfig}/edit', 'UsersAddressController@edit')->name('addressEdit');
-Route::put('/address/{userPaymentConfig}/update', 'UsersAddressController@update')->name('addressUpdate');
-Route::get('/address/{userPaymentConfig}/delete', 'UsersAddressController@delete')->name('addressDelete');
-Route::delete('/address/{userPaymentConfig}/destroy', 'UsersAddressController@destroy')->name('addressDestroy');
+Route::get('/address/{usersAddress}/edit', 'UsersAddressController@edit')->name('addressEdit');
+Route::put('/address/{usersAddress}/update', 'UsersAddressController@update')->name('addressUpdate');
+Route::get('/address/{usersAddress}/delete', 'UsersAddressController@delete')->name('addressDelete');
+Route::delete('/address/{usersAddress}/destroy', 'UsersAddressController@destroy')->name('addressDestroy');

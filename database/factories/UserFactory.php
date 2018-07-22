@@ -33,10 +33,12 @@ $factory->define(App\User::class, function (Faker $faker) {
 });
 
 $factory->define(App\UsersAddress::class, function (Faker $faker) {
+    $param = str_shuffle("00000111112222233333444445555566666777778888899999");
     $user = App\User::inRandomOrder()->first();
 
     return [
         'user_id' => $user->id,
+        'phone_number_extension' => '+'.mb_substr($param, 2, 3),
         'phone_number' => $faker->phonenumber,
         'building_name' => $faker->buildingnumber,
         'street_address1' => $faker->StreetAddress,
