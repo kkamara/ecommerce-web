@@ -52,7 +52,7 @@
                                             </div>
 
                                             <div class="pull-right">
-                                                <a href='{{ route('addressEdit', $address->id) }}' class='btn btn-primary'>Edit Card</a>
+                                                <a href='{{ route('addressEdit', $address->id) }}' class='btn btn-info'>Edit Card</a>
                                             </div>
                                         </div>
                                     </div>
@@ -67,7 +67,9 @@
                     </div>
                 </div>
             </div>
-
+            <div class="card-footer">
+                <a href="{{ route('addressCreate') }}" class="btn btn-primary float-right">Add Address</a>
+            </div>
         </div>
 
     </div>

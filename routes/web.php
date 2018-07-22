@@ -54,6 +54,8 @@ Route::get('/billing/{userPaymentConfig}/edit', 'UserPaymentConfigController@edi
 Route::put('/billing/{userPaymentConfig}/update', 'UserPaymentConfigController@update')->name('billingUpdate');
 Route::get('/billing/{userPaymentConfig}/delete', 'UserPaymentConfigController@delete')->name('billingDelete');
 Route::delete('/billing/{userPaymentConfig}/destroy', 'UserPaymentConfigController@destroy')->name('billingDestroy');
+Route::get('/billing/create', 'UserPaymentConfigController@create')->name('billingCreate');
+Route::post('/billing/store', 'UserPaymentConfigController@store')->name('billingStore');
 
 /*
 |--------------------------------------------------------------------------
@@ -65,3 +67,5 @@ Route::get('/address/{usersAddress}/edit', 'UsersAddressController@edit')->name(
 Route::put('/address/{usersAddress}/update', 'UsersAddressController@update')->name('addressUpdate');
 Route::get('/address/{usersAddress}/delete', 'UsersAddressController@delete')->name('addressDelete');
 Route::delete('/address/{usersAddress}/destroy', 'UsersAddressController@destroy')->name('addressDestroy');
+Route::get('/address/create', 'UsersAddressController@create')->name('addressCreate');
+Route::post('/address/store', 'UsersAddressController@store')->name('addressStore');
