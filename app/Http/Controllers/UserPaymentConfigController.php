@@ -159,7 +159,6 @@ class UserPaymentConfigController extends Controller
                 {
                     return redirect()->back()->with([
                         'errors' => ['Invalid expiry date provided.'],
-                        'input' => $request->all(),
                     ]);
                 }
             }
@@ -167,7 +166,6 @@ class UserPaymentConfigController extends Controller
             {
                 return redirect()->back()->with([
                     'errors' => $validator->errors()->all(),
-                    'input' => $request->all(),
                 ]);
             }
         }
