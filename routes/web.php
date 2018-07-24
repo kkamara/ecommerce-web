@@ -12,6 +12,7 @@ Route::get('/', 'HomeController@index')->name('home');
 | Product Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/products', 'ProductController@index')->name('productHome');
 Route::get('/products/{product}', 'ProductController@show')->name('productShow');
 Route::get('/products/{product}/add', 'ProductController@create')->name('productAdd');
 
