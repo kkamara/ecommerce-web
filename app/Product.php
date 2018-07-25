@@ -103,7 +103,9 @@ class Product extends Model
             {
                 if($sort_by == 'top')
                 {
-
+                    $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
+                        ->groupBy('product_reviews.product_id')
+                        ->orderBy('product_reviews.score', 'DESC');
                 }
             }
         }
