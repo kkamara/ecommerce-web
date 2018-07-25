@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Product;
 use Auth;
@@ -20,7 +19,7 @@ class ProductController extends Controller
 
         return view('product.index', [
             'title' => 'Products',
-            'products' => $products,
+            'products' => $products->appends(request()->except('page')),
             'input' => $request->all(),
         ]);
     }

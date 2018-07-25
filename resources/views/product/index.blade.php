@@ -18,7 +18,7 @@
                     <select name="sort_by" class='form-control'>
                         <option value="">Sort by</option>
                         <option @if(isset($input['sort_by']) && $input['sort_by'] == 'pop') selected @endif value="pop">Most Popular</option>
-                        <option @if(isset($input['sort_by']) && $input['sort_by'] == 'top') selected @endif value="top">Top Rated</option>
+                        {{-- <option @if(isset($input['sort_by']) && $input['sort_by'] == 'top') selected @endif value="top">Top Rated</option> --}}
                     </select>
                 </div>
             </div>
@@ -40,8 +40,6 @@
                     <input type="number" min="0.01" step="0.01" max="2500" name="max_price" class='form-control' placeholder='Max' value='{{ $input['max_price'] or '' }}'>
                 </div>
             </div>
-
-            {{-- add input for average review --}}
 
             <div class="form-group">
                 <div class="input-group">

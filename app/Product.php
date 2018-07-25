@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -94,16 +95,17 @@ class Product extends Model
                 $products = $products->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
                     ->groupBy('order_history_products.product_id');
             }
-            else
-            {
-                if($sort_by == 'top')
-                {
-                    // update to get average reviews
-                    $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
-                        ->groupBy('product_reviews.product_id')
-                        ->orderBy('product_reviews.score', 'DESC');
-                }
-            }
+            // else
+            // {
+            //     if($sort_by == 'top')
+            //     {
+            //         // update to get average reviews
+            //         $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
+            //             ->addSelect(DB::raw('AVG(product_reviews.score) as average_score'))
+            //             ->orderBy('average_score', 'desc')
+            //             ->groupBy('average_score', 'desc');
+            //     }
+            // }
         }
 
         $products = $products->orderBy('products.id', 'DESC')->paginate(7);
