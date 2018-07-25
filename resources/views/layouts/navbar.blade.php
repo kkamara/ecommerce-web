@@ -11,10 +11,10 @@
                     <a class="nav-link" href="{{ route('home') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <div class="nav-item">
-                    <a class="nav-link" href="#">Most Popular</a>
+                    <a class="nav-link" href="{{ url('products/?sort_by=pop') }}">Most Popular</a>
                 </div>
                 <div class="nav-item">
-                    <a class="nav-link" href="#">Top Rated</a>
+                    <a class="nav-link" href="{{ url('products/?sort_by=top') }}">Top Rated</a>
                 </div>
             </ul>
             <ul class="navbar-nav mr-auto">
