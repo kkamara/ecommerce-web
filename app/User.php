@@ -86,7 +86,7 @@ class User extends Authenticatable
         return $errors;
     }
 
-    public function productReviews()
+    public function productReview()
     {
         return $this->hasMany('App\ProductReview', 'user_id');
     }

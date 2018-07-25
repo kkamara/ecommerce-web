@@ -65,9 +65,21 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $user = auth()->user();
+
+        $reviews = $product->productReview()->get();
+
+        $permissionToReview = FALSE;
+
+        if(isset($user))
+            $permissionToReview = $product->didUserPurchaseProduct($user->id);
+
         return view('product.show', [
-            'title' => $product->name
-        ])->with(compact('product'));
+            'title' => $product->name,
+        ])
+        ->with(compact('product'))
+        ->with(compact('reviews'))
+        ->with(compact('permissionToReview'));
     }
 
     /**

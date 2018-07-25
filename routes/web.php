@@ -16,6 +16,14 @@ Route::get('/products', 'ProductController@index')->name('productHome');
 Route::get('/products/{product}', 'ProductController@show')->name('productShow');
 Route::get('/products/{product}/add', 'ProductController@create')->name('productAdd');
 
+
+/*
+|--------------------------------------------------------------------------
+| Product Review Routes
+|--------------------------------------------------------------------------
+*/
+Route::post('/products/{product}/review', 'ProductReviewController@store')->name('reviewCreate');
+
 /*
 |--------------------------------------------------------------------------
 | Cart Routes

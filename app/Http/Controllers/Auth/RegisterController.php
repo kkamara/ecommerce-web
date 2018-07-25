@@ -111,40 +111,61 @@ class RegisterController extends Controller
         if(empty($validator->errors()->all()))
         {
             $expiry_date = explode('-', request('expiry_date'));
-            $expiry_year = $expiry_date[0];
-            $expiry_month = $expiry_date[1];
+            $expiry_year = filter_var($expiry_date[0], FILTER_SANITIZE_NUMBER_INT);
+            $expiry_month = filter_var($expiry_date[1], FILTER_SANITIZE_NUMBER_INT);
 
             if(strtotime(date("$expiry_year-$expiry_month")) >= strtotime(date('Y-m')))
             {
+                $firstName = filter_var(request('first_name'), FILTER_SANITIZE_STRING);
+                $lastName = filter_var(request('last_name'), FILTER_SANITIZE_STRING);
+                $email = filter_var(request('email'), FILTER_SANITIZE_EMAIL);
+                $password = bcrypt('password');
+
+                $building_name = filter_var(request('building_name'), FILTER_SANITIZE_STRING);
+                $streetAddress1 = filter_var(request('street_address1'), FILTER_SANITIZE_STRING);
+                $streetAddress2 = filter_var(request('street_address2'), FILTER_SANITIZE_STRING);
+                $streetAddress3 = filter_var(request('street_address3'), FILTER_SANITIZE_STRING);
+                $streetAddress4 = filter_var(request('street_address4'), FILTER_SANITIZE_STRING);
+                $postcode = filter_var(request('postcode'), FILTER_SANITIZE_STRING);
+                $city = filter_var(request('city'), FILTER_SANITIZE_STRING);
+                $country = filter_var(request('country'), FILTER_SANITIZE_STRING);
+                $county = filter_var(request('county'), FILTER_SANITIZE_STRING);
+                $phoneNumberExtension = filter_var(request('phone_number_ext'), FILTER_SANITIZE_STRING);
+                $phoneNumber = filter_var(request('phone_number'), FILTER_SANITIZE_STRING);
+                $mobileNumberExtension = filter_var(request('mobile_number_ext'), FILTER_SANITIZE_STRING);
+                $mobileNumber = filter_var(request('mobile_number'), FILTER_SANITIZE_STRING);
+
+                $cardHolderName = filter_var(request('card_holder_name'), FILTER_SANITIZE_STRING);
+                $cardNumber = filter_var(request('card_number'), FILTER_SANITIZE_STRING);
 
                 $data = array(
                     'user' => array(
-                        'slug' => str_slug(request('first_name') . ' ' . request('last_name'), '-'),
-                        'first_name' => request('first_name'),
-                        'last_name' => request('last_name'),
-                        'email' => request('email'),
-                        'password' => bcrypt('password'),
+                        'slug' => str_slug($firstName . ' ' . $lastName, '-'),
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'email' => $email,
+                        'password' => $password,
                     ),
                     'user_address' => array(
-                        'building_name' => request('building_name'),
-                        'street_address1' => request('street_address1'),
-                        'street_address2' => request('street_address2'),
-                        'street_address3' => request('street_address3'),
-                        'street_address4' => request('street_address4'),
-                        'postcode' => request('postcode'),
-                        'city' => request('city'),
-                        'country' => request('country'),
-                        'county' => request('county'), // nullable
-                        'phone_number_extension' => request('phone_number_ext'),
-                        'phone_number' => request('phone_number'),
-                        'mobile_number_extension' => request('mobile_number_ext'), // nullable
-                        'mobile_number' => request('mobile_number'), // nullable
+                        'building_name' => $building_name,
+                        'street_address1' => $streetAddress1,
+                        'street_address2' => $streetAddress2,
+                        'street_address3' => $streetAddress3,
+                        'street_address4' => $streetAddress4,
+                        'postcode' => $postcode,
+                        'city' => $city,
+                        'country' => $country,
+                        'county' => $county, // nullable
+                        'phone_number_extension' => $phoneNumberExtension,
+                        'phone_number' => $phoneNumber,
+                        'mobile_number_extension' => $mobileNumberExtension, // nullable
+                        'mobile_number' => $mobileNumber, // nullable
                     ),
                     'user_payment_config' => array(
-                        'card_holder_name' => request('card_holder_name'),
-                        'card_number' => request('card_number'),
-                        'expiry_month' => $expiry_month,
-                        'expiry_year' => $expiry_year,
+                        'card_holder_name' => $cardHolderName,
+                        'card_number' => $cardNumber,
+                        'expiry_month' => $expiryMonth,
+                        'expiry_year' => $expiryYear,
                     ),
                 );
                 $data['user_payment_config'] = array_merge($data['user_address'], $data['user_payment_config']);

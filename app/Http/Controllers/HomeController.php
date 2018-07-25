@@ -23,9 +23,9 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest()->paginate(7);
+        $products = Product::getProducts($request);
 
         return view('home.index')
                 ->withTitle('Home')

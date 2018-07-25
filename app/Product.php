@@ -28,14 +28,9 @@ class Product extends Model
         return $this->belongsTo('App\Company', 'company_id');
     }
 
-    public function orderHistory()
+    public function productReview()
     {
-        return $this->hasMany('App\OrderHistory', 'product_id');
-    }
-
-    public function productReviews()
-    {
-        return $this->hasMany('App\ProductReviews', 'product_id');
+        return $this->hasMany('App\ProductReview', 'product_id');
     }
 
     public function orderHistoryProducts()
@@ -103,6 +98,7 @@ class Product extends Model
             {
                 if($sort_by == 'top')
                 {
+                    // update to get average reviews
                     $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
                         ->groupBy('product_reviews.product_id')
                         ->orderBy('product_reviews.score', 'DESC');
@@ -113,5 +109,35 @@ class Product extends Model
         $products = $products->orderBy('products.id', 'DESC')->paginate(7);
 
         return $products;
+    }
+
+    public function didUserPurchaseProduct($user_id)
+    {
+        foreach($this->orderHistoryProducts()->get() as $product){
+            $orderHistory = $product->orderHistory()->get();
+
+            foreach($orderHistory as $order)
+            {
+                if($order->user_id == $user_id)
+                {
+                    return TRUE;
+                }
+            }
+        }
+
+        return FALSE;
+    }
+
+    public function didUserReviewProduct($user_id)
+    {
+        foreach($this->productReview()->get() as $review){
+
+            if($review->user_id == $user_id)
+            {
+                return TRUE;
+            }
+        }
+
+        return FALSE;
     }
 }
