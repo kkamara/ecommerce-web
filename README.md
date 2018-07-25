@@ -44,7 +44,7 @@ Extensive ecommerce site built with ability to add to cart without being logged 
     </tr>
     <tr>
       <td>Users can add, edit & delete addresses</td>
-      <td>Complete+</td>
+      <td>Complete</td>
     </tr>
     <tr>
       <td>Guests / Users can search for products</td>
@@ -60,7 +60,7 @@ Extensive ecommerce site built with ability to add to cart without being logged 
     </tr>
     <tr>  
       <td>Users can leave reviews on verified purchases</td>
-      <td>Inprogress</td>
+      <td>Complete+</td>
     </tr>
     <tr>
       <td>Users can change account settings</td>
