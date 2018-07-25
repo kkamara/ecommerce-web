@@ -95,20 +95,19 @@ class Product extends Model
                 $products = $products->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
                     ->groupBy('order_history_products.product_id');
             }
-            // else
-            // {
-            //     if($sort_by == 'top')
-            //     {
-            //         // update to get average reviews
-            //         $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
-            //             ->addSelect(DB::raw('AVG(product_reviews.score) as average_score'))
-            //             ->orderBy('average_score', 'desc')
-            //             ->groupBy('average_score', 'desc');
-            //     }
-            // }
+            else
+            {
+                if($sort_by == 'top')
+                {
+                    $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
+                    ->withCount(['productReview as review' => function($query) {
+                        $query->select(DB::raw('avg(product_reviews.score) as average_rating'));
+                    }])->groupBy('product_reviews.id')->orderByDesc('review');
+                }
+            }
         }
 
-        $products = $products->orderBy('products.id', 'DESC')->paginate(7);
+        $products = $products->orderBy('products.id', 'DESC')->distinct()->paginate(7);
 
         return $products;
     }

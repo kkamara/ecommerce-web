@@ -18,7 +18,7 @@
                     <select name="sort_by" class='form-control'>
                         <option value="">Sort by</option>
                         <option @if(isset($input['sort_by']) && $input['sort_by'] == 'pop') selected @endif value="pop">Most Popular</option>
-                        {{-- <option @if(isset($input['sort_by']) && $input['sort_by'] == 'top') selected @endif value="top">Top Rated</option> --}}
+                        <option @if(isset($input['sort_by']) && $input['sort_by'] == 'top') selected @endif value="top">Top Rated</option>
                     </select>
                 </div>
             </div>

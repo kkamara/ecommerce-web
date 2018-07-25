@@ -13,9 +13,9 @@
                 <div class="nav-item">
                     <a class="nav-link" href="{{ url('products/?sort_by=pop') }}">Most Popular</a>
                 </div>
-                {{-- <div class="nav-item">
+                <div class="nav-item">
                     <a class="nav-link" href="{{ url('products/?sort_by=top') }}">Top Rated</a>
-                </div> --}}
+                </div>
             </ul>
             <ul class="navbar-nav mr-auto">
                 <form class="form-inline my-2 my-lg-0" action='{{ route('productHome') }}' method='GET'>
