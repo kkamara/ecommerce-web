@@ -16,55 +16,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query   = $request->input('query');
-        $min     = $request->input('min_price');
-        $max     = $request->input('max_price');
-        $sort_by = $request->input('sort_by');
-
-        $products = Product::select('products.id', 'products.name', 'products.user_id', 'products.company_id', 'products.short_description', 'products.long_description', 'products.product_details', 'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery', 'products.created_at', 'products.updated_at');
-        $whereClause = array();
-
-        if(isset($query))
-        {
-            $query = filter_var($query, FILTER_SANITIZE_STRING);
-            array_push($whereClause, [
-                'products.name', 'LIKE', "$query%"
-            ]);
-        }
-        if(isset($min))
-        {
-            $min = filter_var($min, FILTER_SANITIZE_NUMBER_FLOAT);
-            array_push($whereClause, [
-                'products.cost', '>', $min
-            ]);
-        }
-        if(isset($max))
-        {
-            $max = filter_var($max, FILTER_SANITIZE_NUMBER_FLOAT);
-            array_push($whereClause, [
-                'products.cost', '<', $max
-            ]);
-        }
-
-        if(isset($whereClause)) $products = $products->where($whereClause);
-
-        if(isset($sort_by))
-        {
-            if($sort_by == 'pop')
-            {
-                $products = $products->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
-                    ->groupBy('order_history_products.product_id');
-            }
-            else
-            {
-                if($sort_by == 'top')
-                {
-
-                }
-            }
-        }
-
-        $products = $products->orderBy('products.id', 'DESC')->paginate(7);
+        $products = Product::getProducts($request);
 
         return view('product.index', [
             'title' => 'Products',
