@@ -189,4 +189,23 @@ class User extends Authenticatable
     {
         \App\Cart::where('user_id', $this->attributes['id'])->delete();
     }
+
+    public static function slugIsUnique($slug)
+    {
+        $slugs = User::where('slug', $slug)->get();
+
+        return !empty($slugs) ? TRUE : FALSE;
+    }
+
+    public static function generateUniqueSlug($slug)
+    {
+        $param = str_shuffle("00000111112222233333444445555566666777778888899999");
+
+        while(! Self::slugIsUnique($slug) )
+        {
+            $slug = $slug . substr($param, 0, mt_rand(4, 8));
+        }
+
+        return $slug;
+    }
 }

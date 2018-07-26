@@ -138,9 +138,16 @@ class RegisterController extends Controller
                 $cardHolderName = filter_var(request('card_holder_name'), FILTER_SANITIZE_STRING);
                 $cardNumber = filter_var(request('card_number'), FILTER_SANITIZE_STRING);
 
+                $slug = str_slug($firstName . ' ' . $lastName, '-');
+
+                if(! User::slugIsUnique($slug))
+                {
+                    $slug = User::generateUniqueSlug($slug);
+                }
+
                 $data = array(
                     'user' => array(
-                        'slug' => str_slug($firstName . ' ' . $lastName, '-'),
+                        'slug' => $slug,
                         'first_name' => $firstName,
                         'last_name' => $lastName,
                         'email' => $email,

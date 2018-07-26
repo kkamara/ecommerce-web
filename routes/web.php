@@ -78,3 +78,18 @@ Route::get('/address/{usersAddress}/delete', 'UsersAddressController@delete')->n
 Route::delete('/address/{usersAddress}/destroy', 'UsersAddressController@destroy')->name('addressDestroy');
 Route::get('/address/create', 'UsersAddressController@create')->name('addressCreate');
 Route::post('/address/store', 'UsersAddressController@store')->name('addressStore');
+
+/*
+|--------------------------------------------------------------------------
+| Users Settings Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('user/{slug}', 'UserController@edit')->name('userEdit');
+Route::put('user/{slug}', 'UserController@update')->name('userUpdate');
+
+/*
+|--------------------------------------------------------------------------
+| Company Routes
+|--------------------------------------------------------------------------
+*/
+//

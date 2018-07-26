@@ -35,7 +35,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('orderHome') }}">Order History</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">User Settings</a>
+                            <a class="dropdown-item" href="{{ route('userEdit', auth()->user()->slug) }}">User Settings</a>
                             <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                         </div>
                     </li>
