@@ -77,6 +77,9 @@
                     </div>
                     <p class="mb-1">{{ $product->short_description }}.</p>
                     <small>{{ $product->company->name }}.</small>
+                    <div class="float-right">
+                        Average Rating: @if($product->review !== '0.00') {{ $product->review }} @else None @endif
+                    </div>
                 </a>
 
 

@@ -102,7 +102,7 @@ class Product extends Model
                     $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
                     ->withCount(['productReview as review' => function($query) {
                         $query->select(DB::raw('avg(product_reviews.score) as average_rating'));
-                    }])->groupBy('product_reviews.id')->orderByDesc('review');
+                    }])->groupBy('product_reviews.product_id')->orderByDesc('review');
                 }
             }
         }
@@ -140,5 +140,15 @@ class Product extends Model
         }
 
         return FALSE;
+    }
+
+    public function getReviewAttribute()
+    {
+        $review = \App\ProductReview::select(DB::raw('avg(score) as review'))
+            ->where('product_id', $this->attributes['id'])
+            ->groupBy('product_id')
+            ->distinct()->first();
+
+        return isset($review->review) ? number_format((float)$review->review, 2, '.', '') : '0.00';
     }
 }

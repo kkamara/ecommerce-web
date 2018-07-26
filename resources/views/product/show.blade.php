@@ -62,7 +62,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="lead">Reviews</div>
+                    <div class="lead">
+                        Reviews @if($product->review !== '0.00') (Average  {{ $product->review }}) @endif
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="card-text">
@@ -74,7 +76,7 @@
                                         <div class="float-left">
                                             Product Rated {{ $review->score }} / 5
 
-                                            @if(auth()->user()->id === $review->user_id)
+                                            @if(Auth::check() && auth()->user()->id === $review->user_id)
                                                 by <strong>you</strong>
                                             @endif
                                         </div>
