@@ -88,23 +88,26 @@ class Product extends Model
 
         if(isset($whereClause)) $products = $products->where($whereClause);
 
-        if(isset($sort_by))
+        switch($sort_by)
         {
-            if($sort_by == 'pop')
-            {
+            case 'pop': // most popular
                 $products = $products->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
                     ->groupBy('order_history_products.product_id');
-            }
-            else
-            {
-                if($sort_by == 'top')
-                {
-                    $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
+            break;
+            case 'top': // top rated
+                $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
                     ->withCount(['productReview as review' => function($query) {
                         $query->select(DB::raw('avg(product_reviews.score) as average_rating'));
                     }])->groupBy('product_reviews.product_id')->orderByDesc('review');
-                }
-            }
+            break;
+            case 'low': // lowest price
+                $products = $products->orderBy('cost', 'ASC');
+            break;
+            case 'hig': // highest price
+                $products = $products->orderBy('cost', 'DESC');
+            break;
+            default:
+            break;
         }
 
         $products = $products->orderBy('products.id', 'DESC')->distinct()->paginate(7);

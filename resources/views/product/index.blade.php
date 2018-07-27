@@ -19,6 +19,8 @@
                         <option value="">Sort by</option>
                         <option @if(isset($input['sort_by']) && $input['sort_by'] == 'pop') selected @endif value="pop">Most Popular</option>
                         <option @if(isset($input['sort_by']) && $input['sort_by'] == 'top') selected @endif value="top">Top Rated</option>
+                        <option @if(isset($input['sort_by']) && $input['sort_by'] == 'low') selected @endif value="low">Lowest Price</option>
+                        <option @if(isset($input['sort_by']) && $input['sort_by'] == 'hig') selected @endif value="hig">Highest Price</option>
                     </select>
                 </div>
             </div>
