@@ -104,32 +104,32 @@ class UserController extends Controller
 
             if(empty($validator->errors()->all()))
             {
-                if($request->input('new_password') !== NULL)
+                if(! app('hash')->check($data['password'], $requestUser->password))
                 {
-                    $data = array();
-                    $data['password'] = bcrypt($request->input('new_password'));
-
-                    if(! app('hash')->check($data['password'], $requestUser->password))
+                    if($request->input('new_password') !== NULL)
                     {
+                        $data = array();
+                        $data['password'] = bcrypt($request->input('new_password'));
+
                         $requestUser->update($data);
                     }
-                    else
-                    {
-                        return redirect()->back()->with('errors', ['Password does not match.']);
-                    }
+
+                    $data = array();
+                    $data['first_name'] = filter_var($request->input('first_name'), FILTER_SANITIZE_STRING);
+                    $data['last_name']  = filter_var($request->input('last_name'), FILTER_SANITIZE_STRING);
+                    $data['email']      = filter_var($request->input('email'), FILTER_SANITIZE_STRING);
+
+                    $slug = User::generateUniqueSlug($data['first_name'] . ' ' . $data['last_name']);
+                    $data['slug'] = str_slug($slug, '-');
+
+                    $requestUser->update($data);
+
+                    return redirect()->back()->with('flashSuccess', 'Your settings have been successfully updated.');
                 }
-
-                $data = array();
-                $data['first_name']   = filter_var($request->input('first_name'), FILTER_SANITIZE_STRING);
-                $data['last_name']    = filter_var($request->input('last_name'), FILTER_SANITIZE_STRING);
-                $data['email']        = filter_var($request->input('email'), FILTER_SANITIZE_STRING);
-
-                $slug = User::generateUniqueSlug($data['first_name'] . ' ' . $data['last_name']);
-                $data['slug'] = str_slug($slug, '-');
-
-                $requestUser->update($data);
-
-                return redirect()->back()->with('flashSuccess', 'Your settings have been successfully updated.');
+                else
+                {
+                    return redirect()->back()->with('errors', ['Password is incorrect.']);
+                }
             }
             else
             {
