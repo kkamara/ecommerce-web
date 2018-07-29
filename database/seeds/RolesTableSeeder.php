@@ -14,5 +14,6 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         Role::create(['name' => 'moderator']);
+        Role::create(['name' => 'vendor']);
     }
 }
