@@ -35,6 +35,16 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('orderHome') }}">Order History</a>
                             <div class="dropdown-divider"></div>
+                            @role('vendor')
+                                <a class="dropdown-item" href="#">My Products</a>
+                            @else
+                                @role('moderator')
+                                    <a class="dropdown-item" href="#">Reported Product Reviews</a>
+                                @else
+                                    <a class="dropdown-item" href="#">Become a vendor</a>
+                                @endrole
+                            @endrole
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('userEdit', auth()->user()->slug) }}">User Settings</a>
                             <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                         </div>

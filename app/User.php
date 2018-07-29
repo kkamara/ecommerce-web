@@ -127,7 +127,7 @@ class User extends Authenticatable
 
     public function getDbCart()
     {
-        $products = App\Cart::where('user_id', $this->attributes['id'])->get();
+        $products = \App\Cart::where('user_id', $this->attributes['id'])->get();
 
         if(! $products->isEmpty())
         {
