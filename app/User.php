@@ -5,13 +5,13 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Cart;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use Notifiable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -115,7 +115,7 @@ class User extends Authenticatable
         {
             for($i=0; $i<$cc['amount']; $i++)
             {
-                Cart::insert([
+                \App\Cart::insert([
                     'user_id' => $this->attributes['id'],
                     'product_id' => $cc['product']->id,
                 ]);
@@ -127,7 +127,7 @@ class User extends Authenticatable
 
     public function getDbCart()
     {
-        $products = Cart::where('user_id', $this->attributes['id'])->get();
+        $products = App\Cart::where('user_id', $this->attributes['id'])->get();
 
         if(! $products->isEmpty())
         {
@@ -167,7 +167,7 @@ class User extends Authenticatable
             $product_id = $cc['product']->id;
             $amount = $request->get('amount-' . $product_id);
 
-            Cart::where([
+            \App\Cart::where([
                 'user_id' => $this->attributes['id'],
                 'product_id' => $product_id,
             ])->delete();
@@ -176,7 +176,7 @@ class User extends Authenticatable
             {
                 for($i=0; $i<$amount; $i++)
                 {
-                    Cart::insert([
+                    \App\Cart::insert([
                         'user_id' => $this->attributes['id'],
                         'product_id' => $product_id,
                     ]);
