@@ -52,23 +52,23 @@ Extensive ecommerce site built with ability to add to cart without being logged 
     </tr>
     <tr>
       <td>Guests / Users can view most popular products</td>
-      <td>Complete+</td>
+      <td>Complete</td>
     </tr>
     <tr>      
       <td>Guests / Users can view top rated products</td>
-      <td>Complete+</td>
+      <td>Complete</td>
     </tr>
     <tr>  
       <td>Users can leave reviews on verified purchases</td>
-      <td>Complete+</td>
+      <td>Complete</td>
     </tr>
     <tr>
       <td>Users can change account settings</td>
-      <td>Complete+</td>
+      <td>Complete</td>
     </tr>
     <tr>
       <td>Users can apply to become vendors</td>
-      <td>Inprogress</td>
+      <td>Complete+</td>
     </tr>
     <tr>
       <td>Vendors can add, edit & delete their own products</td>
