@@ -30894,7 +30894,7 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap v4.1.1 (https://getbootstrap.com/)
+  * Bootstrap v4.1.2 (https://getbootstrap.com/)
   * Copyright 2011-2018 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
@@ -30965,7 +30965,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): util.js
+   * Bootstrap (v4.1.2): util.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31042,8 +31042,7 @@ module.exports = function(module) {
         }
 
         try {
-          var $selector = $$$1(document).find(selector);
-          return $selector.length > 0 ? selector : null;
+          return document.querySelector(selector) ? selector : null;
         } catch (err) {
           return null;
         }
@@ -31098,7 +31097,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): alert.js
+   * Bootstrap (v4.1.2): alert.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31110,7 +31109,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'alert';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.alert';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31173,7 +31172,7 @@ module.exports = function(module) {
         var parent = false;
 
         if (selector) {
-          parent = $$$1(selector)[0];
+          parent = document.querySelector(selector);
         }
 
         if (!parent) {
@@ -31273,7 +31272,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): button.js
+   * Bootstrap (v4.1.2): button.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31285,7 +31284,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'button';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.button';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31330,14 +31329,14 @@ module.exports = function(module) {
         var rootElement = $$$1(this._element).closest(Selector.DATA_TOGGLE)[0];
 
         if (rootElement) {
-          var input = $$$1(this._element).find(Selector.INPUT)[0];
+          var input = this._element.querySelector(Selector.INPUT);
 
           if (input) {
             if (input.type === 'radio') {
-              if (input.checked && $$$1(this._element).hasClass(ClassName.ACTIVE)) {
+              if (input.checked && this._element.classList.contains(ClassName.ACTIVE)) {
                 triggerChangeEvent = false;
               } else {
-                var activeElement = $$$1(rootElement).find(Selector.ACTIVE)[0];
+                var activeElement = rootElement.querySelector(Selector.ACTIVE);
 
                 if (activeElement) {
                   $$$1(activeElement).removeClass(ClassName.ACTIVE);
@@ -31350,7 +31349,7 @@ module.exports = function(module) {
                 return;
               }
 
-              input.checked = !$$$1(this._element).hasClass(ClassName.ACTIVE);
+              input.checked = !this._element.classList.contains(ClassName.ACTIVE);
               $$$1(input).trigger('change');
             }
 
@@ -31360,7 +31359,7 @@ module.exports = function(module) {
         }
 
         if (addAriaPressed) {
-          this._element.setAttribute('aria-pressed', !$$$1(this._element).hasClass(ClassName.ACTIVE));
+          this._element.setAttribute('aria-pressed', !this._element.classList.contains(ClassName.ACTIVE));
         }
 
         if (triggerChangeEvent) {
@@ -31437,7 +31436,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): carousel.js
+   * Bootstrap (v4.1.2): carousel.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31449,7 +31448,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'carousel';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.carousel';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31528,7 +31527,7 @@ module.exports = function(module) {
         this.touchTimeout = null;
         this._config = this._getConfig(config);
         this._element = $$$1(element)[0];
-        this._indicatorsElement = $$$1(this._element).find(Selector.INDICATORS)[0];
+        this._indicatorsElement = this._element.querySelector(Selector.INDICATORS);
 
         this._addEventListeners();
       } // Getters
@@ -31562,7 +31561,7 @@ module.exports = function(module) {
           this._isPaused = true;
         }
 
-        if ($$$1(this._element).find(Selector.NEXT_PREV)[0]) {
+        if (this._element.querySelector(Selector.NEXT_PREV)) {
           Util.triggerTransitionEnd(this._element);
           this.cycle(true);
         }
@@ -31589,7 +31588,7 @@ module.exports = function(module) {
       _proto.to = function to(index) {
         var _this = this;
 
-        this._activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
+        this._activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
 
         var activeIndex = this._getItemIndex(this._activeElement);
 
@@ -31695,7 +31694,7 @@ module.exports = function(module) {
       };
 
       _proto._getItemIndex = function _getItemIndex(element) {
-        this._items = $$$1.makeArray($$$1(element).parent().find(Selector.ITEM));
+        this._items = element && element.parentNode ? [].slice.call(element.parentNode.querySelectorAll(Selector.ITEM)) : [];
         return this._items.indexOf(element);
       };
 
@@ -31720,7 +31719,7 @@ module.exports = function(module) {
       _proto._triggerSlideEvent = function _triggerSlideEvent(relatedTarget, eventDirectionName) {
         var targetIndex = this._getItemIndex(relatedTarget);
 
-        var fromIndex = this._getItemIndex($$$1(this._element).find(Selector.ACTIVE_ITEM)[0]);
+        var fromIndex = this._getItemIndex(this._element.querySelector(Selector.ACTIVE_ITEM));
 
         var slideEvent = $$$1.Event(Event.SLIDE, {
           relatedTarget: relatedTarget,
@@ -31734,7 +31733,8 @@ module.exports = function(module) {
 
       _proto._setActiveIndicatorElement = function _setActiveIndicatorElement(element) {
         if (this._indicatorsElement) {
-          $$$1(this._indicatorsElement).find(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+          var indicators = [].slice.call(this._indicatorsElement.querySelectorAll(Selector.ACTIVE));
+          $$$1(indicators).removeClass(ClassName.ACTIVE);
 
           var nextIndicator = this._indicatorsElement.children[this._getItemIndex(element)];
 
@@ -31747,7 +31747,7 @@ module.exports = function(module) {
       _proto._slide = function _slide(direction, element) {
         var _this3 = this;
 
-        var activeElement = $$$1(this._element).find(Selector.ACTIVE_ITEM)[0];
+        var activeElement = this._element.querySelector(Selector.ACTIVE_ITEM);
 
         var activeElementIndex = this._getItemIndex(activeElement);
 
@@ -31913,11 +31913,13 @@ module.exports = function(module) {
 
     $$$1(document).on(Event.CLICK_DATA_API, Selector.DATA_SLIDE, Carousel._dataApiClickHandler);
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      $$$1(Selector.DATA_RIDE).each(function () {
-        var $carousel = $$$1(this);
+      var carousels = [].slice.call(document.querySelectorAll(Selector.DATA_RIDE));
+
+      for (var i = 0, len = carousels.length; i < len; i++) {
+        var $carousel = $$$1(carousels[i]);
 
         Carousel._jQueryInterface.call($carousel, $carousel.data());
-      });
+      }
     });
     /**
      * ------------------------------------------------------------------------
@@ -31938,7 +31940,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): collapse.js
+   * Bootstrap (v4.1.2): collapse.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -31950,7 +31952,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'collapse';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.collapse';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -31998,14 +32000,17 @@ module.exports = function(module) {
         this._isTransitioning = false;
         this._element = element;
         this._config = this._getConfig(config);
-        this._triggerArray = $$$1.makeArray($$$1("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
-        var tabToggles = $$$1(Selector.DATA_TOGGLE);
+        this._triggerArray = $$$1.makeArray(document.querySelectorAll("[data-toggle=\"collapse\"][href=\"#" + element.id + "\"]," + ("[data-toggle=\"collapse\"][data-target=\"#" + element.id + "\"]")));
+        var toggleList = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
 
-        for (var i = 0; i < tabToggles.length; i++) {
-          var elem = tabToggles[i];
+        for (var i = 0, len = toggleList.length; i < len; i++) {
+          var elem = toggleList[i];
           var selector = Util.getSelectorFromElement(elem);
+          var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
+            return foundElem === element;
+          });
 
-          if (selector !== null && $$$1(selector).filter(element).length > 0) {
+          if (selector !== null && filterElement.length > 0) {
             this._selector = selector;
 
             this._triggerArray.push(elem);
@@ -32046,7 +32051,9 @@ module.exports = function(module) {
         var activesData;
 
         if (this._parent) {
-          actives = $$$1.makeArray($$$1(this._parent).find(Selector.ACTIVES).filter("[data-parent=\"" + this._config.parent + "\"]"));
+          actives = [].slice.call(this._parent.querySelectorAll(Selector.ACTIVES)).filter(function (elem) {
+            return elem.getAttribute('data-parent') === _this._config.parent;
+          });
 
           if (actives.length === 0) {
             actives = null;
@@ -32081,7 +32088,7 @@ module.exports = function(module) {
         $$$1(this._element).removeClass(ClassName.COLLAPSE).addClass(ClassName.COLLAPSING);
         this._element.style[dimension] = 0;
 
-        if (this._triggerArray.length > 0) {
+        if (this._triggerArray.length) {
           $$$1(this._triggerArray).removeClass(ClassName.COLLAPSED).attr('aria-expanded', true);
         }
 
@@ -32122,14 +32129,15 @@ module.exports = function(module) {
         this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
         Util.reflow(this._element);
         $$$1(this._element).addClass(ClassName.COLLAPSING).removeClass(ClassName.COLLAPSE).removeClass(ClassName.SHOW);
+        var triggerArrayLength = this._triggerArray.length;
 
-        if (this._triggerArray.length > 0) {
-          for (var i = 0; i < this._triggerArray.length; i++) {
+        if (triggerArrayLength > 0) {
+          for (var i = 0; i < triggerArrayLength; i++) {
             var trigger = this._triggerArray[i];
             var selector = Util.getSelectorFromElement(trigger);
 
             if (selector !== null) {
-              var $elem = $$$1(selector);
+              var $elem = $$$1([].slice.call(document.querySelectorAll(selector)));
 
               if (!$elem.hasClass(ClassName.SHOW)) {
                 $$$1(trigger).addClass(ClassName.COLLAPSED).attr('aria-expanded', false);
@@ -32190,11 +32198,12 @@ module.exports = function(module) {
             parent = this._config.parent[0];
           }
         } else {
-          parent = $$$1(this._config.parent)[0];
+          parent = document.querySelector(this._config.parent);
         }
 
         var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
-        $$$1(parent).find(selector).each(function (i, element) {
+        var children = [].slice.call(parent.querySelectorAll(selector));
+        $$$1(children).each(function (i, element) {
           _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
         });
         return parent;
@@ -32204,7 +32213,7 @@ module.exports = function(module) {
         if (element) {
           var isOpen = $$$1(element).hasClass(ClassName.SHOW);
 
-          if (triggerArray.length > 0) {
+          if (triggerArray.length) {
             $$$1(triggerArray).toggleClass(ClassName.COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
           }
         }
@@ -32213,7 +32222,7 @@ module.exports = function(module) {
 
       Collapse._getTargetFromElement = function _getTargetFromElement(element) {
         var selector = Util.getSelectorFromElement(element);
-        return selector ? $$$1(selector)[0] : null;
+        return selector ? document.querySelector(selector) : null;
       };
 
       Collapse._jQueryInterface = function _jQueryInterface(config) {
@@ -32271,7 +32280,8 @@ module.exports = function(module) {
 
       var $trigger = $$$1(this);
       var selector = Util.getSelectorFromElement(this);
-      $$$1(selector).each(function () {
+      var selectors = [].slice.call(document.querySelectorAll(selector));
+      $$$1(selectors).each(function () {
         var $target = $$$1(this);
         var data = $target.data(DATA_KEY);
         var config = data ? 'toggle' : $trigger.data();
@@ -32298,7 +32308,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): dropdown.js
+   * Bootstrap (v4.1.2): dropdown.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32310,7 +32320,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'dropdown';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.dropdown';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32519,14 +32529,16 @@ module.exports = function(module) {
         if (!this._menu) {
           var parent = Dropdown._getParentFromElement(this._element);
 
-          this._menu = $$$1(parent).find(Selector.MENU)[0];
+          if (parent) {
+            this._menu = parent.querySelector(Selector.MENU);
+          }
         }
 
         return this._menu;
       };
 
       _proto._getPlacement = function _getPlacement() {
-        var $parentDropdown = $$$1(this._element).parent();
+        var $parentDropdown = $$$1(this._element.parentNode);
         var placement = AttachmentMap.BOTTOM; // Handle dropup
 
         if ($parentDropdown.hasClass(ClassName.DROPUP)) {
@@ -32614,15 +32626,19 @@ module.exports = function(module) {
           return;
         }
 
-        var toggles = $$$1.makeArray($$$1(Selector.DATA_TOGGLE));
+        var toggles = [].slice.call(document.querySelectorAll(Selector.DATA_TOGGLE));
 
-        for (var i = 0; i < toggles.length; i++) {
+        for (var i = 0, len = toggles.length; i < len; i++) {
           var parent = Dropdown._getParentFromElement(toggles[i]);
 
           var context = $$$1(toggles[i]).data(DATA_KEY);
           var relatedTarget = {
             relatedTarget: toggles[i]
           };
+
+          if (event && event.type === 'click') {
+            relatedTarget.clickEvent = event;
+          }
 
           if (!context) {
             continue;
@@ -32662,7 +32678,7 @@ module.exports = function(module) {
         var selector = Util.getSelectorFromElement(element);
 
         if (selector) {
-          parent = $$$1(selector)[0];
+          parent = document.querySelector(selector);
         }
 
         return parent || element.parentNode;
@@ -32694,7 +32710,7 @@ module.exports = function(module) {
 
         if (!isActive && (event.which !== ESCAPE_KEYCODE || event.which !== SPACE_KEYCODE) || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
           if (event.which === ESCAPE_KEYCODE) {
-            var toggle = $$$1(parent).find(Selector.DATA_TOGGLE)[0];
+            var toggle = parent.querySelector(Selector.DATA_TOGGLE);
             $$$1(toggle).trigger('focus');
           }
 
@@ -32702,7 +32718,7 @@ module.exports = function(module) {
           return;
         }
 
-        var items = $$$1(parent).find(Selector.VISIBLE_ITEMS).get();
+        var items = [].slice.call(parent.querySelectorAll(Selector.VISIBLE_ITEMS));
 
         if (items.length === 0) {
           return;
@@ -32780,7 +32796,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): modal.js
+   * Bootstrap (v4.1.2): modal.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -32792,7 +32808,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'modal';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.modal';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -32836,8 +32852,7 @@ module.exports = function(module) {
       DATA_TOGGLE: '[data-toggle="modal"]',
       DATA_DISMISS: '[data-dismiss="modal"]',
       FIXED_CONTENT: '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top',
-      STICKY_CONTENT: '.sticky-top',
-      NAVBAR_TOGGLER: '.navbar-toggler'
+      STICKY_CONTENT: '.sticky-top'
       /**
        * ------------------------------------------------------------------------
        * Class Definition
@@ -32852,7 +32867,7 @@ module.exports = function(module) {
       function Modal(element, config) {
         this._config = this._getConfig(config);
         this._element = element;
-        this._dialog = $$$1(element).find(Selector.DIALOG)[0];
+        this._dialog = element.querySelector(Selector.DIALOG);
         this._backdrop = null;
         this._isShown = false;
         this._isBodyOverflowing = false;
@@ -33109,7 +33124,7 @@ module.exports = function(module) {
           this._backdrop.className = ClassName.BACKDROP;
 
           if (animate) {
-            $$$1(this._backdrop).addClass(animate);
+            this._backdrop.classList.add(animate);
           }
 
           $$$1(this._backdrop).appendTo(document.body);
@@ -33203,23 +33218,19 @@ module.exports = function(module) {
         if (this._isBodyOverflowing) {
           // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
           //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-          // Adjust fixed content padding
-          $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
-            var actualPadding = $$$1(element)[0].style.paddingRight;
+          var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+          var stickyContent = [].slice.call(document.querySelectorAll(Selector.STICKY_CONTENT)); // Adjust fixed content padding
+
+          $$$1(fixedContent).each(function (index, element) {
+            var actualPadding = element.style.paddingRight;
             var calculatedPadding = $$$1(element).css('padding-right');
             $$$1(element).data('padding-right', actualPadding).css('padding-right', parseFloat(calculatedPadding) + _this9._scrollbarWidth + "px");
           }); // Adjust sticky content margin
 
-          $$$1(Selector.STICKY_CONTENT).each(function (index, element) {
-            var actualMargin = $$$1(element)[0].style.marginRight;
+          $$$1(stickyContent).each(function (index, element) {
+            var actualMargin = element.style.marginRight;
             var calculatedMargin = $$$1(element).css('margin-right');
             $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) - _this9._scrollbarWidth + "px");
-          }); // Adjust navbar-toggler margin
-
-          $$$1(Selector.NAVBAR_TOGGLER).each(function (index, element) {
-            var actualMargin = $$$1(element)[0].style.marginRight;
-            var calculatedMargin = $$$1(element).css('margin-right');
-            $$$1(element).data('margin-right', actualMargin).css('margin-right', parseFloat(calculatedMargin) + _this9._scrollbarWidth + "px");
           }); // Adjust body padding
 
           var actualPadding = document.body.style.paddingRight;
@@ -33230,15 +33241,15 @@ module.exports = function(module) {
 
       _proto._resetScrollbar = function _resetScrollbar() {
         // Restore fixed content padding
-        $$$1(Selector.FIXED_CONTENT).each(function (index, element) {
+        var fixedContent = [].slice.call(document.querySelectorAll(Selector.FIXED_CONTENT));
+        $$$1(fixedContent).each(function (index, element) {
           var padding = $$$1(element).data('padding-right');
+          $$$1(element).removeData('padding-right');
+          element.style.paddingRight = padding ? padding : '';
+        }); // Restore sticky content
 
-          if (typeof padding !== 'undefined') {
-            $$$1(element).css('padding-right', padding).removeData('padding-right');
-          }
-        }); // Restore sticky content and navbar-toggler margin
-
-        $$$1(Selector.STICKY_CONTENT + ", " + Selector.NAVBAR_TOGGLER).each(function (index, element) {
+        var elements = [].slice.call(document.querySelectorAll("" + Selector.STICKY_CONTENT));
+        $$$1(elements).each(function (index, element) {
           var margin = $$$1(element).data('margin-right');
 
           if (typeof margin !== 'undefined') {
@@ -33247,10 +33258,8 @@ module.exports = function(module) {
         }); // Restore body padding
 
         var padding = $$$1(document.body).data('padding-right');
-
-        if (typeof padding !== 'undefined') {
-          $$$1(document.body).css('padding-right', padding).removeData('padding-right');
-        }
+        $$$1(document.body).removeData('padding-right');
+        document.body.style.paddingRight = padding ? padding : '';
       };
 
       _proto._getScrollbarWidth = function _getScrollbarWidth() {
@@ -33315,7 +33324,7 @@ module.exports = function(module) {
       var selector = Util.getSelectorFromElement(this);
 
       if (selector) {
-        target = $$$1(selector)[0];
+        target = document.querySelector(selector);
       }
 
       var config = $$$1(target).data(DATA_KEY) ? 'toggle' : _objectSpread({}, $$$1(target).data(), $$$1(this).data());
@@ -33358,7 +33367,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): tooltip.js
+   * Bootstrap (v4.1.2): tooltip.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -33370,7 +33379,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tooltip';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.tooltip';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -33580,7 +33589,7 @@ module.exports = function(module) {
           var attachment = this._getAttachment(placement);
 
           this.addAttachmentClass(attachment);
-          var container = this.config.container === false ? document.body : $$$1(this.config.container);
+          var container = this.config.container === false ? document.body : $$$1(document).find(this.config.container);
           $$$1(tip).data(this.constructor.DATA_KEY, this);
 
           if (!$$$1.contains(this.element.ownerDocument.documentElement, this.tip)) {
@@ -33719,9 +33728,9 @@ module.exports = function(module) {
       };
 
       _proto.setContent = function setContent() {
-        var $tip = $$$1(this.getTipElement());
-        this.setElementContent($tip.find(Selector.TOOLTIP_INNER), this.getTitle());
-        $tip.removeClass(ClassName.FADE + " " + ClassName.SHOW);
+        var tip = this.getTipElement();
+        this.setElementContent($$$1(tip.querySelectorAll(Selector.TOOLTIP_INNER)), this.getTitle());
+        $$$1(tip).removeClass(ClassName.FADE + " " + ClassName.SHOW);
       };
 
       _proto.setElementContent = function setElementContent($element, content) {
@@ -33914,15 +33923,18 @@ module.exports = function(module) {
         var $tip = $$$1(this.getTipElement());
         var tabClass = $tip.attr('class').match(BSCLS_PREFIX_REGEX);
 
-        if (tabClass !== null && tabClass.length > 0) {
+        if (tabClass !== null && tabClass.length) {
           $tip.removeClass(tabClass.join(''));
         }
       };
 
-      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(data) {
+      _proto._handlePopperPlacementChange = function _handlePopperPlacementChange(popperData) {
+        var popperInstance = popperData.instance;
+        this.tip = popperInstance.popper;
+
         this._cleanTipClass();
 
-        this.addAttachmentClass(this._getAttachment(data.placement));
+        this.addAttachmentClass(this._getAttachment(popperData.placement));
       };
 
       _proto._fixTransition = function _fixTransition() {
@@ -34025,7 +34037,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): popover.js
+   * Bootstrap (v4.1.2): popover.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34037,7 +34049,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'popover';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.popover';
     var EVENT_KEY = "." + DATA_KEY;
     var JQUERY_NO_CONFLICT = $$$1.fn[NAME];
@@ -34222,7 +34234,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): scrollspy.js
+   * Bootstrap (v4.1.2): scrollspy.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34234,7 +34246,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'scrollspy';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.scrollspy';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -34316,13 +34328,13 @@ module.exports = function(module) {
         this._offsets = [];
         this._targets = [];
         this._scrollHeight = this._getScrollHeight();
-        var targets = $$$1.makeArray($$$1(this._selector));
+        var targets = [].slice.call(document.querySelectorAll(this._selector));
         targets.map(function (element) {
           var target;
           var targetSelector = Util.getSelectorFromElement(element);
 
           if (targetSelector) {
-            target = $$$1(targetSelector)[0];
+            target = document.querySelector(targetSelector);
           }
 
           if (target) {
@@ -34419,7 +34431,9 @@ module.exports = function(module) {
           return;
         }
 
-        for (var i = this._offsets.length; i--;) {
+        var offsetLength = this._offsets.length;
+
+        for (var i = offsetLength; i--;) {
           var isActiveTarget = this._activeTarget !== this._targets[i] && scrollTop >= this._offsets[i] && (typeof this._offsets[i + 1] === 'undefined' || scrollTop < this._offsets[i + 1]);
 
           if (isActiveTarget) {
@@ -34439,7 +34453,7 @@ module.exports = function(module) {
         queries = queries.map(function (selector) {
           return selector + "[data-target=\"" + target + "\"]," + (selector + "[href=\"" + target + "\"]");
         });
-        var $link = $$$1(queries.join(','));
+        var $link = $$$1([].slice.call(document.querySelectorAll(queries.join(','))));
 
         if ($link.hasClass(ClassName.DROPDOWN_ITEM)) {
           $link.closest(Selector.DROPDOWN).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
@@ -34460,7 +34474,8 @@ module.exports = function(module) {
       };
 
       _proto._clear = function _clear() {
-        $$$1(this._selector).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
+        var nodes = [].slice.call(document.querySelectorAll(this._selector));
+        $$$1(nodes).filter(Selector.ACTIVE).removeClass(ClassName.ACTIVE);
       }; // Static
 
 
@@ -34507,9 +34522,10 @@ module.exports = function(module) {
 
 
     $$$1(window).on(Event.LOAD_DATA_API, function () {
-      var scrollSpys = $$$1.makeArray($$$1(Selector.DATA_SPY));
+      var scrollSpys = [].slice.call(document.querySelectorAll(Selector.DATA_SPY));
+      var scrollSpysLength = scrollSpys.length;
 
-      for (var i = scrollSpys.length; i--;) {
+      for (var i = scrollSpysLength; i--;) {
         var $spy = $$$1(scrollSpys[i]);
 
         ScrollSpy._jQueryInterface.call($spy, $spy.data());
@@ -34534,7 +34550,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): tab.js
+   * Bootstrap (v4.1.2): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -34546,7 +34562,7 @@ module.exports = function(module) {
      * ------------------------------------------------------------------------
      */
     var NAME = 'tab';
-    var VERSION = '4.1.1';
+    var VERSION = '4.1.2';
     var DATA_KEY = 'bs.tab';
     var EVENT_KEY = "." + DATA_KEY;
     var DATA_API_KEY = '.data-api';
@@ -34628,7 +34644,7 @@ module.exports = function(module) {
         }
 
         if (selector) {
-          target = $$$1(selector)[0];
+          target = document.querySelector(selector);
         }
 
         this._activate(this._element, listElement);
@@ -34710,7 +34726,8 @@ module.exports = function(module) {
           var dropdownElement = $$$1(element).closest(Selector.DROPDOWN)[0];
 
           if (dropdownElement) {
-            $$$1(dropdownElement).find(Selector.DROPDOWN_TOGGLE).addClass(ClassName.ACTIVE);
+            var dropdownToggleList = [].slice.call(dropdownElement.querySelectorAll(Selector.DROPDOWN_TOGGLE));
+            $$$1(dropdownToggleList).addClass(ClassName.ACTIVE);
           }
 
           element.setAttribute('aria-expanded', true);
@@ -34782,7 +34799,7 @@ module.exports = function(module) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.1.1): index.js
+   * Bootstrap (v4.1.2): index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
    * --------------------------------------------------------------------------
    */

@@ -39,7 +39,7 @@
                                 <a class="dropdown-item" href="#">My Products</a>
                             @else
                                 @role('moderator')
-                                    <a class="dropdown-item" href="#">Reported Product Reviews</a>
+                                        <a class="dropdown-item" href="{{ route('modHubHome') }}">Moderator's Hub</a>
                                 @else
                                     <a class="dropdown-item" href="{{ route('vendorCreate') }}">Become a vendor</a>
                                 @endrole

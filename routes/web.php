@@ -102,3 +102,10 @@ Route::put('user/{slug}', 'UserController@update')->name('userUpdate');
 Route::get('/becomeavendor', 'VendorApplicationController@create')->name('vendorCreate');
 Route::get('/becomeavendor/apply', 'VendorApplicationController@store')->name('vendorStore');
 Route::get('/becomeavendor/applied', 'VendorApplicationController@show')->name('vendorShow');
+
+/*
+|--------------------------------------------------------------------------
+| Moderator's Hub Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/modhub', 'ModeratorsHubController@index')->name('modHubHome');

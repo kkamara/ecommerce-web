@@ -8,7 +8,7 @@ use App\Cart;
 use Auth;
 
 class CartController extends Controller
-{
+{    
     /**
      * Display a listing of the resource.
      *

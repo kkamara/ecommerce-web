@@ -22,7 +22,7 @@ class VendorApplicationController extends Controller
     {
         $user = auth()->user();
 
-        if(! $user->hasRole('vendor'))
+        if($user->hasNoRole())
         {
             return view('vendor.create', [
                 'title' => 'Become a vendor',
@@ -44,7 +44,7 @@ class VendorApplicationController extends Controller
     {
         $user = auth()->user();
 
-        if(! $user->hasRole('vendor'))
+        if($user->hasNoRole())
         {
             if(! VendorApplication::hasUserApplied($user->id))
             {

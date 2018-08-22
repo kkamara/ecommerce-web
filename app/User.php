@@ -101,6 +101,11 @@ class User extends Authenticatable
         return $this->hasMany('App\UsersAddress', 'user_id');
     }
 
+    public function vendorApplication()
+    {
+        return $this->hasOne('App\VendorApplication');
+    }
+
     public function addProductToDbCart($product)
     {
         \App\Cart::create([
@@ -207,5 +212,10 @@ class User extends Authenticatable
         }
 
         return $slug;
+    }
+    
+    public static function hasNoRoles()
+    {
+        return !$this->hasRole('vendor') && !$this->hasRole('moderator');
     }
 }

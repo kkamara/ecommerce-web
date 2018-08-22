@@ -25,4 +25,15 @@ class VendorApplication extends Model
             'accepted' => 0
         ])->get()->isEmpty();
     }
+
+    // gets unanswered applications
+    public static function scopeWhereFresh($query)
+    {
+        return $query->where('accepted', '=', NULL);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }
