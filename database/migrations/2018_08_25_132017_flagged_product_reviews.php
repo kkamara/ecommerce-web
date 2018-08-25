@@ -18,7 +18,7 @@ class FlaggedProductReviews extends Migration
             $table->integer('product_reviews_id')
                   ->references('id')->on('product_reviews')
                   ->onDelete('cascade');
-            $table->integer('flagged_count')->nullable();
+            $table->string('flagged_from_ip');
             $table->timestamps();
         });
     }
