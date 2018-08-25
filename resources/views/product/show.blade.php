@@ -71,6 +71,7 @@
 
                         @forelse($reviews as $review)
                             <div class="card">
+                                @if(! $review->isFlaggedFiveTimes())
                                 <div class="card-body">
                                     <div class="card-text">
                                         <div class="float-left">
@@ -94,6 +95,16 @@
 
                                     </div>
                                 </div>
+                                <div class="card-footer">
+                                    <a href="{{ route('flaggedReviewStore', $review->id) }}" class="pull-right btn btn-sm btn-default">
+                                        <small>Flag this review</small>
+                                    </a>
+                                </div>
+                                @else
+                                <div class="card-body">
+                                    <small>This comment is currently being reviewed.</small>
+                                </div>
+                                @endif
                             </div>
                         @empty
                             No reviews for this product.

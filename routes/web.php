@@ -26,6 +26,13 @@ Route::post('/products/{product}/review', 'ProductReviewController@store')->name
 
 /*
 |--------------------------------------------------------------------------
+| Flagged Product Reviews Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/review/{productReview}/report', 'FlaggedProductReviewController@store')->name('flaggedReviewStore');
+
+/*
+|--------------------------------------------------------------------------
 | Cart Routes
 |--------------------------------------------------------------------------
 */
