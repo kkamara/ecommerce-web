@@ -214,7 +214,7 @@ class User extends Authenticatable
         return $slug;
     }
     
-    public static function hasNoRoles()
+    public function hasNoRole()
     {
         return !$this->hasRole('vendor') && !$this->hasRole('moderator');
     }
