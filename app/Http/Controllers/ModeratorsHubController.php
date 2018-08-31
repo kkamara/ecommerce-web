@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FlaggedProductReview;
 use Illuminate\Http\Request;
 use App\VendorApplication;
 use App\User;
@@ -25,10 +26,11 @@ class ModeratorsHubController extends Controller
         if($user->hasRole('moderator'))
         {
             $vendorApplications = VendorApplication::whereFresh()->paginate();
+            $unansweredFlaggedReviews = FlaggedProductReview::whereUnanswered()->paginate();
 
             return view('modhub.index', [
                 'title' => 'Moderator\'s Hub'
-            ])->with(compact('vendorApplications'));
+            ])->with(compact('vendorApplications'), compact('unansweredFlaggedReviews'));
         }
         else
         {

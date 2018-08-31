@@ -102,7 +102,7 @@
                                 </div>
                                 @else
                                 <div class="card-body">
-                                    <small>This comment is currently being reviewed.</small>
+                                    <small>This comment is currently under review.</small>
                                 </div>
                                 @endif
                             </div>

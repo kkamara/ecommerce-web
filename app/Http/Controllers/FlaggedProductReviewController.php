@@ -20,11 +20,16 @@ class FlaggedProductReviewController extends Controller
 
         if(FlaggedProductReview::hasIpFlaggedThisReview($ip)->isEmpty())
         {
+            FlaggedProductReview::create([
+                'product_reviews_id' => $productReview->id,
+                'flagged_from_ip' => $ip,
+            ]);
 
+            return redirect()->back()->with('flashSuccess', 'Product review has been flagged and will be reviewed by moderators. Thanks!');
         }
         else
         {
-            return redirect()->back()->with('flashDanger', 'You\'ve already flagged that review.');
+            return redirect()->back()->with('flashDanger', 'You have already flagged that review.');
         }
     }
 }
