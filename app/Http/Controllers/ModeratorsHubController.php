@@ -30,7 +30,7 @@ class ModeratorsHubController extends Controller
 
             return view('modhub.index', [
                 'title' => 'Moderator\'s Hub'
-            ])->with(compact('vendorApplications'), compact('unansweredFlaggedReviews'));
+            ])->with(compact('vendorApplications', 'unansweredFlaggedReviews'));
         }
         else
         {
