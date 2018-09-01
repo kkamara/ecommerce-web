@@ -116,3 +116,5 @@ Route::get('/becomeavendor/applied', 'VendorApplicationController@show')->name('
 |--------------------------------------------------------------------------
 */
 Route::get('/modhub', 'ModeratorsHubController@index')->name('modHubHome');
+Route::post('/modhub/reviews/flagged/{productReview}/decision', 'ModeratorsHubController@storeFlaggedReviewDecision')->name('flaggedReviewDecisionStore');
+Route::post('/modhub/vendor/applicants/{vendorApplication}/decision', 'ModeratorsHubController@storeVendorApplicantDecision')->name('vendorApplicationDecisionStore');

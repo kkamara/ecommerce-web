@@ -40,8 +40,26 @@ class ProductReview extends Model
         return $this->hasOne('App\Product');
     }
 
+    /**
+     * Finds whether an \App\ProductReview has been flagged 5 times.
+     *
+     * return \Illuminate\Database\Eloquent\Model
+     */
     public function isFlaggedFiveTimes()
     {
-        return FlaggedProductReview::getFlagCount() > 4;
+        return FlaggedProductReview::getFlagCount($this->attributes['id']) > 4;
+    }
+
+    /**
+     * Gets a shortened content attribute from current model instance.
+     *
+     * @return string
+     */
+    public function getShortContentAttribute()
+    {
+        $content = $this->attributes['content'];
+        $limit = mt_rand(150, 200);
+
+        return strlen($content) > $limit ? substr($content, 0, $limit) . '...' : $content;
     }
 }

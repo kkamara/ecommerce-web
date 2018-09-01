@@ -18,7 +18,7 @@ class FlaggedProductReviewController extends Controller
     {
         $ip = $request->ip();
 
-        if(FlaggedProductReview::hasIpFlaggedThisReview($ip)->isEmpty())
+        if(FlaggedProductReview::hasIpFlaggedThisReview($ip, $productReview->id)->isEmpty())
         {
             FlaggedProductReview::create([
                 'product_reviews_id' => $productReview->id,

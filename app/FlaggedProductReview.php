@@ -24,11 +24,16 @@ class FlaggedProductReview extends Model
     /**
      * Find whether a particular IP Address has flagged a product review.
      *
+     * @param string $ipAddress, \App\ProductReview $id
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public static function hasIpFlaggedThisReview($ip)
+    public static function hasIpFlaggedThisReview($ipAddress, $id)
     {
-        return self::where('flagged_from_ip', $ip)->get();
+        return self::where([
+            'flagged_from_ip' => $ipAddress,
+            'product_reviews_id' => $id,
+        ])->get();
     }
 
     /**
@@ -65,7 +70,7 @@ class FlaggedProductReview extends Model
     /**
      * Gets the number of times an \App\ProductReview has been flagged.
      *
-     * @param \App\ProductReview id
+     * @param \App\ProductReview $id
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
