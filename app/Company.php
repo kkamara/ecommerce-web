@@ -27,4 +27,14 @@ class Company extends Model
     {
         return $this->hasMany('App\Product', 'company_id');
     }
+
+    /**
+     * Find whether a given company name already exists in this model.
+     *
+     * @param  string  $companyName
+     */
+    public static function doesCompanyNameExist($companyName)
+    {
+        return ! self::where('name', '=', $companyName)->get()->isEmpty();
+    }
 }

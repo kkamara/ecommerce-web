@@ -4,7 +4,8 @@
 
     <div class="row">
         <div class="col-md-4 offset-md-4">
-            <div class="card">
+            <form action="{{ route('vendorStore') }}" method="POST" class="card">
+                {{ csrf_field() }}
                 <div class="card-header">
                     <div class="lead">{{ $title }}</div>
                 </div>
@@ -17,14 +18,38 @@
                             <li class="list-group-item">Sell your stuff</li>
                         </ul>
 
+                        <br/>
+
+                        @if(! $usersAddresses->isEmpty())
+                            <select name="users_address" class="form-control">
+                                <option value="0">
+                                    Choose a company address
+                                </option>
+                                @foreach($usersAddresses as $usersAddress)
+
+
+                                    <option value="{{ $usersAddress->id }}">
+                                        {{ (string) $usersAddress }}
+                                    </option>
+
+                                @endforeach
+                            </select>
+                        @else
+                            You must have at least one address on file.
+                            <a href="{{ route('addressHome') }}">
+                                Click here to add an address.
+                            </a>
+                        @endif
+
                     </div>
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route('vendorStore') }}" class="btn btn-primary float-right">
-                        Apply now
-                    </a>
+                    <div class="float-left">
+                        <input type="text" class='form-control' name="company_name" placeholder="Company Name">
+                    </div>
+                    <input type="submit" class="btn btn-primary float-right" value="Apply now">
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 

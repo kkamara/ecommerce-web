@@ -44,9 +44,7 @@
                         </table>
                         {{ $unansweredFlaggedReviews->links() }}
                     @else
-                        <div class="text-center">
-                            <small>There are currently no flagged reviews.</small>
-                        </div>
+                        <small>There are currently no flagged reviews.</small>
                     @endif
                 </div>
             </div>
@@ -59,6 +57,10 @@
                     <div class="float-right">
                         <a href="" class="btn btn-sm btn-primary">View All Vendors</a>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
 
                     @if(!$vendorApplications->isEmpty())
                         <table class='table'>
