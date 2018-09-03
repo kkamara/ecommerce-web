@@ -105,7 +105,8 @@
 {{-- Modal for review action --}}
 @foreach($unansweredFlaggedReviews as $unansweredFlaggedReview)
     <!-- Modal -->
-    <div action="{{ route('flaggedReviewDecisionStore', $unansweredFlaggedReview->id) }}" method="POST" class="modal fade" id="decideReviewModal-{{ $unansweredFlaggedReview->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form action="{{ route('flaggedReviewDecisionStore', $unansweredFlaggedReview->id) }}" method="POST" class="modal fade" id="decideReviewModal-{{ $unansweredFlaggedReview->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{ csrf_field() }}
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -135,21 +136,31 @@
                         </tbody>
                     </table>
 
+                    <hr>
+
+                    <div class="col-md-12">
+                        <label>Provide a reason for your decision:
+                            <textarea cols="100" type="text" required class='form-control' name='reason' mexlength="191"></textarea>
+                        </label>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="col md-4">
-                        <input type="submit" class="btn btn-danger" name='decline' value="Inappropriate Content">
-                    </div>
-                    <div class="col md-4">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    <div class="col md-4">
-                        <input type="submit" class="btn btn-success" name='accept' value="Appropriate Content">
+                    <div class="row">
+
+                        <div class="col md-4">
+                            <input type="submit" class="btn btn-danger" name='decline' value="Inappropriate Content">
+                        </div>
+                        <div class="col md-4">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col md-4">
+                            <input type="submit" class="btn btn-success" name='accept' value="Appropriate Content">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 @endforeach
 
 {{-- Modal for vendor action --}}

@@ -47,6 +47,15 @@ class ModeratorsHubController extends Controller
     public function storeFlaggedReviewDecision(ProductReview $productReview, Request $request)
     {
         $user = auth()->user();
+
+        if($user->hasRole('moderator'))
+        {
+
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
@@ -57,5 +66,14 @@ class ModeratorsHubController extends Controller
     public function storeVendorApplicantDecision(VendorApplication $vendorApplication, Request $request)
     {
         $user = auth()->user();
+
+        if($user->hasRole('moderator'))
+        {
+
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 }
