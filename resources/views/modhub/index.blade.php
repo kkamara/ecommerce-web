@@ -103,7 +103,7 @@
 {{-- Modal for review action --}}
 @foreach($unansweredFlaggedReviews as $unansweredFlaggedReview)
     <!-- Modal -->
-    <div class="modal fade" id="decideReviewModal-{{ $unansweredFlaggedReview->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div action="{{ route('flaggedReviewDecisionStore', $unansweredFlaggedReview->id) }}" method="POST" class="modal fade" id="decideReviewModal-{{ $unansweredFlaggedReview->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -135,54 +135,73 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <div class="col md-4">
+                        <input type="submit" class="btn btn-danger" name='decline' value="Inappropriate Content">
+                    </div>
+                    <div class="col md-4">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="col md-4">
+                        <input type="submit" class="btn btn-success" name='accept' value="Appropriate Content">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 @endforeach
 
-{{-- Modal for review action --}}
+{{-- Modal for vendor action --}}
 @foreach($vendorApplications as $vendorApplication)
     <!-- Modal -->
-    <div class="modal fade" id="decideVendorAppModal-{{ $vendorApplication->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form action="{{ route('vendorApplicationDecisionStore', $vendorApplication->id) }}" method="POST" class="modal fade" id="decideVendorAppModal-{{ $vendorApplication->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {{ csrf_field() }}
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Vendor Application - Make a decision
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        Vendor Application - Make a decision
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
 
-                <table class='table'>
-                    <tbody>
-                        <tr>
-                            <th>Name</th>
-                            <td>{{ $vendorApplication->user->name }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ $vendorApplication->user->email }}</td>
-                        </tr>
-                        <tr>
-                            <th>Application Date</th>
-                            <td>{{ $vendorApplication->created_at }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table class='table'>
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ $vendorApplication->user->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ $vendorApplication->user->email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Application Date</th>
+                                <td>{{ $vendorApplication->created_at }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col md-4">
+                                <input type="submit" class="btn btn-danger" name='decline' value="Decline Application">
+                            </div>
+                            <div class="col md-4">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                            <div class="col md-4">
+                                <input type="submit" class="btn btn-success" name='accept' value="Accept Application">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 @endforeach
 @stop
