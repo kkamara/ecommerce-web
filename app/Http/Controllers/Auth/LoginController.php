@@ -55,11 +55,6 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // login
-        // if login then redirect to checkout page if was prompted to login/register
-        // if normal login then redirect to home
-        // redirect back if false
-
         if(empty($validator->errors()->all()))
         {
             $email = filter_var(request('email'), FILTER_SANITIZE_EMAIL);
@@ -74,9 +69,23 @@ class LoginController extends Controller
                 $user = auth()->user();
                 $cacheCart = getCacheCart();
 
-                $user->moveCacheCartToDbCart($cacheCart);
+                /**
+                * login
+                * if login then redirect to checkout page if was prompted to login/register
+                * if normal login then redirect to home
+                * redirect back if false
+                */
 
-                return redirect()->route('orderCreate');
+                if(! empty($cacheCart))
+                {
+                    $user->moveCacheCartToDbCart($cacheCart);
+
+                    return redirect()->route('orderCreate');
+                }
+                else
+                {
+                    return redirect()->route('home');
+                }
             }
             else
             {

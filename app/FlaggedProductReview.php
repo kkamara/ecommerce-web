@@ -87,9 +87,9 @@ class FlaggedProductReview extends Model
      * @param  int  $userId, string  $companyName, int  $usersAddressId
      * @return string|false The error text or false implying no errors occurred.
      */
-    public static function getError($reasonGiven, $acceptDecision, $declineDecision)
+    public static function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
     {
-        if(! isset($reasonGiven) || strlen($reasonGiven) === 0)
+        if(! isset($reasonGiven))
             return 'Reason not provided.';
         elseif(strlen($reasonGiven) < 10)
             return 'Reason must be longer than 10 characters.';

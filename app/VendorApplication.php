@@ -112,4 +112,25 @@ class VendorApplication extends Model
     {
         return ! self::where('proposed_company_name', '=', $companyName)->get()->isEmpty();
     }
+
+    /**
+     * Returns an error in the decision process when a moderator reviews an instance of this model.
+     *
+     * @param  int  $userId, string  $companyName, int  $usersAddressId
+     * @return string|false The error text or false implying no errors occurred.
+     */
+    public static function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
+    {
+        if(! isset($reasonGiven))
+            return 'Reason not provided.';
+        elseif(strlen($reasonGiven) < 10)
+            return 'Reason must be longer than 10 characters.';
+        elseif(strlen($reasonGiven) > 191)
+            return 'Reason exceeds maximum length 191.';
+
+        if(! isset($acceptDecision) && ! isset($declineDecision))
+            return 'Error processing that request. Contact system administrator.';
+
+        return FALSE;
+    }
 }
