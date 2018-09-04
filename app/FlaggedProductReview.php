@@ -80,4 +80,25 @@ class FlaggedProductReview extends Model
             'product_reviews_id' => $id,
         ])->count();
     }
+
+    /**
+     * Returns an error in the decision process when a moderator reviews a flagged \App\ProductReview.
+     *
+     * @param  int  $userId, string  $companyName, int  $usersAddressId
+     * @return string|false The error text or false implying no errors occurred.
+     */
+    public static function getError($reasonGiven, $acceptDecision, $declineDecision)
+    {
+        if(! isset($reasonGiven) || strlen($reasonGiven) === 0)
+            return 'Reason not provided.';
+        elseif(strlen($reasonGiven) < 10)
+            return 'Reason must be longer than 10 characters.';
+        elseif(strlen($reasonGiven) > 191)
+            return 'Reason exceeds maximum length 191.';
+
+        if(! isset($acceptDecision) && ! isset($declineDecision))
+            return 'Error processing that request. Contact system administrator.';
+
+        return FALSE;
+    }
 }

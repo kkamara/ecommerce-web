@@ -77,6 +77,10 @@ class VendorApplication extends Model
         {
             return 'Company Name already exists.';
         }
+        elseif(strlen($companyName) > 191)
+        {
+            return 'Company Name exceeds maximum length 191.';
+        }
 
         /**
          * Error if address not given |
@@ -88,7 +92,9 @@ class VendorApplication extends Model
         }
         else
         {
-            if(UsersAddress::where('id', '=', $usersAddressId)->get()->isEmpty())
+            if(UsersAddress::where([
+                'id' => $usersAddressId,'user_id' => $userId,
+                ])->get()->isEmpty())
             {
                 return 'Address not provided.';
             }

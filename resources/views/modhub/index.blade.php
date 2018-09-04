@@ -105,7 +105,7 @@
 {{-- Modal for review action --}}
 @foreach($unansweredFlaggedReviews as $unansweredFlaggedReview)
     <!-- Modal -->
-    <form action="{{ route('flaggedReviewDecisionStore', $unansweredFlaggedReview->id) }}" method="POST" class="modal fade" id="decideReviewModal-{{ $unansweredFlaggedReview->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form action="{{ route('flaggedReviewDecisionStore', $unansweredFlaggedReview->product_reviews_id) }}" method="POST" class="modal fade" id="decideReviewModal-{{ $unansweredFlaggedReview->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         {{ csrf_field() }}
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -197,6 +197,14 @@
                         </tbody>
                     </table>
 
+                    <hr>
+
+                    <div class="col-md-12">
+                        <label>Provide a reason for your decision:
+                            <textarea cols="100" type="text" required class='form-control' name='reason_given' mexlength="191"></textarea>
+                        </label>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <div class="container">
@@ -208,7 +216,7 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                             <div class="col md-4">
-                                <input type="submit" class="btn btn-success" name='accept' value="Accept Application">
+                                <input type="submit" class="btn btn-success" name='accept' value="Approve Application">
                             </div>
                         </div>
                     </div>

@@ -48,9 +48,44 @@ class ModeratorsHubController extends Controller
     {
         $user = auth()->user();
 
+        $reasonGiven     = filter_var($request->input('reason'), FILTER_SANITIZE_STRING);
+        $acceptDecision  = filter_var($request->input('accept'), FILTER_SANITIZE_STRING);
+        $declineDecision = filter_var($request->input('decline'), FILTER_SANITIZE_STRING);
+
         if($user->hasRole('moderator'))
         {
+            if(! $decisionError = FlaggedProductReview::getError($reasonGiven, $acceptDecision, $declineDecision))
+            {
+                FlaggedProductReview::where('product_reviews_id', $productReview->id)->delete();
 
+                if( (bool) $acceptDecision === TRUE )
+                {
+                    $productReview->update([
+                        'flagged_review_decided_by' => $user->id,
+                        'flagged_review_decision_reason' => $reasonGiven,
+                        'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+                    ]);
+
+                    $flashMessage = "Review has been restored successfully.";
+                }
+                else
+                {
+                    $productReview->update([
+                        'flagged_review_decided_by' => $user->id,
+                        'flagged_review_decision_reason' => $reasonGiven,
+                        'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+                        'deleted_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
+                    ]);
+
+                    $flashMessage = "Review has been deleted successfully.";
+                }
+
+                return redirect()->route('modHubHome')->with('flashSuccess', $flashMessage);
+            }
+            else
+            {
+                return redirect()->back()->with('flashSuccess', $decisionError);
+            }
         }
         else
         {
