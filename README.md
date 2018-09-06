@@ -86,17 +86,17 @@ Extensive ecommerce site built with ability to add to cart without being logged 
       <td>Add Moderators</td>
       <td>Complete+</td>
     </tr>
+     <tr>
+      <td>Moderators can approve/deny vendor applications giving reason</td>
+      <td>Complete+</td>
+    </tr>
+    <tr>
+      <td>Moderators can approve/deny flagged reviews giving reason</td>
+      <td>Complete+</td>
+    </tr>
     <tr>
       <td>Vendors can add, edit & delete their own products</td>
       <td>Inprogress</td>
     </tr>    
-    <tr>
-      <td>Moderators can approve/deny vendor applications giving reason</td>
-      <td>Inprogress</td>
-    </tr>
-    <tr>
-      <td>Moderators can approve/deny flagged reviews giving reason</td>
-      <td>Inprogress</td>
-    </tr>
   </tbody>
 </table>
