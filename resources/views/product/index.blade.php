@@ -86,7 +86,7 @@
 
 
                 @empty
-                    <p>No products available.</p>
+                    <p>There are no products currently available.</p>
                 @endforelse
 
             </div>

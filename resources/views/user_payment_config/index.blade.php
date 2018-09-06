@@ -12,14 +12,10 @@
     <div class="col-md-12">
 
         <div class="card">
-
+            <div class="card-header">
+                <div class="lead">Billing Cards</div>
+            </div>
             <div class="card-body">
-                <div class="lead">
-                    Billing Cards
-                </div>
-
-                <br/>
-
                 <div class="card-text">
 
                     <div class="row">

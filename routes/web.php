@@ -99,7 +99,15 @@ Route::put('user/{slug}', 'UserController@update')->name('userUpdate');
 | Company Routes
 |--------------------------------------------------------------------------
 */
-//
+// Route::get();
+
+
+/*
+|--------------------------------------------------------------------------
+| Company Products Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/vendor/{slug}/products', 'CompanyProductController@index')->name('companyProductHome');
 
 /*
 |--------------------------------------------------------------------------

@@ -54,21 +54,21 @@ class Product extends Model
         return $this->attributes['cost'];
     }
 
-    public static function getProducts($request)
+    public function scopeGetProducts($query, $request)
     {
-        $query   = $request->input('query');
+        $querySearch   = $request->input('query');
         $min     = $request->input('min_price');
         $max     = $request->input('max_price');
         $sort_by = $request->input('sort_by');
 
-        $products = Self::select('products.id', 'products.name', 'products.user_id', 'products.company_id', 'products.short_description', 'products.long_description', 'products.product_details', 'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery', 'products.created_at', 'products.updated_at');
+        $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id', 'products.short_description', 'products.long_description', 'products.product_details', 'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery', 'products.created_at', 'products.updated_at');
         $whereClause = array();
 
-        if(isset($query))
+        if(isset($querySearch))
         {
-            $query = filter_var($query, FILTER_SANITIZE_STRING);
+            $querySearch = filter_var($querySearch, FILTER_SANITIZE_STRING);
             array_push($whereClause, [
-                'products.name', 'LIKE', "$query%"
+                'products.name', 'LIKE', "$querySearch%"
             ]);
         }
         if(isset($min))
@@ -86,33 +86,33 @@ class Product extends Model
             ]);
         }
 
-        if(isset($whereClause)) $products = $products->where($whereClause);
+        if(isset($whereClause)) $query->where($whereClause);
 
         switch($sort_by)
         {
             case 'pop': // most popular
-                $products = $products->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
+                $query->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
                     ->groupBy('order_history_products.product_id');
             break;
             case 'top': // top rated
-                $products = $products->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
+                $query->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
                     ->withCount(['productReview as review' => function($query) {
                         $query->select(DB::raw('avg(product_reviews.score) as average_rating'));
                     }])->groupBy('product_reviews.product_id')->orderByDesc('review');
             break;
             case 'low': // lowest price
-                $products = $products->orderBy('cost', 'ASC');
+                $query->orderBy('cost', 'ASC');
             break;
             case 'hig': // highest price
-                $products = $products->orderBy('cost', 'DESC');
+                $query->orderBy('cost', 'DESC');
             break;
             default:
             break;
         }
 
-        $products = $products->orderBy('products.id', 'DESC')->distinct()->paginate(7);
+        $query->orderBy('products.id', 'DESC')->distinct();
 
-        return $products;
+        return $query;
     }
 
     public function didUserPurchaseProduct($user_id)
@@ -153,5 +153,16 @@ class Product extends Model
             ->distinct()->first();
 
         return isset($review->review) ? number_format((float)$review->review, 2, '.', '') : '0.00';
+    }
+
+    /**
+     * Get products that belong to a given vendor.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $query, int  $companyId
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function scopeGetCompanyProducts($query, $companyId)
+    {
+        return $query->where('company_id', '=', $companyId);
     }
 }

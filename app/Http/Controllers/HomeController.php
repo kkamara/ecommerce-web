@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::getProducts($request);
+        $products = Product::getProducts($request)->paginate(7);
 
         return view('home.index')
                 ->withTitle('Home')
