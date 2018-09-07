@@ -165,4 +165,9 @@ class Product extends Model
     {
         return $query->where('company_id', '=', $companyId);
     }
+
+    public function doesUserOwnProduct()
+    {
+        return $this->company->user_id === auth()->user()->id;
+    }
 }

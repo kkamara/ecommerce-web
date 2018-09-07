@@ -51,9 +51,18 @@
                     @endif
                 </li>
                 <li class="list-group-item">
-                    <a href='{{ route('productAdd', $product->id) }}' class='btn btn-primary'>
-                        Add to cart
-                    </a>
+                    @if(Auth::check() &&     $product->doesUserOwnProduct())
+                        <a href='{{ route('productAdd', $product->id) }}' class='btn btn-warning btn-sm pull-left'>
+                            Edit item
+                        </a>
+                        <a href='{{ route('productAdd', $product->id) }}' class='btn btn-danger btn-sm pull-right'>
+                            Delete item
+                        </a>
+                    @else
+                        <a href='{{ route('productAdd', $product->id) }}' class='btn btn-primary btn-sm'>
+                            Add to cart
+                        </a>
+                    @endif
                 </li>
             </ul>
         </div>
