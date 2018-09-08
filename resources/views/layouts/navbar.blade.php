@@ -36,6 +36,7 @@
                             <a class="dropdown-item" href="{{ route('orderHome') }}">Order History</a>
                             <div class="dropdown-divider"></div>
                             @role('vendor')
+                                <a class="dropdown-item" href="{{ route('companyProductCreate', auth()->user()->company->slug) }}">Add a Product</a>
                                 <a class="dropdown-item" href="{{ route('companyProductHome', auth()->user()->company->slug) }}">My Products</a>
                             @else
                                 @role('moderator')

@@ -109,6 +109,8 @@ Route::put('user/{slug}', 'UserController@update')->name('userUpdate');
 |--------------------------------------------------------------------------
 */
 Route::get('/vendor/{slug}/products', 'CompanyProductController@index')->name('companyProductHome');
+Route::get('/vendor/{slug}/products/create', 'CompanyProductController@create')->name('companyProductCreate');
+Route::post('/vendor/{slug}/products/store', 'CompanyProductController@store')->name('companyProductStore');
 Route::get('/vendor/{slug}/products/{product}/delete', 'CompanyProductController@delete')->name('companyProductDelete');
 Route::delete('/vendor/{slug}/products/{product}/destroy', 'CompanyProductController@destroy')->name('companyProductDestroy');
 Route::get('/vendor/{slug}/products/{product}/edit', 'CompanyProductController@edit')->name('companyProductEdit');

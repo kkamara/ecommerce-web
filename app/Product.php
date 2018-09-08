@@ -211,7 +211,7 @@ class Product extends Model
 
         /** If user doesnt want to use a default image but has not uploaded an image */
         if((bool) $request->input('use_default_image') === FALSE && Input::hasFile('image') === FALSE)
-            $errors[] = 'You have opted to not use a default image but you have no provided one.';
+            $errors[] = 'You have opted to not use a default image but you have not provided one.';
 
         /** If user wants to use default image but has uploaded an image anyway */
         if((bool) $request->input('use_default_image') === TRUE && Input::hasFile('image') === TRUE)

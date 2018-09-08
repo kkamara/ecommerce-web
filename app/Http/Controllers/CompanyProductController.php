@@ -45,22 +45,96 @@ class CompanyProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  string  $slug
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($slug, Request $request)
     {
-        //
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
+
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            return view('company_product.create', [
+                'title' => 'Add a Product',
+            ]);
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param  string  $slug
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($slug, Request $request)
     {
-        //
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
+
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            $product = new Product;
+            $errors = $product->getErrors($request);
+
+            if(empty($errors))
+            {
+                $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
+
+                if(Input::hasFile('image'))
+                {
+                    $file = Input::file('image');
+                    $imageName = $file->getClientOriginalName();
+                }
+
+                /** store image file if provided */
+                if(isset($file) && isset($imageName))
+                {
+                    $imagePath = 'uploads/companies/'.$company->id.'/images/';
+                    $file->move(public_path($imagePath), $imageName);
+
+                    $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
+                }
+
+                /**
+                 * on the following line we use FILTER_SANITIZE_STRING on an expected float,
+                 * this is because FILTER_SANITIZE_NUMBER_FLOAT produces unexpected results
+                 */
+                $data = array(
+                    'user_id'           => $user->id,
+                    'company_id'        => $company->id,
+                    'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
+                    'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
+                    'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
+                    'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
+                    'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
+                    'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
+                    'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
+                    'image_path'        => $imagePath ?? NULL,
+                );
+                $product = $product->create($data);
+
+                return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Product has been added to your listings.');
+            }
+            else
+            {
+                return view('company_product.create', [
+                    'title' => 'Add a Product',
+                    'errors' => $errors,
+                    'input' => $request->input(),
+                ]);
+            }
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
