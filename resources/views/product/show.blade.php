@@ -51,11 +51,11 @@
                     @endif
                 </li>
                 <li class="list-group-item">
-                    @if(Auth::check() &&     $product->doesUserOwnProduct())
-                        <a href='{{ route('productAdd', $product->id) }}' class='btn btn-warning btn-sm pull-left'>
+                    @if(Auth::check() && $product->doesUserOwnProduct())
+                        <a href='{{ route('companyProductEdit', [$product->company->slug, $product->id]) }}' class='btn btn-warning btn-sm pull-left'>
                             Edit item
                         </a>
-                        <a href='{{ route('productAdd', $product->id) }}' class='btn btn-danger btn-sm pull-right'>
+                        <a href='{{ route('companyProductDelete', [$product->company->slug, $product->id]) }}' class='btn btn-danger btn-sm pull-right'>
                             Delete item
                         </a>
                     @else

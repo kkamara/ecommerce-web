@@ -34,6 +34,10 @@ class ProductController extends Controller
         if(Auth::check())
         {
             $user = auth()->user();
+
+            if($user->id === $product->company->user_id)
+                return redirect()->back()->with('flashDanger', 'Unable to perform add to cart action on your own product.');
+
             $user->addProductToDbCart($product);
         }
         else

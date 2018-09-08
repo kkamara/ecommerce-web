@@ -23,7 +23,7 @@ class CompanyProductController extends Controller
         $company = Company::where('slug', $slug)->first();
         $user = auth()->user();
 
-        if($user->hasRole('vendor') && $company !== NULL && $user->id === $company->user_id)
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
             $companyProducts = Product::getProducts($request)->getCompanyProducts($company->id)->paginate(7);
 
@@ -61,17 +61,6 @@ class CompanyProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -94,14 +83,54 @@ class CompanyProductController extends Controller
         //
     }
 
+    public function delete($slug, Product $product, Request $request)
+    {
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
+
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            return view('company_product.delete', [
+                'title' => 'Delete '.$product->name,
+            ])->with(compact('product'));
+        }
+        else
+        {
+            return abort(404);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug, Product $product, Request $request)
     {
-        //
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
+
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            switch($request->input('choice'))
+            {
+                case '0':
+                    return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Your item listing has not been removed.');
+                break;
+                case '1':
+                    $product->delete();
+
+                    return redirect()->route('companyProductHome', $company->slug)->with('flashSuccess', 'Your item listing was successfully removed.');
+                break;
+                default:
+                    return redirect()->back()->with('flashDanger', 'Oops, something went wrong. Contact system administrator.');
+                break;
+            }
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 }

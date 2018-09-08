@@ -37,4 +37,9 @@ class Company extends Model
     {
         return ! self::where('name', '=', $companyName)->get()->isEmpty();
     }
+
+    public function belongsToUser($userId)
+    {
+        return $userId === $this->user_id;
+    }
 }

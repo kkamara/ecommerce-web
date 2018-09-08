@@ -103,15 +103,20 @@ Route::put('user/{slug}', 'UserController@update')->name('userUpdate');
 
 
 /*
+
 |--------------------------------------------------------------------------
 | Company Products Routes
 |--------------------------------------------------------------------------
 */
 Route::get('/vendor/{slug}/products', 'CompanyProductController@index')->name('companyProductHome');
+Route::get('/vendor/{slug}/products/{product}/delete', 'CompanyProductController@delete')->name('companyProductDelete');
+Route::delete('/vendor/{slug}/products/{product}/destroy', 'CompanyProductController@destroy')->name('companyProductDestroy');
+Route::get('/vendor/{slug}/products/{product}/edit', 'CompanyProductController@edit')->name('companyProductEdit');
+Route::put('/vendor/{slug}/products/{product}/update', 'CompanyProductController@update')->name('companyProductUpdate');
 
 /*
 |--------------------------------------------------------------------------
-| Vendor Routes
+| Vendor Application Routes
 |--------------------------------------------------------------------------
 */
 Route::get('/becomeavendor', 'VendorApplicationController@create')->name('vendorCreate');
