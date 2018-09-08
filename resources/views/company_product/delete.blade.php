@@ -28,7 +28,7 @@
             <div class="card-footer">
 
                 <div class="form-group pull-left">
-                    <a href='{{ route('addressHome') }}' class='btn btn-secondary'>Back</a>
+                    <a href='{{ route('productShow', $product->id) }}' class='btn btn-secondary'>Back</a>
                 </div>
 
                 <div class="form-group pull-right">

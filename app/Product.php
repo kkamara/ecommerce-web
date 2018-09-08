@@ -4,7 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class Product extends Model
 {
@@ -166,8 +168,55 @@ class Product extends Model
         return $query->where('company_id', '=', $companyId);
     }
 
+    /**
+     * Returns boolean indicating if authenticated user owns the current instance of this model.
+     *
+     * @return bool
+     */
     public function doesUserOwnProduct()
     {
         return $this->company->user_id === auth()->user()->id;
+    }
+
+    /**
+     * Returns boolean indicating whether this model instance is using a default image.
+     *
+     * @return bool
+     */
+    public function usingDefaultImage()
+    {
+        return $this->attributes['image_path'] === NULL;
+    }
+
+    /**
+     * Returns an array of errors for \App\Http\Controllers\CompanyProductController requests.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $request
+     * @return array
+     */
+    public static function getErrors($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:191',
+            'cost' => 'required|regex:/\d.\d/',
+            'shippable' => 'required|boolean|between:0,1',
+            'free_delivery' => 'required|boolean|between:0,1',
+            'use_default_image' => 'required|boolean|between:0,1',
+            'image' => 'image',
+            'short_description' => 'required|max:191',
+            'long_description' => 'required',
+            'product_details' => 'required',
+        ]);
+        $errors = $validator->errors()->all();
+
+        /** If user doesnt want to use a default image but has not uploaded an image */
+        if((bool) $request->input('use_default_image') === FALSE && Input::hasFile('image') === FALSE)
+            $errors[] = 'You have opted to not use a default image but you have no provided one.';
+
+        /** If user wants to use default image but has uploaded an image anyway */
+        if((bool) $request->input('use_default_image') === TRUE && Input::hasFile('image') === TRUE)
+            $errors[] = 'You have opted to use a default image but you provided one anyway.';
+
+        return $errors;
     }
 }
