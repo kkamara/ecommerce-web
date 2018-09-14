@@ -1,15 +1,23 @@
 <?php
 
+/**
+ * Adds a product to the user's cache cart.
+ * 
+ * @param  \App\Product  $product
+ */
 function addProductToCacheCart($product)
 {
+    /** Cookie will expire in 120 minutes */
     $expiresAt = now()->addMinutes(120);
 
+    /** Get existing cache cookie if set  */
     $cacheCart = Cache::get('cc');
 
+    /** Check is existing cookie is present */
     if($cacheCart !== NULL && is_array($cacheCart))
     {
         $productAlreadyAdded = FALSE;
-
+        /** Check if this product already exists in cart */
         foreach($cacheCart as $cc)
         {
             if(is_array($cc) && in_array($product->id, $cc))
@@ -17,7 +25,7 @@ function addProductToCacheCart($product)
                 $productAlreadyAdded = TRUE;
             }
         }
-
+        /** Add new product to cache cart if not already present */
         if($productAlreadyAdded == FALSE)
         {
             $newItem = array(
@@ -30,6 +38,7 @@ function addProductToCacheCart($product)
     }
     else
     {
+        /** Set a new cache cart cookie with product as it's first item */
         $cacheCart = array(
             array(
                 'product' => $product->id,
@@ -40,10 +49,14 @@ function addProductToCacheCart($product)
     }
 }
 
+/**
+ * Returns the user's cache cart.
+ * 
+ * @return  array
+ */
 function getCacheCart()
 {
     $cacheCart = Cache::get('cc');
-// dd($cacheCart);
     $array = array();
 
     if(isset($cacheCart))
@@ -63,18 +76,26 @@ function getCacheCart()
     return $array;
 }
 
+/**
+ * Updates the respective number of products in the user's cache cart.
+ * 
+ * @param  \Illuminate\Http\Request  $request
+ */
 function updateCacheCartAmount($request)
 {
+    /** Get existing cache cart */
     $cacheCart = getCacheCart();
     $array     = array();
 
     foreach($cacheCart as $cc)
     {
+        /** Check if an amount value for this product was given in the request */
         $product_id = $cc['product']->id;
         $amount = $request->get('amount-' . $product_id);
 
         if($amount !== NULL && $amount != 0)
         {
+            /** Push to $array the product with new amount value */
             array_push($array, array(
                 'product' => $product_id,
                 'amount'  => (int) $amount,
@@ -82,6 +103,15 @@ function updateCacheCartAmount($request)
         }
     }
 
+    /** Set cache cart equal to our updated products array */
     $expiresAt = now()->addMinutes(120);
     Cache::put('cc', $array, $expiresAt);
+}
+
+/**
+ * Remove the cache cart cookie.
+ */
+function clearCacheCart()
+{
+    Cache::forget('cc');
 }

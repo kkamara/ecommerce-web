@@ -8,11 +8,33 @@ use Auth;
 
 class Cart extends Model
 {
+    /** 
+     * This models table name is 'cart' instead of 'carts' so must be set explicitly here.
+     * 
+     * @var string
+     */
     protected $table = 'cart';
+
+    /** 
+     * This models immutable values are stored in this array. 
+     * 
+     * @var array
+     */
     protected $guarded = [];
 
+    /** 
+     * Disable created_at and updated_at columns for this model.
+     * 
+     * @var bool
+     */
     public $timestamps = false;
 
+    /**
+     * Gets the number of items in the user's cache or db cart, 
+     * depending on whether the user is authenticated.
+     * 
+     * @return  int
+     */
     public static function count()
     {
         $count = 0;
@@ -37,6 +59,12 @@ class Cart extends Model
         return $count;
     }
 
+    /**
+     * Gets the price of the total amount of items in the cache or db cart, 
+     * depending on whether the user is authenticated.
+     * 
+     * @return  string
+     */
     public static function price()
     {
         $price = 0;
@@ -61,19 +89,34 @@ class Cart extends Model
         return "£".number_format($price, 2);
     }
 
+    /**
+     * This model relationship belongs to \App\User.
+     * 
+     * @return  \Illuminate\Database\Eloquent\Model
+     */
     public function user()
     {
         return $this->belongsTo('App\User');
     }
 
+    /**
+     * This model relationship belongs to \App\Product.
+     * 
+     * @return  \Illuminate\Database\Eloquent\Model
+     */
     public function product()
     {
         return $this->belongsTo('App\Product');
     }
 
+    /**
+     * Gets the products assigned to the authenticated user.
+     * 
+     * @return array|int
+     */
     public function getDbCart()
     {
-        $products = \App\Cart::where('user_id', $this->attributes['id'])->get();
+        $products = self::where('user_id', $this->user->id)->get();
 
         if(! $products->isEmpty())
         {

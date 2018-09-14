@@ -9,6 +9,11 @@ use App\ProductReview;
 
 class FlaggedProductReview extends Model
 {
+    /** 
+     * This models immutable values.
+     *
+     * @var array 
+     */
     protected $guarded = [];
 
     /**
@@ -25,7 +30,6 @@ class FlaggedProductReview extends Model
      * Find whether a particular IP Address has flagged a product review.
      *
      * @param string $ipAddress, \App\ProductReview $id
-     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public static function hasIpFlaggedThisReview($ipAddress, $id)
@@ -43,9 +47,7 @@ class FlaggedProductReview extends Model
      */
     public static function scopeWhereUnanswered($query)
     {
-        /**
-         * Query for unanswered flagged reviews.
-         */
+        /** Query for unanswered flagged reviews. */
         $ids = DB::Select('SELECT product_reviews_id
         FROM
         (
@@ -55,9 +57,7 @@ class FlaggedProductReview extends Model
             HAVING COUNT(*) > 4
         ) T1');
 
-        /**
-         * Push results to a standard array.
-         */
+        /** Push results to a standard array. */
         $idsArray = array();
         foreach($ids as $id)
         {
@@ -71,7 +71,6 @@ class FlaggedProductReview extends Model
      * Gets the number of times an \App\ProductReview has been flagged.
      *
      * @param \App\ProductReview $id
-     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public static function getFlagCount($id)

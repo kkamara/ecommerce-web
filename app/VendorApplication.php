@@ -8,9 +8,19 @@ use App\Company;
 
 class VendorApplication extends Model
 {
+    /** 
+     * This models immutable values.
+     *
+     * @var array 
+     */
     protected $guarded = [];
 
-    // check if user has applied with no response
+    /**
+     * Checks if a given user has applied with no response.
+     * 
+     * @param  \App\User  $userId
+     * @return bool
+     */
     public static function hasUserApplied($userId)
     {
         return ! Self::where([
@@ -19,7 +29,12 @@ class VendorApplication extends Model
         ])->get()->isEmpty();
     }
 
-    // check if user has been rejected
+    /**
+     * Checks if a given user has been rejected.
+     * 
+     * @param   \App\User  $userId
+     * @return  bool
+     */
     public static function hasApplicationBeenRejected($userId)
     {
         return ! Self::where([
@@ -28,12 +43,22 @@ class VendorApplication extends Model
         ])->get()->isEmpty();
     }
 
-    // gets unanswered applications
+    /**
+     * Adds onto a query for where vendor applications are unanswered.
+     * 
+     * @param  \Illuminate\Database\Eloquent\Model  $query
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public static function scopeWhereFresh($query)
     {
         return $query->where('accepted', '=', NULL);
     }
 
+    /**
+     * This model relationship belongs to \App\User
+     * 
+     * @return  \Illuminate\Database\Eloquent\Model
+     */
     public function user()
     {
         return $this->belongsTo('App\User');

@@ -8,6 +8,11 @@ use App\ProductReview;
 
 class ProductReview extends Model
 {
+    /** 
+     * This models immutable values.
+     *
+     * @var array 
+     */
     protected $guarded = [];
 
     /**

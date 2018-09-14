@@ -10,60 +10,121 @@ use Validator;
 
 class Product extends Model
 {
+    /** This model uses the SoftDeletes trait for a deleted_at datetime column. */
     use SoftDeletes;
 
+    /** 
+     * This models immutable values.
+     *
+     * @var array 
+     */
     protected $guarded = [];
 
+    /** 
+     * This models immutable date values.
+     * 
+     * @var array
+     */
     protected $dates = ['deleted_at'];
 
+    /**
+     * Set a publicily accessible identifier to get the path for this unique instance.
+     * 
+     * @return  string
+     */
     public function getPathAttribute()
     {
         return url('/products/'.$this->attributes['id']);
     }
 
+    /**
+     * Set a publicily accessible identifier to get the image path for this unique instance.
+     * 
+     * @return  string
+     */
     public function getImagePathAttribute()
     {
         return $this->attributes['image_path'] ?? '/image/products/default/not-found.jpg';
     }
 
+    /**
+     * This model relationship belongs to \App\Company.
+     * 
+     * @return  \Illuminate\Database\Eloquent\Model
+     */
     public function company()
     {
         return $this->belongsTo('App\Company', 'company_id');
     }
 
+    /**
+     * This model relationship has many to \App\ProductReview.
+     * 
+     * @return  \Illuminate\Database\Eloquent\Model
+     */
     public function productReview()
     {
         return $this->hasMany('App\ProductReview', 'product_id');
     }
 
+    /**
+     * This model relationship has many to \App\OrderHistoryProducts.
+     * 
+     * @return  \Illuminate\Database\Eloquent\Model
+     */
     public function orderHistoryProducts()
     {
         return $this->hasMany('App\OrderHistoryProducts', 'product_id');
     }
 
+    /**
+     * This model relationship belongs to \App\User.
+     * 
+     * @return  \Illuminate\Database\Eloquent\Model
+     */
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    /**
+     * Return the formatted cost attribute.
+     * 
+     * @return  string
+     */
     public function getFormattedCostAttribute()
     {
         return "£".number_format($this->attributes['cost'], 2);
     }
 
+    /**
+     * Return the cost attribute.
+     * 
+     * @return  string
+     */
     public function getCostAttribute()
     {
         return $this->attributes['cost'];
     }
 
+    /**
+     * Query products using request params.
+     * 
+     * @param  \Illuminate\Database\Eloquent\Model  $query
+     * @param  \Illuminate\Http\Request             $request
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function scopeGetProducts($query, $request)
     {
-        $querySearch   = $request->input('query');
-        $min     = $request->input('min_price');
-        $max     = $request->input('max_price');
-        $sort_by = $request->input('sort_by');
+        $querySearch = $request->input('query');
+        $min         = $request->input('min_price');
+        $max         = $request->input('max_price');
+        $sort_by     = $request->input('sort_by');
 
-        $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id', 'products.short_description', 'products.long_description', 'products.product_details', 'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery', 'products.created_at', 'products.updated_at');
+        $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id', 
+                       'products.short_description', 'products.long_description', 'products.product_details', 
+                       'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery', 
+                       'products.created_at', 'products.updated_at');
         $whereClause = array();
 
         if(isset($querySearch))
@@ -94,13 +155,13 @@ class Product extends Model
         {
             case 'pop': // most popular
                 $query->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
-                    ->groupBy('order_history_products.product_id');
+                      ->groupBy('order_history_products.product_id');
             break;
             case 'top': // top rated
                 $query->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
-                    ->withCount(['productReview as review' => function($query) {
+                      ->withCount(['productReview as review' => function($query) {
                         $query->select(DB::raw('avg(product_reviews.score) as average_rating'));
-                    }])->groupBy('product_reviews.product_id')->orderByDesc('review');
+                      }])->groupBy('product_reviews.product_id')->orderByDesc('review');
             break;
             case 'low': // lowest price
                 $query->orderBy('cost', 'ASC');
@@ -117,14 +178,20 @@ class Product extends Model
         return $query;
     }
 
-    public function didUserPurchaseProduct($user_id)
+    /**
+     * Find whether a given user has purchased this product instance.
+     * 
+     * @param  \App\User  $userId
+     * @return bool
+     */
+    public function didUserPurchaseProduct($userId)
     {
         foreach($this->orderHistoryProducts()->get() as $product){
             $orderHistory = $product->orderHistory()->get();
 
             foreach($orderHistory as $order)
             {
-                if($order->user_id == $user_id)
+                if($order->user_id == $userId)
                 {
                     return TRUE;
                 }
@@ -134,11 +201,17 @@ class Product extends Model
         return FALSE;
     }
 
-    public function didUserReviewProduct($user_id)
+    /**
+     * Find whether a given user has reviewed this product instance.
+     * 
+     * @param  \App\User  $userId
+     * @return bool
+     */
+    public function didUserReviewProduct($userId)
     {
         foreach($this->productReview()->get() as $review){
 
-            if($review->user_id == $user_id)
+            if($review->user_id == $userId)
             {
                 return TRUE;
             }
@@ -147,6 +220,11 @@ class Product extends Model
         return FALSE;
     }
 
+    /**
+     * Return the review attribute.
+     * 
+     * @return  string
+     */
     public function getReviewAttribute()
     {
         $review = \App\ProductReview::select(DB::raw('avg(score) as review'))
@@ -179,7 +257,7 @@ class Product extends Model
     }
 
     /**
-     * Returns boolean indicating whether this model instance is using a default image.
+     * Returns boolean indicating whether this model relationship is using a default image.
      *
      * @return bool
      */
@@ -211,11 +289,15 @@ class Product extends Model
 
         /** If user doesnt want to use a default image but has not uploaded an image */
         if((bool) $request->input('use_default_image') === FALSE && Input::hasFile('image') === FALSE)
+        {
             $errors[] = 'You have opted to not use a default image but you have not provided one.';
+        }
 
         /** If user wants to use default image but has uploaded an image anyway */
         if((bool) $request->input('use_default_image') === TRUE && Input::hasFile('image') === TRUE)
+        {
             $errors[] = 'You have opted to use a default image but you provided one anyway.';
+        }
 
         return $errors;
     }
