@@ -76,7 +76,7 @@ class FlaggedProductReview extends Model
      */
     public static function getFlagCount($id)
     {
-        self::where([
+        return (int) self::where([
             'product_reviews_id' => $id,
         ])->count();
     }
