@@ -86,11 +86,11 @@ class OrderHistory extends Model
     /**
      * Gets total price of items in a single order.
      * 
-     * @return  \Illuminate\Database\Eloquent\Model
+     * @return  int
      */
     public function getAmountTotalAttribute()
     {
-        return OrderHistoryProducts::where([
+        return (int) OrderHistoryProducts::where([
             'order_history_id' => $this->attributes['id'],
         ])->sum('amount');
     }

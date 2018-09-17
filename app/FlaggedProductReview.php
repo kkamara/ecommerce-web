@@ -29,8 +29,9 @@ class FlaggedProductReview extends Model
     /**
      * Find whether a particular IP Address has flagged a product review.
      *
-     * @param string $ipAddress, \App\ProductReview $id
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param   string $ipAddress
+     * @param   \App\ProductReview $id
+     * @return  Illuminate\Support\Collection
      */
     public static function hasIpFlaggedThisReview($ipAddress, $id)
     {
@@ -70,12 +71,12 @@ class FlaggedProductReview extends Model
     /**
      * Gets the number of times an \App\ProductReview has been flagged.
      *
-     * @param \App\ProductReview $id
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param  \App\ProductReview $id
+     * @return int
      */
     public static function getFlagCount($id)
     {
-        return self::where([
+        self::where([
             'product_reviews_id' => $id,
         ])->count();
     }

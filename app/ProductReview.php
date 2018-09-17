@@ -48,7 +48,7 @@ class ProductReview extends Model
     /**
      * Finds whether an \App\ProductReview has been flagged 5 times.
      *
-     * return \Illuminate\Database\Eloquent\Model
+     * @return bool
      */
     public function isFlaggedFiveTimes()
     {
