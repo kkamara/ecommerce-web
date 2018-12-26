@@ -17,7 +17,8 @@ class AddUserPaymentConfigIdToOrderHistoryTable extends Migration
             $table->integer('user_payment_config_id')
                   ->references('id')->on('user_payment_config')
                   ->onDelete('cascade')
-                  ->after('cost');
+                  ->after('cost')
+                  ->nullable();
         });
     }
 

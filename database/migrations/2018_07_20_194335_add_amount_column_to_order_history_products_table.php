@@ -14,7 +14,7 @@ class AddAmountColumnToOrderHistoryProductsTable extends Migration
     public function up()
     {
         Schema::table('order_history_products', function (Blueprint $table) {
-            $table->integer('amount')->after('product_id');
+            $table->integer('amount')->after('product_id')->nullable();
         });
     }
 

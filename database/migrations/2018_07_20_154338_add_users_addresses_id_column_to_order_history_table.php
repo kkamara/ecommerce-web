@@ -14,7 +14,7 @@ class AddUsersAddressesIdColumnToOrderHistoryTable extends Migration
     public function up()
     {
         Schema::table('order_history', function($table) {
-            $table->string('users_addresses_id')->after('user_payment_config_id');
+            $table->string('users_addresses_id')->after('user_payment_config_id')->nullable();
         });
     }
 

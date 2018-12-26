@@ -17,7 +17,8 @@ class AddUserIdColumnToProductsTable extends Migration
             $table->integer('user_id')
                   ->references('id')->on('user')
                   ->onDelete('cascade')
-                  ->after('id');
+                  ->after('id')
+                  ->nullable();
         });
     }
 

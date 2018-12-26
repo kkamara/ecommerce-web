@@ -14,7 +14,7 @@ class AddProposedCompanyNameFieldToVendorApplicationsTable extends Migration
     public function up()
     {
         Schema::table('vendor_applications', function (Blueprint $table) {
-            $table->string('proposed_company_name')->unique()->after('user_id');
+            $table->string('proposed_company_name')->unique()->after('user_id')->nullable();
         });
     }
 

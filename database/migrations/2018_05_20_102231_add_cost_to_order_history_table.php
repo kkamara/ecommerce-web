@@ -14,7 +14,7 @@ class AddCostToOrderHistoryTable extends Migration
     public function up()
     {
         Schema::table('order_history', function($table) {
-            $table->float('cost', 8, 2)->after('product_id');
+            $table->float('cost', 8, 2)->after('product_id')->nullable();
         });
     }
 

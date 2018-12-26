@@ -18,7 +18,8 @@ class AddUsersAddressesIdFieldToVendorApplicationsTable extends Migration
                   ->references('id')->on('users_addresses')
                   ->onDelete('cascade')
                   ->unique()
-                  ->after('proposed_company_name');
+                  ->after('proposed_company_name')
+                  ->nullable();
         });
     }
 

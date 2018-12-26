@@ -14,7 +14,7 @@ class AddReferenceNumberToOrderHistoryTable extends Migration
     public function up()
     {
         Schema::table('order_history', function($table) {
-            $table->string('reference_number')->after('user_id');
+            $table->string('reference_number')->after('user_id')->nullable();
         });
     }
 
