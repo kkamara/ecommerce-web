@@ -11,149 +11,162 @@
                 <form class='form' action="{{ route('registerCreate') }}" method='POST'>
                     {{ csrf_field() }}
                     {{ method_field('POST') }}
-                    <div class="row">
-                        <div class="col-md-4">
 
-                            <div class="card-text">
-                                <h5>Basic Details</h5>
-                                <hr/>
-                                <div class="text-center">
-                                    <div class="form-group">
-                                        <label>First Name*:
-                                            <input value='text' type="text" class="form-control" name='first_name'>
-                                        </label>
-                                    </div>
+                    <div class="card-text">
+                        <h5>Basic Details</h5>
+                        <hr/>
 
-                                    <div class="form-group">
-                                        <label>Last Name*:
-                                            <input value='text' type="text" class="form-control" name='last_name'>
-                                        </label>
-                                    </div>
+                        <div class='col-sm-8 offset-md-2'>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">First Name*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='first_name'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Email*:
-                                            <input value='user@mail.com' type="email" class="form-control" name='email'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Last Name*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='last_name'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Password*:
-                                            <input value='password' type="password" class="form-control" name='password'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Email*:</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name='email'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Confirm Password*:
-                                            <input value='password' type="password" class="form-control" name='password_confirmation'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Password*:</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" name='password'>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Confirm Password*:</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" name='password'>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="card-text">
-                                <h5>Delivery Address</h5>
-                                <hr/>
+                        <h5>Delivery Address</h5>
+                        <hr/>
 
-                                <div class="text-center">
-                                    <div class="form-group">
-                                        <label>Building Name/Number*:
-                                            <input value='text' type="text" class="form-control" name='building_name'>
-                                        </label>
-                                    </div>
+                        <div class='col-sm-8 offset-md-2'>
 
-                                    <div class="form-group">
-                                        <label>Street Address 1*:
-                                            <input value='text' type="text" class="form-control" name='street_address1'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Building Number*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='building_name''>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Street Address 2:
-                                            <input type="text" class="form-control" name='street_address2'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Street Address 1*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='street_address1'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Street Address 3:
-                                            <input type="text" class="form-control" name='street_address3'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Street Address 2:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='street_address2'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Street Address 4:
-                                            <input type="text" class="form-control" name='street_address4'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Street Address 3:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='street_address3'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Postcode*:
-                                            <input value='postcode' type="text" class="form-control" name='postcode'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Street Address 4:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='street_address4'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>City*:
-                                            <input value='text' type="text" class="form-control" name='city'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Postcode*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='postcode'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Country*:
-                                            <input value='text' type="text" class="form-control" name='country'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">City*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='city'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Phone Number Extension*:
-                                            <input value='text' type="text" class="form-control" name='phone_number_ext'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Country*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='country'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Phone Number*:
-                                            <input value='111111' type="text" class="form-control" name='phone_number'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Phone Number Extension*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='phone_number_ext'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Mobile Number Extension:
-                                            <input type="text" class="form-control" name='mobile_number_ext'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Phone Number*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='phone_number'>
+                                </div>
+                            </div>
 
-                                    <div class="form-group">
-                                        <label>Mobile Number:
-                                            <input type="text" class="form-control" name='mobile_number'>
-                                        </label>
-                                    </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Mobile Number Extension*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='mobile_number_ext'>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Mobile Number*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='mobile_number'>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="card-text">
-                                <h5>Billing Details</h5>
-                                <hr/>
-                                <div class="text-center">
-                                    <div class="form-group">
-                                        <label>Card Holder Name*:
-                                            <input value='card holder name' type="text" class="form-control" name='card_holder_name'>
-                                        </label>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label>Card Number*:
-                                            <input value='1111222233334444' type="text" class="form-control" name='card_number'>
-                                        </label>
-                                    </div>
+                        <h5>Billing Details</h5>
+                        <hr/>
 
-                                    <div class="form-group">
-                                        <label>Expiry Date*:
-                                            <input type="month" class="form-control" name='expiry_date'>
-                                        </label>
-                                    </div>
+                        <div class='col-sm-8 offset-md-2'>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Card Holder Name*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='card_holder_name'>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Card Number*:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name='card_number'>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Expiry Date*:</label>
+                                <div class="col-sm-9">
+                                    <input type="month" class="form-control" name='expiry_date'>
                                 </div>
                             </div>
                         </div>
