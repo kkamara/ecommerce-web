@@ -98,10 +98,16 @@ class OrderHistoryController extends Controller
             return redirect()->back()->with(compact('errors'));
         }
 
-        if(request('cvc-'.$billingCardIds[0]) === NULL)
+        $billingCVC = $billingCardIds[0];
+
+        if(request('cvc-'.$billingCVC) === NULL)
         {
             return redirect()->back()->with('errors', [
-                'Missing cvc for chosen billing card.'
+                'Missing CVC for chosen billing card.'
+            ]);
+        } else if (strlen($billingCVC) !== 3) {
+            return redirect()->back()->with('errors', [
+                'CVC must be 3 characters long.'
             ]);
         }
 
