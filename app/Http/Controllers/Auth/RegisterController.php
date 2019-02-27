@@ -84,34 +84,18 @@ class RegisterController extends Controller
 
     public function storeUser(Request $request)
     {
-        $validator = Validate::make($request->all(), [
-            'first_name' => 'required|string|max:191',
-            'last_name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+        $registerErrors = User::getRegisterErrors($request);
 
-            'building_name' => 'required|string|max:191',
-            'street_address1' => 'required|max:191',
-            'street_address2' => 'max:191',
-            'street_address3' => 'max:191',
-            'street_address4' => 'max:191',
-            'postcode' => 'required|string|min: 5|max:191',
-            'city' => 'required|string|min: 4|max:191',
-            'country' => 'required|string|min: 4|max:191',
-            'phone_number_ext' => 'required|min: 2|max:191',
-            'phone_number' => 'required|min: 5|max:191',
-            'mobile_number_ext' => 'max:191',
-            'mobile_number' => 'max:191',
+        $input = $request->input();
 
-            'card_holder_name' => 'required|min: 6|max: 191',
-            'card_number' => 'required|digits: 16',
-            'expiry_date' => 'required', // format 2018-01
-        ]);
-
-        if(!empty($validator->errors()->all()))
+        if(true === $registerErrors['present'])
         {
-            return redirect()->back()->with('errors', $validator->errors()->all());
+            return redirect()->back()->with(array(
+                'errors' => $registerErrors,
+                'input' => $input,
+            ));
         }
+
         $expiry_date = explode('-', request('expiry_date'));
         $expiry_year = filter_var($expiry_date[0], FILTER_SANITIZE_NUMBER_INT);
         $expiry_month = filter_var($expiry_date[1], FILTER_SANITIZE_NUMBER_INT);

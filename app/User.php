@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Validator;
 
 class User extends Authenticatable
 {
@@ -333,5 +335,52 @@ class User extends Authenticatable
     public function hasNoRole()
     {
         return !$this->hasRole('vendor') && !$this->hasRole('moderator');
+    }
+
+    public static function getRegisterErrors(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:191',
+            'last_name' => 'required|string|max:191',
+            'email' => 'required|string|email|max:191|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+        $basicErrors = $validator->errors();
+
+        $validator = Validator::make($request->all(), [
+            'building_name' => 'required|string|max:191',
+            'street_address1' => 'required|max:191',
+            'street_address2' => 'max:191',
+            'street_address3' => 'max:191',
+            'street_address4' => 'max:191',
+            'postcode' => 'required|string|min: 5|max:191',
+            'city' => 'required|string|min: 4|max:191',
+            'country' => 'required|string|min: 4|max:191',
+            'phone_number_ext' => 'required|min: 2|max:191',
+            'phone_number' => 'required|min: 5|max:191',
+            'mobile_number_ext' => 'max:191',
+            'mobile_number' => 'max:191',
+        ]);
+        $addressErrors = $validator->errors();
+
+        $validator = Validator::make($request->all(), [
+            'card_holder_name' => 'required|min: 6|max: 191',
+            'card_number' => 'required|digits: 16',
+            'expiry_date' => 'required', // format 2018-01
+        ]);
+        $billingErrors = $validator->errors();
+
+        if(false == $basicErrors->isEmpty() || false == $addressErrors->isEmpty() || false == $billingErrors->isEmpty()) {
+            $present = true;
+        } else {
+            $present = false;
+        }
+
+        return array(
+            'basic' => false == $basicErrors->isEmpty() ? $basicErrors : array(),
+            'address' => false == $addressErrors->isEmpty() ? $addressErrors : array(),
+            'billing' => false == $billingErrors->isEmpty() ? $billingErrors : array(),
+            'present' => $present,
+        ); 
     }
 }
