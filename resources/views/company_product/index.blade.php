@@ -36,7 +36,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">£</div>
                                 </div>
-                                <input type="number" min="0.01" step="0.01" max="2500" name="min_price" class='form-control' placeholder='Min' value='{{ $input['min_price'] or '' }}'>
+                                <input type="number" min="0.01" step="0.01" max="2500" name="min_price" class='form-control' placeholder='Min' value='{{ $input['min_price'] ?? '' }}'>
                             </div>
                         </div>
 
@@ -45,7 +45,7 @@
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">£</div>
                                 </div>
-                                <input type="number" min="0.01" step="0.01" max="2500" name="max_price" class='form-control' placeholder='Max' value='{{ $input['max_price'] or '' }}'>
+                                <input type="number" min="0.01" step="0.01" max="2500" name="max_price" class='form-control' placeholder='Max' value='{{ $input['max_price'] ?? '' }}'>
                             </div>
                         </div>
 
@@ -56,7 +56,7 @@
                                         <i class="fa fa-search" aria-hidden="true"></i>
                                     </div>
                                 </div>
-                                <input name='query' type="text" class='form-control' placeholder="Search..." value='{{ $input['query'] or '' }}'>
+                                <input name='query' type="text" class='form-control' placeholder="Search..." value='{{ $input['query'] ?? '' }}'>
                             </div>
                         </div>
 

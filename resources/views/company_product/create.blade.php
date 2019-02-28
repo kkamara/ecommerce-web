@@ -18,13 +18,13 @@
                     <div class="form-group">
                         <label>
                             Listing Name:
-                            <input type="text" class='form-control' name='name' value="{{ $input['name'] or '' }}">
+                            <input type="text" class='form-control' name='name' value="{{ $input['name'] ?? '' }}">
                         </label>
                     </div>
 
                     <div class="form-group">
                         <label>Cost:
-                            <input type="number" step=".01" name='cost' class='form-control' value="{{ $input['cost'] or '' }}">
+                            <input type="number" step=".01" name='cost' class='form-control' value="{{ $input['cost'] ?? '' }}">
                         </label>
                     </div>
 
@@ -64,19 +64,19 @@
 
                     <div class="form-group">
                         <label>Short Description:
-                            <textarea name="short_description" class='form-control' cols="150" rows="2">{{  $input['short_description'] or '' }}</textarea>
+                            <textarea name="short_description" class='form-control' cols="150" rows="2">{{  $input['short_description'] ?? '' }}</textarea>
                         </label>
                     </div>
 
                     <div class="form-group">
                         <label>Long Description:
-                            <textarea name="long_description" class='form-control' cols="150" rows="2">{{ $input['long_description'] or '' }}</textarea>
+                            <textarea name="long_description" class='form-control' cols="150" rows="2">{{ $input['long_description'] ?? '' }}</textarea>
                         </label>
                     </div>
 
                     <div class="form-group">
                         <label>Product details:
-                            <textarea name="product_details" class='form-control' cols="150" rows="2">{{ $input['product_details'] or '' }}</textarea>
+                            <textarea name="product_details" class='form-control' cols="150" rows="2">{{ $input['product_details'] ?? '' }}</textarea>
                         </label>
                     </div>
 

@@ -21,7 +21,7 @@
                                 <div class="form-group">
                                     <div class="form-control">
                                         <label>Email
-                                            <input type="text" class='form-control' name='email' value="{{ $input['email'] or '' }}">
+                                            <input type="text" class='form-control' name='email' value="{{ $input['email'] ?? '' }}">
                                         </label>
                                     </div>
                                 </div>
