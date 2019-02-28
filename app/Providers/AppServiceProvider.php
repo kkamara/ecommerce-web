@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Laravel\Dusk\DuskServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        if ($this->app->environment('local', 'testing', 'staging')) {
+            $this->app->register(DuskServiceProvider::class);
+         }
 
         view()->composer(['layouts.navbar', 'cart.show', 'order_history.create'], function($view) {
             $view->with('cartCount', \App\Cart::count());

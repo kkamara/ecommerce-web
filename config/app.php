@@ -174,6 +174,8 @@ return [
          * Custom Service Providers
          */
         'App\Providers\HelperServiceProvider',
+        App\Providers\RouteServiceProvider::class,
+        Laravel\Dusk\DuskServiceProvider::class,
     ],
 
     /*
