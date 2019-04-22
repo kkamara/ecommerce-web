@@ -17,20 +17,19 @@ use Faker\Generator as Faker;
  * Factories should be run individually in the order of which they are defined
  * Create and user only a single user or hardcode $userid field in each factory
  */
-$factory->define(App\User::class, function (Faker $faker) {
-
-    $name = array(
-        'firstName' => $faker->unique()->firstName,
-        'lastName'  => $faker->unique()->lastName,
-    );
+$factory->define(App\UsersAddress::class, function (Faker $faker) {
+    $param = str_shuffle("00000111112222233333444445555566666777778888899999");
+    $user = App\User::inRandomOrder()->first();
 
     return [
-        'slug' => str_slug($name['firstName'] . ' ' . $name['lastName'], '-'),
-        'first_name' => $name['firstName'],
-        'last_name' => $name['lastName'],
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
+        'user_id' => $user->id,
+        'phone_number_extension' => '+'.mb_substr($param, 2, 3),
+        'phone_number' => $faker->phonenumber,
+        'building_name' => $faker->buildingnumber,
+        'street_address1' => $faker->StreetAddress,
+        'city' => $faker->city,
+        'country' => $faker->country,
+        'postcode' => $faker->postcode,
     ];
 });
 
