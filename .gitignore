@@ -17,3 +17,4 @@ public/images/products/*
 /bootstrap
 /public
 /storage
+/.env
