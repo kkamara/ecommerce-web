@@ -11,7 +11,8 @@
         "laravel/dusk": "^5.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "spatie/laravel-permission": "^2.12"
+        "spatie/laravel-permission": "^2.12",
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
