@@ -2,81 +2,85 @@
 
 namespace App\Http\Controllers;
 
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Validator;
 use App\User;
+use JWTAuth;
+
 
 class UserController extends Controller
 {
-    public function __construct()
+    public function authenticate(Request $request)
     {
-        $this->middleware('auth');
-    }
+        $credentials = $request->only('email', 'password');
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $slug
-     * @return \Illuminate\Http\Response
-     */
-    public function show($slug)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $slug
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($slug)
-    {
-        $user = auth()->user();
-
-        $requestUser = User::where('slug', '=', $slug)->first();
-
-        if(isset($requestUser->id) && $user->id === $requestUser->id)
+        try 
         {
-            return view('user.edit', [
-                'title' => 'User  Settings',
-                'user'  => $requestUser,
-            ]);
-        }
-        else
+            if (! $token = JWTAuth::attempt($credentials)) 
+            {
+                return response()->json(['error' => 'invalid_credentials'], 400);
+            }
+        } 
+        catch (JWTException $e) 
         {
-            return abort(404);
+            return response()->json(['error' => 'could_not_create_token'], 500);
         }
+
+        return response()->json(compact('token'));
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = User::create([
+            'first_name' => $request->get('first_name'),
+            'last_name' => $request->get('last_name'),
+            'email' => $request->get('email'),
+            'password' => Hash::make($request->get('password')),
+        ]);
+
+        $token = JWTAuth::fromUser($user);
+
+        return response()->json(compact('user','token'),201);
+    }
+
+    public function getAuthenticatedUser()
+    {
+        try 
+        {
+            if (! $user = JWTAuth::parseToken()->authenticate()) 
+            {
+                return response()->json(['user_not_found'], 404);
+            }
+        } 
+        catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) 
+        {
+            return response()->json(['token_expired'], $e->getStatusCode());
+        } 
+        catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) 
+        {
+            return response()->json(['token_invalid'], $e->getStatusCode());
+
+        } 
+        catch (Tymon\JWTAuth\Exceptions\JWTException $e) 
+        {
+            return response()->json(['token_absent'], $e->getStatusCode());
+        }
+
+        return response()->json(compact('user'));
     }
 
     /**
@@ -140,16 +144,5 @@ class UserController extends Controller
         {
             return abort(404);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $slug
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($slug)
-    {
-        //
     }
 }
