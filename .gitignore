@@ -12,3 +12,5 @@ npm-debug.log
 yarn-error.log
 .env
 package-lock.json
+public/images/companies/*
+public/images/products/*
