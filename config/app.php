@@ -173,7 +173,7 @@ return [
         /*
          * Custom Service Providers
          */
-        'App\Providers\HelperServiceProvider',
+        App\Providers\HelperServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Laravel\Dusk\DuskServiceProvider::class,
     ],
@@ -224,6 +224,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'SessionCart' => App\Helpers\SessionCartHelper::class,
 
     ],
 

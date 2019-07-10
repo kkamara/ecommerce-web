@@ -98,9 +98,9 @@ class OrderHistoryController extends Controller
             return redirect()->back()->with(compact('errors'));
         }
 
-        $billingCVC = $billingCardIds[0];
+        $billingCVC = request('cvc-'.$billingCardIds[0]);
 
-        if(request('cvc-'.$billingCVC) === NULL)
+        if($billingCVC === NULL)
         {
             return redirect()->back()->with('errors', [
                 'Missing CVC for chosen billing card.'

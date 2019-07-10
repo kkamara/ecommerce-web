@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
 use Validator as Validate;
 use App\UserPaymentConfig;
 use App\UsersAddress;
@@ -181,10 +182,10 @@ class RegisterController extends Controller
         UserPaymentConfig::create($data['user_payment_config']);
 
         // // add to cart if cache cart not empty
-        $cacheCart = getCacheCart();
-        if(!empty($cacheCart))
+        $sessionCart = SessionCart::getSessionCart();
+        if(!empty($sessionCart))
         {
-            $user->moveCacheCartToDbCart($cacheCart);
+            $user->moveSessionCartToDbCart($sessionCart);
         }
 
         Auth::attempt([

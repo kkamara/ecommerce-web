@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Controller;
+use App\Helpers\SessionCart;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
@@ -67,7 +68,7 @@ class LoginController extends Controller
             if(Auth::attempt($creds))
             {
                 $user = auth()->user();
-                $cacheCart = getCacheCart();
+                $sessionCart = SessionCart::getSessionCart();
 
                 /**
                 * login
@@ -76,9 +77,9 @@ class LoginController extends Controller
                 * redirect back if false
                 */
 
-                if(! empty($cacheCart))
+                if(! empty($sessionCart))
                 {
-                    $user->moveCacheCartToDbCart($cacheCart);
+                    $user->moveSessionCartToDbCart($sessionCart);
 
                     return redirect()->route('orderCreate');
                 }

@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
+use App\Helpers\SessionCart;
 use Auth;
 
 class Cart extends Model
@@ -30,7 +31,7 @@ class Cart extends Model
     public $timestamps = false;
 
     /**
-     * Gets the number of items in the user's cache or db cart, 
+     * Gets the number of items in the user's session or db cart, 
      * depending on whether the user is authenticated.
      * 
      * @return  int
@@ -42,16 +43,16 @@ class Cart extends Model
         if(Auth::check())
         {
             $user = auth()->user();
-            $cacheCart = $user->getDbCart();
+            $sessionCart = $user->getDbCart();
         }
         else
         {
-            $cacheCart = Cache::get('cc');
+            $sessionCart = Session::get('cc');
         }
 
-        if(empty($cacheCart)) return 0;
+        if(empty($sessionCart)) return 0;
 
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             $count += $cc['amount'];
         }
@@ -60,7 +61,7 @@ class Cart extends Model
     }
 
     /**
-     * Gets the price of the total amount of items in the cache or db cart, 
+     * Gets the price of the total amount of items in the session or db cart, 
      * depending on whether the user is authenticated.
      * 
      * @return  string
@@ -72,16 +73,16 @@ class Cart extends Model
         if(Auth::check())
         {
             $user = auth()->user();
-            $cacheCart = $user->getDbCart();
+            $sessionCart = $user->getDbCart();
         }
         else
         {
-            $cacheCart = getCacheCart();
+            $sessionCart = SessionCart::getSessionCart();
         }
 
-        if(empty($cacheCart)) return '£0.00';
+        if(empty($sessionCart)) return '£0.00';
 
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             $price += $cc['product']->cost * $cc['amount'];
         }

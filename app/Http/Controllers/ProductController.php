@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
 use App\Product;
 use Auth;
 
@@ -42,7 +43,7 @@ class ProductController extends Controller
         }
         else
         {
-            addProductToCacheCart($product);
+            SessionCart::addProductToSessionCart($product);
         }
 
         return redirect()->route('productShow', $product->id)

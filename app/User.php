@@ -9,6 +9,8 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
+
 use Validator;
 
 class User extends Authenticatable
@@ -192,13 +194,13 @@ class User extends Authenticatable
     /**
      * Moves cache cart to db cart for this user on login.
      * 
-     * @param  array  $cacheCart
+     * @param  array  $sessionCart
      */
-    public function moveCacheCartToDbCart($cacheCart)
+    public function moveSessionCartToDbCart($sessionCart)
     {
         $userId = $this->attributes['id'];
         
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             if($cc['product']->user_id !== $userId)
             {
@@ -212,7 +214,7 @@ class User extends Authenticatable
             }
         }
 
-        clearCacheCart();
+        SessionCart::clearSessionCart();
     }
 
     /**
@@ -261,9 +263,9 @@ class User extends Authenticatable
     public function updateDbCartAmount($request)
     {
         /** Get existing cache cart */
-        $cacheCart = $this->getDbCart();
+        $sessionCart = $this->getDbCart();
 
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             /** Check if an amount value for this product was given in the request */
             $product_id = $cc['product']->id;
@@ -278,7 +280,7 @@ class User extends Authenticatable
             {
                 for($i=0; $i<$amount; $i++)
                 {
-                    /** Push to $cacheCart the product with new amount value */
+                    /** Push to $sessionCart the product with new amount value */
                     \App\Cart::insert([
                         'user_id' => $this->attributes['id'],
                         'product_id' => $product_id,
