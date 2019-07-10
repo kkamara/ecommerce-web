@@ -1,7 +1,9 @@
 # laravel-ecommerce
+
 Extensive ecommerce site built with ability to add to cart without being logged in. Build with Laravel 5.6 (ongoing).
 
 # Features
+
 <table>
   <thead>
     <tr>
@@ -23,7 +25,7 @@ Extensive ecommerce site built with ability to add to cart without being logged 
       <td>Complete</td>
     </tr>
     <tr>
-      <td>Transfer cache cart to database on login or register</td>
+      <td>Transfer session cart to database on login or register</td>
       <td>Complete</td>
     </tr>
     <tr>
