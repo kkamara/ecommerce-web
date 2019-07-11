@@ -8,11 +8,6 @@ use Validator;
 
 class UserPaymentConfigController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -20,25 +15,12 @@ class UserPaymentConfigController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
 
         $billingCards = UserPaymentConfig::where('user_id', $user->id)->paginate(10);
 
-        return view('user_payment_config.index', [
-            'title' => 'Billing Cards'
-        ])->with(compact('billingCards'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('user_payment_config.create', [
-            'title' => 'Add Billing Card',
-        ]);
+        $message = "Successful";
+        return response()->json(compact('billingCards', 'message'));
     }
 
     /**
@@ -49,7 +31,7 @@ class UserPaymentConfigController extends Controller
      */
     public function store(UserPaymentConfig $userPaymentConfig, Request $request)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
 
         $validator = Validator::make($request->all(), [
             'card_holder_name' => 'required|min: 6|max: 191',
@@ -105,60 +87,33 @@ class UserPaymentConfigController extends Controller
 
                     UserPaymentConfig::create($data);
 
-                    return redirect()->route('billingHome')->with('flashSuccess', 'Billing card successfully created.');
+                    return response()->json([
+                        "errors" => ['Billing card successfully created.'],
+                        "message" => "Successful"
+                    ], config("app.http.created"));
                 }
                 else
                 {
-                    return redirect()->back()->with([
+                    return response()->json([
                         'errors' => ['Invalid country provided'],
-                    ]);
+                        "message" => "Unsuccessful"
+                    ], config("app.http.bad_request"));
                 }
             }
             else
             {
-                return redirect()->back()->with([
+                return response()->json([
                     'errors' => ['Invalid expiry date provided.'],
-                ]);
+                    "message" => "Unsuccessful"
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return redirect()->back()->with([
+            return response()->json([
                 'errors' => $validator->errors()->all(),
-            ]);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\UserPaymentConfig  $userPaymentConfig
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserPaymentConfig $userPaymentConfig)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\UserPaymentConfig  $userPaymentConfig
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserPaymentConfig $userPaymentConfig)
-    {
-        $user = auth()->user();
-        if($userPaymentConfig['user_id'] === $user->id)
-        {
-            return view('user_payment_config.edit', [
-            'title' => 'Edit Billing Card',
-            'billingCard' => $userPaymentConfig,
-        ]);
-        }
-        else
-        {
-            return abort(404);
+                "message" => "Unsuccessful"
+            ], config("app.http.bad_request"));
         }
     }
 
@@ -171,7 +126,7 @@ class UserPaymentConfigController extends Controller
      */
     public function update(Request $request, UserPaymentConfig $userPaymentConfig)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
         if($userPaymentConfig['user_id'] === $user->id)
         {
             $validator = Validator::make($request->all(), [
@@ -226,48 +181,40 @@ class UserPaymentConfigController extends Controller
 
                         UserPaymentConfig::where('id', $userPaymentConfig->id)->update($data);
 
-                        return redirect()->route('billingHome')->with('flashSuccess', 'Billing card successfully updated.');
+                        return response()->json([
+                            "errors" => ['Billing card successfully updated.'],
+                            "message" => "Successful"
+                        ]);
                     }
                     else
                     {
-                        return redirect()->back()->with([
+                        return response()->json([
                             'errors' => ['Invalid country provided'],
-                        ]);
+                            "message" => "Uncuccessful"
+                        ], config("app.http.bad_request"));
                     }
                 }
                 else
                 {
-                    return redirect()->back()->with([
+                    return response()->json([
                         'errors' => ['Invalid expiry date provided.'],
-                    ]);
+                        "message" => "Uncuccessful"
+                    ], config("app.http.bad_request"));
                 }
             }
             else
             {
-                return redirect()->back()->with([
+                return response()->json([
                     'errors' => $validator->errors()->all(),
-                ]);
+                    "message" => "Uncuccessful"
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return abort(404);
-        }
-    }
-
-    public function delete(UserPaymentConfig $userPaymentConfig)
-    {
-        $user = auth()->user();
-        if($userPaymentConfig['user_id'] === $user->id)
-        {
-            return view('user_payment_config.delete', [
-                'title' => 'Delete Billing Card',
-                'billingCard' => $userPaymentConfig,
-            ]);
-        }
-        else
-        {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -279,7 +226,7 @@ class UserPaymentConfigController extends Controller
      */
     public function destroy(UserPaymentConfig $userPaymentConfig, Request $request)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
         if($userPaymentConfig['user_id'] === $user->id)
         {
             $validator = Validator::make($request->all(), [
@@ -296,21 +243,31 @@ class UserPaymentConfigController extends Controller
                 {
                     UserPaymentConfig::destroy($userPaymentConfig->id);
 
-                    return redirect()->route('billingHome')->with('flashSuccess', 'Billing card has been deleted successfully.');
+                    return response()->json([
+                        "message" => "Successful",
+                    ]);
                 }
                 else
                 {
-                    return redirect()->route('billingHome')->with('flashSuccess', 'Billing card has not been deleted.');
+                    return response()->json([
+                        'errors', ['Billing card has not been deleted.'],
+                        "message" => "Unsuccessful"
+                    ], config("app.http.bad_request"));
                 }
             }
             else
             {
-                return redirect()->back()->with('errors', $validator->errors()->all());
+                return response()->json([
+                    'errors', $validator->errors()->all(),
+                    "message" => "Unsuccessful"
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 }

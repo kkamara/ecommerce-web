@@ -1,88 +1,52 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Validator;
 use App\User;
 use JWTAuth;
 
-
 class UserController extends Controller
 {
-    public function authenticate(Request $request)
+    public function authenticate()
     {
-        $credentials = $request->only('email', 'password');
-
-        try 
-        {
-            if (! $token = JWTAuth::attempt($credentials)) 
-            {
-                return response()->json(['error' => 'invalid_credentials'], 400);
-            }
-        } 
-        catch (JWTException $e) 
-        {
-            return response()->json(['error' => 'could_not_create_token'], 500);
-        }
-
-        return response()->json(compact('token'));
-    }
-
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        if($validator->fails())
-        {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $user = User::create([
-            'first_name' => $request->get('first_name'),
-            'last_name' => $request->get('last_name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
-        ]);
-
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(compact('user','token'),201);
-    }
-
-    public function getAuthenticatedUser()
-    {
+        $message = "Unsuccessful";
         try 
         {
             if (! $user = JWTAuth::parseToken()->authenticate()) 
             {
-                return response()->json(['user_not_found'], 404);
+                $response = array_merge(['user_not_found'], compact("message"));
+                return response()->json($response, 404);
             }
         } 
-        catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) 
+        catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) 
         {
-            return response()->json(['token_expired'], $e->getStatusCode());
+            $response = array_merge(['token_expired'], compact("message"));
+            return response()->json($response, $e->getStatusCode());
         } 
-        catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) 
+        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) 
         {
-            return response()->json(['token_invalid'], $e->getStatusCode());
+            $response = array_merge(['token_invalid'], compact("message"));
+            return response()->json($response, $e->getStatusCode());
 
         } 
-        catch (Tymon\JWTAuth\Exceptions\JWTException $e) 
+        catch (\Tymon\JWTAuth\Exceptions\JWTException $e) 
         {
-            return response()->json(['token_absent'], $e->getStatusCode());
+            $response = array_merge(['token_absent'], compact("message"));
+            return response()->json($response, $e->getStatusCode());
         }
 
-        return response()->json(compact('user'));
-    }
+        $message = "Successful";
 
+        $user = $user->getAllData();
+
+        return response()->json(compact('user', "message"));
+    }
+    
     /**
      * Update the specified resource in storage.
      *
@@ -127,22 +91,34 @@ class UserController extends Controller
                     $data['slug'] = str_slug($slug, '-');
 
                     $requestUser->update($data);
+                    $user = $requestUser->getAllData();
 
-                    return redirect()->back()->with('flashSuccess', 'Your settings have been successfully updated.');
+                    return response()->json([
+                        "message"=>"Successful",
+                        "user" => $user,
+                    ]);
                 }
                 else
                 {
-                    return redirect()->back()->with('errors', ['Password is incorrect.']);
+                    return response()->json([
+                        'errors' => ['Password is incorrect.'],
+                        "message" => "Unsuccessful"
+                    ], config("app.http.bad_request"));
                 }
             }
             else
             {
-                return redirect()->back()->with('errors', $validator->errors()->all());
+                return response()->json([
+                    'errors' => $validator->errors()->all(),
+                    "message" => "Unsuccessful"
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 }

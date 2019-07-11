@@ -10,6 +10,9 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
+use JWTAuth;
+
 use Validator;
 
 class User extends Authenticatable implements JWTSubject
@@ -46,20 +49,43 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $dates = ['deleted_at'];
 
-    /**
-     * @return string
-     */
     public function getJWTIdentifier()
     {
-        return $this->getKey();
+        return $this->getKey(); 
     }
 
-    /**
-     * @return array
-     */
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Attempt to sign in user using JWT token
+     * 
+     * @return User | null
+     */
+    public static function attemptAuth()
+    {
+        try 
+        {
+            $parse = JWTAuth::ParseToken();
+            $result = JWTAuth::toUser($parse);
+        } 
+        catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) 
+        {
+            $result = null;
+        } 
+        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) 
+        {
+            $result = null;
+
+        } 
+        catch (\Tymon\JWTAuth\Exceptions\JWTException $e) 
+        {
+            $result = null;
+        }
+
+        return $result;
     }
 
     /**
@@ -125,32 +151,20 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get errors in request data.
      * 
-     * @param  array  $data
-     * @return array
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Support\MessageBag
      */
-    public function getOrderHistoryErrors($data)
+    public function getOrderHistoryErrors($request)
     {
         $errors = array();
 
-        if(empty($data['delivery']))
-        {
-            array_push($errors, 'No delivery address chosen');
-        }
-        elseif(sizeof($data['delivery']) > 1)
-        {
-            array_push($errors, 'Please select just one delivery address');
-        }
+        $validator = Validator::make($request->all(), [
+            "billing_card_id" => "required|integer|exists:user_payment_config",
+            "address_id" => "required|integer|exists:users_addresses",
+            "billing_cvc" => "required|integer|digits:3"
+        ]);
 
-        if(empty($data['billing']))
-        {
-            array_push($errors, 'No billing card chosen');
-        }
-        elseif(sizeof($data['billing']) > 1)
-        {
-            array_push($errors, 'Please select just one billing card');
-        }
-
-        return $errors;
+        return $validator->errors();
     }
 
     /**
@@ -209,13 +223,13 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Moves cache cart to db cart for this user on login.
      * 
-     * @param  array  $cacheCart
+     * @param  array  $sessionCart
      */
-    public function moveCacheCartToDbCart($cacheCart)
+    public function moveSessionCartToDbCart($sessionCart)
     {
         $userId = $this->attributes['id'];
         
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             if($cc['product']->user_id !== $userId)
             {
@@ -229,7 +243,7 @@ class User extends Authenticatable implements JWTSubject
             }
         }
 
-        clearCacheCart();
+        SessionCart::clearSessionCart();
     }
 
     /**
@@ -278,9 +292,9 @@ class User extends Authenticatable implements JWTSubject
     public function updateDbCartAmount($request)
     {
         /** Get existing cache cart */
-        $cacheCart = $this->getDbCart();
+        $sessionCart = $this->getDbCart();
 
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             /** Check if an amount value for this product was given in the request */
             $product_id = $cc['product']->id;
@@ -295,7 +309,7 @@ class User extends Authenticatable implements JWTSubject
             {
                 for($i=0; $i<$amount; $i++)
                 {
-                    /** Push to $cacheCart the product with new amount value */
+                    /** Push to $sessionCart the product with new amount value */
                     \App\Cart::insert([
                         'user_id' => $this->attributes['id'],
                         'product_id' => $product_id,
@@ -399,5 +413,22 @@ class User extends Authenticatable implements JWTSubject
             'billing' => false == $billingErrors->isEmpty() ? $billingErrors : array(),
             'present' => $present,
         ); 
+    }
+
+    /**
+     * Get all data associated with this user
+     * 
+     * @return self
+     */
+    public function getAllData()
+    {
+        $billingCards = $this->userPaymentConfig->all();
+        $addresses = $this->userAddress->all();
+        // return $billingCards->getAttributes();
+        return array_merge(
+            $this->attributes, 
+            compact("billingCards"), 
+            compact("addresses")
+        );
     }
 }

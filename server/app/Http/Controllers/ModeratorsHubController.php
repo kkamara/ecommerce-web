@@ -12,32 +12,29 @@ use App\User;
 
 class ModeratorsHubController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource..
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $user = auth()->user();
+    {        
+        $user = \App\User::attemptAuth();
 
         if($user->hasRole('moderator'))
         {
             $vendorApplications = VendorApplication::whereFresh()->paginate(5,  ['*'], 'vendorAppPage');
             $unansweredFlaggedReviews = FlaggedProductReview::whereUnanswered()->paginate(5,  ['*'], 'flaggedReviewPage');
 
-            return view('modhub.index', [
-                'title' => 'Moderator\'s Hub'
-            ])->with(compact('vendorApplications', 'unansweredFlaggedReviews'));
+            return response()->json(
+                compact('vendorApplications', 'unansweredFlaggedReviews')
+            );
         }
         else
         {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -48,7 +45,7 @@ class ModeratorsHubController extends Controller
      */
     public function storeFlaggedReviewDecision(ProductReview $productReview, Request $request)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
 
         $reasonGiven     = filter_var($request->input('reason'), FILTER_SANITIZE_STRING);
         $acceptDecision  = filter_var($request->input('accept'), FILTER_SANITIZE_STRING);
@@ -67,8 +64,6 @@ class ModeratorsHubController extends Controller
                         'flagged_review_decision_reason' => $reasonGiven,
                         'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
                     ]);
-
-                    $flashMessage = ['flashSuccess' => "Review has been restored."];
                 }
                 else /** if declined */
                 {
@@ -78,20 +73,18 @@ class ModeratorsHubController extends Controller
                         'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
                         'deleted_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
                     ]);
-
-                    $flashMessage = ['flashDanger' => "Review has been deleted."];
                 }
 
-                return redirect()->route('modHubHome')->with($flashMessage);
+                return response()->json(["message" => "Successful"]);
             }
-            else
-            {
-                return redirect()->back()->with('flashSuccess', $decisionError);
-            }
+
+            return response()->json(["message" => "Successful"]);
         }
         else
         {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -102,7 +95,7 @@ class ModeratorsHubController extends Controller
      */
     public function storeVendorApplicantDecision(VendorApplication $vendorApplication, Request $request)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
 
         $reasonGiven     = filter_var($request->input('reason_given'), FILTER_SANITIZE_STRING);
         $acceptDecision  = filter_var($request->input('accept'), FILTER_SANITIZE_STRING);
@@ -145,8 +138,6 @@ class ModeratorsHubController extends Controller
 
                     /** assign vendor role to the user who made the application */
                     $vendorUser = User::find($vendorApplication->user_id)->assignRole('vendor');
-
-                    $flashMessage = ['flashSuccess' => "Vendor application has been approved."];
                 }
                 else /** if declined */
                 {
@@ -156,20 +147,16 @@ class ModeratorsHubController extends Controller
                         'reason_given' => $reasonGiven,
                         'updated_at' => \Carbon\Carbon::now()->format('Y-m-d H:i:s'),
                     ]);
-
-                    $flashMessage = ['flashDanger' => "Vendor application has been declined."];
                 }
+            }
 
-                return redirect()->route('modHubHome')->with($flashMessage);
-            }
-            else
-            {
-                return redirect()->back()->with('flashSuccess', $decisionError);
-            }
+            return response()->json(["message" => "Successful"]);
         }
         else
         {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 }

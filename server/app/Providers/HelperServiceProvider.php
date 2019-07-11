@@ -4,8 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-require_once app_path('Helpers/CacheCartHelper.php');
-require_once app_path('Helpers/CommonHelper.php');
+require_once app_path() . "/Helpers/CommonHelper.php";
 
 class HelperServiceProvider extends ServiceProvider
 {
@@ -26,6 +25,6 @@ class HelperServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        require_once app_path() . "/Helpers/SessionCartHelper.php";
     }
 }

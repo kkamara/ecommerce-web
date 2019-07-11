@@ -8,11 +8,6 @@ use Validator;
 
 class UsersAddressController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -20,24 +15,10 @@ class UsersAddressController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
         $usersAddresses = UsersAddress::where('user_id', $user->id)->paginate(10);
 
-        return view('users_address.index', [
-            'title' => 'Addresses',
-        ])->with(compact('usersAddresses'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('users_address.create', [
-            'title' => 'Add Address',
-        ]);
+        return response()->json(compact('usersAddresses'));
     }
 
     /**
@@ -48,7 +29,7 @@ class UsersAddressController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
 
         $validator = Validator::make($request->all(), [
             'building_name' => 'required|string|max:191',
@@ -89,52 +70,24 @@ class UsersAddressController extends Controller
 
                 UsersAddress::create($data);
 
-                return redirect()->route('addressHome')->with('flashSuccess', 'Address successfully created.');
+                return response()->json([
+                    "message" => "Successful"
+                ], config("app.http.created"));
             }
             else
             {
-                return redirect()->back()->with([
+                return response()->json([
                     'errors' => ['Invalid country provided'],
-                ]);
+                    "message" => "Successful",
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return redirect()->back()->with([
+            return response()->json([
                 'errors' => $validator->errors()->all(),
-            ]);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UsersAddress $usersAddress)
-    {
-        $user = auth()->user();
-        if($usersAddress['user_id'] === $user->id)
-        {
-            return view('users_address.edit', [
-                'title' => 'Edit Address',
-            ])->with(compact('usersAddress'));
-        }
-        else
-        {
-            return abort(404);
+                "message" => "Successful",
+            ], config("app.http.bad_request"));
         }
     }
 
@@ -147,7 +100,7 @@ class UsersAddressController extends Controller
      */
     public function update(UsersAddress $usersAddress, Request $request)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
         if($usersAddress['user_id'] === $user->id)
         {
             $validator = Validator::make($request->all(), [
@@ -187,40 +140,29 @@ class UsersAddressController extends Controller
 
                     UsersAddress::where('id', $usersAddress->id)->update($data);
 
-                    return redirect()->route('addressHome')->with('flashSuccess', 'Address successfully updated.');
+                    return response()->json(["message" => "Successful"]);
                 }
                 else
                 {
-                    return redirect()->back()->with([
+                    return response()->json([
                         'errors' => ['Invalid country provided'],
-                    ]);
+                        "message" => "Successful",
+                    ], config("app.http.bad_request"));
                 }
             }
             else
             {
-                return redirect()->back()->with([
+                return response()->json([
                     'errors' => $validator->errors()->all(),
-                ]);
+                    "message" => "Successful",
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return abort(404);
-        }
-    }
-
-    public function delete(UsersAddress $usersAddress)
-    {
-        $user = auth()->user();
-        if($usersAddress['user_id'] === $user->id)
-        {
-            return view('users_address.delete', [
-                'title' => 'Delete Address',
-            ])->with(compact('usersAddress'));
-        }
-        else
-        {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized",
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -231,8 +173,8 @@ class UsersAddressController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(UsersAddress $usersAddress, Request $request)
-    {
-        $user = auth()->user();
+    {     
+        $user = \App\User::attemptAuth();
         if($usersAddress['user_id'] === $user->id)
         {
             $validator = Validator::make($request->all(), [
@@ -248,22 +190,23 @@ class UsersAddressController extends Controller
                 if($choice !== FALSE)
                 {
                     UsersAddress::destroy($usersAddress->id);
+                }
 
-                    return redirect()->route('addressHome')->with('flashSuccess', 'Address has been deleted successfully.');
-                }
-                else
-                {
-                    return redirect()->route('addressHome')->with('flashSuccess', 'Address has not been deleted.');
-                }
+                return response()->json(["message" => "Successful"]);
             }
             else
             {
-                return redirect()->back()->with('errors', $validator->errors()->all());
+                return response()->json([
+                    "errors" => $validator->errors()->all(),
+                    "message" => "Unsuccessful",
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized",
+            ], config("app.http.unauthorized"));
         }
     }
 }

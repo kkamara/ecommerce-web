@@ -10,11 +10,6 @@ use Validator;
 
 class CompanyProductController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -23,46 +18,24 @@ class CompanyProductController extends Controller
      */
     public function index($slug, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $company = Company::where('slug', $slug)->first();        
+
+        $user = \App\User::attemptAuth();
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
             $companyProducts = Product::getProducts($request)->getCompanyProducts($company->id)->paginate(7);
 
-            return view('company_product.index', [
-                'title' => 'My Products',
-                'companyProducts' => $companyProducts->appends(request()->except('page')),
-                'input' => $request->all(),
+            return response()->json([
+                'companyProducts' => $companyProducts,
+                "message" => "Successful"
             ]);
         }
         else
         {
-            return abort(404);
-        }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param  string  $slug
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create($slug, Request $request)
-    {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
-
-        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
-        {
-            return view('company_product.create', [
-                'title' => 'Add a Product',
-            ]);
-        }
-        else
-        {
-            return abort(404);
+            return response()->json([
+                'message' => "Unauthorized",
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -76,7 +49,9 @@ class CompanyProductController extends Controller
     public function store($slug, Request $request)
     {
         $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        
+
+        $user = \App\User::attemptAuth();
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
@@ -120,44 +95,23 @@ class CompanyProductController extends Controller
                 );
                 $product = $product->create($data);
 
-                return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Product has been added to your listings.');
+                return response()->json([
+                    "message" => "Successful"
+                ], config("app.http.created"));
             }
             else
             {
-                return view('company_product.create', [
-                    'title' => 'Add a Product',
+                return response()->json([
                     'errors' => $errors,
-                    'input' => $request->input(),
-                ]);
+                    "message" => "Unsuccessful"
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return abort(404);
-        }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  string  $slug
-     * @param  \App\Product $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($slug, Product $product, Request $request)
-    {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
-
-        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
-        {
-            return view('company_product.edit', [
-                'title' => 'Edit '.$product->name,
-            ])->with(compact('product'));
-        }
-        else
-        {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -172,7 +126,9 @@ class CompanyProductController extends Controller
     public function update($slug, Product $product, Request $request)
     {
         $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        
+
+        $user = \App\User::attemptAuth();
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
@@ -213,37 +169,21 @@ class CompanyProductController extends Controller
                 );
                 $product->update($data);
 
-                return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Product details have been updated.');
+                return response()->json(["message" => 'Successful']);
             }
             else
             {
-                return redirect()->back()->with([
-                    'product' => $product,
+                return response()->json([
                     'errors' => $errors,
-                    'input' => $request->input(),
-                ]);
+                    "message" => "Unsuccessful"
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return abort(404);
-        }
-    }
-
-    public function delete($slug, Product $product, Request $request)
-    {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
-
-        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
-        {
-            return view('company_product.delete', [
-                'title' => 'Delete '.$product->name,
-            ])->with(compact('product'));
-        }
-        else
-        {
-            return abort(404);
+            return response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -256,29 +196,40 @@ class CompanyProductController extends Controller
      */
     public function destroy($slug, Product $product, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $company = Company::where('slug', $slug)->first();        
+
+        $user = \App\User::attemptAuth();
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
             switch($request->input('choice'))
             {
                 case '0':
-                    return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Your item listing has not been removed.');
+                    $response = response()->json([
+                        "message" => 'Successful',
+                    ]);
                 break;
                 case '1':
                     $product->delete();
 
-                    return redirect()->route('companyProductHome', $company->slug)->with('flashSuccess', 'Your item listing was successfully removed.');
+                    $response = response()->json([
+                        "message" => 'Successful',
+                    ]);
                 break;
                 default:
-                    return redirect()->back()->with('flashDanger', 'Oops, something went wrong. Contact system administrator.');
+                    $response = response()->json([
+                        "message" => "Unsuccessful"
+                    ], config("app.http.internal_error"));
                 break;
             }
+
+            return $response;
         }
         else
         {
-            return abort(404);
+            $response = response()->json([
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 }
