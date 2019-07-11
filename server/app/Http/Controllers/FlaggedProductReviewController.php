@@ -25,11 +25,14 @@ class FlaggedProductReviewController extends Controller
                 'flagged_from_ip' => $ip,
             ]);
 
-            return redirect()->back()->with('flashSuccess', 'Product review has been flagged and will be reviewed by moderators. Thanks!');
+            return response()->json(["message" => "Successful"]);
         }
         else
         {
-            return redirect()->back()->with('flashDanger', 'You have already flagged that review.');
+            return response()->json([
+                "errors" => ['You have already flagged that review.'],
+                "message" => "Unsuccessful"
+            ], config("app.http.bad_request"));
         }
     }
 }

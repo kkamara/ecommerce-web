@@ -2,104 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
 use App\Cart;
 use Auth;
 
 class CartController extends Controller
 {    
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create() {}
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Request $request)
     {
-        if(Auth::check())
+        $user = \App\User::attemptAuth();
+
+        if(null === $user && !empty($token))
         {
-            $user = auth()->user();
+            return redirect()->route("login");
+        }
+        
+        if(null !== $user)
+        {
             $cart = $user->getDbCart();
         }
         else
         {
-            $cart = getCacheCart();
+            $cart = SessionCart::getSessionCart();
         }
 
-        return view('cart.show', compact('cart'))->withTitle('Cart');
-    }
+        if(false == $cart) 
+        {
+            $cart = array();
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $message = "Successful";
+        return response()->json(compact('cart', "message"));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
-        if(Auth::check())
+        
+
+        $user = \App\User::attemptAuth();
+
+        if(null === $user && !empty($token))
         {
-            $user = auth()->user();
+            return redirect()->route("login");
+        }
+
+        if(null !== $user)
+        {
             $user->updateDbCartAmount($request);
         }
         else
         {
-            updateCacheCartAmount($request);
+            SessionCart::updateSessionCartAmount($request);
         }
 
-        return redirect()->route('cartShow')
-                ->with('flashSuccess', 'Your cart was successfully updated!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json(["message"=>"Successful"]);
     }
 }

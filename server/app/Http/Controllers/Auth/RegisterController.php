@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
 use Validator as Validate;
 use App\UserPaymentConfig;
 use App\UsersAddress;
@@ -35,54 +36,7 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-    }
-
-    public function createUser(Request $request)
-    {
-        return view('register.create', array(
-            'title' => 'Register'
-        ));
-    }
-
-    public function storeUser(Request $request)
+    public function register(Request $request)
     {
         $registerErrors = User::getRegisterErrors($request);
 
@@ -90,10 +44,10 @@ class RegisterController extends Controller
 
         if(true === $registerErrors['present'])
         {
-            return redirect()->back()->with(array(
+            return response()->json([
                 'errors' => $registerErrors,
-                'input' => $input,
-            ));
+                "message" => "Unsuccessful"
+            ], config("app.http.bad_request"));
         }
 
         $expiry_date = explode('-', request('expiry_date'));
@@ -102,9 +56,10 @@ class RegisterController extends Controller
 
         if(strtotime(date("$expiry_year-$expiry_month")) < strtotime(date('Y-m')))
         {
-            return redirect()->back()->with('errors', [
-                'Invalid expiry date provided.'
-            ]);
+            return response()->json([
+                'errors' => 'Invalid expiry date provided.',
+                "message" => "Unsuccessful"
+            ], config("app.http.bad_request"));
         }
 
         $firstName = filter_var(request('first_name'), FILTER_SANITIZE_STRING);
@@ -181,17 +136,22 @@ class RegisterController extends Controller
         UserPaymentConfig::create($data['user_payment_config']);
 
         // // add to cart if cache cart not empty
-        $cacheCart = getCacheCart();
-        if(!empty($cacheCart))
+        $sessionCart = SessionCart::getSessionCart();
+        if(!empty($sessionCart))
         {
-            $user->moveCacheCartToDbCart($cacheCart);
+            $user->moveSessionCartToDbCart($sessionCart);
         }
 
-        Auth::attempt([
-            'email' => $user->email,
-            'password' => request('password')
-        ], 1);
+        if($validator->fails())
+        {
+            $errors = array_merge($validator->errors(), compact("message"));
+            return response()->json($validator->errors(), 400);
+        }
 
-        return redirect()->route('home');
+        $token = JWTAuth::fromUser($user);
+        $user = $user->getAllData();
+
+        $message = "Successful";
+        return response()->json(compact('user','token', "message"),201);
     }
 }

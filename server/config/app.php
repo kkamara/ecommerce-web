@@ -4,12 +4,26 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Http Codes
+    |--------------------------------------------------------------------------
+    */
+    "http" => [
+        "success" => 200,
+        "created" => 201,
+        "deleted" => 204,
+        "unauthorized" => 401,
+        "bad_request" => 400,
+        "internal_error" => 500,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Encryption Values
     |--------------------------------------------------------------------------
     */
-    'ENCRYPTION_KEY'    => 'mykey',
-    'ENCRYPTION_METHOD' => 'AES-256-OFB',
-    'ENCRYPTION_IV'     => 'CcyKp+WzkOgcAPWkiHe81Q==',
+    'ENCRYPTION_KEY'    => env("ENCRYPTION_KEY"),
+    'ENCRYPTION_METHOD' => env("ENCRYPTION_METHOD"),
+    'ENCRYPTION_IV'     => env("ENCRYPTION_IV"),
 
     /*
     |--------------------------------------------------------------------------
@@ -160,7 +174,6 @@ return [
          * Package Service Providers...
          */
         Spatie\Permission\PermissionServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -174,7 +187,7 @@ return [
         /*
          * Custom Service Providers
          */
-        'App\Providers\HelperServiceProvider',
+        App\Providers\HelperServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Laravel\Dusk\DuskServiceProvider::class,
     ],
@@ -226,8 +239,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class, 
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'SessionCart' => App\Helpers\SessionCartHelper::class,
 
     ],
 

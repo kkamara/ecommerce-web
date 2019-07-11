@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Helpers\SessionCart;
 use Illuminate\Http\Request;
 use Validator;
+use JWTAuth;
 use Auth;
 
 class LoginController extends Controller
@@ -31,88 +35,51 @@ class LoginController extends Controller
     protected $redirectTo = '/';
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * Authenticate user 
+     * 
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
      */
-    public function __construct()
+    public function create(Request $request)
     {
-        $this->middleware('guest')->except('delete');
-    }
+        $message = "Unsuccessful Login";
 
-    public function create()
-    {
-        return view('login.create', array(
-            'title' => 'Login',
-            'fromOrder' => request('fromOrder')
-        ));
-    }
-
-    public function store(Request $request)
-    {
         $validator = Validator::make($request->all(), [
             'email' => 'required',
             'password' => 'required',
         ]);
 
-        if(empty($validator->errors()->all()))
+        if($validator->fails())
         {
-            $email = filter_var(request('email'), FILTER_SANITIZE_EMAIL);
-
-            $creds = array(
-                'email' => request('email'),
-                'password' => request('password'),
-            );
-
-            if(Auth::attempt($creds))
-            {
-                $user = auth()->user();
-                $cacheCart = getCacheCart();
-
-                /**
-                * login
-                * if login then redirect to checkout page if was prompted to login/register
-                * if normal login then redirect to home
-                * redirect back if false
-                */
-
-                if(! empty($cacheCart))
-                {
-                    $user->moveCacheCartToDbCart($cacheCart);
-
-                    return redirect()->route('orderCreate');
-                }
-                else
-                {
-                    return redirect()->route('home');
-                }
-            }
-            else
-            {
-                return view('login.create', array(
-                    'title' => 'Login',
-                    'input' => $request->input(),
-                    'errors' => array('Invalid login credentials provided'),
-                ));
-            }
+            return response()->json([
+                "errors" => $validator->errors(),
+                "message" => $message,
+            ], config("app.http.bad_request"));
         }
-        else
+
+        $credentials = $request->only('email', 'password');
+
+        try 
         {
-            return view('login.create', array(
-                'title' => 'Login',
-                'input' => $request->input(),
-                'errors' => $validator->errors()->all(),
-            ));
+            if (! $token = JWTAuth::attempt($credentials)) 
+            {
+                return response()->json([
+                    'error' => 'invalid_credentials',
+                    "message" => $message,
+                ], 400);
+            }
+        } 
+        catch (JWTException $e) 
+        {
+            return response()->json([
+                'error' => 'could_not_create_token',
+                "message" => $message,
+            ], 500);
         }
-    }
 
-    public function edit() {}
-    public function update() {}
+        $user = \App\User::where("email", $credentials["email"])->first()->getAllData();
 
-    public function delete()
-    {
-        Auth::logout();
-
-        return redirect()->route('home');
+        $message = "Successful Login";
+        return response()->json(compact('token', "message", "user"));
     }
 }

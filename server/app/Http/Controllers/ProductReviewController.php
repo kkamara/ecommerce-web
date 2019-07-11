@@ -10,26 +10,6 @@ use Validator;
 class ProductReviewController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -37,7 +17,9 @@ class ProductReviewController extends Controller
      */
     public function store(Product $product, Request $request)
     {
-        $user = auth()->user();
+        
+
+        $user = \App\User::attemptAuth();
 
         if($product->didUserReviewProduct($user->id) === FALSE)
         {
@@ -60,69 +42,33 @@ class ProductReviewController extends Controller
                     );
 
                     $product->productReview()->create($data);
+                    $message = "Successful";
 
-                    return redirect()->back()->with('flashSuccess', 'We appreciate your review of this item.');
+                    return response()->json(compact("product", "message"));
                 }
                 else
                 {
-                    return redirect()->back()->with([
+                    return response()->json([
                         'errors' => $validator->errors()->all(),
-                    ]);
+                        "message" => "Unsuccessful"
+                    ], config("app.http.bad_request"));
                 }
             }
             else
             {
-                return abort(404);
+                return response()->json([
+                    "message" => "Unauthorized"
+                ], config("app.http.unauthorized"));
             }
         }
         else
         {
-            return redirect()->back()->with('flashDanger', 'You have already reviewed this product.');
+            return response()->json([
+                'errors' => [
+                    "You have already reviewed this product."
+                ],
+                "message" => "Unsuccessful"
+            ], config("app.http.bad_request"));
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -9,33 +9,6 @@ use App\User;
 
 class VendorApplicationController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $user = auth()->user();
-        $usersAddresses = UsersAddress::where('user_id', $user->id)->get();
-
-        if($user->hasNoRole())
-        {
-            return view('vendor.create', [
-                'title' => 'Become a vendor',
-            ])->with(compact('usersAddresses'));
-        }
-        else
-        {
-            return redirect()->route('home');
-        }
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -44,7 +17,7 @@ class VendorApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
 
         $companyName = filter_var($request->input('company_name'), FILTER_SANITIZE_STRING);
         $usersAddressId = filter_var($request->input('users_address'), FILTER_SANITIZE_NUMBER_INT);
@@ -59,16 +32,24 @@ class VendorApplicationController extends Controller
                     'users_addresses_id' => $usersAddressId,
                 ]);
 
-                return redirect()->route('vendorShow');
+                return response()->json([
+                    "message" => "Successful"
+                ], config("app.http.created"));
             }
             else
             {
-                return redirect()->back()->with('flashDanger', $applicationError);
+                return response()->json([
+                    "errors" => $applicationError,
+                    "message" => "Unsuccessful"
+                ], config("app.http.bad_request"));
             }
         }
         else
         {
-            return redirect()->route('home');
+            return response()->json([
+                "errors" => ["Only a guest user can access this resource."],
+                "message" => "Unauthorized"
+            ], config("app.http.unauthorized"));
         }
     }
 
@@ -80,17 +61,20 @@ class VendorApplicationController extends Controller
      */
     public function show()
     {
-        $user = auth()->user();
+        $user = \App\User::attemptAuth();
 
         if(VendorApplication::hasUserApplied($user->id))
         {
-            return view('vendor.show', [
-                'title' => 'Application Sent',
-            ]);
+            $response = "Yes";
         }
         else
         {
-            return redirect()->route('home');
+            $response = "No";
         }
+
+        return response()->json([
+            "data" => $response,
+            "message" => "Successful"
+        ], config("app.http.created"));
     }
 }
