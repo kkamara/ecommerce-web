@@ -14,6 +14,15 @@ class OrderHistoryProducts extends Model
     protected $guarded = [];
 
     /**
+     * Attributes to automatically append onto the response.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'formatted_cost'
+    ];
+
+    /**
      * This model instance belongs to \App\OrderHistory.
      * 
      * @return  \Illuminate\Database\Eloquent\Model

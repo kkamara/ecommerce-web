@@ -18,6 +18,15 @@ class UsersAddress extends Model
     protected $guarded = [];
 
     /**
+     * Attributes to automatically append onto the response.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'formatted_phone_number', 'formatted_mobile_number'
+    ];
+
+    /**
      * This model relationship belongs to \App\User
      * 
      * @return  \Illuminate\Database\Eloquent\Model

@@ -15,6 +15,15 @@ class UserPaymentConfig extends Model
     protected $guarded = [];
 
     /**
+     * Attributes to automatically append onto the response.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'hidden_card_number', 'expiry_date', 'formatted_phone_number', 'formatter_mobile_number'
+    ];
+
+    /**
      * This model relationship belongs to \App\User.
      * 
      * @return \Illuminate\Database\Eloquent\Model
