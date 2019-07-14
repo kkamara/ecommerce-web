@@ -25,6 +25,15 @@ class Company extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Attributes to automatically append onto the response.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'path',
+    ];
+
+    /**
      * Set a publicily accessible identifier to get the path for this unique instance.
      * 
      * @return  string

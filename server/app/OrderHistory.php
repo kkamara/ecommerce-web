@@ -23,6 +23,15 @@ class OrderHistory extends Model
     protected $guarded = [];
 
     /**
+     * Attributes to automatically append onto the response.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'amount_total', 'formatted_cost'
+    ];
+
+    /**
      * Generates a new reference number.
      * 
      * @return string

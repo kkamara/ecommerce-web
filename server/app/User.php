@@ -42,6 +42,15 @@ class User extends Authenticatable implements JWTSubject
         'password', 'remember_token',
     ];
 
+    /**
+     * Attributes to automatically append onto the response.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'name', 'path',
+    ];
+
     /** 
      * This models immutable date values.
      * 
