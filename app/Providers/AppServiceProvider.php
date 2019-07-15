@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Dusk\DuskServiceProvider;
+use Illuminate\Routing\UrlGenerator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        if(env('REDIRECT_HTTPS')) {
+            $url->forceScheme('https');
+        }
 
         if ($this->app->environment('local', 'testing', 'staging')) {
             $this->app->register(DuskServiceProvider::class);

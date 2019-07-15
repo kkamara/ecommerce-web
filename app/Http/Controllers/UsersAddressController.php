@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CommonHelper;
 use Illuminate\Http\Request;
 use App\UsersAddress;
 use Validator;
@@ -48,7 +49,7 @@ class UsersAddressController extends Controller
 
         if(empty($validator->errors()->all()))
         {
-            if(in_array(request('country'), getCountriesList()))
+            if(in_array(request('country'), CommonHelper::getCountriesList()))
             {
                 $data = array(
                     'user_id' => $user->id,
@@ -120,7 +121,7 @@ class UsersAddressController extends Controller
 
             if(empty($validator->errors()->all()))
             {
-                if(in_array(request('country'), getCountriesList()))
+                if(in_array(request('country'), CommonHelper::getCountriesList()))
                 {
                     $data = array(
                         'building_name' => request('building_name'),
