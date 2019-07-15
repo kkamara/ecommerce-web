@@ -21,9 +21,9 @@ return [
     | Encryption Values
     |--------------------------------------------------------------------------
     */
-    'ENCRYPTION_KEY'    => env("ENCRYPTION_KEY"),
-    'ENCRYPTION_METHOD' => env("ENCRYPTION_METHOD"),
-    'ENCRYPTION_IV'     => env("ENCRYPTION_IV"),
+    'ENCRYPTION_KEY'    => env("ENCRYPTION_KEY", ""),
+    'ENCRYPTION_METHOD' => env("ENCRYPTION_METHOD", ""),
+    'ENCRYPTION_IV'     => env("ENCRYPTION_IV", ""),
 
     /*
     |--------------------------------------------------------------------------
@@ -240,6 +240,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'SessionCart' => App\Helpers\SessionCartHelper::class,
+        'Common' => App\Helpers\CommonHelper::class,
 
     ],
 

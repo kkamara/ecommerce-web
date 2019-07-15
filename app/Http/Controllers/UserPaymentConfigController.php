@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CommonHelper;
 use Illuminate\Http\Request;
 use App\UserPaymentConfig;
 use Validator;
@@ -60,7 +61,7 @@ class UserPaymentConfigController extends Controller
 
             if(strtotime(date("$expiry_year-$expiry_month")) >= strtotime(date('Y-m')))
             {
-                if(in_array(request('country'), getCountriesList()))
+                if(in_array(request('country'), CommonHelper::getCountriesList()))
                 {
                     $data = array(
                         'user_id' => $user->id,
@@ -156,7 +157,7 @@ class UserPaymentConfigController extends Controller
 
                 if(strtotime(date("$expiry_year-$expiry_month")) >= strtotime(date('Y-m')))
                 {
-                    if(in_array(request('country'), getCountriesList()))
+                    if(in_array(request('country'), CommonHelper::getCountriesList()))
                     {
                         $data = array(
                             'card_holder_name' => request('card_holder_name'),
