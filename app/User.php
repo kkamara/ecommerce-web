@@ -48,7 +48,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $appends = [
-        'name', 'path',
+        'name', 'path', 
     ];
 
     /** 
@@ -66,7 +66,14 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
-    }
+    }    
+    
+    public function setPasswordAttribute($password)
+    {
+        if ( !empty($password) ) {
+            $this->attributes['password'] = bcrypt($password);
+        }
+    }  
 
     /**
      * Attempt to sign in user using JWT token

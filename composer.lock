@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6db26287acf2e693d8891051e4ff41a",
+    "content-hash": "674c3643530deadf2d7215584d1ee035",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3821,41 +3821,54 @@
         },
         {
             "name": "tymon/jwt-auth",
-            "version": "0.5.12",
+            "version": "1.0.0-rc.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tymondesigns/jwt-auth.git",
-                "reference": "614ee3410a1cc18ef13c8d5ffd491b5608afabd8"
+                "reference": "63698d304554e5d0bc3eb481cc260a9fc900e151"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/614ee3410a1cc18ef13c8d5ffd491b5608afabd8",
-                "reference": "614ee3410a1cc18ef13c8d5ffd491b5608afabd8",
+                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/63698d304554e5d0bc3eb481cc260a9fc900e151",
+                "reference": "63698d304554e5d0bc3eb481cc260a9fc900e151",
                 "shasum": ""
             },
             "require": {
-                "illuminate/http": "~5.0",
-                "illuminate/support": "~5.0",
-                "namshi/jose": "^5.0 || ^7.0",
-                "nesbot/carbon": "~1.0",
-                "php": ">=5.4.0"
+                "illuminate/auth": "^5.1",
+                "illuminate/contracts": "^5.1",
+                "illuminate/http": "^5.1",
+                "illuminate/support": "^5.1",
+                "lcobucci/jwt": "^3.2",
+                "namshi/jose": "^7.0",
+                "nesbot/carbon": "^1.0 || ^2.0",
+                "php": "^5.5.9 || ^7.0"
             },
             "require-dev": {
-                "illuminate/auth": "~5.0",
-                "illuminate/console": "~5.0",
-                "illuminate/database": "~5.0",
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "4.*"
+                "cartalyst/sentinel": "2.0.*",
+                "illuminate/console": "^5.1",
+                "illuminate/database": "^5.1",
+                "illuminate/routing": "^5.1",
+                "mockery/mockery": ">=0.9.9",
+                "phpunit/phpunit": "~4.8 || ~6.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-develop": "0.5-dev"
+                    "dev-develop": "1.0-dev"
+                },
+                "laravel": {
+                    "aliases": {
+                        "JWTAuth": "Tymon\\JWTAuth\\Facades\\JWTAuth",
+                        "JWTFactory": "Tymon\\JWTAuth\\Facades\\JWTFactory"
+                    },
+                    "providers": [
+                        "Tymon\\JWTAuth\\Providers\\LaravelServiceProvider"
+                    ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Tymon\\JWTAuth\\": "src"
+                    "Tymon\\JWTAuth\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3866,21 +3879,20 @@
                 {
                     "name": "Sean Tymon",
                     "email": "tymon148@gmail.com",
-                    "homepage": "http://tymondesigns.com",
+                    "homepage": "https://tymon.xyz",
                     "role": "Developer"
                 }
             ],
-            "description": "JSON Web Token Authentication for Laravel 4 and 5",
+            "description": "JSON Web Token Authentication for Laravel and Lumen",
             "homepage": "https://github.com/tymondesigns/jwt-auth",
             "keywords": [
                 "Authentication",
                 "JSON Web Token",
                 "auth",
                 "jwt",
-                "laravel",
-                "tymon"
+                "laravel"
             ],
-            "time": "2017-06-07T21:32:02+00:00"
+            "time": "2019-03-14T20:29:20+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

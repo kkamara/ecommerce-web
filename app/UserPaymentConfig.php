@@ -20,7 +20,7 @@ class UserPaymentConfig extends Model
      * @var array
      */
     protected $appends = [
-        'hidden_card_number', 'expiry_date', 'formatted_phone_number', 'formatter_mobile_number'
+        'hidden_card_number', 'expiry_date', 'formatted_phone_number', 'formatted_mobile_number'
     ];
 
     /**
