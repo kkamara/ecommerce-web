@@ -5,85 +5,100 @@ import ProductsList from "./Products/ProductsList.js";
 import ProductsPagination from "./Products/ProductsPagination.js";
 import ProductsSearch from "./Products/ProductsSearch.js";
 
+import { connect } from "react-redux";
+import { APP_URL } from "../constants";
+
 const initialState = {
-  products: {},
-  productSearch: {},
-  isLoaded: false,
-  activePage: 1
+    products: {
+        searchParams: {},
+        activePage: 1
+    }
 };
 
 class App extends React.Component {
-  state = { ...initialState };
+    state = { ...initialState };
 
-  async componentDidMount() {
-    const data = await getProducts();
+    async componentDidMount() {
+        this.loadProducts();
+    }
 
-    this.setProductsState(data);
-  }
+    loadProducts() {
+        this.props.dispatch({
+            type: "FETCH_PRODUCTS",
+            payload: getProducts(
+                this.state.products.activePage,
+                this.state.products.searchParams
+            )
+        });
+    }
 
-  async loadProducts() {
-    const data = await getProducts(
-      this.state.activePage,
-      this.state.productSearch
-    );
+    setActivePageState(pageNumber, callback) {
+        this.setState(
+            prevState => {
+                let products = Object.assign({}, prevState.products);
+                products.activePage = pageNumber;
+                return { products };
+            },
+            () => callback()
+        );
+    }
 
-    this.setProductsState(data);
-  }
+    setProductSearchState(criteria, callback) {
+        this.setState(
+            prevState => {
+                let products = Object.assign({}, prevState.products);
+                products.searchParams = criteria;
+                return { products };
+            },
+            () => callback()
+        );
+    }
 
-  setProductsState({ isLoaded, products }) {
-    this.setState({
-      isLoaded: isLoaded,
-      products: products
-    });
-  }
+    handlePageChange(pageNumber) {
+        this.setActivePageState(pageNumber, this.loadProducts.bind(this));
+    }
 
-  setActivePageState(pageNumber, callback) {
-    this.setState({ activePage: pageNumber }, () => callback());
-  }
+    handleProductSearch(criteria) {
+        this.setProductSearchState(criteria, this.loadProducts.bind(this));
+    }
 
-  setProductSearchState(criteria, callback) {
-    this.setState({ productSearch: criteria }, () => {
-      console.log("in app component", this.state);
-      return callback();
-    });
-  }
-
-  handlePageChange(pageNumber) {
-    this.setActivePageState(pageNumber, this.loadProducts.bind(this));
-  }
-
-  handleProductSearch(criteria) {
-    this.setProductSearchState(criteria, this.loadProducts.bind(this));
-  }
-
-  render() {
-    return (
-      <div className="container" id="app">
-        <div className="card">
-          <div className="card-header">
-            <ProductsSearch
-              handleProductSearch={this.handleProductSearch.bind(this)}
-            />
-          </div>
-          <div className="card-body">
-            <div className="card-text">
-              <div className="list-group">
-                <ProductsList {...this.state} />
-              </div>
+    render() {
+        console.log("in app", this.props);
+        return (
+            <div className="container" id="app">
+                <div className="card">
+                    <div className="card-header">
+                        <ProductsSearch
+                            handleProductSearch={this.handleProductSearch.bind(
+                                this
+                            )}
+                        />
+                    </div>
+                    <div className="card-body">
+                        <div className="card-text">
+                            <div className="list-group">
+                                <ProductsList products={this.props.products} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-footer">
+                        <div className="text-center">
+                            <ProductsPagination
+                                products={this.props.products}
+                                handlePageChange={this.handlePageChange.bind(
+                                    this
+                                )}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div className="card-footer">
-            <div className="text-center">
-              <ProductsPagination
-                {...this.state}
-                handlePageChange={this.handlePageChange.bind(this)}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+        );
+    }
 }
 
-export default App;
+const mapStateToProps = state => ({
+    products: state.product.products
+});
+
+export default connect(mapStateToProps)(App);
