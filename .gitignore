@@ -18,3 +18,5 @@ public/images/products/*
 /public
 /storage
 /.env
+public/js/app.js
+public/css/app.css
