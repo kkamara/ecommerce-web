@@ -15,7 +15,7 @@
         "nesbot/carbon": "2.21.0 as 1.39.0",
         "phpseclib/phpseclib": "^2.0",
         "spatie/laravel-permission": "^2.37",
-        "tymon/jwt-auth": "^0.5.12"
+        "tymon/jwt-auth": "1.0.0-rc.3"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
