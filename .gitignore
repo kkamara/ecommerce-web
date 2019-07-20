@@ -20,3 +20,4 @@ public/images/products/*
 /.env
 public/js/app.js
 public/css/app.css
+composer.lock

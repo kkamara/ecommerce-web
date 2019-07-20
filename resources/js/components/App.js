@@ -6,7 +6,6 @@ import ProductsPagination from "./Products/ProductsPagination.js";
 import ProductsSearch from "./Products/ProductsSearch.js";
 
 import { connect } from "react-redux";
-import { APP_URL } from "../constants";
 
 const initialState = {
     products: {
@@ -23,13 +22,17 @@ class App extends React.Component {
     }
 
     loadProducts() {
-        this.props.dispatch({
-            type: "FETCH_PRODUCTS",
-            payload: getProducts(
-                this.state.products.activePage,
-                this.state.products.searchParams
-            )
-        });
+        this.props
+            .dispatch({
+                type: "FETCH_PRODUCTS",
+                payload: getProducts(
+                    this.state.products.activePage,
+                    this.state.products.searchParams
+                )
+            })
+            .then(({ value: res }) => {
+                if (res.fetched == false) return <Redirect to="/" />;
+            });
     }
 
     setActivePageState(pageNumber, callback) {
@@ -63,37 +66,43 @@ class App extends React.Component {
     }
 
     render() {
-        console.log("in app", this.props);
-        return (
-            <div className="container" id="app">
-                <div className="card">
-                    <div className="card-header">
-                        <ProductsSearch
-                            handleProductSearch={this.handleProductSearch.bind(
-                                this
-                            )}
-                        />
-                    </div>
-                    <div className="card-body">
-                        <div className="card-text">
-                            <div className="list-group">
-                                <ProductsList products={this.props.products} />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card-footer">
-                        <div className="text-center">
-                            <ProductsPagination
-                                products={this.props.products}
-                                handlePageChange={this.handlePageChange.bind(
+        const { isLoaded, fetched } = this.props.products;
+        if (!isLoaded) {
+            return <div>Loading</div>;
+        } else {
+            return (
+                <div className="container" id="app">
+                    <div className="card">
+                        <div className="card-header">
+                            <ProductsSearch
+                                handleProductSearch={this.handleProductSearch.bind(
                                     this
                                 )}
                             />
                         </div>
+                        <div className="card-body">
+                            <div className="card-text">
+                                <div className="list-group">
+                                    <ProductsList
+                                        products={this.props.products}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-footer">
+                            <div className="text-center">
+                                <ProductsPagination
+                                    products={this.props.products}
+                                    handlePageChange={this.handlePageChange.bind(
+                                        this
+                                    )}
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
 

@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 
 import Navbar from "./components/Navbar.js";
 import App from "./components/App.js";
+import ProductPage from "./components/Products/ProductPage";
 
 import logger from "redux-logger";
 import { applyMiddleware, createStore, combineReducers } from "redux";
@@ -22,6 +23,7 @@ const Root = () => (
                 <Navbar />
                 <Switch>
                     <Route path="/" exact component={App} />
+                    <Route path="/products/:id" exact component={ProductPage} />
                     <Redirect to="/" />
                 </Switch>
             </Fragment>
