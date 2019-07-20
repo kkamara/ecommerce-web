@@ -21,7 +21,7 @@ class ProductReview extends Model
      * @var array
      */
     protected $appends = [
-        'short_content'
+        'short_content', 'is_flagged_exceeding_limit'
     ];
 
     /**
@@ -59,7 +59,7 @@ class ProductReview extends Model
      *
      * @return bool
      */
-    public function isFlaggedFiveTimes()
+    public function getisFlaggedExceedingLimitAttribute()
     {
         return FlaggedProductReview::getFlagCount($this->attributes['id']) > 4;
     }

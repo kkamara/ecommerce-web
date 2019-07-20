@@ -43,9 +43,33 @@ export const getProducts = async (pageNumber = null, params = {}) => {
             return {
                 isLoaded: true,
                 fetched: false,
-                errors: err.json(),
+                errors: err,
                 activePage: pageNumber,
                 searchParams: params
+            };
+        });
+    return data;
+};
+
+export const getProduct = async id => {
+    let url = APP_URL + `/products/${id}`;
+
+    url = encodeURI(url);
+    console.log("querying server for " + url);
+    const data = await fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            return {
+                isLoaded: true,
+                fetched: true,
+                product: json.product
+            };
+        })
+        .catch(err => {
+            return {
+                isLoaded: true,
+                fetched: false,
+                errors: err
             };
         });
     return data;

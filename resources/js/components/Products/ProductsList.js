@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 
 const initialState = {
     activePage: 1
@@ -21,7 +22,7 @@ class ProductsList extends React.Component {
                             review
                         }) => (
                             <a
-                                href="#"
+                                href={`/products/${id}`}
                                 className="list-group-item list-group-item-action flex-column align-items-start"
                                 key={id}
                             >
@@ -51,4 +52,4 @@ class ProductsList extends React.Component {
     }
 }
 
-export default ProductsList;
+export default withRouter(ProductsList);
