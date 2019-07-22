@@ -433,6 +433,7 @@ class User extends Authenticatable implements JWTSubject
     {
         $billingCards = $this->userPaymentConfig->all();
         $addresses = $this->userAddress->all();
+
         $assignedRole = $this->getRoleNames();
         $role = false;
 
@@ -440,11 +441,20 @@ class User extends Authenticatable implements JWTSubject
         {
             $role = $assignedRole[0];
         }
+
+        $assignedCompany = $this->company()->get();
+        $company = false;
+
+        if(false == $assignedCompany->isEmpty()) 
+        {
+            $company = $assignedCompany->first();
+        }
         
         return array_merge(
             $this->attributes, 
             compact("billingCards"), 
             compact("addresses"),
+            compact("company"),
             compact("role")
         );
     }

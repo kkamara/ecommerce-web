@@ -22,17 +22,13 @@ class App extends React.Component {
     }
 
     loadProducts() {
-        this.props
-            .dispatch({
-                type: "FETCH_PRODUCTS",
-                payload: getProducts(
-                    this.state.products.activePage,
-                    this.state.products.searchParams
-                )
-            })
-            .then(({ value: res }) => {
-                if (res.fetched == false) return <Redirect to="/" />;
-            });
+        this.props.dispatch({
+            type: "FETCH_PRODUCTS",
+            payload: getProducts(
+                this.state.products.activePage,
+                this.state.products.searchParams
+            )
+        });
     }
 
     setActivePageState(pageNumber, callback) {
@@ -66,10 +62,13 @@ class App extends React.Component {
     }
 
     render() {
+        console.log("current user", this.props.current_user);
         const { isLoaded, fetched } = this.props.products;
         if (!isLoaded) {
             return <div>Loading</div>;
-        } else {
+        } else if (isLoaded && !fetched) {
+            return <div>Error</div>;
+        } else if (isLoaded && fetched) {
             return (
                 <div className="container" id="app">
                     <div className="card">

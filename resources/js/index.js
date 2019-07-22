@@ -13,25 +13,36 @@ import promise from "redux-promise-middleware";
 import { Provider } from "react-redux";
 import reducers from "./reducers/index.js";
 
+import requireSession from "./components/withSession";
+
 const middleware = applyMiddleware(promise, thunk, logger);
 const store = createStore(reducers, middleware);
 
 const Root = () => (
-    <Provider store={store}>
-        <BrowserRouter>
-            <Fragment>
-                <Navbar />
-                <Switch>
-                    <Route path="/" exact component={App} />
-                    <Route path="/products/:id" exact component={ProductPage} />
-                    <Redirect to="/" />
-                </Switch>
-            </Fragment>
-        </BrowserRouter>
-    </Provider>
+    <BrowserRouter>
+        <Fragment>
+            <Navbar />
+            <Switch>
+                <Route path="/" exact component={requireSession(App)} />
+                <Route
+                    path="/products/:id"
+                    exact
+                    component={requireSession(ProductPage)}
+                />
+                <Redirect to="/" />
+            </Switch>
+        </Fragment>
+    </BrowserRouter>
 );
 
-ReactDOM.render(<Root />, document.getElementById("root"));
+// const RootWithSession = withSession(Root);
+
+ReactDOM.render(
+    <Provider store={store}>
+        <Root />
+    </Provider>,
+    document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

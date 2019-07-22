@@ -13,30 +13,30 @@ const initialState = {
 const productReducer = (state = initialState, action) => {
     switch (action.type) {
         case "FETCH_PRODUCTS_PENDING":
-            return { ...state, fetching: true };
+            return { ...state, fetched: false, isLoaded: false };
             break;
         case "FETCH_PRODUCTS_REJECTED":
-            return { ...state, fetching: false, error: action.payload };
+            return { ...state, fetched: false, isLoaded: true, error: action.payload };
             break;
         case "FETCH_PRODUCTS_FULFILLED":
             return {
                 ...state,
-                fetching: false,
                 fetched: true,
+                isLoaded: true,
                 products: action.payload
             };
             break;
         case "FETCH_PRODUCT_PENDING":
-            return { ...state, fetching: true };
+            return { ...state, fetched: false, isLoaded: false };
             break;
         case "FETCH_PRODUCT_REJECTED":
-            return { ...state, fetching: false, error: action.payload };
+            return { ...state, fetched: false, isLoaded: true, error: action.payload };
             break;
         case "FETCH_PRODUCT_FULFILLED":
             return {
                 ...state,
-                fetching: false,
                 fetched: true,
+                isLoaded: true,
                 product: action.payload
             };
             break;

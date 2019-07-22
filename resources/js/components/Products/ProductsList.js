@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import { APP_URL } from "../../constants";
 
 const initialState = {
     activePage: 1
@@ -19,7 +20,8 @@ class ProductsList extends React.Component {
                             name,
                             formatted_cost,
                             short_description,
-                            review
+                            review,
+                            image_path
                         }) => (
                             <a
                                 href={`/products/${id}`}
@@ -28,6 +30,7 @@ class ProductsList extends React.Component {
                             >
                                 <div className="d-flex w-100 justify-content-between">
                                     <img
+                                        // href={APP_URL + "/" + image_path}
                                         style={{ maxHeight: "100px" }}
                                         className="img-responsive"
                                     />

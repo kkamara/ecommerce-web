@@ -507,7 +507,7 @@ mark,
 }
 
 .blockquote-footer::before {
-  content: "— ";
+  content: "\2014\A0";
 }
 
 .img-fluid {
