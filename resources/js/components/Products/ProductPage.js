@@ -14,14 +14,10 @@ class ProductPage extends Component {
     loadProduct() {
         const { id } = this.props.match.params;
 
-        this.props
-            .dispatch({
-                type: "FETCH_PRODUCT",
-                payload: getProduct(id)
-            })
-            .then(({ value: res }) => {
-                if (res.fetched == false) return <Redirect to="/" />;
-            });
+        this.props.dispatch({
+            type: "FETCH_PRODUCT",
+            payload: getProduct(id)
+        });
     }
 
     render() {
@@ -30,7 +26,13 @@ class ProductPage extends Component {
         if (!isLoaded) {
             return <div>Loading</div>;
         } else {
+            const { current_user, userAuthenticated } = this.props;
             const { product, reviews } = this.props.product.product;
+
+            if (userAuthenticated) {
+                const doesUserOwnProduct =
+                    product.company_id === current_user.user.company.id;
+            }
 
             return (
                 <div className="container" id="app">
@@ -87,18 +89,32 @@ class ProductPage extends Component {
                                     )}
                                 </li>
                                 <li className="list-group-item">
-                                    {/* @if(Auth::check() && product.doesUserOwnProduct())
-                        <a href='{ route('companyProductEdit', [product.company.slug, product.id]) }' className='btn btn-warning btn-sm pull-left'>
-                            Edit item
-                        </a>
-                        <a href='{ route('companyProductDelete', [product.company.slug, product.id]) }' className='btn btn-danger btn-sm pull-right'>
-                            Delete item
-                        </a>
-                    @else
-                        <a href='{ route('productAdd', product.id) }' className='btn btn-primary btn-sm'>
-                            Add to cart
-                        </a>
-                    @endif */}
+                                    {userAuthenticated && doesUserOwnProduct ? (
+                                        <div>
+                                            {/* href={`/vendor/${current_user.user.company.slug}/products/${product.id}/edit`} */}
+                                            <a
+                                                href="#"
+                                                className="btn btn-warning btn-sm pull-left"
+                                            >
+                                                Edit item
+                                            </a>
+                                            {/* href={`/vendor/${current_user.user.company.slug}/products/${product.id}/delete`}  */}
+                                            <a
+                                                href="#"
+                                                className="btn btn-danger btn-sm pull-right"
+                                            >
+                                                Delete item
+                                            </a>
+                                        </div>
+                                    ) : (
+                                        // href={`/products/add`}
+                                        <a
+                                            href="#"
+                                            className="btn btn-primary btn-sm"
+                                        >
+                                            Add to cart
+                                        </a>
+                                    )}
                                 </li>
                             </ul>
                         </div>
@@ -108,6 +124,9 @@ class ProductPage extends Component {
                             <ProductReviewList
                                 reviews={reviews}
                                 score={product.review}
+                                current_user={current_user}
+                                userAuthenticated={userAuthenticated}
+                                product={product}
                             />
                         </div>
                     </div>

@@ -1,14 +1,5 @@
 import { APP_URL } from "../constants";
-
-function convertArrayToGETParams(params) {
-    let data = [];
-    for (let key in params) {
-        if (params[key].length > 0) {
-            data.push(`${key}=${params[key]}`);
-        }
-    }
-    return data.join("&");
-}
+import { convertArrayToGETParams } from "../utilities/methods";
 
 export const getProducts = async (pageNumber = null, params = {}) => {
     let url = APP_URL + "/products";

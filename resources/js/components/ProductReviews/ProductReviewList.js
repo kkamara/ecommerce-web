@@ -1,5 +1,7 @@
 import React from "react";
 
+import ReviewProduct from "./ReviewProduct";
+
 const CardHeader = props => (
     <div className="card-header">
         <div className="lead">
@@ -11,40 +13,13 @@ const CardHeader = props => (
 
 const CardFooter = props => (
     <div className="card-footer">
-        {/* @if($permissionToReview)
-                        @include('layouts.errors')
-
-                        <form action="{ route('reviewCreate', product.id) }" method='POST'>
-                            { csrf_field() }
-                            <div className="form-group">
-                                <label>
-                                    <select name="rating" className='form-control'>
-                                        <option value="">Choose a rating</option>
-                                        <option value="0">0</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </label>
-                            </div>
-
-                            <div className="form-group">
-                                <textarea className='form-control' name='content' type="text" placeholder="Your review..."></textarea>
-                            </div>
-
-                            <div className="form-group pull-right">
-                                <input type="submit" className='form-group btn btn-primary'>
-                            </div>
-                        </form>
-                    @endif */}
+        {props.permissionToReview ? <ReviewProduct {...props} /> : ""}
     </div>
 );
 
 const ProductReviewList = props => {
-    const { score, reviews } = props;
-    console.log(reviews);
+    const { score, reviews, current_user, userAuthenticated, product } = props;
+    const { permissionToReview } = product;
 
     if (reviews.length < 1) {
         return (
@@ -57,7 +32,10 @@ const ProductReviewList = props => {
                     </div>
                 </div>
 
-                <CardFooter />
+                <CardFooter
+                    permissionToReview={permissionToReview}
+                    product_id={product.id}
+                />
             </div>
         );
     } else {
@@ -90,11 +68,13 @@ const ProductReviewList = props => {
                                                     <div className="float-left">
                                                         Product Rated {score} /
                                                         5
-                                                        {/* @if(Auth::check() &&
-                                                    auth().user().id ===
-                                                    $review.user_id) by{" "}
-                                                    <strong>you</strong>
-                                                    @endif */}
+                                                        {userAuthenticated &&
+                                                        current_user.user.id ===
+                                                            reviews.user_id ? (
+                                                            <strong>you</strong>
+                                                        ) : (
+                                                            ""
+                                                        )}
                                                     </div>
 
                                                     <div className="float-right">
@@ -133,7 +113,10 @@ const ProductReviewList = props => {
                     </div>
                 </div>
 
-                <CardFooter />
+                <CardFooter
+                    permissionToReview={permissionToReview}
+                    product_id={product.id}
+                />
             </div>
         );
     }

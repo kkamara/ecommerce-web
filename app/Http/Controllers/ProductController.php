@@ -63,8 +63,6 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        
-
         $user = \App\User::attemptAuth();
 
         $reviews = $product->productReview()->get();
@@ -76,7 +74,7 @@ class ProductController extends Controller
         if(null !== $user)
             $permissionToReview = $product->didUserPurchaseProduct($user->id);
 
-            $collection[] = compact("permissionToReview");
+            $collection['permissionToReview'] = $permissionToReview;
 
         return response()->json([
             "product" => $collection, 
