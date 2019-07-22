@@ -440,11 +440,19 @@ class User extends Authenticatable implements JWTSubject
     {
         $billingCards = $this->userPaymentConfig->all();
         $addresses = $this->userAddress->all();
-        // return $billingCards->getAttributes();
+        $assignedRole = $this->getRoleNames();
+        $role = false;
+
+        if(false == $assignedRole->isEmpty()) 
+        {
+            $role = $assignedRole[0];
+        }
+        
         return array_merge(
             $this->attributes, 
             compact("billingCards"), 
-            compact("addresses")
+            compact("addresses"),
+            compact("role")
         );
     }
 }
