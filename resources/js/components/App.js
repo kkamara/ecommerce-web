@@ -1,11 +1,12 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import { getProducts } from "../requests/products.js";
 import ProductsList from "./Products/ProductsList.js";
 import ProductsPagination from "./Products/ProductsPagination.js";
 import ProductsSearch from "./Products/ProductsSearch.js";
 
-import { connect } from "react-redux";
+import Loader from "./Loader";
 
 const initialState = {
     products: {
@@ -54,22 +55,7 @@ class App extends React.Component {
         }
 
         if (sort_by || min_price || max_price || query) {
-            this.setState(
-                prevState => {
-                    const { products } = prevState;
-                    let newProducts = Object.assign({}, products);
-
-                    if (sort_by) newProducts.searchParams.sort_by = sort_by;
-                    if (min_price)
-                        newProducts.searchParams.min_price = min_price;
-                    if (max_price)
-                        newProducts.searchParams.max_price = max_price;
-                    if (query) newProducts.searchParams.query = query;
-
-                    return { products: newProducts };
-                },
-                () => this.loadProducts()
-            );
+            this.handleIncomingVals({ sort_by, min_price, max_price, query });
         } else {
             this.loadProducts();
         }
@@ -83,6 +69,23 @@ class App extends React.Component {
                 this.state.products.searchParams
             )
         });
+    }
+
+    handleIncomingVals({ sort_by, min_price, max_price, query }) {
+        this.setState(
+            prevState => {
+                const { products } = prevState;
+                let newProducts = Object.assign({}, products);
+
+                if (sort_by) newProducts.searchParams.sort_by = sort_by;
+                if (min_price) newProducts.searchParams.min_price = min_price;
+                if (max_price) newProducts.searchParams.max_price = max_price;
+                if (query) newProducts.searchParams.query = query;
+
+                return { products: newProducts };
+            },
+            () => this.loadProducts()
+        );
     }
 
     setActivePageState(pageNumber, callback) {
@@ -120,7 +123,7 @@ class App extends React.Component {
 
         const { isLoaded, fetched } = this.props.products;
         if (!isLoaded) {
-            return <div>Loading</div>;
+            return <Loader />;
         } else if (isLoaded && !fetched) {
             return <div>Error</div>;
         } else if (isLoaded && fetched) {

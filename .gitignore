@@ -14,4 +14,10 @@ yarn-error.log
 package-lock.json
 public/images/companies/*
 public/images/products/*
-public/uploads
+/bootstrap
+/public
+/storage
+/.env
+public/js/app.js
+public/css/app.css
+composer.lock
