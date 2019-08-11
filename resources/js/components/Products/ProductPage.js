@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 import { getProduct } from "../../requests/products";
-import { connect } from "react-redux";
-
 import ProductReviewList from "../ProductReviews/ProductReviewList";
+
+import Loader from "../Loader";
 
 class ProductPage extends Component {
     componentDidMount() {
@@ -24,7 +25,7 @@ class ProductPage extends Component {
         const { isLoaded, fetched } = this.props.product;
 
         if (!isLoaded) {
-            return <div>Loading</div>;
+            return <Loader />;
         } else {
             const { current_user, userAuthenticated } = this.props;
             const { product, reviews } = this.props.product.product;
