@@ -30,8 +30,8 @@ class ProductsList extends React.Component {
                             >
                                 <div className="d-flex w-100 justify-content-between">
                                     <img
-                                        // href={APP_URL + "/" + image_path}
-                                        style={{ maxHeight: "100px" }}
+                                        src={image_path}
+                                        style={{ maxHeight: 100 }}
                                         className="img-responsive"
                                     />
                                     <h5 className="mb-1">{name}</h5>
