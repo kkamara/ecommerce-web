@@ -30,11 +30,6 @@ class ProductPage extends Component {
             const { current_user, userAuthenticated } = this.props;
             const { product, reviews } = this.props.product.product;
 
-            if (userAuthenticated) {
-                const doesUserOwnProduct =
-                    product.company_id === current_user.user.company.id;
-            }
-
             return (
                 <div className="container" id="app">
                     <div className="row">

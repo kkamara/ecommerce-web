@@ -37,7 +37,7 @@ class ProductsSearch extends React.Component {
         const { sort_by, min_price, max_price, query } = this.state;
 
         return (
-            <form className="form-inline" action="" method="GET">
+            <form className="form-inline">
                 <div className="form-group">
                     <div className="input-group">
                         <div className="input-group-prepend">

@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import { withRouter, Link, Redirect } from "react-router-dom";
 
 import { APP_NAME } from "../constants";
+import ProductQuickSearch from "./Products/ProductQuickSearch";
 
 class Navbar extends PureComponent {
     render() {
@@ -60,25 +61,7 @@ class Navbar extends PureComponent {
                             </div>
                         </ul>
                         <ul className="navbar-nav mr-auto">
-                            <form
-                                className="form-inline my-2 my-lg-0"
-                                action="/"
-                                method="GET"
-                            >
-                                <input
-                                    name="query"
-                                    className="form-control mr-sm-2"
-                                    type="search"
-                                    placeholder="Find Your Product"
-                                    aria-label="Search"
-                                />
-                                <button
-                                    className="btn btn-outline-success my-2 my-sm-0"
-                                    type="submit"
-                                >
-                                    Search
-                                </button>
-                            </form>
+                            <ProductQuickSearch {...this.props} />
                         </ul>
                         <ul className="navbar-nav mr-right">
                             {/* @if(Auth::check())
