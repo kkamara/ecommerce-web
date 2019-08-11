@@ -9,7 +9,12 @@ import { connect } from "react-redux";
 
 const initialState = {
     products: {
-        searchParams: {},
+        searchParams: {
+            sort_by: "",
+            min_price: "",
+            max_price: "",
+            query: ""
+        },
         activePage: 1
     }
 };
@@ -17,8 +22,57 @@ const initialState = {
 class App extends React.Component {
     state = { ...initialState };
 
-    async componentDidMount() {
-        this.loadProducts();
+    componentDidMount() {
+        let sort_by,
+            min_price,
+            max_price,
+            query = null;
+
+        if (
+            typeof this.props.location.state !== "undefined" &&
+            typeof this.props.location.state.sort_by != "undefined"
+        ) {
+            sort_by = this.props.location.state.sort_by;
+        }
+        if (
+            typeof this.props.location.state !== "undefined" &&
+            typeof this.props.location.state.min_price != "undefined"
+        ) {
+            min_price = this.props.location.state.min_price;
+        }
+        if (
+            typeof this.props.location.state !== "undefined" &&
+            typeof this.props.location.state.max_price != "undefined"
+        ) {
+            max_price = this.props.location.state.max_price;
+        }
+        if (
+            typeof this.props.location.state !== "undefined" &&
+            typeof this.props.location.state.query != "undefined"
+        ) {
+            query = this.props.location.state.query;
+        }
+
+        if (sort_by || min_price || max_price || query) {
+            this.setState(
+                prevState => {
+                    const { products } = prevState;
+                    let newProducts = Object.assign({}, products);
+
+                    if (sort_by) newProducts.searchParams.sort_by = sort_by;
+                    if (min_price)
+                        newProducts.searchParams.min_price = min_price;
+                    if (max_price)
+                        newProducts.searchParams.max_price = max_price;
+                    if (query) newProducts.searchParams.query = query;
+
+                    return { products: newProducts };
+                },
+                () => this.loadProducts()
+            );
+        } else {
+            this.loadProducts();
+        }
     }
 
     loadProducts() {
@@ -63,6 +117,7 @@ class App extends React.Component {
 
     render() {
         console.log("current user", this.props.current_user);
+
         const { isLoaded, fetched } = this.props.products;
         if (!isLoaded) {
             return <div>Loading</div>;
@@ -77,6 +132,7 @@ class App extends React.Component {
                                 handleProductSearch={this.handleProductSearch.bind(
                                     this
                                 )}
+                                searchParams={this.state.products.searchParams}
                             />
                         </div>
                         <div className="card-body">
