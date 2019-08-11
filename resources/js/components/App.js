@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import querySearch from "query-string";
 
 import { getProducts } from "../requests/products.js";
 import ProductsList from "./Products/ProductsList.js";
@@ -35,30 +36,19 @@ class App extends React.Component {
         ) {
             sort_by = this.props.location.state.sort_by;
         }
-        if (
-            typeof this.props.location.state !== "undefined" &&
-            typeof this.props.location.state.min_price != "undefined"
-        ) {
-            min_price = this.props.location.state.min_price;
-        }
-        if (
-            typeof this.props.location.state !== "undefined" &&
-            typeof this.props.location.state.max_price != "undefined"
-        ) {
-            max_price = this.props.location.state.max_price;
-        }
-        if (
-            typeof this.props.location.state !== "undefined" &&
-            typeof this.props.location.state.query != "undefined"
-        ) {
-            query = this.props.location.state.query;
+        if (0 < this.props.location.search.length) {
+            query = querySearch.parse(this.props.location.search).query;
         }
 
-        if (sort_by || min_price || max_price || query) {
-            this.handleIncomingVals({ sort_by, min_price, max_price, query });
+        if (sort_by || query) {
+            this.handleIncomingVals({ sort_by, query });
         } else {
             this.loadProducts();
         }
+    }
+
+    componentWillUnmount() {
+        this.setState({ query: "" });
     }
 
     loadProducts() {
