@@ -4,7 +4,8 @@ const initialState = {
     sort_by: "",
     min_price: "",
     max_price: "",
-    query: ""
+    query: "",
+    clearInputsHover: false
 };
 
 class ProductsSearch extends React.Component {
@@ -33,8 +34,26 @@ class ProductsSearch extends React.Component {
         });
     };
 
+    toggleClearHover() {
+        this.setState({ clearInputsHover: !this.state.clearInputsHover });
+    }
+
+    clearInputs() {
+        this.setState(
+            { sort_by: "", min_price: "", max_price: "", query: "" },
+            () => this.props.handleProductSearch({ ...this.state })
+        );
+    }
+
     render() {
-        const { sort_by, min_price, max_price, query } = this.state;
+        const { resetInputs } = styles;
+        const {
+            sort_by,
+            min_price,
+            max_price,
+            query,
+            clearInputsHover
+        } = this.state;
 
         return (
             <form className="form-inline">
@@ -118,9 +137,36 @@ class ProductsSearch extends React.Component {
                         />
                     </div>
                 </div>
+
+                <div className="form-group">
+                    <div className="input-group">
+                        <a
+                            onMouseEnter={this.toggleClearHover.bind(this)}
+                            onMouseLeave={this.toggleClearHover.bind(this)}
+                            onClick={this.clearInputs.bind(this)}
+                            className="form-control"
+                            style={resetInputs}
+                        >
+                            {clearInputsHover ? (
+                                <i
+                                    className="fa fa-window-close"
+                                    aria-hidden="true"
+                                />
+                            ) : (
+                                <i className="fa fa-times" aria-hidden="true" />
+                            )}
+                        </a>
+                    </div>
+                </div>
             </form>
         );
     }
 }
+
+const styles = {
+    resetInputs: {
+        cursor: "pointer"
+    }
+};
 
 export default ProductsSearch;

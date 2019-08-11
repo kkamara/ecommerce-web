@@ -47,10 +47,6 @@ class App extends React.Component {
         }
     }
 
-    componentWillUnmount() {
-        this.setState({ query: "" });
-    }
-
     loadProducts() {
         this.props.dispatch({
             type: "FETCH_PRODUCTS",
