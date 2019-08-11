@@ -52054,7 +52054,7 @@ function (_Component) {
           colSpan: "2"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
           style: {
-            maxHeight: "100"
+            maxHeight: 100
           },
           src: product.image_path,
           className: "img-responsive"
@@ -52198,9 +52198,9 @@ function (_React$Component) {
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
             className: "d-flex w-100 justify-content-between"
           }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-            // href={APP_URL + "/" + image_path}
+            src: image_path,
             style: {
-              maxHeight: "100px"
+              maxHeight: 100
             },
             className: "img-responsive"
           }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {

@@ -43,7 +43,7 @@ class ProductPage extends Component {
                                     <tr className="text-center">
                                         <th scope="row" colSpan="2">
                                             <img
-                                                style={{ maxHeight: "100" }}
+                                                style={{ maxHeight: 100 }}
                                                 src={product.image_path}
                                                 className="img-responsive"
                                             />
