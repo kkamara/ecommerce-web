@@ -10,6 +10,22 @@ const initialState = {
 class ProductsSearch extends React.Component {
     state = { ...initialState };
 
+    componentDidMount() {
+        const {
+            sort_by,
+            min_price,
+            max_price,
+            query
+        } = this.props.searchParams;
+
+        this.setState({
+            sort_by,
+            min_price,
+            max_price,
+            query
+        });
+    }
+
     handleChange = event => {
         const { name, value } = event.target;
         this.setState({ [name]: value }, () => {
@@ -18,13 +34,10 @@ class ProductsSearch extends React.Component {
     };
 
     render() {
+        const { sort_by, min_price, max_price, query } = this.state;
+
         return (
-            <form
-                onChange={event => this.handleChange(event)}
-                className="form-inline"
-                action=""
-                method="GET"
-            >
+            <form className="form-inline" action="" method="GET">
                 <div className="form-group">
                     <div className="input-group">
                         <div className="input-group-prepend">
@@ -32,7 +45,12 @@ class ProductsSearch extends React.Component {
                                 <i className="fa fa-sort" aria-hidden="true" />
                             </div>
                         </div>
-                        <select name="sort_by" className="form-control">
+                        <select
+                            name="sort_by"
+                            value={sort_by}
+                            onChange={e => this.handleChange(e)}
+                            className="form-control"
+                        >
                             <option value="">Sort by</option>
                             <option value="pop">Most Popular</option>
                             <option value="top">Top Rated</option>
@@ -53,6 +71,8 @@ class ProductsSearch extends React.Component {
                             step="0.01"
                             max="2500"
                             name="min_price"
+                            value={min_price}
+                            onChange={e => this.handleChange(e)}
                             className="form-control"
                             placeholder="Min"
                         />
@@ -70,6 +90,8 @@ class ProductsSearch extends React.Component {
                             step="0.01"
                             max="2500"
                             name="max_price"
+                            value={max_price}
+                            onChange={e => this.handleChange(e)}
                             className="form-control"
                             placeholder="Max"
                         />
@@ -88,6 +110,8 @@ class ProductsSearch extends React.Component {
                         </div>
                         <input
                             name="query"
+                            value={query}
+                            onChange={e => this.handleChange(e)}
                             type="text"
                             className="form-control"
                             placeholder="Search..."
