@@ -1,11 +1,28 @@
 import React, { PureComponent } from "react";
 import { withRouter, Link, Redirect } from "react-router-dom";
 
+import { getCurrentUser } from "../requests/user";
+import { connect } from "react-redux";
+
 import { APP_NAME } from "../constants";
 import ProductQuickSearch from "./Products/ProductQuickSearch";
 
 class Navbar extends PureComponent {
+    componentDidMount() {
+        this.loadCurrentUser();
+    }
+
+    loadCurrentUser() {
+        this.props.dispatch({
+            type: "FETCH_CURRENT_USER",
+            payload: getCurrentUser()
+        });
+    }
+
     render() {
+        const { fetched, isLoaded, user } = this.props.current_user;
+        const isAuth = typeof user === "undefined" ? false : true;
+
         return (
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div className="container">
@@ -64,50 +81,110 @@ class Navbar extends PureComponent {
                             <ProductQuickSearch {...this.props} />
                         </ul>
                         <ul className="navbar-nav mr-right">
-                            {/* @if(Auth::check())
-                    <li className="nav-item dropdown">
-                        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            My Stuff
-                        </a>
-                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a className="dropdown-item" href="{{ route('billingHome') }}">Billing Cards</a>
-                            <a className="dropdown-item" href="{{ route('addressHome') }}">Addresses</a>
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="{{ route('orderHome') }}">Order History</a>
-                            <div className="dropdown-divider"></div>
-                            @role('vendor')
-                                <a className="dropdown-item" href="{{ route('companyProductCreate', auth()->user()->company->slug) }}">Add a Product</a>
-                                <a className="dropdown-item" href="{{ route('companyProductHome', auth()->user()->company->slug) }}">My Products</a>
-                            @else
-                                @role('moderator')
-                                        <a className="dropdown-item" href="{{ route('modHubHome') }}">Moderator's Hub</a>
-                                @else
-                                    <a className="dropdown-item" href="{{ route('vendorCreate') }}">Become a vendor</a>
-                                @endrole
-                            @endrole
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" href="{{ route('userEdit', auth()->user()->slug) }}">User Settings</a>
-                            <a className="dropdown-item" href="{{ route('logout') }}">Logout</a>
-                        </div>
-                    </li>
-                @else
-                    <li className="nav-item">
-                            <a className="nav-link" href="{{ route('registerHome') }}">
-                            <span>
-                                <i className="fa fa-user-plus" aria-hidden="true"></i>
-                            </span>
-                            <span>Register</span>
-                        </a>
-                    </li>
-                    <li className="nav-item">
-                            <a className="nav-link" href="{{ route('login') }}">
-                            <span>
-                                <i className="fa fa-sign-in" aria-hidden="true"></i>
-                            </span>
-                            <span>Login</span>
-                        </a>
-                    </li>
-                @endif */}
+                            {isAuth ? (
+                                <li className="nav-item dropdown">
+                                    <a
+                                        className="nav-link dropdown-toggle"
+                                        href="#"
+                                        id="navbarDropdown"
+                                        role="button"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        My Stuff
+                                    </a>
+                                    <div
+                                        className="dropdown-menu"
+                                        aria-labelledby="navbarDropdown"
+                                    >
+                                        {/* <a
+                                            className="dropdown-item"
+                                            href="{{ route('billingHome') }}"
+                                        >
+                                            Billing Cards
+                                        </a>
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('addressHome') }}"
+                                        >
+                                            Addresses
+                                        </a>
+                                        <div className="dropdown-divider" />
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('orderHome') }}"
+                                        >
+                                            Order History
+                                        </a>
+                                        <div className="dropdown-divider" />
+                                        @role('vendor')
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('companyProductCreate', auth()->user()->company->slug) }}"
+                                        >
+                                            Add a Product
+                                        </a>
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('companyProductHome', auth()->user()->company->slug) }}"
+                                        >
+                                            My Products
+                                        </a>
+                                        @else @role('moderator')
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('modHubHome') }}"
+                                        >
+                                            Moderator's Hub
+                                        </a>
+                                        @else
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('vendorCreate') }}"
+                                        >
+                                            Become a vendor
+                                        </a>
+                                        @endrole @endrole
+                                        <div className="dropdown-divider" />
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('userEdit', auth()->user()->slug) }}"
+                                        >
+                                            User Settings
+                                        </a>
+                                        <a
+                                            className="dropdown-item"
+                                            href="{{ route('logout') }}"
+                                        >
+                                            Logout
+                                        </a> */}
+                                    </div>
+                                </li>
+                            ) : (
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/register">
+                                        <span>
+                                            <i
+                                                className="fa fa-user-plus"
+                                                aria-hidden="true"
+                                            />
+                                        </span>
+                                        <span>Register</span>
+                                    </a>
+                                </li>
+                            )}
+                            <li className="nav-item">
+                                <a className="nav-link" href="/login">
+                                    <span>
+                                        <i
+                                            className="fa fa-sign-in"
+                                            aria-hidden="true"
+                                        />
+                                    </span>
+                                    <span>Login</span>
+                                </a>
+                            </li>
                             {/* <li className="nav-item">
                     <a className="nav-link" href="{{ route('cartShow') }}">
                         <span>
@@ -124,4 +201,7 @@ class Navbar extends PureComponent {
     }
 }
 
-export default withRouter(Navbar);
+const mapStateToProps = state => ({
+    current_user: state.user.user
+});
+export default connect(mapStateToProps)(withRouter(Navbar));
