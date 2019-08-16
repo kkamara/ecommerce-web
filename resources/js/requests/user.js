@@ -1,8 +1,46 @@
 import { APP_URL } from "../constants";
 
+const tokenName = "recipe-toke";
+
+export const loginUser = async () => {
+    let url = APP_URL + "/user/login";
+    url = encodeURI(url);
+
+    const data = await fetch(url, {
+        method: "POST"
+    })
+        .then(res => res.json())
+        .then(json => {
+            localStorage.setItem(tokenName, json.token);
+
+            return {
+                isLoaded: true,
+                fetched: true,
+                user: json.user
+            };
+        })
+        .catch(err => {
+            return {
+                isLoaded: true,
+                fetched: false,
+                errors: err
+            };
+        });
+
+    return data;
+};
+
+export const logoutUser = () => {
+    localStorage.removeItem(tokenName);
+
+    return {
+        logout: true
+    };
+};
+
 export const getCurrentUser = async () => {
     let url = APP_URL + "/user/authenticate";
-    const token = localStorage.getItem("recipe-toke");
+    const token = localStorage.getItem(tokenName);
 
     if (null === token) {
         return {
