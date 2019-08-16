@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import { withRouter, Link, Redirect } from "react-router-dom";
 
 import { getCurrentUser } from "../requests/user";
@@ -8,8 +8,26 @@ import { APP_NAME } from "../constants";
 import ProductQuickSearch from "./Products/ProductQuickSearch";
 
 class Navbar extends PureComponent {
+    state = {
+        userRole: ""
+    };
+
     componentDidMount() {
         this.loadCurrentUser();
+    }
+
+    componentDidUpdate() {
+        const { user } = this.props;
+
+        if (typeof user !== "undefined" && user.fetched === true) {
+            this.setUserRole();
+        }
+    }
+
+    setUserRole() {
+        const newUserRole = user.role;
+
+        this.setState({ userRole: newUserRole });
     }
 
     loadCurrentUser() {
@@ -20,7 +38,9 @@ class Navbar extends PureComponent {
     }
 
     render() {
+        const { userRole } = this.state;
         const { fetched, isLoaded, user } = this.props.current_user;
+
         const isAuth = typeof user === "undefined" ? false : true;
 
         return (
@@ -98,67 +118,73 @@ class Navbar extends PureComponent {
                                         className="dropdown-menu"
                                         aria-labelledby="navbarDropdown"
                                     >
-                                        {/* <a
+                                        <a
                                             className="dropdown-item"
-                                            href="{{ route('billingHome') }}"
+                                            href="/billing"
                                         >
                                             Billing Cards
                                         </a>
                                         <a
                                             className="dropdown-item"
-                                            href="{{ route('addressHome') }}"
+                                            href="/addresses"
                                         >
                                             Addresses
                                         </a>
                                         <div className="dropdown-divider" />
                                         <a
                                             className="dropdown-item"
-                                            href="{{ route('orderHome') }}"
+                                            href="/orders"
                                         >
                                             Order History
                                         </a>
                                         <div className="dropdown-divider" />
-                                        @role('vendor')
-                                        <a
-                                            className="dropdown-item"
-                                            href="{{ route('companyProductCreate', auth()->user()->company->slug) }}"
-                                        >
-                                            Add a Product
-                                        </a>
-                                        <a
-                                            className="dropdown-item"
-                                            href="{{ route('companyProductHome', auth()->user()->company->slug) }}"
-                                        >
-                                            My Products
-                                        </a>
-                                        @else @role('moderator')
-                                        <a
-                                            className="dropdown-item"
-                                            href="{{ route('modHubHome') }}"
-                                        >
-                                            Moderator's Hub
-                                        </a>
-                                        @else
-                                        <a
-                                            className="dropdown-item"
-                                            href="{{ route('vendorCreate') }}"
-                                        >
-                                            Become a vendor
-                                        </a>
-                                        @endrole @endrole
+                                        {userRole === "vendor" ? (
+                                            <Fragment>
+                                                <a
+                                                    className="dropdown-item"
+                                                    href="/company/create"
+                                                >
+                                                    Add a Product
+                                                </a>
+                                                <a
+                                                    className="dropdown-item"
+                                                    href="/company/products"
+                                                >
+                                                    My Products
+                                                </a>
+                                            </Fragment>
+                                        ) : userRole === "moderator" ? (
+                                            <Fragment>
+                                                <a
+                                                    className="dropdown-item"
+                                                    href="moderators/hub"
+                                                >
+                                                    Moderator's Hub
+                                                </a>
+                                                :
+                                                <a
+                                                    className="dropdown-item"
+                                                    href="/vendors/create"
+                                                >
+                                                    Become a vendor
+                                                </a>
+                                            </Fragment>
+                                        ) : (
+                                            <div />
+                                        )}
                                         <div className="dropdown-divider" />
                                         <a
                                             className="dropdown-item"
-                                            href="{{ route('userEdit', auth()->user()->slug) }}"
+                                            href="/user/edit"
                                         >
                                             User Settings
                                         </a>
                                         <a
                                             className="dropdown-item"
-                                            href="{{ route('logout') }}"
+                                            href="/logout"
                                         >
                                             Logout
-                                        </a> */}
+                                        </a>
                                     </div>
                                 </li>
                             ) : (
