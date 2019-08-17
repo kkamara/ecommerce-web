@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import Navbar from "./components/Navbar.js";
 import App from "./components/App.js";
 import ProductPage from "./components/Products/ProductPage";
+import page404 from "./components/Page404";
 
 import logger from "redux-logger";
 import { applyMiddleware, createStore, combineReducers } from "redux";
@@ -14,6 +15,7 @@ import { Provider } from "react-redux";
 import reducers from "./reducers/index.js";
 
 import requireSession from "./components/withSession";
+import Page404 from "./components/Page404";
 
 const middleware = applyMiddleware(promise, thunk, logger);
 const store = createStore(reducers, middleware);
@@ -29,7 +31,8 @@ const Root = () => (
                     exact
                     component={requireSession(ProductPage)}
                 />
-                <Redirect to="/" />
+                <Route path="/404" exact component={Page404} />
+                <Redirect to="/404" />
             </Switch>
         </Fragment>
     </BrowserRouter>
