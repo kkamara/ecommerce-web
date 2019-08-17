@@ -2,12 +2,18 @@ import { APP_URL } from "../constants";
 
 const tokenName = "recipe-toke";
 
-export const loginUser = async () => {
+export const loginUser = async (email, password) => {
     let url = APP_URL + "/user/login";
     url = encodeURI(url);
 
+    let body = new FormData();
+    body.append("email", email);
+    body.append("password", password);
+
+    console.log("querying server for " + url);
     const data = await fetch(url, {
-        method: "POST"
+        method: "POST",
+        body
     })
         .then(res => res.json())
         .then(json => {
