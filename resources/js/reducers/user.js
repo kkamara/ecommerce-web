@@ -3,7 +3,8 @@ const initialState = {
         user: undefined,
         isLoaded: false,
         fetched: false,
-        logout: false
+        logout: false,
+        errors: {}
     }
 };
 const userReducer = (state = initialState, action) => {
@@ -27,10 +28,10 @@ const userReducer = (state = initialState, action) => {
                 user: action.payload
             };
             break;
-        case "FETCH_LOGIN_USER_PENDING":
+        case "POST_LOGIN_USER_PENDING":
             return { ...state, fetched: false, isLoaded: false };
             break;
-        case "FETCH_LOGIN_USER_REJECTED":
+        case "POST_LOGIN_USER_REJECTED":
             return {
                 ...state,
                 fetched: false,
@@ -38,7 +39,7 @@ const userReducer = (state = initialState, action) => {
                 error: action.payload
             };
             break;
-        case "FETCH_LOGIN_USER_FULFILLED":
+        case "POST_LOGIN_USER_FULFILLED":
             return {
                 ...state,
                 fetched: true,

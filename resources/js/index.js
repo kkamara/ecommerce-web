@@ -2,11 +2,6 @@ import { BrowserRouter, Switch, Redirect, Route } from "react-router-dom";
 import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 
-import Navbar from "./components/Navbar.js";
-import App from "./components/App.js";
-import ProductPage from "./components/Products/ProductPage";
-import page404 from "./components/Page404";
-
 import logger from "redux-logger";
 import { applyMiddleware, createStore, combineReducers } from "redux";
 import thunk from "redux-thunk";
@@ -14,8 +9,14 @@ import promise from "redux-promise-middleware";
 import { Provider } from "react-redux";
 import reducers from "./reducers/index.js";
 
-import requireSession from "./components/withSession";
+import withSession from "./components/withSession";
+
+import Navbar from "./components/Navbar.js";
+import App from "./components/App.js";
+import ProductPage from "./components/Products/ProductPage";
 import Page404 from "./components/Page404";
+import Login from "./components/Users/Login";
+import Footer from "./components/Footer";
 
 const middleware = applyMiddleware(promise, thunk, logger);
 const store = createStore(reducers, middleware);
@@ -25,15 +26,17 @@ const Root = () => (
         <Fragment>
             <Navbar />
             <Switch>
-                <Route path="/" exact component={requireSession(App)} />
+                <Route path="/" exact component={withSession(App)} />
                 <Route
                     path="/products/:id"
                     exact
-                    component={requireSession(ProductPage)}
+                    component={withSession(ProductPage)}
                 />
+                <Route path="/login" exact component={withSession(Login)} />
                 <Route path="/404" exact component={Page404} />
                 <Redirect to="/404" />
             </Switch>
+            <Footer />
         </Fragment>
     </BrowserRouter>
 );

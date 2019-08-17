@@ -105,8 +105,6 @@ class App extends React.Component {
     }
 
     render() {
-        console.log("current user", this.props.current_user);
-
         const { isLoaded, fetched } = this.props.products;
         if (!isLoaded) {
             return <Loader />;
