@@ -16,6 +16,7 @@ import App from "./components/App.js";
 import ProductPage from "./components/Products/ProductPage";
 import Page404 from "./components/Page404";
 import Login from "./components/Users/Login";
+import Logout from "./components/Users/Logout";
 import Footer from "./components/Footer";
 
 const middleware = applyMiddleware(promise, thunk, logger);
@@ -33,6 +34,7 @@ const Root = () => (
                     component={withSession(ProductPage)}
                 />
                 <Route path="/login" exact component={withSession(Login)} />
+                <Route path="/logout" exact component={withSession(Logout)} />
                 <Route path="/404" exact component={Page404} />
                 <Redirect to="/404" />
             </Switch>
