@@ -7,7 +7,7 @@ import { applyMiddleware, createStore, combineReducers } from "redux";
 import thunk from "redux-thunk";
 import promise from "redux-promise-middleware";
 import { Provider } from "react-redux";
-import reducers from "./reducers/index.js";
+import reducers from "./redux/reducers/index";
 
 import withSession from "./components/withSession";
 
@@ -19,7 +19,7 @@ import Login from "./components/Users/Login";
 import Logout from "./components/Users/Logout";
 import Footer from "./components/Footer";
 
-const middleware = applyMiddleware(promise, thunk, logger);
+const middleware = applyMiddleware(/*promise,*/ thunk, logger);
 const store = createStore(reducers, middleware);
 
 const Root = () => (

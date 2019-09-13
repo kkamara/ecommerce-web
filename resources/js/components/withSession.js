@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { getCurrentUser } from "../requests/user";
+import { userActions } from "../redux/actions/index";
 import { connect } from "react-redux";
 
 export default function(ComposedComponent) {
@@ -10,10 +10,7 @@ export default function(ComposedComponent) {
         }
 
         loadCurrentUser() {
-            this.props.dispatch({
-                type: "FETCH_CURRENT_USER",
-                payload: getCurrentUser()
-            });
+            this.props.getCurrentUser();
         }
 
         render() {
@@ -35,6 +32,12 @@ export default function(ComposedComponent) {
     const mapStateToProps = state => ({
         current_user: state.user.user
     });
+    const mapDispatchToProps = dispatch => ({
+        getCurrentUser: () => dispatch(userActions.getCurrentUser())
+    });
 
-    return connect(mapStateToProps)(withSession);
+    return connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(withSession);
 }

@@ -1,6 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { APP_URL } from "../../constants";
 
 const initialState = {
     activePage: 1
@@ -9,12 +9,12 @@ class ProductsList extends React.Component {
     state = { ...initialState };
 
     render() {
-        const { products, isLoaded, fetched } = this.props.products;
+        const { products } = this.props;
 
-        if (isLoaded && fetched) {
+        if (products.products.products.data.length) {
             return (
                 <div>
-                    {products.data.map(
+                    {products.products.products.data.map(
                         ({
                             id,
                             name,
@@ -55,4 +55,10 @@ class ProductsList extends React.Component {
     }
 }
 
-export default withRouter(ProductsList);
+const mapStateToProps = state => ({
+    products: state.product
+});
+export default connect(
+    mapStateToProps,
+    null
+)(withRouter(ProductsList));

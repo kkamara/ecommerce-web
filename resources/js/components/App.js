@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import querySearch from "query-string";
 
-import { getProducts } from "../requests/products.js";
+import { productActions } from "../redux/actions/index";
 import ProductsList from "./Products/ProductsList.js";
 import ProductsPagination from "./Products/ProductsPagination.js";
 import ProductsSearch from "./Products/ProductsSearch.js";
@@ -48,13 +48,10 @@ class App extends React.Component {
     }
 
     loadProducts() {
-        this.props.dispatch({
-            type: "FETCH_PRODUCTS",
-            payload: getProducts(
-                this.state.products.activePage,
-                this.state.products.searchParams
-            )
-        });
+        this.props.getProducts(
+            this.state.products.activePage,
+            this.state.products.searchParams
+        );
     }
 
     handleIncomingVals({ sort_by, min_price, max_price, query }) {
@@ -105,7 +102,8 @@ class App extends React.Component {
     }
 
     render() {
-        const { isLoaded, fetched } = this.props.products;
+        const { isLoaded, fetched, products } = this.props.products;
+
         if (!isLoaded) {
             return <Loader />;
         } else if (isLoaded && !fetched) {
@@ -125,16 +123,13 @@ class App extends React.Component {
                         <div className="card-body">
                             <div className="card-text">
                                 <div className="list-group">
-                                    <ProductsList
-                                        products={this.props.products}
-                                    />
+                                    <ProductsList />
                                 </div>
                             </div>
                         </div>
                         <div className="card-footer">
                             <div className="text-center">
                                 <ProductsPagination
-                                    products={this.props.products}
                                     handlePageChange={this.handlePageChange.bind(
                                         this
                                     )}
@@ -149,7 +144,14 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    products: state.product.products
+    products: state.product
+});
+const mapDispatchToProps = dispatch => ({
+    getProducts: (activePage, searchParams) =>
+        dispatch(productActions.getProducts(activePage, searchParams))
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Redirect } from "react-router-dom";
 
-import { logoutUser } from "../../requests/user";
+import { userActions } from "../../redux/actions/index";
 
 class Logout extends Component {
     componentDidMount() {
@@ -12,10 +12,7 @@ class Logout extends Component {
         if (typeof user !== "undefined") {
             history.push("/404");
         } else {
-            this.props.dispatch({
-                type: "FETCH_LOGOUT_USER",
-                payload: logoutUser
-            });
+            this.props.logoutUser();
 
             setTimeout(() => history.push("/"), 1000);
         }
@@ -29,7 +26,10 @@ class Logout extends Component {
 const mapStateToProps = state => ({
     user: state.user.user
 });
+const mapDispatchToProps = dispatch => ({
+    logoutUser: () => dispatch(userActions.logoutUser())
+});
 export default connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
 )(withRouter(Logout));
