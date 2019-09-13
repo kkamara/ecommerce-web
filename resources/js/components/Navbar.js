@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from "react";
 import { withRouter, Link, Redirect } from "react-router-dom";
 
-import { getCurrentUser } from "../requests/user";
+import { userActions } from "../redux/actions/index";
 import { connect } from "react-redux";
 
 import { APP_NAME } from "../constants";
@@ -41,10 +41,7 @@ class Navbar extends PureComponent {
     setIsAuth = isAuth => this.setState({ isAuth });
 
     loadCurrentUser() {
-        this.props.dispatch({
-            type: "FETCH_CURRENT_USER",
-            payload: getCurrentUser()
-        });
+        this.props.getCurrentUser();
     }
 
     render() {
@@ -265,4 +262,10 @@ const styles = {
 const mapStateToProps = state => ({
     current_user: state.user.user
 });
-export default connect(mapStateToProps)(withRouter(Navbar));
+const mapDispatchToProps = dispatch => ({
+    getCurrentUser: () => dispatch(userActions.getCurrentUser())
+});
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(Navbar));

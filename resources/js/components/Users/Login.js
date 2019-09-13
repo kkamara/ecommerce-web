@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Redirect } from "react-router-dom";
 
-import { loginUser } from "../../requests/user";
+import { userActions } from "../../redux/actions/index";
 
 class Login extends Component {
     state = {
@@ -53,10 +53,7 @@ class Login extends Component {
         } else {
             const { email, password } = this.state;
 
-            this.props.dispatch({
-                type: "POST_LOGIN_USER",
-                payload: loginUser(email, password)
-            });
+            this.props.loginUser(email, password);
         }
     };
 
@@ -187,7 +184,10 @@ class Login extends Component {
 const mapStateToProps = state => ({
     user: state.user.user
 });
+const mapDispatchToProps = dispatch => ({
+    loginUser: () => dispatch(userActions.loginUser())
+});
 export default connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
 )(withRouter(Login));

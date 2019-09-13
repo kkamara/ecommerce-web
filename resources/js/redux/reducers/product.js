@@ -1,3 +1,5 @@
+import { productActions } from "./types";
+
 const initialState = {
     products: {
         products: {},
@@ -12,34 +14,38 @@ const initialState = {
 };
 const productReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "FETCH_PRODUCTS_PENDING":
+        case productActions.GET_PRODUCTS_PENDING:
             return { ...state, fetched: false, isLoaded: false };
-            break;
-        case "FETCH_PRODUCTS_REJECTED":
-            return { ...state, fetched: false, isLoaded: true, error: action.payload };
-            break;
-        case "FETCH_PRODUCTS_FULFILLED":
+        case productActions.GET_PRODUCTS_ERROR:
+            return {
+                ...state,
+                fetched: false,
+                isLoaded: true,
+                error: action.payload
+            };
+        case productActions.GET_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 fetched: true,
                 isLoaded: true,
                 products: action.payload
             };
-            break;
-        case "FETCH_PRODUCT_PENDING":
+        case productActions.GET_PRODUCT_PENDING:
             return { ...state, fetched: false, isLoaded: false };
-            break;
-        case "FETCH_PRODUCT_REJECTED":
-            return { ...state, fetched: false, isLoaded: true, error: action.payload };
-            break;
-        case "FETCH_PRODUCT_FULFILLED":
+        case productActions.GET_PRODUCT_ERROR:
+            return {
+                ...state,
+                fetched: false,
+                isLoaded: true,
+                error: action.payload
+            };
+        case productActions.GET_PRODUCT_SUCCESS:
             return {
                 ...state,
                 fetched: true,
                 isLoaded: true,
                 product: action.payload
             };
-            break;
     }
 
     return state;

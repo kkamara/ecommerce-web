@@ -1,13 +1,12 @@
 import React from "react";
-import Pagination from "react-js-pagination";
 import { connect } from "react-redux";
+import Pagination from "react-js-pagination";
 
 class ProductsPagination extends React.Component {
     render() {
-        const { handlePageChange } = this.props;
-        const { products, isLoaded, fetched, activePage } = this.props.products;
+        const { handlePageChange, activePage, products } = this.props;
 
-        if (isLoaded && fetched) {
+        if (products.products.products.data.length) {
             return (
                 <div>
                     <Pagination
@@ -15,8 +14,8 @@ class ProductsPagination extends React.Component {
                         itemClass="page-item"
                         linkClass="page-link"
                         activePage={activePage}
-                        itemsCountPerPage={products.per_page}
-                        totalItemsCount={products.total}
+                        itemsCountPerPage={products.products.products.per_page}
+                        totalItemsCount={products.products.products.total}
                         pageRangeDisplayed={7}
                         onChange={handlePageChange}
                     />
@@ -29,6 +28,6 @@ class ProductsPagination extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    products: state.product.products
+    products: state.product
 });
 export default connect(mapStateToProps)(ProductsPagination);

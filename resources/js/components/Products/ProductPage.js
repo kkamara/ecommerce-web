@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { getProduct } from "../../requests/products";
+import { productActions } from "../../redux/actions/index";
 import ProductReviewList from "../ProductReviews/ProductReviewList";
 
 import Loader from "../Loader";
@@ -15,10 +15,7 @@ class ProductPage extends Component {
     loadProduct() {
         const { id } = this.props.match.params;
 
-        this.props.dispatch({
-            type: "FETCH_PRODUCT",
-            payload: getProduct(id)
-        });
+        this.props.getProduct(id);
     }
 
     render() {
@@ -135,5 +132,11 @@ class ProductPage extends Component {
 const mapStateToProps = state => ({
     product: state.product.product
 });
+const mapDispatchToProps = dispatch => ({
+    getProduct: id => dispatch(productActions.getProduct(id))
+});
 
-export default connect(mapStateToProps)(ProductPage);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ProductPage);
