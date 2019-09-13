@@ -9,26 +9,36 @@ import ProductQuickSearch from "./Products/ProductQuickSearch";
 
 class Navbar extends PureComponent {
     state = {
-        userRole: ""
+        userRole: "",
+        isAuth: false
     };
 
     componentDidMount() {
-        this.loadCurrentUser();
+        this.handleUserAuth();
     }
 
     componentDidUpdate() {
-        const { user } = this.props;
-
-        if (typeof user !== "undefined" && user.fetched === true) {
-            this.setUserRole();
-        }
+        this.handleUserAuth();
     }
 
-    setUserRole() {
+    handleUserAuth = () => {
+        const { fetched, user } = this.props.current_user;
+
+        if (typeof user !== "undefined" && fetched === true) {
+            this.setUserRole(user);
+            this.setIsAuth(
+                typeof user === "object" && user !== null ? true : false
+            );
+        }
+    };
+
+    setUserRole = user => {
         const newUserRole = user.role;
 
         this.setState({ userRole: newUserRole });
-    }
+    };
+
+    setIsAuth = isAuth => this.setState({ isAuth });
 
     loadCurrentUser() {
         this.props.dispatch({
@@ -38,13 +48,11 @@ class Navbar extends PureComponent {
     }
 
     render() {
-        const { userRole } = this.state;
+        const { userRole, isAuth } = this.state;
         const { location } = this.props;
         const { fetched, isLoaded, user } = this.props.current_user;
 
         const { navbarSpacing } = styles;
-
-        const isAuth = typeof user === "undefined" ? false : true;
 
         if (location.pathname === "/404") {
             return <div />;
