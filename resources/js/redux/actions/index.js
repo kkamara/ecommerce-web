@@ -1,4 +1,5 @@
 import userActions from "./user";
-import productActions from "./products";
+import productActions from "./product";
+import productsActions from "./products";
 
-export { userActions, productActions };
+export { userActions, productActions, productsActions };

@@ -1,15 +1,14 @@
 import { APP_URL } from "../../constants";
-import { productActions } from "../reducers/types";
+import { productsActions } from "../reducers/types";
 import { convertArrayToGETParams } from "../../utilities/methods";
 
 export default {
-    getProducts,
-    getProduct
+    getProducts
 };
 
 function getProducts(pageNumber = null, params = {}) {
     return async dispatch => {
-        dispatch(request(productActions.GET_PRODUCTS_PENDING));
+        dispatch(request(productsActions.GET_PRODUCTS_PENDING));
         let url = APP_URL + "/products";
 
         let GETVars = convertArrayToGETParams(params);
@@ -31,7 +30,7 @@ function getProducts(pageNumber = null, params = {}) {
             .then(res => res.json())
             .then(json => {
                 dispatch(
-                    success(productActions.GET_PRODUCTS_SUCCESS, {
+                    success(productsActions.GET_PRODUCTS_SUCCESS, {
                         products: json.products,
                         activePage: pageNumber,
                         searchParams: params
@@ -39,47 +38,7 @@ function getProducts(pageNumber = null, params = {}) {
                 );
             })
             .catch(err => {
-                dispatch(error(productActions.GET_PRODUCTS_ERROR, err));
-            });
-
-        function request(type) {
-            return {
-                type
-            };
-        }
-
-        function error(type, payload) {
-            return {
-                type,
-                payload
-            };
-        }
-
-        function success(type, payload) {
-            return {
-                type,
-                payload
-            };
-        }
-    };
-}
-
-function getProduct(id) {
-    return async dispatch => {
-        dispatch(request(productActions.GET_PRODUCTS_PENDING));
-        let url = APP_URL + `/products/${id}`;
-
-        url = encodeURI(url);
-        console.log("querying server for " + url);
-        const data = await fetch(url)
-            .then(res => res.json())
-            .then(json => {
-                dispatch(
-                    success(productActions.GET_PRODUCTS_SUCCESS, json.product)
-                );
-            })
-            .catch(err => {
-                dispatch(error(productActions.GET_PRODUCTS_ERROR, err));
+                dispatch(error(productsActions.GET_PRODUCTS_ERROR, err));
             });
 
         function request(type) {

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import querySearch from "query-string";
 
-import { productActions } from "../redux/actions/index";
+import { productsActions } from "../redux/actions/index";
 import ProductsList from "./Products/ProductsList.js";
 import ProductsPagination from "./Products/ProductsPagination.js";
 import ProductsSearch from "./Products/ProductsSearch.js";
@@ -144,11 +144,11 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    products: state.product
+    products: state.products
 });
 const mapDispatchToProps = dispatch => ({
     getProducts: (activePage, searchParams) =>
-        dispatch(productActions.getProducts(activePage, searchParams))
+        dispatch(productsActions.getProducts(activePage, searchParams))
 });
 
 export default connect(

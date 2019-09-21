@@ -20,6 +20,7 @@ class ProductPage extends Component {
 
     render() {
         const { isLoaded, fetched } = this.props.product;
+        console.log("this.props.product", this.props.product);
 
         if (!isLoaded) {
             return <Loader />;
@@ -130,7 +131,7 @@ class ProductPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    product: state.product.product
+    product: state.product
 });
 const mapDispatchToProps = dispatch => ({
     getProduct: id => dispatch(productActions.getProduct(id))

@@ -56,7 +56,7 @@ class ProductsList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    products: state.product
+    products: state.products
 });
 export default connect(
     mapStateToProps,
