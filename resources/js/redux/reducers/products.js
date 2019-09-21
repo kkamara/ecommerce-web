@@ -1,30 +1,30 @@
-import { productActions } from "./types";
+import { productsActions } from "./types";
 
 const initialState = {
-    product: {
-        product: {}
+    products: {
+        products: {}
     }
 };
-const productReducer = (state = initialState, action) => {
+const productsReducer = (state = initialState, action) => {
     switch (action.type) {
-        case productActions.GET_PRODUCT_PENDING:
+        case productsActions.GET_PRODUCTS_PENDING:
             return { ...state, fetched: false, isLoaded: false };
-        case productActions.GET_PRODUCT_ERROR:
+        case productsActions.GET_PRODUCTS_ERROR:
             return {
                 ...state,
                 fetched: false,
                 isLoaded: true,
                 error: action.payload
             };
-        case productActions.GET_PRODUCT_SUCCESS:
+        case productsActions.GET_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 fetched: true,
                 isLoaded: true,
-                product: action.payload
+                products: action.payload
             };
     }
 
     return state;
 };
-export default productReducer;
+export default productsReducer;
