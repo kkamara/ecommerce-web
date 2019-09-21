@@ -29,9 +29,24 @@ class ProductsSearch extends React.Component {
 
     handleChange = event => {
         const { name, value } = event.target;
-        this.setState({ [name]: value }, () => {
-            return this.props.handleProductSearch({ ...this.state });
-        });
+
+        if (name == "sort_by") {
+            this.setState({ [name]: value }, () => {
+                return this.props.handleProductSearch({ ...this.state });
+            });
+        } else {
+            this.setState({ [name]: value });
+        }
+    };
+
+    handleProductSearch = e => {
+        this.props.handleProductSearch({ ...this.state });
+    };
+
+    handleKeyDown = e => {
+        if (e.key === "Enter") {
+            this.handleProductSearch();
+        }
     };
 
     toggleClearHover() {
@@ -92,6 +107,7 @@ class ProductsSearch extends React.Component {
                             name="min_price"
                             value={min_price}
                             onChange={e => this.handleChange(e)}
+                            onKeyDown={this.handleKeyDown}
                             className="form-control"
                             placeholder="Min"
                         />
@@ -111,6 +127,7 @@ class ProductsSearch extends React.Component {
                             name="max_price"
                             value={max_price}
                             onChange={e => this.handleChange(e)}
+                            onKeyDown={this.handleKeyDown}
                             className="form-control"
                             placeholder="Max"
                         />
@@ -131,6 +148,7 @@ class ProductsSearch extends React.Component {
                             name="query"
                             value={query}
                             onChange={e => this.handleChange(e)}
+                            onKeyDown={this.handleKeyDown}
                             type="text"
                             className="form-control"
                             placeholder="Search..."
