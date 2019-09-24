@@ -1,13 +1,13 @@
 import { APP_URL } from "../../constants";
-import { productActions } from "../reducers/types";
+import { noauthCartActions } from "../reducers/types";
 
 export default {
-    getProduct
+    addToCart
 };
 
-function getProduct(id) {
+function addToCart(id) {
     return async dispatch => {
-        dispatch(request(productActions.GET_PRODUCT_PENDING));
+        dispatch(request(noauthCartActions.NOAUTH_ADD_TO_CART_PENDING));
         let url = APP_URL + `/products/${id}`;
 
         url = encodeURI(url);
@@ -16,11 +16,16 @@ function getProduct(id) {
             .then(res => res.json())
             .then(json => {
                 dispatch(
-                    success(productActions.GET_PRODUCT_SUCCESS, json.product)
+                    success(
+                        noauthCartActions.NOAUTH_ADD_TO_CART_SUCCESS,
+                        json.product
+                    )
                 );
             })
             .catch(err => {
-                dispatch(error(productActions.GET_PRODUCT_ERROR, err));
+                dispatch(
+                    error(noauthCartActions.NOAUTH_ADD_TO_CART_ERROR, err)
+                );
             });
 
         function request(type) {
