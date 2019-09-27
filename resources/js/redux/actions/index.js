@@ -1,7 +1,6 @@
-import userActions from "./user";
-import productActions from "./product";
 import productsActions from "./products";
-import authCart from "./authCart";
-import noauthCart from "./noauthCart";
+import productActions from "./product";
+import userActions from "./user";
+import cartActions from "./cart";
 
-export { userActions, productActions, productsActions, authCart, noauthCart };
+export { userActions, productActions, productsActions, cartActions };

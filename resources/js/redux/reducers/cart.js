@@ -1,26 +1,30 @@
-import { noauthCartActions } from "./types";
+import { cartActions } from "./types";
 
-const initialState = {};
-const noauthCartReducer = (state = initialState, action) => {
+const initialState = {
+    cart: {
+        cart: []
+    }
+};
+const cartReducer = (state = initialState, action) => {
     switch (action.type) {
-        case noauthCartActions.NOAUTH_ADD_TO_CART_PENDING:
+        case cartActions.ADD_TO_CART_PENDING:
             return { ...state, successful: false, isLoaded: false };
-        case noauthCartActions.NOAUTH_ADD_TO_CART_ERROR:
+        case cartActions.ADD_TO_CART_ERROR:
             return {
                 ...state,
                 successful: false,
                 isLoaded: true,
                 error: action.payload
             };
-        case noauthCartActions.NOAUTH_ADD_TO_CART_SUCCESS:
+        case cartActions.ADD_TO_CART_SUCCESS:
             return {
                 ...state,
                 successful: true,
                 isLoaded: true,
-                product: action.payload
+                cart: action.payload
             };
     }
 
     return state;
 };
-export default noauthCartReducer;
+export default cartReducer;
