@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 
-import { productActions } from "../../redux/actions/index";
+import { productActions, cartActions } from "../../redux/actions/index";
 import ProductReviewList from "../ProductReviews/ProductReviewList";
+import { addToCart } from "../../redux/actions/cart";
 
 import Loader from "../Loader";
 
@@ -18,12 +18,22 @@ class ProductPage extends Component {
         this.props.getProduct(id);
     }
 
+    addToCart = () => {
+        const { addToCart } = this.props;
+        const { id } = this.props.product.product.product;
+
+        addToCart(id);
+    };
+
+    _onAddToCart = e => this.addToCart();
+
     render() {
         const { isLoaded, fetched } = this.props.product;
-        console.log("this.props.product", this.props.product);
 
         if (!isLoaded) {
             return <Loader />;
+        } else if (!fetched) {
+            return <div>Error</div>;
         } else {
             const { current_user, userAuthenticated } = this.props;
             const { product, reviews } = this.props.product.product;
@@ -102,12 +112,13 @@ class ProductPage extends Component {
                                         </div>
                                     ) : (
                                         // href={`/products/add`}
-                                        <a
+                                        <button
                                             href="#"
                                             className="btn btn-primary btn-sm"
+                                            onClick={this._onAddToCart}
                                         >
                                             Add to cart
-                                        </a>
+                                        </button>
                                     )}
                                 </li>
                             </ul>
@@ -131,10 +142,12 @@ class ProductPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    product: state.product
+    product: state.product,
+    cart: state.cart.cart
 });
 const mapDispatchToProps = dispatch => ({
-    getProduct: id => dispatch(productActions.getProduct(id))
+    getProduct: id => dispatch(productActions.getProduct(id)),
+    addToCart: productID => dispatch(cartActions.addToCart(productID))
 });
 
 export default connect(

@@ -1,10 +1,10 @@
 import React, { PureComponent, Fragment } from "react";
-import { withRouter, Link, Redirect } from "react-router-dom";
-
-import { userActions } from "../redux/actions/index";
-import { connect } from "react-redux";
+import { withRouter, Link } from "react-router-dom";
 
 import { APP_NAME } from "../constants";
+import { userActions, cartActions } from "../redux/actions/index";
+import { connect } from "react-redux";
+
 import ProductQuickSearch from "./Products/ProductQuickSearch";
 
 class Navbar extends PureComponent {
@@ -15,6 +15,8 @@ class Navbar extends PureComponent {
 
     componentDidMount() {
         this.handleUserAuth();
+
+        this.props.getCart();
     }
 
     componentDidUpdate() {
@@ -48,7 +50,8 @@ class Navbar extends PureComponent {
         const { userRole, isAuth } = this.state;
         const { location } = this.props;
         const { fetched, isLoaded, user } = this.props.current_user;
-
+        const { cart } = this.props.cart;
+        console.log("cart", cart);
         const { navbarSpacing } = styles;
 
         if (location.pathname === "/404") {
@@ -234,14 +237,21 @@ class Navbar extends PureComponent {
                                             </li>
                                         </Fragment>
                                     )}
-                                    {/* <li className="nav-item">
-                    <a className="nav-link" href="{{ route('cartShow') }}">
-                        <span>
-                            <i className="fa fa-cart-plus" aria-hidden="true"></i>
-                        </span>
-                        <span>Cart ({{ $cartCount }})</span>
-                    </a>
-                </li> */}
+                                    <li className="nav-item">
+                                        <a
+                                            className="nav-link"
+                                            href="#"
+                                            // href="{{ route('cartShow') }}"
+                                        >
+                                            <span>
+                                                <i
+                                                    className="fa fa-cart-plus"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </span>
+                                            <span>Cart ({cart.length})</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -260,10 +270,12 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-    current_user: state.user.user
+    current_user: state.user.user,
+    cart: state.cart.cart
 });
 const mapDispatchToProps = dispatch => ({
-    getCurrentUser: () => dispatch(userActions.getCurrentUser())
+    getCurrentUser: () => dispatch(userActions.getCurrentUser()),
+    getCart: () => dispatch(cartActions.getCart())
 });
 export default connect(
     mapStateToProps,

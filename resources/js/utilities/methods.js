@@ -1,4 +1,6 @@
-export function convertArrayToGETParams(params) {
+import { TOKEN_NAME } from "../constants";
+
+export const convertArrayToGETParams = params => {
     let data = [];
     for (let key in params) {
         if (params[key].length > 0) {
@@ -6,4 +8,10 @@ export function convertArrayToGETParams(params) {
         }
     }
     return data.join("&");
-}
+};
+
+export const getAuthToken = () => {
+    const token = localStorage.getItem(TOKEN_NAME);
+
+    return token;
+};

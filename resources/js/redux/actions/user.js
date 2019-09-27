@@ -1,7 +1,6 @@
-import { APP_URL } from "../../constants";
+import { APP_URL, TOKEN_NAME } from "../../constants";
 import { userActions } from "../reducers/types";
-
-const tokenName = "recipe-toke";
+import { getAuthToken } from "../../utilities/methods";
 
 export default { loginUser, logoutUser, getCurrentUser };
 
@@ -22,7 +21,7 @@ function loginUser(email, password) {
         })
             .then(res => res.json())
             .then(json => {
-                localStorage.setItem(tokenName, json.token);
+                localStorage.setItem(TOKEN_NAME, json.token);
 
                 dispatch(
                     success(userActions.GET_CURRENT_USER_SUCCESS, json.user)
@@ -56,7 +55,7 @@ function loginUser(email, password) {
 
 function logoutUser() {
     return async dispatch => {
-        localStorage.removeItem(tokenName);
+        localStorage.removeItem(TOKEN_NAME);
 
         dispatch(pending(userActions.GET_CURRENT_USER_PENDING));
         dispatch(success(userActions.GET_CURRENT_USER_SUCCESS));
@@ -82,7 +81,7 @@ function getCurrentUser() {
         dispatch(request(userActions.GET_CURRENT_USER_PENDING));
 
         let url = APP_URL + "/user/authenticate";
-        const token = localStorage.getItem(tokenName);
+        const token = getAuthToken();
 
         if (null === token) {
             dispatch(
