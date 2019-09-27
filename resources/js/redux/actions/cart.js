@@ -6,15 +6,16 @@ export default {
     getCart
 };
 
-function addToCart(id) {
+function addToCart(ID) {
     return async dispatch => {
         dispatch(request(cartActions.ADD_TO_CART_PENDING));
-        // implement
-        let url = APP_URL + `/products/${id}`;
 
-        url = encodeURI(url);
+        let url = APP_URL + `/products/${ID}/store`;
+
         console.log("querying server for " + url);
-        await fetch(url)
+        await fetch(url, {
+            method: "POST"
+        })
             .then(res => res.json())
             .then(json => {
                 dispatch(

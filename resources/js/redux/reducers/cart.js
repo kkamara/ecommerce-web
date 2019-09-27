@@ -20,8 +20,7 @@ const cartReducer = (state = initialState, action) => {
             return {
                 ...state,
                 successful: true,
-                isLoaded: true,
-                cart: action.payload
+                isLoaded: true
             };
     }
 
