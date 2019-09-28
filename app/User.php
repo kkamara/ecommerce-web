@@ -10,7 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Helpers\SessionCart;
+use App\Helpers\CacheCart;
 use JWTAuth;
 
 use Validator;
@@ -239,13 +239,13 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Moves cache cart to db cart for this user on login.
      * 
-     * @param  array  $sessionCart
+     * @param  array  $cacheCart
      */
-    public function moveSessionCartToDbCart($sessionCart)
+    public function moveCacheCartToDbCart($cacheCart)
     {
         $userId = $this->attributes['id'];
         
-        foreach($sessionCart as $cc)
+        foreach($cacheCart as $cc)
         {
             if($cc['product']->user_id !== $userId)
             {
@@ -259,7 +259,7 @@ class User extends Authenticatable implements JWTSubject
             }
         }
 
-        SessionCart::clearSessionCart();
+        CacheCart::clearCacheCart();
     }
 
     /**
@@ -308,9 +308,9 @@ class User extends Authenticatable implements JWTSubject
     public function updateDbCartAmount($request)
     {
         /** Get existing cache cart */
-        $sessionCart = $this->getDbCart();
+        $cacheCart = $this->getDbCart();
 
-        foreach($sessionCart as $cc)
+        foreach($cacheCart as $cc)
         {
             /** Check if an amount value for this product was given in the request */
             $product_id = $cc['product']->id;
@@ -325,7 +325,7 @@ class User extends Authenticatable implements JWTSubject
             {
                 for($i=0; $i<$amount; $i++)
                 {
-                    /** Push to $sessionCart the product with new amount value */
+                    /** Push to $cacheCart the product with new amount value */
                     \App\Cart::insert([
                         'user_id' => $this->attributes['id'],
                         'product_id' => $product_id,

@@ -98,7 +98,7 @@ function getCurrentUser() {
             })
                 .then(res => res.json())
                 .then(json => {
-                    if ("undefined" == json.user) {
+                    if (undefined === json.user) {
                         dispatch(
                             error(
                                 userActions.GET_CURRENT_USER_ERROR,

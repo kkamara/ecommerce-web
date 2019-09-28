@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Helpers\SessionCart;
+use App\Helpers\CacheCart;
 use App\Product;
 use Auth;
 
@@ -47,7 +47,7 @@ class ProductController extends Controller
         }
         else
         {
-            SessionCart::addProductToSessionCart($product);
+            CacheCart::addProductToCacheCart($product);
         }
 
         return response()->json([

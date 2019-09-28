@@ -239,7 +239,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'SessionCart' => App\Helpers\SessionCartHelper::class,
+        'CacheCart' => App\Helpers\CacheCartHelper::class,
         'Common' => App\Helpers\CommonHelper::class,
 
     ],

@@ -2,31 +2,31 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Product;
 
-class SessionCart 
+class CacheCart 
 {
     /**
      * Adds a product to the user's session cart.
      * 
      * @param  \App\Product  $product
      */
-    public static function addProductToSessionCart(Product $product)
+    public static function addProductToCacheCart(Product $product)
     {
         /** Cookie will expire in 120 minutes */
         $expiresAt = now()->addMinutes(120);
 
         /** Get existing session cookie if set  */
-        $sessionCart = Session::get('cc');
+        $cacheCart = Cache::get('cc');
 
         /** Check is existing cookie is present */
-        if($sessionCart !== NULL && is_array($sessionCart))
+        if($cacheCart !== NULL && is_array($cacheCart))
         {
             $productAlreadyAdded = FALSE;
             /** Check if this product already exists in cart */
-            foreach($sessionCart as $cc)
+            foreach($cacheCart as $cc)
             {
                 if(is_array($cc) && in_array($product->id, $cc))
                 {
@@ -40,20 +40,20 @@ class SessionCart
                     'product' => $product->id,
                     'amount'  => 1,
                 );
-                array_push($sessionCart, $newItem);
-                Session::put('cc', $sessionCart, $expiresAt);
+                array_push($cacheCart, $newItem);
+                Cache::put('cc', $cacheCart, $expiresAt);
             }
         }
         else
         {
             /** Set a new session cart cookie with product as it's first item */
-            $sessionCart = array(
+            $cacheCart = array(
                 array(
                     'product' => $product->id,
                     'amount'  => 1,
                 )
             );
-            Session::put('cc', $sessionCart, $expiresAt);
+            Cache::put('cc', $cacheCart, $expiresAt);
         }
     }
 
@@ -62,14 +62,14 @@ class SessionCart
      * 
      * @return  array
      */
-    public static function getSessionCart()
+    public static function getCacheCart()
     {
-        $sessionCart = Session::get('cc');
+        $cacheCart = Cache::get('cc');
         $array = array();
 
-        if(isset($sessionCart))
+        if(isset($cacheCart))
         {
-            foreach($sessionCart as $cc)
+            foreach($cacheCart as $cc)
             {
                 $item = Product::where('id', $cc['product'])->first();
                 $amount = $cc['amount'];
@@ -89,13 +89,13 @@ class SessionCart
      * 
      * @param  \Illuminate\Http\Request  $request
      */
-    public static function updateSessionCartAmount(Request $request)
+    public static function updateCacheCartAmount(Request $request)
     {
         /** Get existing session cart */
-        $sessionCart = self::getSessionCart();
+        $cacheCart = self::getCacheCart();
         $array     = array();
 
-        foreach($sessionCart as $cc)
+        foreach($cacheCart as $cc)
         {
             /** Check if an amount value for this product was given in the request */
             $product_id = $cc['product']->id;
@@ -113,14 +113,14 @@ class SessionCart
 
         /** Set session cart equal to our updated products array */
         $expiresAt = now()->addMinutes(120);
-        Session::put('cc', $array, $expiresAt);
+        Cache::put('cc', $array, $expiresAt);
     }
 
     /**
      * Remove the session cart cookie.
      */
-    public static function clearSessionCart()
+    public static function clearCacheCart()
     {
-        Session::forget('cc');
+        Cache::forget('cc');
     }
 }

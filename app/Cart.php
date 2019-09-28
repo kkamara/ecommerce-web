@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use App\Helpers\SessionCart;
+use App\Helpers\CacheCart;
 use Auth;
 
 class Cart extends Model
@@ -43,16 +43,16 @@ class Cart extends Model
         if(Auth::check())
         {
             $user = auth()->user();
-            $sessionCart = $user->getDbCart();
+            $cacheCart = $user->getDbCart();
         }
         else
         {
-            $sessionCart = Session::get('cc');
+            $cacheCart = Cache::get('cc');
         }
 
-        if(empty($sessionCart)) return 0;
+        if(empty($cacheCart)) return 0;
 
-        foreach($sessionCart as $cc)
+        foreach($cacheCart as $cc)
         {
             $count += $cc['amount'];
         }
@@ -73,16 +73,16 @@ class Cart extends Model
         if(Auth::check())
         {
             $user = auth()->user();
-            $sessionCart = $user->getDbCart();
+            $cacheCart = $user->getDbCart();
         }
         else
         {
-            $sessionCart = SessionCart::getSessionCart();
+            $cacheCart = CacheCart::getCacheCart();
         }
 
-        if(empty($sessionCart)) return '£0.00';
+        if(empty($cacheCart)) return '£0.00';
 
-        foreach($sessionCart as $cc)
+        foreach($cacheCart as $cc)
         {
             $price += $cc['product']->cost * $cc['amount'];
         }
