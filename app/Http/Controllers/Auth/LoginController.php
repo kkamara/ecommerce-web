@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Helpers\SessionCart;
+use App\Helpers\CacheCart;
 use Illuminate\Http\Request;
 use Validator;
 use JWTAuth;

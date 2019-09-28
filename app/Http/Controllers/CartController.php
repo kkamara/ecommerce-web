@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Helpers\SessionCart;
+use App\Helpers\CacheCart;
 use App\Cart;
 use Auth;
 
@@ -30,7 +30,7 @@ class CartController extends Controller
         }
         else
         {
-            $cart = SessionCart::getSessionCart();
+            $cart = CacheCart::getCacheCart();
         }
 
         if(false == $cart) 
@@ -65,7 +65,7 @@ class CartController extends Controller
         }
         else
         {
-            SessionCart::updateSessionCartAmount($request);
+            CacheCart::updateCacheCartAmount($request);
         }
 
         return response()->json(["message"=>"Successful"]);

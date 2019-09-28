@@ -19,7 +19,7 @@ function addToCart(ID) {
             .then(res => res.json())
             .then(json => {
                 dispatch(
-                    success(cartActions.ADD_TO_CART_SUCCESS, json.product)
+                    success(cartActions.ADD_TO_CART_SUCCESS, json.message)
                 );
             })
             .catch(err => {
@@ -58,7 +58,7 @@ function getCart() {
         await fetch(url)
             .then(res => res.json())
             .then(json => {
-                dispatch(success(cartActions.GET_CART_SUCCESS, json.product));
+                dispatch(success(cartActions.GET_CART_SUCCESS, json.cart));
             })
             .catch(err => {
                 dispatch(error(cartActions.GET_CART_ERROR, err));

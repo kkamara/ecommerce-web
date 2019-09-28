@@ -49,9 +49,8 @@ class Navbar extends PureComponent {
     render() {
         const { userRole, isAuth } = this.state;
         const { location } = this.props;
-        const { fetched, isLoaded, user } = this.props.current_user;
         const { cart } = this.props.cart;
-        console.log("cart", cart);
+
         const { navbarSpacing } = styles;
 
         if (location.pathname === "/404") {
@@ -271,7 +270,7 @@ const styles = {
 
 const mapStateToProps = state => ({
     current_user: state.user.user,
-    cart: state.cart.cart
+    cart: state.cart
 });
 const mapDispatchToProps = dispatch => ({
     getCurrentUser: () => dispatch(userActions.getCurrentUser()),
