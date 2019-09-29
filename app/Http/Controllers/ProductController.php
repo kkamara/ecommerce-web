@@ -47,7 +47,7 @@ class ProductController extends Controller
         }
         else
         {
-            CacheCart::addProductToCacheCart($product);
+            CacheCart::addProductToCacheCart($product, $request->get("client_hash_key"));
         }
 
         return response()->json([

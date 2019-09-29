@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 
-import { userActions } from "../redux/actions/index";
+import { currentUserActions } from "../redux/actions/index";
 import { connect } from "react-redux";
-import { CACHE_HASH_NAME } from "../constants";
 import { getCacheHashToken } from "../utilities/methods";
 
 export default function(ComposedComponent) {
@@ -28,10 +27,7 @@ export default function(ComposedComponent) {
                 null === getCacheHashToken() &&
                 (current_user === undefined || !current_user.user)
             )
-                localStorage.setItem(
-                    CACHE_HASH_NAME,
-                    Math.floor(new Date().getTime() * Math.random(0, 1000000))
-                );
+                storeNewCacheHashToken();
         };
 
         render() {
@@ -51,10 +47,10 @@ export default function(ComposedComponent) {
     }
 
     const mapStateToProps = state => ({
-        current_user: state.user.user
+        current_user: state.current_user
     });
     const mapDispatchToProps = dispatch => ({
-        getCurrentUser: () => dispatch(userActions.getCurrentUser())
+        getCurrentUser: () => dispatch(currentUserActions.getCurrentUser())
     });
 
     return connect(

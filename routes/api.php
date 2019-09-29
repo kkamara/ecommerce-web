@@ -125,7 +125,7 @@ Route::prefix('v1')->group(function () {
     | Cart Routes
     |--------------------------------------------------------------------------
     */
-    Route::get('/cart', 'CartController@show')->name('cartShow');
+    Route::post('/cart', 'CartController@show')->name('cartShow');
     Route::put('/cart/update', 'CartController@update')->name('cartUpdate');
 
 });

@@ -24,6 +24,7 @@ class Logout extends Component {
 }
 
 const mapStateToProps = state => ({
+    current_user: state.current_user.user,
     user: state.user.user
 });
 const mapDispatchToProps = dispatch => ({

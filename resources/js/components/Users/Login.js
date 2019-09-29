@@ -74,7 +74,7 @@ class Login extends Component {
     render() {
         const { email, password, errors, showErrors } = this.state;
 
-        const { user } = this.props.user;
+        const { user } = this.props;
 
         if (typeof user !== "undefined") {
             return <Redirect to="/" />;
@@ -182,10 +182,11 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
+    current_user: state.current_user.user,
     user: state.user.user
 });
 const mapDispatchToProps = dispatch => ({
-    loginUser: () => dispatch(userActions.loginUser())
+    loginUser: (email, pwd) => dispatch(userActions.loginUser(email, pwd))
 });
 export default connect(
     mapStateToProps,

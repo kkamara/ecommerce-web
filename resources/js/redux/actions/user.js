@@ -1,12 +1,11 @@
 import { APP_URL, TOKEN_NAME } from "../../constants";
 import { userActions } from "../reducers/types";
-import { getAuthToken } from "../../utilities/methods";
 
-export default { loginUser, logoutUser, getCurrentUser };
+export default { loginUser, logoutUser };
 
 function loginUser(email, password) {
     return async dispatch => {
-        dispatch(request(userActions.GET_CURRENT_USER_PENDING));
+        dispatch(request(userActions.POST_LOGIN_USER_PENDING));
         let url = APP_URL + "/user/login";
         url = encodeURI(url);
 
@@ -24,11 +23,11 @@ function loginUser(email, password) {
                 localStorage.setItem(TOKEN_NAME, json.token);
 
                 dispatch(
-                    success(userActions.GET_CURRENT_USER_SUCCESS, json.user)
+                    success(userActions.POST_LOGIN_USER_SUCCESS, json.user)
                 );
             })
             .catch(err => {
-                dispatch(error(userActions.GET_CURRENT_USER_ERROR, err));
+                dispatch(error(userActions.POST_LOGIN_USER_ERROR, err));
             });
 
         function request(type) {
@@ -68,71 +67,6 @@ function logoutUser() {
         }
 
         function success(type) {
-            return {
-                type,
-                payload
-            };
-        }
-    };
-}
-
-function getCurrentUser() {
-    return async dispatch => {
-        dispatch(request(userActions.GET_CURRENT_USER_PENDING));
-
-        let url = APP_URL + "/user/authenticate";
-        const token = getAuthToken();
-
-        if (null === token) {
-            dispatch(
-                error(userActions.GET_CURRENT_USER_ERROR, "No token stored")
-            );
-        } else {
-            url = encodeURI(url);
-            console.log("querying server for " + url);
-            await fetch(url, {
-                method: "GET",
-                headers: new Headers({
-                    Authorization: `Bearer ${token}`
-                })
-            })
-                .then(res => res.json())
-                .then(json => {
-                    if (undefined === json.user) {
-                        dispatch(
-                            error(
-                                userActions.GET_CURRENT_USER_ERROR,
-                                json.error
-                            )
-                        );
-                    } else {
-                        dispatch(
-                            success(
-                                userActions.GET_CURRENT_USER_SUCCESS,
-                                json.user
-                            )
-                        );
-                    }
-                })
-                .catch(err => {
-                    dispatch(error(userActions.GET_CURRENT_USER_ERROR, err));
-                });
-        }
-
-        function request(type) {
-            return {
-                type
-            };
-        }
-
-        function error(type, payload) {
-            return {
-                type,
-                payload
-            };
-        }
-
-        function success(type, payload) {
             return {
                 type,
                 payload

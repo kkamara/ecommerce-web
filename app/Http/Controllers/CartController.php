@@ -30,7 +30,7 @@ class CartController extends Controller
         }
         else
         {
-            $cart = CacheCart::getCacheCart();
+            $cart = CacheCart::getCacheCart($request->get("client_hash_key"));
         }
 
         if(false == $cart) 

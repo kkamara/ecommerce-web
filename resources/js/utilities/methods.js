@@ -1,4 +1,4 @@
-import { TOKEN_NAME, CACHE_HASH } from "../constants";
+import { TOKEN_NAME, CACHE_HASH_NAME } from "../constants";
 
 export const convertArrayToGETParams = params => {
     let data = [];
@@ -17,7 +17,14 @@ export const getAuthToken = () => {
 };
 
 export const getCacheHashToken = () => {
-    const token = localStorage.getItem("CACHE_HASH");
-    console.log("token", token);
-    return token;
+    const token = localStorage.getItem(CACHE_HASH_NAME);
+
+    if (null) return token;
+};
+
+export const storeNewCacheHashToken = () => {
+    localStorage.setItem(
+        CACHE_HASH_NAME,
+        Math.floor(new Date().getTime() * Math.random(0, 1000000))
+    );
 };

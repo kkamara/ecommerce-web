@@ -93,7 +93,8 @@ class ProductPage extends Component {
                                     )}
                                 </li>
                                 <li className="list-group-item">
-                                    {userAuthenticated && doesUserOwnProduct ? (
+                                    {userAuthenticated &&
+                                    product.user_id === current_user.user.id ? (
                                         <div>
                                             {/* href={`/vendor/${current_user.user.company.slug}/products/${product.id}/edit`} */}
                                             <a

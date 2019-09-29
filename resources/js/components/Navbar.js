@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from "react";
 import { withRouter, Link } from "react-router-dom";
 
 import { APP_NAME } from "../constants";
-import { userActions, cartActions } from "../redux/actions/index";
+import { currentUserActions, cartActions } from "../redux/actions/index";
 import { connect } from "react-redux";
 
 import ProductQuickSearch from "./Products/ProductQuickSearch";
@@ -269,11 +269,11 @@ const styles = {
 };
 
 const mapStateToProps = state => ({
-    current_user: state.user.user,
+    current_user: state.current_user,
     cart: state.cart
 });
 const mapDispatchToProps = dispatch => ({
-    getCurrentUser: () => dispatch(userActions.getCurrentUser()),
+    getCurrentUser: () => dispatch(currentUserActions.getCurrentUser()),
     getCart: () => dispatch(cartActions.getCart())
 });
 export default connect(

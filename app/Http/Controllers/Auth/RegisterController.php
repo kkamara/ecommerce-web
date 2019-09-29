@@ -136,7 +136,7 @@ class RegisterController extends Controller
         UserPaymentConfig::create($data['user_payment_config']);
 
         // // add to cart if cache cart not empty
-        $cacheCart = CacheCart::getCacheCart();
+        $cacheCart = CacheCart::getCacheCart($request->get("client_hash_key"));
         if(!empty($cacheCart))
         {
             $user->moveCacheCartToDbCart($cacheCart);

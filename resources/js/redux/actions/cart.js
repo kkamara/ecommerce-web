@@ -55,7 +55,7 @@ function getCart() {
 
         url = encodeURI(url);
         console.log("querying server for " + url);
-        await fetch(url)
+        await fetch(url, { method: "POST" })
             .then(res => res.json())
             .then(json => {
                 dispatch(success(cartActions.GET_CART_SUCCESS, json.cart));

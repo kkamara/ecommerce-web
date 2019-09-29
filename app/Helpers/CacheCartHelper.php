@@ -12,14 +12,15 @@ class CacheCart
      * Adds a product to the user's session cart.
      * 
      * @param  \App\Product  $product
+     * @param  int           $client_hash_key
      */
-    public static function addProductToCacheCart(Product $product)
+    public static function addProductToCacheCart(Product $product, $client_hash_key)
     {
         /** Cookie will expire in 120 minutes */
         $expiresAt = now()->addMinutes(120);
 
         /** Get existing session cookie if set  */
-        $cacheCart = Cache::get('cc');
+        $cacheCart = Cache::get($client_hash_key);
 
         /** Check is existing cookie is present */
         if($cacheCart !== NULL && is_array($cacheCart))
@@ -41,7 +42,7 @@ class CacheCart
                     'amount'  => 1,
                 );
                 array_push($cacheCart, $newItem);
-                Cache::put('cc', $cacheCart, $expiresAt);
+                Cache::put($client_hash_key, $cacheCart, $expiresAt);
             }
         }
         else
@@ -53,18 +54,19 @@ class CacheCart
                     'amount'  => 1,
                 )
             );
-            Cache::put('cc', $cacheCart, $expiresAt);
+            Cache::put($client_hash_key, $cacheCart, $expiresAt);
         }
     }
 
     /**
      * Returns the user's session cart.
      * 
+     * @param   int     $client_hash_key
      * @return  array
      */
-    public static function getCacheCart()
+    public static function getCacheCart($client_hash_key)
     {
-        $cacheCart = Cache::get('cc');
+        $cacheCart = Cache::get($client_hash_key);
         $array = array();
 
         if(isset($cacheCart))
@@ -92,7 +94,7 @@ class CacheCart
     public static function updateCacheCartAmount(Request $request)
     {
         /** Get existing session cart */
-        $cacheCart = self::getCacheCart();
+        $cacheCart = self::getCacheCart($request->get("client_hash_key"));
         $array     = array();
 
         foreach($cacheCart as $cc)
@@ -113,14 +115,16 @@ class CacheCart
 
         /** Set session cart equal to our updated products array */
         $expiresAt = now()->addMinutes(120);
-        Cache::put('cc', $array, $expiresAt);
+        Cache::put($client_hash_key, $array, $expiresAt);
     }
 
     /**
      * Remove the session cart cookie.
+     * 
+     * @param int $client_hash_key
      */
-    public static function clearCacheCart()
+    public static function clearCacheCart($client_hash_key)
     {
-        Cache::forget('cc');
+        Cache::forget($client_hash_key);
     }
 }
