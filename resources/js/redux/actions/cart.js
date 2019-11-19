@@ -58,7 +58,13 @@ function getCart() {
         await fetch(url, { method: "POST" })
             .then(res => res.json())
             .then(json => {
-                dispatch(success(cartActions.GET_CART_SUCCESS, json.cart));
+                dispatch(
+                    success(cartActions.GET_CART_SUCCESS, {
+                        count: json.count,
+                        items: json.cart,
+                        cost: json.cost
+                    })
+                );
             })
             .catch(err => {
                 dispatch(error(cartActions.GET_CART_ERROR, err));

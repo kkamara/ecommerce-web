@@ -8,7 +8,7 @@ use App\Cart;
 use Auth;
 
 class CartController extends Controller
-{    
+{
     /**
      * Display the specified resource.
      *
@@ -23,7 +23,7 @@ class CartController extends Controller
         {
             return redirect()->route("login");
         }
-        
+
         if(null !== $user)
         {
             $cart = $user->getDbCart();
@@ -33,13 +33,16 @@ class CartController extends Controller
             $cart = CacheCart::getCacheCart($request->get("client_hash_key"));
         }
 
-        if(false == $cart) 
+        if(false == $cart)
         {
             $cart = array();
         }
 
+        $cost = Cart::price($request->get("client_hash_key"));
+        $count = Cart::count($request->get("client_hash_key"));
+
         $message = "Successful";
-        return response()->json(compact('cart', "message"));
+        return response()->json(compact("cart", "cost", "count", "message"));
     }
 
     /**
@@ -50,7 +53,7 @@ class CartController extends Controller
      */
     public function update(Request $request)
     {
-        
+
 
         $user = \App\User::attemptAuth();
 

@@ -24,15 +24,16 @@ class AppServiceProvider extends ServiceProvider
 
         if ($this->app->environment('local', 'testing', 'staging')) {
             $this->app->register(DuskServiceProvider::class);
-         }
+        }
+        /*
+            view()->composer(['layouts.navbar', 'cart.show', 'order_history.create'], function($view) {
+                $view->with('cartCount', \App\Cart::count());
+            });
 
-        view()->composer(['layouts.navbar', 'cart.show', 'order_history.create'], function($view) {
-            $view->with('cartCount', \App\Cart::count());
-        });
-
-        view()->composer(['cart.show', 'order_history.create'], function($view) {
-            $view->with('cartPrice', \App\Cart::price());
-        });
+            view()->composer(['cart.show', 'order_history.create'], function($view) {
+                $view->with('cartPrice', \App\Cart::price());
+            });
+        */
     }
 
     /**

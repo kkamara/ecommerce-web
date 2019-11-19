@@ -240,7 +240,7 @@ class Navbar extends PureComponent {
                                         <a
                                             className="nav-link"
                                             href="#"
-                                            // href="{{ route('cartShow') }}"
+                                            href="/cart"
                                         >
                                             <span>
                                                 <i
@@ -276,7 +276,4 @@ const mapDispatchToProps = dispatch => ({
     getCurrentUser: () => dispatch(currentUserActions.getCurrentUser()),
     getCart: () => dispatch(cartActions.getCart())
 });
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withRouter(Navbar));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

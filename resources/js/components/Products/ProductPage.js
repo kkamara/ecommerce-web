@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { productActions, cartActions } from "../../redux/actions/index";
 import ProductReviewList from "../ProductReviews/ProductReviewList";
-import { addToCart } from "../../redux/actions/cart";
 
 import Loader from "../Loader";
 
@@ -28,11 +27,11 @@ class ProductPage extends Component {
     _onAddToCart = e => this.addToCart();
 
     render() {
-        const { isLoaded, fetched } = this.props.product;
+        const { isLoaded, fetched: productsFetched } = this.props.product;
 
         if (!isLoaded) {
             return <Loader />;
-        } else if (!fetched) {
+        } else if (!productsFetched) {
             return <div>Error</div>;
         } else {
             const { current_user, userAuthenticated } = this.props;
@@ -143,15 +142,12 @@ class ProductPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    product: state.product,
-    cart: state.cart.cart
+    current_user: state.current_user,
+    product: state.product
 });
 const mapDispatchToProps = dispatch => ({
     getProduct: id => dispatch(productActions.getProduct(id)),
     addToCart: productID => dispatch(cartActions.addToCart(productID))
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ProductPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductPage);
