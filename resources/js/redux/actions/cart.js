@@ -40,6 +40,7 @@ function addToCart(ID) {
         }
 
         function success(type, payload) {
+            dispatch(getCart());
             return {
                 type,
                 payload
