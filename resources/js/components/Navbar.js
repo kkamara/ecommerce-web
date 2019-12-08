@@ -248,7 +248,7 @@ class Navbar extends PureComponent {
                                                     aria-hidden="true"
                                                 ></i>
                                             </span>
-                                            <span>Cart ({cart.length})</span>
+                                            <span>Cart ({cart.count})</span>
                                         </a>
                                     </li>
                                 </ul>
