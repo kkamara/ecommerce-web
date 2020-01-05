@@ -24,13 +24,20 @@ class CartController extends Controller
             return redirect()->route("login");
         }
 
+        $client_hash_key = $request->get("client_hash_key");
+
         if(null !== $user)
         {
             $cart = $user->getDbCart();
         }
         else
         {
-            $cart = CacheCart::getCacheCart($request->get("client_hash_key"));
+            if ($client_hash_key === null) {
+                return response()->json([
+                    "message" => "Client hash key not given"
+                ], 409);
+            }
+            $cart = CacheCart::getCacheCart($client_hash_key);
         }
 
         if(false == $cart)
@@ -38,8 +45,8 @@ class CartController extends Controller
             $cart = array();
         }
 
-        $cost = Cart::price($request->get("client_hash_key"));
-        $count = Cart::count($request->get("client_hash_key"));
+        $cost = Cart::price($client_hash_key);
+        $count = Cart::count($client_hash_key);
 
         $message = "Successful";
         return response()->json(compact("cart", "cost", "count", "message"));
@@ -53,8 +60,6 @@ class CartController extends Controller
      */
     public function update(Request $request)
     {
-
-
         $user = \App\User::attemptAuth();
 
         if(null === $user && !empty($token))

@@ -18,13 +18,16 @@ export const getAuthToken = () => {
 
 export const getCacheHashToken = () => {
     const token = localStorage.getItem(CACHE_HASH_NAME);
-
-    if (null) return token;
+    console.log("token", token);
+    if (!token) return storeNewCacheHashToken();
+    return token
 };
 
 export const storeNewCacheHashToken = () => {
+    const result = Math.floor(new Date().getTime() * Math.random(0, 1000000))
     localStorage.setItem(
         CACHE_HASH_NAME,
-        Math.floor(new Date().getTime() * Math.random(0, 1000000))
+        result
     );
+    return result;
 };

@@ -35,14 +35,22 @@ class LoginController extends Controller
     protected $redirectTo = '/';
 
     /**
-     * Authenticate user 
-     * 
+     * Authenticate user
+     *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
     {
         $message = "Unsuccessful Login";
+
+        $client_hash_key = $request->get("client_hash_key");
+
+        if ($client_hash_key === null) {
+            return response()->json([
+                "message" => "Client hash key not given"
+            ], 409);
+        }
 
         $validator = Validator::make($request->all(), [
             'email' => 'required',
@@ -59,17 +67,17 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        try 
+        try
         {
-            if (! $token = JWTAuth::attempt($credentials)) 
+            if (! $token = JWTAuth::attempt($credentials))
             {
                 return response()->json([
                     'error' => 'invalid_credentials',
                     "message" => $message,
                 ], 400);
             }
-        } 
-        catch (JWTException $e) 
+        }
+        catch (JWTException $e)
         {
             return response()->json([
                 'error' => 'could_not_create_token',
@@ -77,9 +85,24 @@ class LoginController extends Controller
             ], 500);
         }
 
-        $user = \App\User::where("email", $credentials["email"])->first()->getAllData();
+        $user = \App\User::where("email", $credentials["email"])->first();
+        $responseData = $user->getAllData();
+
+        // add to cart if cache cart not empty
+        $cacheCart = CacheCart::getCacheCart($client_hash_key);
+        if(!empty($cacheCart))
+        {
+            $user->moveCacheCartToDbCart($cacheCart, $client_hash_key);
+        }
+
+        $cart = $user->getDbCart();
 
         $message = "Successful Login";
-        return response()->json(compact('token', "message", "user"));
+        return response()->json(
+            array_merge(
+                ["user" => $responseData],
+                compact("message", "token", "cart")
+            )
+        );
     }
 }

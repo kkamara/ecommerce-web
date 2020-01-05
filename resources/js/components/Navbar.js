@@ -16,11 +16,21 @@ class Navbar extends PureComponent {
     componentDidMount() {
         this.handleUserAuth();
 
-        this.props.getCart();
+        this.getCart();
     }
 
     componentDidUpdate() {
         this.handleUserAuth();
+    }
+
+    getCart() {
+        const { fetched, user } = this.props.current_user;
+
+        if (typeof user !== "undefined" && fetched === true) {
+            this.props.getCart(user);
+        } else {
+            this.props.getCart();
+        }
     }
 
     handleUserAuth = () => {
@@ -54,7 +64,7 @@ class Navbar extends PureComponent {
         const { navbarSpacing } = styles;
 
         if (location.pathname === "/404") {
-            return <div />;
+            return null;
         } else {
             return (
                 <Fragment>
@@ -274,6 +284,6 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     getCurrentUser: () => dispatch(currentUserActions.getCurrentUser()),
-    getCart: () => dispatch(cartActions.getCart())
+    getCart: (user=null) => dispatch(cartActions.getCart(user))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

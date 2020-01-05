@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Product;
 
-class CacheCart 
+class CacheCart
 {
     /**
      * Adds a product to the user's session cart.
-     * 
+     *
      * @param  \App\Product  $product
      * @param  int           $client_hash_key
      */
@@ -60,7 +60,7 @@ class CacheCart
 
     /**
      * Returns the user's session cart.
-     * 
+     *
      * @param   int     $client_hash_key
      * @return  array
      */
@@ -88,7 +88,7 @@ class CacheCart
 
     /**
      * Updates the respective number of products in the user's session cart.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      */
     public static function updateCacheCartAmount(Request $request)
@@ -120,7 +120,7 @@ class CacheCart
 
     /**
      * Remove the session cart cookie.
-     * 
+     *
      * @param int $client_hash_key
      */
     public static function clearCacheCart($client_hash_key)

@@ -42,6 +42,14 @@ class RegisterController extends Controller
 
         $input = $request->input();
 
+        $client_hash_key = $request->get("client_hash_key");
+
+        if ($client_hash_key === null) {
+            return response()->json([
+                "message" => "Client hash key not given"
+            ], 409);
+        }
+
         if(true === $registerErrors['present'])
         {
             return response()->json([
@@ -135,11 +143,11 @@ class RegisterController extends Controller
         // create user payment config
         UserPaymentConfig::create($data['user_payment_config']);
 
-        // // add to cart if cache cart not empty
+        // add to cart if cache cart not empty
         $cacheCart = CacheCart::getCacheCart($request->get("client_hash_key"));
         if(!empty($cacheCart))
         {
-            $user->moveCacheCartToDbCart($cacheCart);
+            $user->moveCacheCartToDbCart($cacheCart, $client_hash_key);
         }
 
         if($validator->fails())

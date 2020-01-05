@@ -15,26 +15,26 @@ class UserController extends Controller
     public function authenticate()
     {
         $message = "Unsuccessful";
-        try 
+        try
         {
-            if (! $user = JWTAuth::parseToken()->authenticate()) 
+            if (! $user = JWTAuth::parseToken()->authenticate())
             {
                 $response = array_merge(['user_not_found'], compact("message"));
                 return response()->json($response, 404);
             }
-        } 
-        catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) 
+        }
+        catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
         {
             $response = array_merge(['token_expired'], compact("message"));
             return response()->json($response, $e->getStatusCode());
-        } 
-        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) 
+        }
+        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
         {
             $response = array_merge(['token_invalid'], compact("message"));
             return response()->json($response, $e->getStatusCode());
 
-        } 
-        catch (\Tymon\JWTAuth\Exceptions\JWTException $e) 
+        }
+        catch (\Tymon\JWTAuth\Exceptions\JWTException $e)
         {
             $response = array_merge(['token_absent'], compact("message"));
             return response()->json($response, $e->getStatusCode());
@@ -42,11 +42,17 @@ class UserController extends Controller
 
         $message = "Successful";
 
-        $user = $user->getAllData();
+        $responseData = $user->getAllData();
+        $cart = $user->getDbCart();
 
-        return response()->json(compact('user', "message"));
+        return response()->json(
+            array_merge(
+                ["user" => $responseData],
+                compact("message", "cart")
+            )
+        );
     }
-    
+
     /**
      * Update the specified resource in storage.
      *

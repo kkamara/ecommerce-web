@@ -1,5 +1,6 @@
-import { APP_URL } from "../../constants";
+import { getCacheHashToken, getAuthToken } from "../../utilities/methods";
 import { cartActions } from "../reducers/types";
+import { APP_URL } from "../../constants";
 
 export default {
     addToCart,
@@ -11,6 +12,8 @@ function addToCart(ID) {
         dispatch(request(cartActions.ADD_TO_CART_PENDING));
 
         let url = APP_URL + `/products/${ID}/store`;
+        url += `?client_hash_key=${getCacheHashToken()}`;
+        url = encodeURI(url)
 
         console.log("querying server for " + url);
         await fetch(url, {
@@ -49,14 +52,27 @@ function addToCart(ID) {
     };
 }
 
-function getCart() {
+function getCart(user) {
     return async dispatch => {
         dispatch(request(cartActions.GET_CART_PENDING));
         let url = APP_URL + `/cart`;
+        console.log("user", user);
+        let headers;
+        if (user) {
+            headers = new Headers({
+                Authorization: `Bearer ${getAuthToken()}`
+            });
+        } else {
+            url += `?client_hash_key=${getCacheHashToken()}`;
+        }
 
         url = encodeURI(url);
+
         console.log("querying server for " + url);
-        await fetch(url, { method: "POST" })
+        await fetch(url, {
+            method: "POST",
+            headers
+        })
             .then(res => res.json())
             .then(json => {
                 dispatch(

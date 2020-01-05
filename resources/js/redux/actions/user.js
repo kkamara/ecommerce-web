@@ -1,3 +1,4 @@
+import { getCacheHashToken } from "../../utilities/methods";
 import { APP_URL, TOKEN_NAME } from "../../constants";
 import { userActions } from "../reducers/types";
 
@@ -7,6 +8,7 @@ function loginUser(email, password) {
     return async dispatch => {
         dispatch(request(userActions.POST_LOGIN_USER_PENDING));
         let url = APP_URL + "/user/login";
+        url += `?client_hash_key=${getCacheHashToken()}`;
         url = encodeURI(url);
 
         let body = new FormData();

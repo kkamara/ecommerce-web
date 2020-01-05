@@ -22,7 +22,7 @@ class User extends Authenticatable implements JWTSubject
 
     /** This model uses the SoftDeletes trait for a deleted_at datetime column. */
     use SoftDeletes;
-    
+
     /** This model uses the HasRoles trait for a user being able to have a role. */
     use HasRoles;
 
@@ -44,59 +44,59 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Attributes to automatically append onto the response.
-     * 
+     *
      * @var array
      */
     protected $appends = [
-        'name', 'path', 
+        'name', 'path',
     ];
 
-    /** 
+    /**
      * This models immutable date values.
-     * 
+     *
      * @var array
      */
     protected $dates = ['deleted_at'];
 
     public function getJWTIdentifier()
     {
-        return $this->getKey(); 
+        return $this->getKey();
     }
 
     public function getJWTCustomClaims()
     {
         return [];
-    }    
-    
+    }
+
     public function setPasswordAttribute($password)
     {
         if ( !empty($password) ) {
             $this->attributes['password'] = bcrypt($password);
         }
-    }  
+    }
 
     /**
      * Attempt to sign in user using JWT token
-     * 
+     *
      * @return User | null
      */
     public static function attemptAuth()
     {
-        try 
+        try
         {
             $parse = JWTAuth::ParseToken();
             $result = JWTAuth::toUser($parse);
-        } 
-        catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) 
+        }
+        catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
         {
             $result = null;
-        } 
-        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) 
+        }
+        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
         {
             $result = null;
 
-        } 
-        catch (\Tymon\JWTAuth\Exceptions\JWTException $e) 
+        }
+        catch (\Tymon\JWTAuth\Exceptions\JWTException $e)
         {
             $result = null;
         }
@@ -106,7 +106,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getPathAttribute()
@@ -116,7 +116,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Set a publicily accessible identifier to get the name attribute for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getNameAttribute()
@@ -126,7 +126,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has many \App\Cart.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function cart()
@@ -136,7 +136,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has one \App\Company.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function company()
@@ -146,7 +146,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has many \App\OrderHistory.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
@@ -156,7 +156,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has many \App\Product.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
@@ -166,7 +166,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get errors in request data.
-     * 
+     *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Support\MessageBag
      */
@@ -185,7 +185,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has many \App\ProductReview.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function productReview()
@@ -195,7 +195,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has many \App\UserPaymentConfig.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userPaymentConfig()
@@ -205,7 +205,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has many \App\UsersAddress.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userAddress()
@@ -215,7 +215,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * This model relationship has many \App\UsersAddress.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function vendorApplication()
@@ -225,7 +225,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Adds a given product to db cart for this user.
-     * 
+     *
      * @param  \App\Product  $product
      */
     public function addProductToDbCart($product)
@@ -238,13 +238,14 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Moves cache cart to db cart for this user on login.
-     * 
+     *
      * @param  array  $cacheCart
+     * @param  int    $client_hash_key
      */
-    public function moveCacheCartToDbCart($cacheCart)
+    public function moveCacheCartToDbCart($cacheCart, $client_hash_key)
     {
         $userId = $this->attributes['id'];
-        
+
         foreach($cacheCart as $cc)
         {
             if($cc['product']->user_id !== $userId)
@@ -259,12 +260,12 @@ class User extends Authenticatable implements JWTSubject
             }
         }
 
-        CacheCart::clearCacheCart();
+        CacheCart::clearCacheCart($client_hash_key);
     }
 
     /**
      * Gets the database cart for this user.
-     * 
+     *
      * @return array|int
      */
     public function getDbCart()
@@ -302,7 +303,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Updates the respective number of products in the user's database cart.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      */
     public function updateDbCartAmount($request)
@@ -345,7 +346,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Checks whether a given slug already exists for an instance of this model.
-     * 
+     *
      * @param  string  $slug
      * @return bool
      */
@@ -358,7 +359,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Checks a given slug is unique and creates a new unique slug if necessary.
-     * 
+     *
      * @param  string  $slug
      * @return string
      */
@@ -373,10 +374,10 @@ class User extends Authenticatable implements JWTSubject
 
         return $slug;
     }
-    
+
     /**
      * Check if an instance of this model has a role.
-     * 
+     *
      * @return bool
      */
     public function hasNoRole()
@@ -384,7 +385,7 @@ class User extends Authenticatable implements JWTSubject
         return !$this->hasRole('vendor') && !$this->hasRole('moderator');
     }
 
-    public static function getRegisterErrors(Request $request) 
+    public static function getRegisterErrors(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:191',
@@ -428,12 +429,12 @@ class User extends Authenticatable implements JWTSubject
             'address' => false == $addressErrors->isEmpty() ? $addressErrors : array(),
             'billing' => false == $billingErrors->isEmpty() ? $billingErrors : array(),
             'present' => $present,
-        ); 
+        );
     }
 
     /**
      * Get all data associated with this user
-     * 
+     *
      * @return self
      */
     public function getAllData()
@@ -444,7 +445,7 @@ class User extends Authenticatable implements JWTSubject
         $assignedRole = $this->getRoleNames();
         $role = false;
 
-        if(false == $assignedRole->isEmpty()) 
+        if(false == $assignedRole->isEmpty())
         {
             $role = $assignedRole[0];
         }
@@ -452,14 +453,14 @@ class User extends Authenticatable implements JWTSubject
         $assignedCompany = $this->company()->get();
         $company = false;
 
-        if(false == $assignedCompany->isEmpty()) 
+        if(false == $assignedCompany->isEmpty())
         {
             $company = $assignedCompany->first();
         }
-        
+
         return array_merge(
-            $this->attributes, 
-            compact("billingCards"), 
+            $this->attributes,
+            compact("billingCards"),
             compact("addresses"),
             compact("company"),
             compact("role")

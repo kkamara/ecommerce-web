@@ -29,7 +29,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'first_name' => $name['firstName'],
         'last_name' => $name['lastName'],
         'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+        'password' => password_hash("secret", PASSWORD_DEFAULT),
         'remember_token' => str_random(10),
     ];
 });

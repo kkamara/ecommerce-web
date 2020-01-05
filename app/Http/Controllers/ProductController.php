@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Helpers\CacheCart;
 use App\Product;
@@ -77,7 +78,7 @@ class ProductController extends Controller
             $collection['permissionToReview'] = $permissionToReview;
 
         return response()->json([
-            "product" => $collection, 
+            "product" => $collection,
             "message" => "Successful"
         ]);
     }
