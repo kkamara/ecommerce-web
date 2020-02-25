@@ -33,7 +33,7 @@
         "react-js-pagination": "^3.0.2",
         "react-redux": "^7.1.0",
         "react-router-dom": "^5.0.1",
-        "react-scripts": "3.0.1",
+        "react-scripts": "^3.4.0",
         "react-spinners": "^0.5.13",
         "redux": "^4.0.4",
         "redux-logger": "^3.0.6",
