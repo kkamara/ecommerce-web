@@ -1,4 +1,4 @@
-export const APP_URL = "http://ecommerce.test/api/v1";
+export const APP_URL = "https://laraecommerce.herokuapp.com/api/v1";
 export const APP_NAME = "Ecommerce";
 export const GIPHY_API_KEY = "M5Pj4m4sIMVxGzJvOEOHwWbzl5UcOKjE";
 export const TOKEN_NAME = "recipe-toke";
