@@ -2,8 +2,11 @@ docker-setup:
 	docker-compose build # let's build our services
 	docker-compose up -d # get services running
 
-backend-setup:
+backend-install:
 	@docker exec e-app composer i
+
+backend-setup:
+	make backend-install
 	@docker exec e-app php artisan key:generate
 	@docker exec e-app php artisan migrate
 
