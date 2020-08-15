@@ -8,6 +8,7 @@ backend-install:
 backend-setup:
 	make backend-install
 	@docker exec e-app php artisan key:generate
+	@docker exec e-app php artisan jwt:secret
 	@docker exec e-app php artisan migrate
 
 make backend-seed:
