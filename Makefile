@@ -30,5 +30,4 @@ dev:
 	sleep 30
 	make backend-setup
 	make backend-seed
-	make clean-js-dep
 	make install-js-dep
