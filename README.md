@@ -1,104 +1,32 @@
-# laravel-react-ecommerce
+# Laravel React Ecommerce
 
-Extensive ecommerce site built with ability to add to cart without being logged in. Build with Laravel 5.6 (ongoing).
+Extensive ecommerce site built with ability to add to cart without being logged in. Ongoing release developement.
 
-# Features
+## Installation
 
-<table>
-  <thead>
-    <tr>
-      <th>Addition</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Guests / Users can view products</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Add to cart without being logged in</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Guests can login & register</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Transfer session cart to database on login or register</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Users can add to cart while logged in</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Users can checkout items</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Users can view invoices</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Users can add, edit & delete billing cards</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Users can add, edit & delete addresses</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Guests / Users can search for products</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Guests / Users can view most popular products</td>
-      <td>Complete</td>
-    </tr>
-    <tr>      
-      <td>Guests / Users can view top rated products</td>
-      <td>Complete</td>
-    </tr>
-    <tr>  
-      <td>Users can leave reviews on verified purchases</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Users can change account settings</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Users can apply to become vendors</td>
-      <td>Complete</td>
-    </tr>
-    <tr>  
-      <td>Users / Guests can report product reviews anonymously</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Reported product reviews are raised for mod approval</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Product reviews with 5 or more reports are visibly flagged</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Add Moderators</td>
-      <td>Complete</td>
-    </tr>
-     <tr>
-      <td>Moderators can approve/deny vendor applications giving reason</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Moderators can approve/deny flagged reviews giving reason</td>
-      <td>Complete</td>
-    </tr>
-    <tr>
-      <td>Vendors can add, edit & delete their own products</td>
-      <td>Complete+</td>
-    </tr>    
-  </tbody>
-</table>
+Install [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
+
+## Setup
+Our Makefile is based at the root of project directory and provides us with a number of useful commands.
+
+What you want to do is go to the root directory where you've stored this project and run the following command:
+```
+make dev
+```
+
+This will build our app and all it's required services and libraries, as well as provide seed data for the database service.
+
+When `make dev` completes your app should be accessible from any web browser on your system at the following address:
+```
+http://localhost:8000
+```
+
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
