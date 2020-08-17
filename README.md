@@ -12,6 +12,7 @@ Our [Makefile](https://github.com/kkamara/laravel-react-ecommerce/blob/master/Ma
 
 What you want to do is go to the root directory where you've stored this project and run the following command:
 ```
+cp .env.example .env # make our environment variables accessible to the app
 make dev
 ```
 
