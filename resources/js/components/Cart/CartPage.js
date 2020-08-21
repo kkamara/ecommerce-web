@@ -7,11 +7,15 @@ const CartPage = ({ cart: cartObj }) => {
     const { cart, isLoaded, fetched } = cartObj;
     console.log("cart", "isLoaded", "fetched", cart, isLoaded, fetched);
 
-    const updateCart = e => {};
+    const onCartChangeClick = e => {};
+
+    const onCartProceedClick = e => {};
+
+    const onCartAmountChange = e => {};
 
     const _renderCartForm = () => {
         return (
-            <form action="" onSubmit={e => updateCart(e)}>
+            <div>
                 {cart.items && cart.items.length ?
                     (
                         <Fragment>
@@ -28,7 +32,7 @@ const CartPage = ({ cart: cartObj }) => {
                                         product,
                                         amount,
                                     }, index) => (
-                                        <tr key={index}>
+                                        <tr key={index} data-id={index}>
                                             <td>
                                                 <a
                                                     href={`/products/${product.id}`}
@@ -45,6 +49,7 @@ const CartPage = ({ cart: cartObj }) => {
                                                     type="number"
                                                     name={`amount-${product.id}`}
                                                     defaultValue={`${amount}`}
+                                                    onChange={onCartAmountChange}
                                                 />
                                             </td>
                                         </tr>
@@ -58,19 +63,20 @@ const CartPage = ({ cart: cartObj }) => {
                             </table>
                             <br />
                             <div className="pull-right">
-                                <input
-                                    type="submit"
-                                    href=""
+                                <button
                                     className="btn btn-primary"
                                     defaultValue="Update details"
-                                />
+                                    onClick={onCartChangeClick}
+                                >
+                                    Submit Query
+                                </button>
                             </div>
                         </Fragment>
                      ) : (
                         <p>Your cart is empty.</p>
                      )
                 }
-            </form>
+            </div>
         );
     };
 
@@ -92,9 +98,13 @@ const CartPage = ({ cart: cartObj }) => {
                 <div className="col-md-4">
                     <ul className="list-group">
                         <li className="list-group-item">
-                            <a href='#' className='btn btn-success' style={{ display: 'block' }}>
+                            <button 
+                                className='btn btn-success' 
+                                style={{ display: 'block' }}
+                                onClick={onCartProceedClick}
+                            >
                                 Proceed to checkout
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>
