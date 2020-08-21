@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 const initialState = {
     activePage: 1
 };
-class ProductsList extends React.Component {
+class ProductsListPage extends React.Component {
     state = { ...initialState };
 
     render() {
@@ -61,4 +61,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     null
-)(withRouter(ProductsList));
+)(withRouter(ProductsListPage));

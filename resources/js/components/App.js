@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import querySearch from "query-string";
 
 import { productsActions } from "../redux/actions/index";
-import ProductsList from "./Products/ProductsList.js";
+import ProductsListPage from "./Products/ProductsListPage.js";
 import ProductsPagination from "./Products/ProductsPagination.js";
 import ProductsSearch from "./Products/ProductsSearch.js";
 
@@ -123,7 +123,7 @@ class App extends React.Component {
                         <div className="card-body">
                             <div className="card-text">
                                 <div className="list-group">
-                                    <ProductsList />
+                                    <ProductsListPage />
                                 </div>
                             </div>
                         </div>
