@@ -31,3 +31,6 @@ dev:
 	make backend-setup
 	make backend-seed
 	make install-js-dep
+
+watch:
+	@docker exec e-app npm run watch
