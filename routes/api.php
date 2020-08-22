@@ -30,7 +30,7 @@ Route::prefix('v1')->middleware('throttle:60,1')->group(function () {
         | Users Settings Routes
         |--------------------------------------------------------------------------
         */
-        Route::put('user/{slug}', 'UserController@update')->name('userUpdate');
+        Route::put('user/{slug}', 'Auth\UserController@update')->name('userUpdate');
 
         /*
         |--------------------------------------------------------------------------
