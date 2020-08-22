@@ -5,7 +5,6 @@ import Loader from "../Loader";
 
 const CartPage = ({ cart: cartObj }) => {
     const { cart, isLoaded, fetched } = cartObj;
-    console.log("cart", "isLoaded", "fetched", cart, isLoaded, fetched);
 
     const onCartChangeClick = e => {};
 
@@ -99,9 +98,10 @@ const CartPage = ({ cart: cartObj }) => {
                     <ul className="list-group">
                         <li className="list-group-item">
                             <button 
-                                className='btn btn-success' 
+                                className='btn btn-success mx-auto' 
                                 style={{ display: 'block' }}
                                 onClick={onCartProceedClick}
+                                disabled={cart.items && !cart.items.length}
                             >
                                 Proceed to checkout
                             </button>
