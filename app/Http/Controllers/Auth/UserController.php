@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Validator;
 use App\User;
@@ -109,7 +110,7 @@ class UserController extends Controller
                     return response()->json([
                         'errors' => ['Password is incorrect.'],
                         "message" => "Unsuccessful"
-                    ], config("app.http.bad_request"));
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
@@ -117,14 +118,14 @@ class UserController extends Controller
                 return response()->json([
                     'errors' => $validator->errors()->all(),
                     "message" => "Unsuccessful"
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

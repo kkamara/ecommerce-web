@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Helpers\CacheCart;
 use Validator as Validate;
@@ -55,7 +56,7 @@ class RegisterController extends Controller
             return response()->json([
                 'errors' => $registerErrors,
                 "message" => "Unsuccessful"
-            ], config("app.http.bad_request"));
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $expiry_date = explode('-', request('expiry_date'));
@@ -67,7 +68,7 @@ class RegisterController extends Controller
             return response()->json([
                 'errors' => 'Invalid expiry date provided.',
                 "message" => "Unsuccessful"
-            ], config("app.http.bad_request"));
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $firstName = filter_var(request('first_name'), FILTER_SANITIZE_STRING);

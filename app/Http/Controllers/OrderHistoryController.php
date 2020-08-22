@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\OrderHistoryProducts;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\OrderHistory;
 use App\Cart;
@@ -45,7 +46,7 @@ class OrderHistoryController extends Controller
 
             return response()->json(
                 compact('errors', "message"),
-                config("app.http.bad_request")
+                Response::HTTP_BAD_REQUEST,
             );
         }
 
@@ -75,7 +76,7 @@ class OrderHistoryController extends Controller
 
         return response()->json([
             "message" => "Successful"
-        ], config("app.http.created"));
+        ], Response::HTTP_CREATED);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use App\Helpers\CommonHelper;
 use Illuminate\Http\Request;
 use App\UsersAddress;
@@ -73,14 +74,14 @@ class UsersAddressController extends Controller
 
                 return response()->json([
                     "message" => "Successful"
-                ], config("app.http.created"));
+                ], Response::HTTP_CREATED);
             }
             else
             {
                 return response()->json([
                     'errors' => ['Invalid country provided'],
                     "message" => "Successful",
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
@@ -88,7 +89,7 @@ class UsersAddressController extends Controller
             return response()->json([
                 'errors' => $validator->errors()->all(),
                 "message" => "Successful",
-            ], config("app.http.bad_request"));
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -148,7 +149,7 @@ class UsersAddressController extends Controller
                     return response()->json([
                         'errors' => ['Invalid country provided'],
                         "message" => "Successful",
-                    ], config("app.http.bad_request"));
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
@@ -156,14 +157,14 @@ class UsersAddressController extends Controller
                 return response()->json([
                     'errors' => $validator->errors()->all(),
                     "message" => "Successful",
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
                 "message" => "Unauthorized",
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -200,14 +201,14 @@ class UsersAddressController extends Controller
                 return response()->json([
                     "errors" => $validator->errors()->all(),
                     "message" => "Unsuccessful",
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
                 "message" => "Unauthorized",
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

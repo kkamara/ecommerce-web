@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\FlaggedProductReview;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use App\ProductReview;
 
 class FlaggedProductReviewController extends Controller
@@ -32,7 +33,7 @@ class FlaggedProductReviewController extends Controller
             return response()->json([
                 "errors" => ['You have already flagged that review.'],
                 "message" => "Unsuccessful"
-            ], config("app.http.bad_request"));
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }

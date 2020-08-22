@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\VendorApplication;
 use App\UsersAddress;
@@ -34,14 +35,14 @@ class VendorApplicationController extends Controller
 
                 return response()->json([
                     "message" => "Successful"
-                ], config("app.http.created"));
+                ], Response::HTTP_CREATED);
             }
             else
             {
                 return response()->json([
                     "errors" => $applicationError,
                     "message" => "Unsuccessful"
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
@@ -49,7 +50,7 @@ class VendorApplicationController extends Controller
             return response()->json([
                 "errors" => ["Only a guest user can access this resource."],
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -75,6 +76,6 @@ class VendorApplicationController extends Controller
         return response()->json([
             "data" => $response,
             "message" => "Successful"
-        ], config("app.http.created"));
+        ], Response::HTTP_CREATED);
     }
 }

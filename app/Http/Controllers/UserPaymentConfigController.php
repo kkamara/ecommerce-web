@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use App\Helpers\CommonHelper;
 use Illuminate\Http\Request;
 use App\UserPaymentConfig;
@@ -18,10 +19,14 @@ class UserPaymentConfigController extends Controller
     {
         $user = \App\User::attemptAuth();
 
-        $billingCards = UserPaymentConfig::where('user_id', $user->id)->paginate(10);
+        $billingCards = UserPaymentConfig::
+            where('user_id', $user->id)
+            ->paginate(10);
 
         $message = "Successful";
-        return response()->json(compact('billingCards', 'message'));
+        return response()->json(
+            compact('billingCards', 'message')
+        );
     }
 
     /**
@@ -91,14 +96,14 @@ class UserPaymentConfigController extends Controller
                     return response()->json([
                         "errors" => ['Billing card successfully created.'],
                         "message" => "Successful"
-                    ], config("app.http.created"));
+                    ], Response::HTTP_CREATED);
                 }
                 else
                 {
                     return response()->json([
                         'errors' => ['Invalid country provided'],
                         "message" => "Unsuccessful"
-                    ], config("app.http.bad_request"));
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
@@ -106,7 +111,7 @@ class UserPaymentConfigController extends Controller
                 return response()->json([
                     'errors' => ['Invalid expiry date provided.'],
                     "message" => "Unsuccessful"
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
@@ -114,7 +119,7 @@ class UserPaymentConfigController extends Controller
             return response()->json([
                 'errors' => $validator->errors()->all(),
                 "message" => "Unsuccessful"
-            ], config("app.http.bad_request"));
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -192,7 +197,7 @@ class UserPaymentConfigController extends Controller
                         return response()->json([
                             'errors' => ['Invalid country provided'],
                             "message" => "Uncuccessful"
-                        ], config("app.http.bad_request"));
+                        ], Response::HTTP_BAD_REQUEST);
                     }
                 }
                 else
@@ -200,7 +205,7 @@ class UserPaymentConfigController extends Controller
                     return response()->json([
                         'errors' => ['Invalid expiry date provided.'],
                         "message" => "Uncuccessful"
-                    ], config("app.http.bad_request"));
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
@@ -208,14 +213,14 @@ class UserPaymentConfigController extends Controller
                 return response()->json([
                     'errors' => $validator->errors()->all(),
                     "message" => "Uncuccessful"
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -253,7 +258,7 @@ class UserPaymentConfigController extends Controller
                     return response()->json([
                         'errors', ['Billing card has not been deleted.'],
                         "message" => "Unsuccessful"
-                    ], config("app.http.bad_request"));
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
@@ -261,14 +266,14 @@ class UserPaymentConfigController extends Controller
                 return response()->json([
                     'errors', $validator->errors()->all(),
                     "message" => "Unsuccessful"
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

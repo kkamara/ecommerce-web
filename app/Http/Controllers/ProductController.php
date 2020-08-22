@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Helpers\CacheCart;
 use App\Product;
@@ -17,10 +18,10 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::getProducts($request)->paginate(7);
-
-        $message = "Successful";
-        return response()->json(compact("products", "message"));
+        return response()->json([
+            "products" => Product::getProducts($request)->paginate(7), 
+            "message" => "Successful",
+        ]);
     }
 
     /**
@@ -41,7 +42,7 @@ class ProductController extends Controller
                 return response()->json([
                     "errors" => ['Unable to perform add to cart action on your own product.'],
                     "message" => "Unauthorized"
-                ], config("app.http.unauthorized"));
+                ], Response::HTTP_UNAUTHORIZED);
             }
 
             $user->addProductToDbCart($product);
@@ -53,7 +54,7 @@ class ProductController extends Controller
 
         return response()->json([
             "message" => "Successful"
-        ], config("app.http.created"));
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -65,17 +66,14 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $user = \App\User::attemptAuth();
-
         $reviews = $product->productReview()->get();
-
         $permissionToReview = FALSE;
-
         $collection = compact('product', 'reviews');
 
-        if(null !== $user)
+        if(null !== $user) {
             $permissionToReview = $product->didUserPurchaseProduct($user->id);
-
             $collection['permissionToReview'] = $permissionToReview;
+        }
 
         return response()->json([
             "product" => $collection,

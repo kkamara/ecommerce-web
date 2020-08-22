@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Helpers\CacheCart;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use App\Helpers\CacheCart;
 use Validator;
 use JWTAuth;
 use Auth;
@@ -62,7 +63,7 @@ class LoginController extends Controller
             return response()->json([
                 "errors" => $validator->errors(),
                 "message" => $message,
-            ], config("app.http.bad_request"));
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $credentials = $request->only('email', 'password');

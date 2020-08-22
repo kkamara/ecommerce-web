@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\ProductReview;
 use App\Product;
@@ -51,14 +52,14 @@ class ProductReviewController extends Controller
                     return response()->json([
                         'errors' => $validator->errors()->all(),
                         "message" => "Unsuccessful"
-                    ], config("app.http.bad_request"));
+                    ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
             {
                 return response()->json([
                     "message" => "Unauthorized"
-                ], config("app.http.unauthorized"));
+                ], Response::HTTP_UNAUTHORIZED);
             }
         }
         else
@@ -68,7 +69,7 @@ class ProductReviewController extends Controller
                     "You have already reviewed this product."
                 ],
                 "message" => "Unsuccessful"
-            ], config("app.http.bad_request"));
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }

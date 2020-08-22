@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Company;
 use App\Product;
@@ -35,7 +36,7 @@ class CompanyProductController extends Controller
         {
             return response()->json([
                 'message' => "Unauthorized",
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -97,21 +98,21 @@ class CompanyProductController extends Controller
 
                 return response()->json([
                     "message" => "Successful"
-                ], config("app.http.created"));
+                ], Response::HTTP_CREATED);
             }
             else
             {
                 return response()->json([
                     'errors' => $errors,
                     "message" => "Unsuccessful"
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -176,14 +177,14 @@ class CompanyProductController extends Controller
                 return response()->json([
                     'errors' => $errors,
                     "message" => "Unsuccessful"
-                ], config("app.http.bad_request"));
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -219,7 +220,7 @@ class CompanyProductController extends Controller
                 default:
                     $response = response()->json([
                         "message" => "Unsuccessful"
-                    ], config("app.http.internal_error"));
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
                 break;
             }
 
@@ -229,7 +230,7 @@ class CompanyProductController extends Controller
         {
             $response = response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

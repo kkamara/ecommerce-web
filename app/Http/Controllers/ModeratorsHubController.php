@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FlaggedProductReview;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\VendorApplication;
 use App\ProductReview;
@@ -34,7 +35,7 @@ class ModeratorsHubController extends Controller
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -84,7 +85,7 @@ class ModeratorsHubController extends Controller
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -156,7 +157,7 @@ class ModeratorsHubController extends Controller
         {
             return response()->json([
                 "message" => "Unauthorized"
-            ], config("app.http.unauthorized"));
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }
