@@ -22,7 +22,8 @@ When `make dev` completes your app should be accessible from any web browser on 
 ```
 http://localhost:8000
 ```
-
+## API
+If you are familiar with [Postman](https://www.postman.com/) the API collection for this project is downloadable [here](https://pastebin.com/CwXBeETc).
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
