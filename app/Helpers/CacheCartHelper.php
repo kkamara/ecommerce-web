@@ -89,14 +89,18 @@ class CacheCart
     /**
      * Updates the respective number of products in the user's session cart.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request|null  $request {null}
      */
-    public static function updateCacheCartAmount(Request $request)
+    public static function updateCacheCartAmount($request=null)
     {
+        if (!$request) {
+            $request = request();
+        }
+        $client_hash_key = $request->get("client_hash_key");
         /** Get existing session cart */
-        $cacheCart = self::getCacheCart($request->get("client_hash_key"));
+        $cacheCart = self::getCacheCart($client_hash_key);
         $array     = array();
-
+        
         foreach($cacheCart as $cc)
         {
             /** Check if an amount value for this product was given in the request */
