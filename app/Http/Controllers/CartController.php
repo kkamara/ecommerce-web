@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Helpers\CacheCart;
+use App\User;
 use App\Cart;
 use Auth;
 
@@ -17,16 +19,15 @@ class CartController extends Controller
      */
     public function show(Request $request)
     {
-        $user = \App\User::attemptAuth();
-
-        if(null === $user && !empty($token))
-        {
-            return redirect()->route("login");
-        }
-
+        $user = User::attemptAuth();
         $client_hash_key = $request->get("client_hash_key");
 
-        if(null !== $user)
+        if(null === $user && null === $client_hash_key)
+        {
+            return abort(Response::HTTP_UNAUTHORIZED);
+        }
+
+        if($user)
         {
             $cart = $user->getDbCart();
         }
@@ -60,20 +61,21 @@ class CartController extends Controller
      */
     public function update(Request $request)
     {
-        $user = \App\User::attemptAuth();
+        $user = User::attemptAuth();
+        $client_hash_key = $request->get("client_hash_key");
 
-        if(null === $user && !empty($token))
+        if(null === $user && null === $client_hash_key)
         {
-            return redirect()->route("login");
+            return abort(Response::HTTP_UNAUTHORIZED);
         }
 
-        if(null !== $user)
+        if($user)
         {
-            $user->updateDbCartAmount($request);
+            $user->updateDbCartAmount();
         }
         else
         {
-            CacheCart::updateCacheCartAmount($request);
+            CacheCart::updateCacheCartAmount();
         }
 
         return response()->json(["message"=>"Successful"]);
