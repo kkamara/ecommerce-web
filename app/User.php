@@ -304,10 +304,13 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Updates the respective number of products in the user's database cart.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request|null  $request {null}
      */
     public function updateDbCartAmount($request)
     {
+        if (!$request) {
+            $request = request();
+        }
         /** Get existing cache cart */
         $cacheCart = $this->getDbCart();
 
