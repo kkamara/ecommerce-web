@@ -2,6 +2,8 @@ import { getCacheHashToken } from "../../utilities/methods";
 import { APP_URL, TOKEN_NAME } from "../../constants";
 import { userActions } from "../reducers/types";
 
+import { getCart } from "./cart";
+
 export default { loginUser, logoutUser };
 
 function loginUser(email, password) {
@@ -12,15 +14,11 @@ function loginUser(email, password) {
         let url = APP_URL + "/user/login";
         url = encodeURI(url);
 
-        let body = new FormData();
-        body.append("email", email);
-        body.append("password", password);
-
         console.log("querying server for " + url);
         await fetch(url, {
+            body: JSON.stringify({ email, password }),
             method: "POST",
             headers,
-            body,
         })
             .then(res => res.json())
             .then(json => {
@@ -48,6 +46,7 @@ function loginUser(email, password) {
         }
 
         function success(type, payload) {
+            dispatch(getCart());
             return {
                 type,
                 payload
@@ -71,6 +70,7 @@ function logoutUser() {
         }
 
         function success(type) {
+            dispatch(getCart());
             return {
                 type,
                 payload
