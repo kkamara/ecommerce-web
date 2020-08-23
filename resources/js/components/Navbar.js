@@ -9,37 +9,39 @@ import ProductQuickSearch from "./Products/ProductQuickSearch";
 
 class Navbar extends PureComponent {
     state = {
+        firstLoad: false,
         userRole: null,
-        isAuth: false
+        isAuth: false,
+        userID: null,
     };
 
     componentDidMount() {
+        this.getCurrentUser();
+
         this.handleUserAuth();
 
-        this.getCart();
+        this.props.getCart();
     }
 
     componentDidUpdate() {
         this.handleUserAuth();
     }
 
-    getCart() {
-        const { isLoaded, fetched, user } = this.props.current_user;
-
-        if (isLoaded && fetched && user) {
-            this.props.getCart(user);
-        } else {
-            this.props.getCart();
-        }
-    }
-
     handleUserAuth = () => {
         const { isLoaded, fetched, user } = this.props.current_user;
 
-        if (isLoaded && fetched && user) {
+        if (
+            isLoaded &&
+            fetched &&
+            user &&
+            user.id !== this.state.userID
+        ) {
             this.setUserRole(user.role);
+            this.setUserID(user.id);
             this.setIsAuth(true);
-        } else {
+            this.props.getCart();
+        } else if (this.state.firstLoad) {
+            this.setFirstLoad(false);
             this.setUserRole(null);
             this.setIsAuth(false);
         }
@@ -51,7 +53,11 @@ class Navbar extends PureComponent {
 
     setIsAuth = isAuth => this.setState({ isAuth });
 
-    loadCurrentUser() {
+    setUserID = userID => this.setState({ userID });
+
+    setFirstLoad = firstLoad => this.setState({ firstLoad });
+
+    getCurrentUser() {
         this.props.getCurrentUser();
     }
 
@@ -283,6 +289,6 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     getCurrentUser: () => dispatch(currentUserActions.getCurrentUser()),
-    getCart: (user=null) => dispatch(cartActions.getCart(user))
+    getCart: () => dispatch(cartActions.getCart())
 });
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

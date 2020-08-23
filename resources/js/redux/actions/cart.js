@@ -11,8 +11,12 @@ export default {
 function updateCart(data) {
     return async dispatch => {
         dispatch(request(cartActions.UPDATE_CART_PENDING));
+
         const headers = new Headers({ "Content-Type": "application/json" });
-        headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
+        const token = getAuthToken();
+
+        if (token) headers.append('Authorization', `Bearer ${token}`);
+        else headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
 
         let url = APP_URL + `/cart/update`;
         url = encodeURI(url);
@@ -62,8 +66,12 @@ function updateCart(data) {
 function addToCart(ID) {
     return async dispatch => {
         dispatch(request(cartActions.ADD_TO_CART_PENDING));
+        
         const headers = new Headers({ "Content-Type": "application/json" });
-        headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
+        const token = getAuthToken();
+
+        if (token) headers.append('Authorization', `Bearer ${token}`);
+        else headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
 
         let url = APP_URL + `/products/${ID}/store`;
         url = encodeURI(url);
@@ -106,19 +114,16 @@ function addToCart(ID) {
     };
 }
 
-function getCart(user) {
+function getCart() {
     return async dispatch => {
         dispatch(request(cartActions.GET_CART_PENDING));
         let url = APP_URL + `/cart`;
-        console.log("user", user);
+
         const headers = new Headers({ "Content-Type": "application/json" });
-        if (user) {
-            headers = new Headers({
-                Authorization: `Bearer ${getAuthToken()}`
-            });
-        } else {
-            headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
-        }
+        const token = getAuthToken();
+
+        if (token) headers.append('Authorization', `Bearer ${token}`);
+        else headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
 
         url = encodeURI(url);
 

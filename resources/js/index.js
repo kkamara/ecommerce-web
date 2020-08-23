@@ -20,7 +20,7 @@ import Login from "./components/Users/Login";
 import Logout from "./components/Users/Logout";
 import Footer from "./components/Footer";
 
-const middleware = applyMiddleware(/*promise,*/ thunk, logger);
+const middleware = applyMiddleware(/*promise,*/ thunk, /* logger */);
 const store = createStore(reducers, middleware);
 
 const Root = () => (

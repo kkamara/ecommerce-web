@@ -41,10 +41,7 @@ class CartController extends Controller
             $cart = CacheCart::getCacheCart($client_hash_key);
         }
 
-        if(false == $cart)
-        {
-            $cart = array();
-        }
+        if(false == $cart) $cart = array();
 
         $cost = Cart::price($client_hash_key);
         $count = Cart::count($client_hash_key);
@@ -71,7 +68,7 @@ class CartController extends Controller
 
         if($user)
         {
-            $user->updateDbCartAmount();
+            $user->updateDbCartAmount($request);
         }
         else
         {

@@ -274,25 +274,30 @@ class User extends Authenticatable implements JWTSubject
 
         if(! $products->isEmpty())
         {
-            $cart = array();
+            $tmpArray = array();
 
             foreach($products as $product)
             {
                 $id = 'item-'.$product->product_id;
 
-                if(! isset($cart[$id]))
+                if(! isset($tmpArray[$id]))
                 {
-                    $cart[$id] = array(
+                    $tmpArray[$id] = array(
                         'product' => $product->product,
                         'amount' => 1,
                     );
                 }
                 else
                 {
-                    $cart[$id]['amount'] += 1;
+                    $tmpArray[$id]['amount'] += 1;
                 }
             }
 
+            $cart = [];
+            foreach($tmpArray as $item) {
+                array_push($cart, $item);
+            }
+            
             return $cart;
         }
         else

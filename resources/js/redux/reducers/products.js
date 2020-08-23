@@ -1,9 +1,8 @@
 import { productsActions } from "./types";
 
 const initialState = {
-    products: {
-        products: {}
-    }
+    isLoaded: false,
+    fetched: false,
 };
 const productsReducer = (state = initialState, action) => {
     switch (action.type) {

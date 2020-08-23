@@ -18,20 +18,18 @@ class ProductPage extends Component {
     }
 
     addToCart = () => {
-        const { addToCart } = this.props;
         const { id } = this.props.product.product.product;
-
-        addToCart(id);
+        this.props.addToCart(id);
     };
 
     _onAddToCart = e => this.addToCart();
 
     render() {
-        const { isLoaded, fetched: productsFetched } = this.props.product;
-
+        const { isLoaded, fetched } = this.props.product;
+        
         if (!isLoaded) {
             return <Loader />;
-        } else if (!productsFetched) {
+        } else if (!fetched) {
             return <div>Error</div>;
         } else {
             const { current_user, userAuthenticated } = this.props;
@@ -146,8 +144,8 @@ const mapStateToProps = state => ({
     product: state.product
 });
 const mapDispatchToProps = dispatch => ({
+    addToCart: productID => dispatch(cartActions.addToCart(productID)),
     getProduct: id => dispatch(productActions.getProduct(id)),
-    addToCart: productID => dispatch(cartActions.addToCart(productID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductPage);
