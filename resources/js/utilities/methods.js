@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { TOKEN_NAME, CACHE_HASH_NAME } from "../constants";
 
 export const convertArrayToGETParams = params => {
@@ -24,10 +26,9 @@ export const getCacheHashToken = () => {
 };
 
 export const storeNewCacheHashToken = () => {
-    const result = Math.floor(new Date().getTime() * Math.random(0, 1000000))
     localStorage.setItem(
         CACHE_HASH_NAME,
-        result
+        uuidv4()
     );
     return result;
 };
