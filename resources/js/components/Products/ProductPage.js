@@ -18,22 +18,24 @@ class ProductPage extends Component {
     }
 
     addToCart = () => {
-        const { id } = this.props.product.product.product;
+        const { id } = this.props.product.data;
         this.props.addToCart(id);
     };
 
-    _onAddToCart = e => this.addToCart();
+    _onAddToCart = () => this.addToCart();
 
     render() {
-        const { isLoaded, fetched } = this.props.product;
-        
+        const { 
+            data: productData,
+            isLoaded, 
+            fetched, 
+        } = this.props.product;
         if (!isLoaded) {
             return <Loader />;
         } else if (!fetched) {
             return <div>Error</div>;
         } else {
             const { current_user, userAuthenticated } = this.props;
-            const { product, reviews } = this.props.product.product;
 
             return (
                 <div className="container" id="app">
@@ -45,24 +47,24 @@ class ProductPage extends Component {
                                         <th scope="row" colSpan="2">
                                             <img
                                                 style={{ maxHeight: 100 }}
-                                                src={product.image_path}
+                                                src={productData.image_path}
                                                 className="img-responsive"
                                             />
-                                            <h4>{product.name}</h4>
+                                            <h4>{productData.name}</h4>
                                         </th>
                                     </tr>
                                     <tr>
                                         <td scope="row">Description</td>
                                         <td>
-                                            {product.short_description}
+                                            {productData.short_description}
                                             <br />
                                             <br />
-                                            {product.long_description}
+                                            {productData.long_description}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td scope="row">Product Details</td>
-                                        <td>{product.product_details}</td>
+                                        <td>{productData.product_details}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -71,9 +73,9 @@ class ProductPage extends Component {
                         <div className="col-md-3">
                             <ul className="list-group">
                                 <li className="list-group-item">
-                                    <h3>{product.formatted_cost}</h3>
+                                    <h3>{productData.formatted_cost}</h3>
                                     <small>
-                                        {product.shippable ? (
+                                        {productData.shippable ? (
                                             "This item is shippable"
                                         ) : (
                                             <div>
@@ -83,7 +85,7 @@ class ProductPage extends Component {
                                         )}
                                     </small>
                                     <br />
-                                    {product.free_delivery ? (
+                                    {productData.free_delivery ? (
                                         <small>Free Delivery</small>
                                     ) : (
                                         ""
@@ -91,7 +93,7 @@ class ProductPage extends Component {
                                 </li>
                                 <li className="list-group-item">
                                     {userAuthenticated &&
-                                    product.user_id === current_user.user.id ? (
+                                    productData.user_id === current_user.data.id ? (
                                         <div>
                                             {/* href={`/vendor/${current_user.user.company.slug}/products/${product.id}/edit`} */}
                                             <a
@@ -125,11 +127,11 @@ class ProductPage extends Component {
                     <div className="row">
                         <div className="col-md-12">
                             <ProductReviewList
-                                reviews={reviews}
-                                score={product.review}
+                                reviews={productData.reviews}
+                                score={productData.review}
                                 current_user={current_user}
                                 userAuthenticated={userAuthenticated}
-                                product={product}
+                                product={productData}
                             />
                         </div>
                     </div>

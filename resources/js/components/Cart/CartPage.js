@@ -7,10 +7,10 @@ import Loader from "../Loader";
 
 class CartPage extends Component {
     onCartUpdateClick() {
-        const { cart } = this.props.cart;
-        if (!cart || !cart.items.length) return;
+        const { data: cartData } = this.props.cart;
+        if (!cartData || !cartData.data.length) return;
         let formattedItems = {};
-        cart.items.forEach(({ product }) => {
+        cartData.data.forEach(({ product }) => {
             const itemID = `amount-${product.id}`;
             const newQty = parseInt($(`input[name="${itemID}"]`).val());
             if (!newQty) return;
@@ -19,17 +19,18 @@ class CartPage extends Component {
         this.props.updateCart(formattedItems);
     }
 
-    onCheckoutProceedClick(e) {
-        const { cart } = this.props.cart;
-        if (!cart || !cart.items.length) return;
+    onCheckoutProceedClick() {
+        const { data: cartData } = this.props.cart;
+        if (!cartData || !cartData.data.length) return;
         // todo...
     }
 
     _renderCartForm() {
-        const { cart } = this.props.cart;
+        const { data: cartData } = this.props.cart;
+        
         return (
             <div>
-                {cart.items && cart.items.length ?
+                {cartData.data && cartData.data.length ?
                     (
                         <Fragment>
                             <table className="table">
@@ -41,7 +42,7 @@ class CartPage extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {cart.items.map(({
+                                    {cartData.data.map(({
                                         product,
                                         amount,
                                     }, index) => (
@@ -68,8 +69,8 @@ class CartPage extends Component {
                                     ))}
                                     <tr>
                                         <th>Total:</th>
-                                        <td>{cart.cost}</td>
-                                        <td>{cart.count}</td>
+                                        <td>{cartData.cost}</td>
+                                        <td>{cartData.count}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -93,10 +94,10 @@ class CartPage extends Component {
     }
 
     render() {
-        const { cart, isLoaded, fetched } = this.props.cart;
+        const { data: cartData, isLoaded, fetched } = this.props.cart;
         let result = null;
 
-        if (!isLoaded || !cart) {
+        if (!isLoaded || !cartData) {
             result = <Loader />;
         } else if (!fetched) {
             result = <div>Error</div>;
@@ -117,7 +118,7 @@ class CartPage extends Component {
                                         className='btn btn-success mx-auto' 
                                         style={{ display: 'block' }}
                                         onClick={this.onCheckoutProceedClick.bind(this)}
-                                        disabled={cart.items && !cart.items.length}
+                                        disabled={cartData.data && !cartData.data.length}
                                     >
                                         Proceed to checkout
                                     </button>

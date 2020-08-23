@@ -1,5 +1,6 @@
-import { APP_URL } from "../../constants";
+import { getCacheHashToken, getAuthToken } from "../../utilities/methods";
 import { productActions } from "../reducers/types";
+import { APP_URL } from "../../constants";
 
 export default {
     getProduct
@@ -10,11 +11,17 @@ function getProduct(id) {
         dispatch(request(productActions.GET_PRODUCT_PENDING));
         const url = encodeURI(APP_URL + `/products/${id}`);
 
-        await fetch(url)
+        const headers = { "Content-Type": "application/json" };
+        const token = getAuthToken();
+
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        else headers['X-CLIENT-HASH-KEY'] = getCacheHashToken();
+
+        await fetch(url, { headers, })
             .then(res => res.json())
             .then(json => {
                 dispatch(
-                    success(productActions.GET_PRODUCT_SUCCESS, json.product)
+                    success(productActions.GET_PRODUCT_SUCCESS, json.data)
                 );
             })
             .catch(err => {

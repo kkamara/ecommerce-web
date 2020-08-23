@@ -45,12 +45,15 @@ class ProductReviewController extends Controller
                     $product->productReview()->create($data);
                     $message = "Successful";
 
-                    return response()->json(compact("product", "message"));
+                    return response()->json(array_merge(
+                        ["data" => $product], 
+                        compact("message"),
+                    ));
                 }
                 else
                 {
                     return response()->json([
-                        'errors' => $validator->errors()->all(),
+                        'error' => $validator->errors()->all(),
                         "message" => "Unsuccessful"
                     ], Response::HTTP_BAD_REQUEST);
                 }
@@ -65,7 +68,7 @@ class ProductReviewController extends Controller
         else
         {
             return response()->json([
-                'errors' => [
+                'error' => [
                     "You have already reviewed this product."
                 ],
                 "message" => "Unsuccessful"

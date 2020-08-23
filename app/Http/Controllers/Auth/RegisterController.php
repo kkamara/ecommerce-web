@@ -55,7 +55,7 @@ class RegisterController extends Controller
         if(true === $registerErrors['present'])
         {
             return response()->json([
-                'errors' => $registerErrors,
+                'error' => $registerErrors,
                 "message" => "Unsuccessful"
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -67,7 +67,7 @@ class RegisterController extends Controller
         if(strtotime(date("$expiry_year-$expiry_month")) < strtotime(date('Y-m')))
         {
             return response()->json([
-                'errors' => 'Invalid expiry date provided.',
+                'error' => 'Invalid expiry date provided.',
                 "message" => "Unsuccessful"
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -155,16 +155,25 @@ class RegisterController extends Controller
         if($validator->fails())
         {
             $errors = array_merge($validator->errors(), compact("message"));
-            return response()->json($validator->errors(), 400);
+            return response()->json([
+                "error" => $validator->errors()->all(),
+            ], 400);
         }
 
         $token = JWTAuth::fromUser($user);
+        $cart = $user->getDbCart();
 
         $message = "Successful";
         return response()->json(
             array_merge(
-                ['user' => new UserResource($user)],
-                compact('token', "message")
+                [
+                    'data' => [
+                        'user' => new UserResource($user),
+                        'token' => $token,
+                        'cart' => $cart,
+                    ],
+                ],
+                compact("message")
             ),
             201
         );

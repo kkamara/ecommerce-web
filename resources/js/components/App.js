@@ -102,7 +102,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { isLoaded, fetched, products } = this.props.products;
+        const { isLoaded, fetched } = this.props.products;
 
         if (!isLoaded) {
             return <Loader />;

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
+use App\Http\Requests\SanitiseRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Response;
-use App\Http\Requests\SanitiseRequest;
 use App\Helpers\CacheCart;
 use App\Product;
 use Auth;
@@ -19,7 +20,7 @@ class ProductController extends Controller
     public function index(SanitiseRequest $request)
     {
         return response()->json([
-            "products" => Product::getProducts($request)->paginate(7), 
+            "data" => Product::getProducts($request)->paginate(7), 
             "message" => "Successful",
         ]);
     }
@@ -40,7 +41,7 @@ class ProductController extends Controller
             if($user->id === $product->company->user_id)
             {
                 return response()->json([
-                    "errors" => ['Unable to perform add to cart action on your own product.'],
+                    "error" => ['Unable to perform add to cart action on your own product.'],
                     "message" => "Unauthorized"
                 ], Response::HTTP_UNAUTHORIZED);
             }
@@ -65,18 +66,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $user = \App\User::attemptAuth();
-        $reviews = $product->productReview()->get();
-        $permissionToReview = FALSE;
-        $collection = compact('product', 'reviews');
-
-        if(null !== $user) {
-            $permissionToReview = $product->didUserPurchaseProduct($user->id);
-            $collection['permissionToReview'] = $permissionToReview;
-        }
-
         return response()->json([
-            "product" => $collection,
+            "data" => new ProductResource($product),
             "message" => "Successful"
         ]);
     }

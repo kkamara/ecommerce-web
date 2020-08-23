@@ -84,8 +84,8 @@ class User extends Authenticatable implements JWTSubject
     {
         try
         {
-            $parse = JWTAuth::ParseToken();
-            $result = JWTAuth::toUser($parse);
+            $token = JWTAuth::ParseToken();
+            $result = JWTAuth::toUser($token);
         }
         catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
         {
@@ -93,8 +93,13 @@ class User extends Authenticatable implements JWTSubject
         }
         catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
         {
+            dd($e->getMessage());
             $result = null;
 
+        }
+        catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
+        {
+            $result = null;
         }
         catch (\Tymon\JWTAuth\Exceptions\JWTException $e)
         {

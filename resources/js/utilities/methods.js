@@ -18,6 +18,8 @@ export const getAuthToken = () => {
     return token;
 };
 
+export const removeAuthToken = () => localStorage.removeItem(TOKEN_NAME);
+
 export const getCacheHashToken = () => {
     const token = localStorage.getItem(CACHE_HASH_NAME);
 
@@ -26,6 +28,7 @@ export const getCacheHashToken = () => {
 };
 
 export const storeNewCacheHashToken = () => {
+    const result = uuidv4();
     localStorage.setItem(
         CACHE_HASH_NAME,
         uuidv4()

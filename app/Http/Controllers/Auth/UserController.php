@@ -21,24 +21,28 @@ class UserController extends Controller
         {
             if (! $user = JWTAuth::parseToken()->authenticate())
             {
-                $response = array_merge(['user_not_found'], compact("message"));
+                $error = 'user_not_found';
+                $response = compact("error", "message");
                 return response()->json($response, 404);
             }
         }
         catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
         {
-            $response = array_merge(['token_expired'], compact("message"));
+            $error = 'token_expired';
+            $response = compact("error", "message");
             return response()->json($response, $e->getStatusCode());
         }
         catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
         {
-            $response = array_merge(['token_invalid'], compact("message"));
+            $error = 'token_invalid';
+            $response = compact("error", "message");
             return response()->json($response, $e->getStatusCode());
 
         }
         catch (\Tymon\JWTAuth\Exceptions\JWTException $e)
         {
-            $response = array_merge(['token_absent'], compact("message"));
+            $error = 'token_absent';
+            $response = compact("error", "message");
             return response()->json($response, $e->getStatusCode());
         }
 
@@ -48,7 +52,7 @@ class UserController extends Controller
 
         return response()->json(
             array_merge(
-                ["user" => new UserResource($user)],
+                ["data" => new UserResource($user)],
                 compact("message", "cart")
             )
         );
@@ -100,14 +104,14 @@ class UserController extends Controller
                     $requestUser->update($data);
 
                     return response()->json([
+                        "data" => new UserResource($user),
                         "message"=>"Successful",
-                        "user" => new UserResource($user),
                     ]);
                 }
                 else
                 {
                     return response()->json([
-                        'errors' => ['Password is incorrect.'],
+                        'error' => ['Password is incorrect.'],
                         "message" => "Unsuccessful"
                     ], Response::HTTP_BAD_REQUEST);
                 }
@@ -115,7 +119,7 @@ class UserController extends Controller
             else
             {
                 return response()->json([
-                    'errors' => $validator->errors()->all(),
+                    'error' => $validator->errors()->all(),
                     "message" => "Unsuccessful"
                 ], Response::HTTP_BAD_REQUEST);
             }

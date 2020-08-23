@@ -1,4 +1,8 @@
-import { getCacheHashToken, getAuthToken } from "../../utilities/methods";
+import { 
+    getCacheHashToken, 
+    removeAuthToken,
+    getAuthToken,
+} from "../../utilities/methods";
 import { cartActions } from "../reducers/types";
 import { APP_URL } from "../../constants";
 
@@ -12,11 +16,11 @@ function updateCart(data) {
     return async dispatch => {
         dispatch(request(cartActions.UPDATE_CART_PENDING));
 
-        const headers = new Headers({ "Content-Type": "application/json" });
+        const headers = { "Content-Type": "application/json" };
         const token = getAuthToken();
 
-        if (token) headers.append('Authorization', `Bearer ${token}`);
-        else headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        else headers['X-CLIENT-HASH-KEY'] = getCacheHashToken();
 
         let url = APP_URL + `/cart/update`;
         url = encodeURI(url);
@@ -27,10 +31,8 @@ function updateCart(data) {
             headers,
         })
             .then(res => res.json())
-            .then(json => {
-                dispatch(
-                    success(cartActions.UPDATE_CART_SUCCESS, json.message)
-                );
+            .then(() => {
+                dispatch(success(cartActions.UPDATE_CART_SUCCESS));
 
                 // not good, but quick fix to get around 
                 // not storing inputs in class state
@@ -53,11 +55,8 @@ function updateCart(data) {
             };
         }
 
-        function success(type, payload) {
-            return {
-                type,
-                payload
-            };
+        function success(type) {
+            return {type};
         }
     };
 }
@@ -66,11 +65,11 @@ function addToCart(ID) {
     return async dispatch => {
         dispatch(request(cartActions.ADD_TO_CART_PENDING));
         
-        const headers = new Headers({ "Content-Type": "application/json" });
+        const headers = { "Content-Type": "application/json" };
         const token = getAuthToken();
 
-        if (token) headers.append('Authorization', `Bearer ${token}`);
-        else headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        else headers['X-CLIENT-HASH-KEY'] = getCacheHashToken();
 
         let url = APP_URL + `/products/${ID}/store`;
         url = encodeURI(url);
@@ -80,11 +79,7 @@ function addToCart(ID) {
             headers,
         })
             .then(res => res.json())
-            .then(json => {
-                dispatch(
-                    success(cartActions.ADD_TO_CART_SUCCESS, json.message)
-                );
-            })
+            .then(() => dispatch(success(cartActions.ADD_TO_CART_SUCCESS)))
             .catch(err => {
                 dispatch(error(cartActions.ADD_TO_CART_ERROR, err));
             });
@@ -102,12 +97,9 @@ function addToCart(ID) {
             };
         }
 
-        function success(type, payload) {
+        function success(type) {
             dispatch(getCart());
-            return {
-                type,
-                payload
-            };
+            return { type };
         }
     };
 }
@@ -117,11 +109,11 @@ function getCart() {
         dispatch(request(cartActions.GET_CART_PENDING));
         let url = APP_URL + `/cart`;
 
-        const headers = new Headers({ "Content-Type": "application/json" });
+        const headers = { "Content-Type": "application/json" };
         const token = getAuthToken();
 
-        if (token) headers.append('Authorization', `Bearer ${token}`);
-        else headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        else headers['X-CLIENT-HASH-KEY'] = getCacheHashToken();
 
         url = encodeURI(url);
 
@@ -131,16 +123,20 @@ function getCart() {
         })
             .then(res => res.json())
             .then(json => {
+                const { count, cart, cost } = json.data;
                 dispatch(
                     success(cartActions.GET_CART_SUCCESS, {
-                        count: json.count,
-                        items: json.cart,
-                        cost: json.cost
+                        data: cart,
+                        count,
+                        cost,
                     })
                 );
             })
             .catch(err => {
                 dispatch(error(cartActions.GET_CART_ERROR, err));
+                if (getAuthToken()) {
+                    removeAuthToken();
+                }
             });
 
         function request(type) {

@@ -53,7 +53,17 @@ class SanitiseRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $result = true;
+        
+        $user = \App\User::attemptAuth();
+        $client_hash_key = $this->header("X-CLIENT-HASH-KEY");
+
+        if(null === $user && null === $client_hash_key)
+        {
+            $result = false;
+        }
+
+        return $result;
     }
 
     /**

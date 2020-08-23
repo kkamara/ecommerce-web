@@ -1,9 +1,8 @@
 import { cartActions } from "./types";
 
 const initialState = {
-    cart: {
-        cart: []
-    }
+    isLoaded: false,
+    fetched: false,
 };
 const cartReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -39,7 +38,7 @@ const cartReducer = (state = initialState, action) => {
                 ...state,
                 fetched: true,
                 isLoaded: true,
-                cart: action.payload
+                data: action.payload
             };
     }
 

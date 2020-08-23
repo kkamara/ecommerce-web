@@ -31,7 +31,7 @@ class FlaggedProductReviewController extends Controller
         else
         {
             return response()->json([
-                "errors" => ['You have already flagged that review.'],
+                "error" => ['You have already flagged that review.'],
                 "message" => "Unsuccessful"
             ], Response::HTTP_BAD_REQUEST);
         }

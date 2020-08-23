@@ -1,6 +1,10 @@
 import { APP_URL } from "../../constants";
 import { productsActions } from "../reducers/types";
-import { convertArrayToGETParams } from "../../utilities/methods";
+import { 
+    convertArrayToGETParams, 
+    getCacheHashToken,
+    getAuthToken,
+} from "../../utilities/methods";
 
 export default {
     getProducts
@@ -10,6 +14,12 @@ function getProducts(pageNumber = null, params = {}) {
     return async dispatch => {
         dispatch(request(productsActions.GET_PRODUCTS_PENDING));
         let url = APP_URL + "/products";
+
+        const headers = { "Content-Type": "application/json" };
+        const token = getAuthToken();
+
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        else headers['X-CLIENT-HASH-KEY'] = getCacheHashToken();
 
         let GETVars = convertArrayToGETParams(params);
 
@@ -26,14 +36,22 @@ function getProducts(pageNumber = null, params = {}) {
         }
         url = encodeURI(url);
 
-        await fetch(url)
+        await fetch(url, { headers, })
             .then(res => res.json())
             .then(json => {
+                const { 
+                    current_page,
+                    per_page,
+                    total,
+                    data,
+                } = json.data;
                 dispatch(
                     success(productsActions.GET_PRODUCTS_SUCCESS, {
-                        products: json.products,
-                        activePage: pageNumber,
-                        searchParams: params
+                        activePage: current_page,
+                        searchParams: params,
+                        per_page,
+                        total,
+                        data,
                     })
                 );
             })

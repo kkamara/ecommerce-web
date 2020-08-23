@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SanitiseRequest;
 use App\FlaggedProductReview;
 use Illuminate\Http\Response;
-use App\Http\Requests\SanitiseRequest;
 use App\VendorApplication;
 use App\ProductReview;
 use App\UsersAddress;
@@ -16,20 +16,24 @@ class ModeratorsHubController extends Controller
     /**
      * Display a listing of the resource..
      *
+     * @param  SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(SanitiseRequest $request)
     {        
-        $user = \App\User::attemptAuth();
+        if(!$user = User::attemptAuth())
+        {
+            return abort(Response::HTTP_UNAUTHORIZED);
+        }
 
         if($user->hasRole('moderator'))
         {
             $vendorApplications = VendorApplication::whereFresh()->paginate(5,  ['*'], 'vendorAppPage');
             $unansweredFlaggedReviews = FlaggedProductReview::whereUnanswered()->paginate(5,  ['*'], 'flaggedReviewPage');
 
-            return response()->json(
-                compact('vendorApplications', 'unansweredFlaggedReviews')
-            );
+            return response()->json([
+                "data" => compact('vendorApplications', 'unansweredFlaggedReviews')
+            ]);
         }
         else
         {
@@ -40,13 +44,18 @@ class ModeratorsHubController extends Controller
     }
 
     /**
-     * Moderator decides if flagged review required deletion.
+     * Moderator decides if flagged review requires deletion.
      *
+     * @param ProductReview   $productReview
+     * @param SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
     public function storeFlaggedReviewDecision(ProductReview $productReview, SanitiseRequest $request)
     {
-        $user = \App\User::attemptAuth();
+        if(!$user = User::attemptAuth())
+        {
+            return abort(Response::HTTP_UNAUTHORIZED);
+        }
 
         $reasonGiven     = filter_var($request->input('reason'), FILTER_SANITIZE_STRING);
         $acceptDecision  = filter_var($request->input('accept'), FILTER_SANITIZE_STRING);

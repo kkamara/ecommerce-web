@@ -1,6 +1,9 @@
 import { APP_URL } from "../../constants";
 import { currentUserActions } from "../reducers/types";
-import { getAuthToken } from "../../utilities/methods";
+import { 
+    removeAuthToken,
+    getAuthToken,
+} from "../../utilities/methods";
 
 export default { getCurrentUser };
 
@@ -22,13 +25,11 @@ function getCurrentUser() {
         
         await fetch(url, {
             method: "GET",
-            headers: new Headers({
-                Authorization: `Bearer ${token}`
-            })
+            headers: { Authorization: `Bearer ${token}` },
         })
             .then(res => res.json())
             .then(json => {
-                if (!json.user) {
+                if (!json.data) {
                     dispatch(
                         error(
                             currentUserActions.GET_CURRENT_USER_ERROR,
@@ -39,7 +40,7 @@ function getCurrentUser() {
                     dispatch(
                         success(
                             currentUserActions.GET_CURRENT_USER_SUCCESS,
-                            json.user
+                            json.data
                         )
                     );
                 }
@@ -48,6 +49,9 @@ function getCurrentUser() {
                 dispatch(
                     error(currentUserActions.GET_CURRENT_USER_ERROR, err)
                 );
+                if (getAuthToken()) {
+                    removeAuthToken();
+                }
             });
 
         function request(type) {

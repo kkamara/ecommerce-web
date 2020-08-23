@@ -20,7 +20,7 @@ class UsersAddressController extends Controller
         $user = \App\User::attemptAuth();
         $usersAddresses = UsersAddress::where('user_id', $user->id)->paginate(10);
 
-        return response()->json(compact('usersAddresses'));
+        return response()->json(["data" => $usersAddresses]);
     }
 
     /**
@@ -79,16 +79,16 @@ class UsersAddressController extends Controller
             else
             {
                 return response()->json([
-                    'errors' => ['Invalid country provided'],
-                    "message" => "Successful",
+                    'error' => ['Invalid country provided'],
+                    "message" => "Bad Request",
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
-                'errors' => $validator->errors()->all(),
-                "message" => "Successful",
+                'error' => $validator->errors()->all(),
+                "message" => "Bad Request",
             ], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -147,16 +147,16 @@ class UsersAddressController extends Controller
                 else
                 {
                     return response()->json([
-                        'errors' => ['Invalid country provided'],
-                        "message" => "Successful",
+                        'error' => ['Invalid country provided'],
+                        "message" => "Bad Request",
                     ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
             {
                 return response()->json([
-                    'errors' => $validator->errors()->all(),
-                    "message" => "Successful",
+                    'error' => $validator->errors()->all(),
+                    "message" => "Bad Request",
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
@@ -199,8 +199,8 @@ class UsersAddressController extends Controller
             else
             {
                 return response()->json([
-                    "errors" => $validator->errors()->all(),
-                    "message" => "Unsuccessful",
+                    "error" => $validator->errors()->all(),
+                    "message" => "Bad Request",
                 ], Response::HTTP_BAD_REQUEST);
             }
         }

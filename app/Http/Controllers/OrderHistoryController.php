@@ -24,7 +24,7 @@ class OrderHistoryController extends Controller
             'user_id' => $user->id,
         ])->paginate(10);
 
-        return response()->json(compact('orderHistories'));
+        return response()->json(["data" => $orderHistories]);
     }
 
     /**
@@ -42,10 +42,10 @@ class OrderHistoryController extends Controller
         $message = "Unsuccessful";
         if(false == $errors->isEmpty())
         {
-            $errors = $errors->all();
+            $error = $errors->all();
 
             return response()->json(
-                compact('errors', "message"),
+                compact('error', "message"),
                 Response::HTTP_BAD_REQUEST,
             );
         }
@@ -96,6 +96,9 @@ class OrderHistoryController extends Controller
         ])->firstOrFail();
 
         $message = "Unsuccessful";
-        return response()->json(compact("orderHistory", "message"));
+        return response()->json(array_merge(
+            ["data" => $orderHistory], 
+            compact("message"),
+        ));
     }
 }

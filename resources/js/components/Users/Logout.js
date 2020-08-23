@@ -6,9 +6,9 @@ import { userActions } from "../../redux/actions/index";
 
 class Logout extends Component {
     componentDidUpdate() {
-        const { fetched, isLoaded, user } = this.props.current_user;
+        const { fetched, isLoaded, data: userData } = this.props.current_user;
 
-        if (fetched && isLoaded && user) {
+        if (fetched && isLoaded && userData) {
             this.props.logoutUser();
         }
     }

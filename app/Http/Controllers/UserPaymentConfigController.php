@@ -24,9 +24,10 @@ class UserPaymentConfigController extends Controller
             ->paginate(10);
 
         $message = "Successful";
-        return response()->json(
-            compact('billingCards', 'message')
-        );
+        return response()->json(array_merge([
+            ["data" => $billingCards], 
+            compact('message'),
+        ]));
     }
 
     /**
@@ -94,14 +95,13 @@ class UserPaymentConfigController extends Controller
                     UserPaymentConfig::create($data);
 
                     return response()->json([
-                        "errors" => ['Billing card successfully created.'],
                         "message" => "Successful"
                     ], Response::HTTP_CREATED);
                 }
                 else
                 {
                     return response()->json([
-                        'errors' => ['Invalid country provided'],
+                        'error' => ['Invalid country provided'],
                         "message" => "Unsuccessful"
                     ], Response::HTTP_BAD_REQUEST);
                 }
@@ -109,7 +109,7 @@ class UserPaymentConfigController extends Controller
             else
             {
                 return response()->json([
-                    'errors' => ['Invalid expiry date provided.'],
+                    'error' => ['Invalid expiry date provided.'],
                     "message" => "Unsuccessful"
                 ], Response::HTTP_BAD_REQUEST);
             }
@@ -117,7 +117,7 @@ class UserPaymentConfigController extends Controller
         else
         {
             return response()->json([
-                'errors' => $validator->errors()->all(),
+                'error' => $validator->errors()->all(),
                 "message" => "Unsuccessful"
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -188,14 +188,14 @@ class UserPaymentConfigController extends Controller
                         UserPaymentConfig::where('id', $userPaymentConfig->id)->update($data);
 
                         return response()->json([
-                            "errors" => ['Billing card successfully updated.'],
+                            "error" => ['Billing card successfully updated.'],
                             "message" => "Successful"
                         ]);
                     }
                     else
                     {
                         return response()->json([
-                            'errors' => ['Invalid country provided'],
+                            'error' => ['Invalid country provided'],
                             "message" => "Uncuccessful"
                         ], Response::HTTP_BAD_REQUEST);
                     }
@@ -203,7 +203,7 @@ class UserPaymentConfigController extends Controller
                 else
                 {
                     return response()->json([
-                        'errors' => ['Invalid expiry date provided.'],
+                        'error' => ['Invalid expiry date provided.'],
                         "message" => "Uncuccessful"
                     ], Response::HTTP_BAD_REQUEST);
                 }
@@ -211,7 +211,7 @@ class UserPaymentConfigController extends Controller
             else
             {
                 return response()->json([
-                    'errors' => $validator->errors()->all(),
+                    'error' => $validator->errors()->all(),
                     "message" => "Uncuccessful"
                 ], Response::HTTP_BAD_REQUEST);
             }
@@ -256,7 +256,7 @@ class UserPaymentConfigController extends Controller
                 else
                 {
                     return response()->json([
-                        'errors', ['Billing card has not been deleted.'],
+                        'error', ['Billing card has not been deleted.'],
                         "message" => "Unsuccessful"
                     ], Response::HTTP_BAD_REQUEST);
                 }
@@ -264,7 +264,7 @@ class UserPaymentConfigController extends Controller
             else
             {
                 return response()->json([
-                    'errors', $validator->errors()->all(),
+                    'error', $validator->errors()->all(),
                     "message" => "Unsuccessful"
                 ], Response::HTTP_BAD_REQUEST);
             }

@@ -9,12 +9,12 @@ class ProductsListPage extends React.Component {
     state = { ...initialState };
 
     render() {
-        const { products } = this.props;
-
-        if (products.products.products.data.length) {
+        const { data: productsData } = this.props.products;
+        
+        if (productsData.data && productsData.data.length) {
             return (
                 <div>
-                    {products.products.products.data.map(
+                    {productsData.data.map(
                         ({
                             id,
                             name,

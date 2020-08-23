@@ -19,21 +19,15 @@ class CartController extends Controller
      */
     public function show(\App\Http\Requests\SanitiseRequest $request)
     {
-        $user = User::attemptAuth();
-        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
-
-        if(null === $user && null === $client_hash_key)
-        {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
-
-        if($user)
+        $client_hash_key = $request->header('X_CLIENT_HASH_KEY');
+        
+        if($user = User::attemptAuth())
         {
             $cart = $user->getDbCart();
         }
         else
         {
-            if ($client_hash_key === null) {
+            if (!$client_hash_key) {
                 return response()->json([
                     "message" => "Client hash key not given"
                 ], 409);
@@ -47,7 +41,12 @@ class CartController extends Controller
         $count = Cart::count($client_hash_key);
 
         $message = "Successful";
-        return response()->json(compact("cart", "cost", "count", "message"));
+        return response()->json(
+            array_merge(
+                ["data" => compact("cart", "cost", "count")], 
+                compact("message"),
+            )
+        );
     }
 
     /**
@@ -55,18 +54,10 @@ class CartController extends Controller
      *
      * @param  \App\Http\Requests\SanitiseRequest $request
      * @return \Illuminate\Http\Response
-     */
+    */
     public function update(SanitiseRequest $request)
     {
-        $user = User::attemptAuth();
-        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
-
-        if(null === $user && null === $client_hash_key)
-        {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
-
-        if($user)
+        if($user = User::attemptAuth())
         {
             $user->updateDbCartAmount($request);
         }

@@ -28,16 +28,16 @@ class Navbar extends PureComponent {
     }
 
     handleUserAuth = () => {
-        const { isLoaded, fetched, user } = this.props.current_user;
+        const { isLoaded, fetched, data: userData } = this.props.current_user;
 
         if (
             isLoaded &&
             fetched &&
-            user &&
-            user.id !== this.state.userID
+            userData &&
+            userData.id !== this.state.userID
         ) {
-            this.setUserRole(user.role);
-            this.setUserID(user.id);
+            this.setUserRole(userData.role);
+            this.setUserID(userData.id);
             this.setIsAuth(true);
             this.props.getCart();
         } else if (this.state.firstLoad) {
@@ -64,10 +64,9 @@ class Navbar extends PureComponent {
     render() {
         const { userRole, isAuth } = this.state;
         const { location } = this.props;
-        const { cart } = this.props.cart;
 
         const { navbarSpacing } = styles;
-
+        
         if (location.pathname === "/404") {
             return null;
         } else {
@@ -241,7 +240,13 @@ class Navbar extends PureComponent {
                                                     aria-hidden="true"
                                                 ></i>
                                             </span>
-                                            <span>Cart ({cart.count})</span>
+                                            <span>
+                                                Cart ({
+                                                    (
+                                                        this.props.cart.data && this.props.cart.data.count
+                                                    ) || 0
+                                                })
+                                            </span>
                                         </a>
                                     </li>
                                 </ul>

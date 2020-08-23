@@ -20,7 +20,7 @@ const productsReducer = (state = initialState, action) => {
                 ...state,
                 fetched: true,
                 isLoaded: true,
-                products: action.payload
+                data: action.payload
             };
     }
 

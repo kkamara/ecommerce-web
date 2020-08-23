@@ -9,8 +9,8 @@ export default { loginUser, logoutUser };
 function loginUser(email, password) {
     return async dispatch => {
         dispatch(request(userActions.POST_LOGIN_USER_PENDING));
-        const headers = new Headers({ "Content-Type": "application/json" });
-        headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
+        const headers = { "Content-Type": "application/json" };
+        headers['X-CLIENT-HASH-KEY'] = getCacheHashToken();
         const url = encodeURI(APP_URL + "/user/login");
 
         await fetch(url, {
@@ -20,10 +20,10 @@ function loginUser(email, password) {
         })
             .then(res => res.json())
             .then(json => {
-                localStorage.setItem(TOKEN_NAME, json.token);
+                localStorage.setItem(TOKEN_NAME, json.data.token);
 
                 dispatch(
-                    success(userActions.POST_LOGIN_USER_SUCCESS, json.user)
+                    success(userActions.POST_LOGIN_USER_SUCCESS, json.data)
                 );
             })
             .catch(err => {

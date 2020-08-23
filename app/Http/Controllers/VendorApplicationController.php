@@ -40,15 +40,15 @@ class VendorApplicationController extends Controller
             else
             {
                 return response()->json([
-                    "errors" => $applicationError,
-                    "message" => "Unsuccessful"
+                    "error" => $applicationError,
+                    "message" => "Bad Request"
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
         else
         {
             return response()->json([
-                "errors" => ["Only a guest user can access this resource."],
+                "error" => ["Only a guest user can access this resource."],
                 "message" => "Unauthorized"
             ], Response::HTTP_UNAUTHORIZED);
         }
@@ -66,11 +66,11 @@ class VendorApplicationController extends Controller
 
         if(VendorApplication::hasUserApplied($user->id))
         {
-            $response = "Yes";
+            $response = true;
         }
         else
         {
-            $response = "No";
+            $response = false;
         }
 
         return response()->json([

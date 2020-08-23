@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import { userActions } from "../../redux/actions/index";
 
@@ -13,10 +13,10 @@ class Login extends Component {
     };
 
     componentDidUpdate() {
-        const { isLoaded, fetched, user } = this.props.current_user;
+        const { isLoaded, fetched, data: userData } = this.props.current_user;
         const { history } = this.props;
-
-        if (isLoaded && fetched && user) {
+        
+        if (isLoaded && fetched && userData) {
             history.push("/");
         }
     }

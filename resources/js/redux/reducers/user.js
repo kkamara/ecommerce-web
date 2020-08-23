@@ -24,7 +24,7 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 fetched: true,
                 isLoaded: true,
-                user: action.payload
+                data: action.payload
             };
     }
 

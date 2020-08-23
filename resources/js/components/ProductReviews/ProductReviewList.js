@@ -69,7 +69,7 @@ const ProductReviewList = props => {
                                                         Product Rated {score} /
                                                         5
                                                         {userAuthenticated &&
-                                                        current_user.user.id ===
+                                                        current_user.data.id ===
                                                             reviews.user_id ? (
                                                             <strong>you</strong>
                                                         ) : (

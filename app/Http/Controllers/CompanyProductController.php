@@ -14,21 +14,25 @@ class CompanyProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  string  $slug
+     * @param  string          $slug
+     * @param  SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
     public function index($slug, SanitiseRequest $request)
     {
-        $company = Company::where('slug', $slug)->first();        
+        $company = Company::where('slug', $slug)->firstOrFail();        
 
-        $user = \App\User::attemptAuth();
+        if(!$user = User::attemptAuth())
+        {
+            return abort(Response::HTTP_UNAUTHORIZED);
+        }
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
             $companyProducts = Product::getProducts($request)->getCompanyProducts($company->id)->paginate(7);
 
             return response()->json([
-                'companyProducts' => $companyProducts,
+                'data' => $companyProducts,
                 "message" => "Successful"
             ]);
         }
@@ -43,16 +47,18 @@ class CompanyProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  string  $slug
-     * @param  \App\Http\Requests\SanitiseRequest  $request
+     * @param  string           $slug
+     * @param  SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store($slug, SanitiseRequest $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        
+        $company = Company::where('slug', $slug)->firstOrFail();
 
-        $user = \App\User::attemptAuth();
+        if(!$user = User::attemptAuth())
+        {
+            return abort(Response::HTTP_UNAUTHORIZED);
+        }
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
@@ -103,7 +109,7 @@ class CompanyProductController extends Controller
             else
             {
                 return response()->json([
-                    'errors' => $errors,
+                    'error' => $errors,
                     "message" => "Unsuccessful"
                 ], Response::HTTP_BAD_REQUEST);
             }
@@ -119,17 +125,19 @@ class CompanyProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\SanitiseRequest  $request
-     * @param  string  $slug
-     * @param  \App\Product $product
+     * @param  string           $slug
+     * @param  Product          $product
+     * @param  SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function update($slug, Product $product, SanitiseRequest $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        
+        $company = Company::where('slug', $slug)->firstOrFail();
 
-        $user = \App\User::attemptAuth();
+        if(!$user = User::attemptAuth())
+        {
+            return abort(Response::HTTP_UNAUTHORIZED);
+        }
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
@@ -175,7 +183,7 @@ class CompanyProductController extends Controller
             else
             {
                 return response()->json([
-                    'errors' => $errors,
+                    'error' => $errors,
                     "message" => "Unsuccessful"
                 ], Response::HTTP_BAD_REQUEST);
             }
@@ -191,15 +199,19 @@ class CompanyProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $slug
-     * @param  \App\Product $product
+     * @param  string          $slug
+     * @param  Product         $product
+     * @param  SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
     public function destroy($slug, Product $product, SanitiseRequest $request)
     {
-        $company = Company::where('slug', $slug)->first();        
-
-        $user = \App\User::attemptAuth();
+        $company = Company::where('slug', $slug)->firstOrFail();      
+        
+        if(!$user = User::attemptAuth())
+        {
+            return abort(Response::HTTP_UNAUTHORIZED);
+        }
 
         if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {

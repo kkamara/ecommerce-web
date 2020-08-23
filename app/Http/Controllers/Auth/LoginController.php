@@ -62,7 +62,7 @@ class LoginController extends Controller
         if($validator->fails())
         {
             return response()->json([
-                "errors" => $validator->errors(),
+                "error" => $validator->errors(),
                 "message" => $message,
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -101,8 +101,14 @@ class LoginController extends Controller
         $message = "Successful Login";
         return response()->json(
             array_merge(
-                ["user" => new UserResource($user)],
-                compact("message", "token", "cart")
+                [
+                    "data" => [
+                        "user" => new UserResource($user),
+                        "token" => $token,
+                        "cart" => $cart,
+                    ],
+                ],
+                compact("message")
             )
         );
     }
