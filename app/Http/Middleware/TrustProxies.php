@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use Fideloper\Proxy\TrustProxies as Middleware;
 
 class TrustProxies extends Middleware
@@ -19,5 +19,5 @@ class TrustProxies extends Middleware
      *
      * @var int
      */
-    protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers = SanitiseRequest::HEADER_X_FORWARDED_ALL;
 }

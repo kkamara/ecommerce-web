@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
 use App\Helpers\CommonHelper;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\UserPaymentConfig;
 use Validator;
 
@@ -32,10 +32,10 @@ class UserPaymentConfigController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserPaymentConfig $userPaymentConfig, Request $request)
+    public function store(UserPaymentConfig $userPaymentConfig, SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
 
@@ -126,11 +126,11 @@ class UserPaymentConfigController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @param  \App\UserPaymentConfig  $userPaymentConfig
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserPaymentConfig $userPaymentConfig)
+    public function update(SanitiseRequest $request, UserPaymentConfig $userPaymentConfig)
     {
         $user = \App\User::attemptAuth();
         if($userPaymentConfig['user_id'] === $user->id)
@@ -230,7 +230,7 @@ class UserPaymentConfigController extends Controller
      * @param  \App\UserPaymentConfig  $userPaymentConfig
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserPaymentConfig $userPaymentConfig, Request $request)
+    public function destroy(UserPaymentConfig $userPaymentConfig, SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
         if($userPaymentConfig['user_id'] === $user->id)

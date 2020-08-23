@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\VendorApplication;
 use App\UsersAddress;
 use App\User;
@@ -13,10 +13,10 @@ class VendorApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
 

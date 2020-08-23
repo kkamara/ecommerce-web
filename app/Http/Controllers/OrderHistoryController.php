@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\OrderHistoryProducts;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\OrderHistory;
 use App\Cart;
 use Auth;
@@ -30,10 +30,10 @@ class OrderHistoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
 
@@ -83,10 +83,10 @@ class OrderHistoryController extends Controller
      * Display the specified resource.
      *
      * @param  string  $refNum - Reference number for \App\OrderHistory resource.
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function show($refNum, Request $request)
+    public function show($refNum, SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
 

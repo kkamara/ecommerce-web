@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
 use App\Helpers\CommonHelper;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\UsersAddress;
 use Validator;
 
@@ -26,10 +26,10 @@ class UsersAddressController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
 
@@ -96,11 +96,11 @@ class UsersAddressController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UsersAddress $usersAddress, Request $request)
+    public function update(UsersAddress $usersAddress, SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
         if($usersAddress['user_id'] === $user->id)
@@ -174,7 +174,7 @@ class UsersAddressController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UsersAddress $usersAddress, Request $request)
+    public function destroy(UsersAddress $usersAddress, SanitiseRequest $request)
     {     
         $user = \App\User::attemptAuth();
         if($usersAddress['user_id'] === $user->id)

@@ -6,7 +6,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use Validator;
 use App\User;
 use JWTAuth;
@@ -57,11 +57,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @param  int  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update($slug, Request $request)
+    public function update($slug, SanitiseRequest $request)
     {
         $user = auth()->user();
 

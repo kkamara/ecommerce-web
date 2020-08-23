@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\Request;
 use App\Product;
 
 class CacheCart
@@ -89,13 +88,10 @@ class CacheCart
     /**
      * Updates the respective number of products in the user's session cart.
      *
-     * @param  \Illuminate\Http\Request|null  $request {null}
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      */
-    public static function updateCacheCartAmount($request=null)
+    public static function updateCacheCartAmount($request)
     {
-        if (!$request) {
-            $request = request();
-        }
         $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
         /** Get existing session cart */
         $cacheCart = self::getCacheCart($client_hash_key);

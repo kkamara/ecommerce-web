@@ -13,7 +13,7 @@ class JwtMiddleware extends BaseMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @param  \Closure  $next
      * @return mixed
      */

@@ -120,7 +120,7 @@ class Product extends Model
      * Query products using request params.
      * 
      * @param  \Illuminate\Database\Eloquent\Model  $query
-     * @param  \Illuminate\Http\Request             $request
+     * @param  \App\Http\Requests\SanitiseRequest    $request
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function scopeGetProducts($query, $request)

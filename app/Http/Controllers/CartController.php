@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SanitiseRequest;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use App\Helpers\CacheCart;
 use App\User;
 use App\Cart;
@@ -14,10 +14,10 @@ class CartController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request
+     * @param  \App\Http\Requests\SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(\App\Http\Requests\SanitiseRequest $request)
     {
         $user = User::attemptAuth();
         $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
@@ -56,10 +56,10 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(SanitiseRequest $request)
     {
         $user = User::attemptAuth();
         $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
@@ -75,7 +75,7 @@ class CartController extends Controller
         }
         else
         {
-            CacheCart::updateCacheCartAmount();
+            CacheCart::updateCacheCartAmount($request);
         }
 
         return response()->json(["message"=>"Successful"]);

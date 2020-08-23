@@ -7,7 +7,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\Helpers\CacheCart;
 use Validator;
 use JWTAuth;
@@ -38,10 +38,10 @@ class LoginController extends Controller
     /**
      * Authenticate user
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\SanitiseRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create(SanitiseRequest $request)
     {
         $message = "Unsuccessful Login";
 

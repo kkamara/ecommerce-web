@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\FlaggedProductReview;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\VendorApplication;
 use App\ProductReview;
 use App\UsersAddress;
@@ -44,7 +44,7 @@ class ModeratorsHubController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function storeFlaggedReviewDecision(ProductReview $productReview, Request $request)
+    public function storeFlaggedReviewDecision(ProductReview $productReview, SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
 
@@ -94,7 +94,7 @@ class ModeratorsHubController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function storeVendorApplicantDecision(VendorApplication $vendorApplication, Request $request)
+    public function storeVendorApplicantDecision(VendorApplication $vendorApplication, SanitiseRequest $request)
     {
         $user = \App\User::attemptAuth();
 

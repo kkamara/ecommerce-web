@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SanitiseRequest;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use App\Company;
 use App\Product;
 use Validator;
@@ -17,7 +17,7 @@ class CompanyProductController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function index($slug, Request $request)
+    public function index($slug, SanitiseRequest $request)
     {
         $company = Company::where('slug', $slug)->first();        
 
@@ -44,10 +44,10 @@ class CompanyProductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  string  $slug
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($slug, Request $request)
+    public function store($slug, SanitiseRequest $request)
     {
         $company = Company::where('slug', $slug)->first();
         
@@ -119,12 +119,12 @@ class CompanyProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @param  string  $slug
      * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function update($slug, Product $product, Request $request)
+    public function update($slug, Product $product, SanitiseRequest $request)
     {
         $company = Company::where('slug', $slug)->first();
         
@@ -195,7 +195,7 @@ class CompanyProductController extends Controller
      * @param  \App\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug, Product $product, Request $request)
+    public function destroy($slug, Product $product, SanitiseRequest $request)
     {
         $company = Company::where('slug', $slug)->first();        
 

@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
+use App\Http\Requests\SanitiseRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use App\Helpers\CacheCart;
 use JWTAuth;
 
@@ -167,7 +167,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get errors in request data.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  App\Http\Requests\SanitiseRequest $request
      * @return \Illuminate\Support\MessageBag
      */
     public function getOrderHistoryErrors($request)
@@ -304,7 +304,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Updates the respective number of products in the user's database cart.
      *
-     * @param  \Illuminate\Http\Request|null  $request {null}
+     * @param  \App\Http\Requests\SanitiseRequest|null  $request {null}
      */
     public function updateDbCartAmount($request)
     {
@@ -388,7 +388,7 @@ class User extends Authenticatable implements JWTSubject
         return !$this->hasRole('vendor') && !$this->hasRole('moderator');
     }
 
-    public static function getRegisterErrors(Request $request)
+    public static function getRegisterErrors(SanitiseRequest $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:191',

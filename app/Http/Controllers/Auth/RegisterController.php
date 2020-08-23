@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\Helpers\CacheCart;
 use Validator as Validate;
 use App\UserPaymentConfig;
@@ -37,7 +37,7 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
 
-    public function register(Request $request)
+    public function register(SanitiseRequest $request)
     {
         $registerErrors = User::getRegisterErrors($request);
 

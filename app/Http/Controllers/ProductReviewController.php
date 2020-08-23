@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\ProductReview;
 use App\Product;
 use Validator;
@@ -13,10 +13,10 @@ class ProductReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Product $product, Request $request)
+    public function store(Product $product, SanitiseRequest $request)
     {
         
 

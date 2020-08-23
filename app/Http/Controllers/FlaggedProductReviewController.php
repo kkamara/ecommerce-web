@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SanitiseRequest;
 use App\FlaggedProductReview;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
 use App\ProductReview;
 
 class FlaggedProductReviewController extends Controller
@@ -12,10 +12,10 @@ class FlaggedProductReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductReview $productReview, Request $request)
+    public function store(ProductReview $productReview, SanitiseRequest $request)
     {
         $ip = $request->ip();
 

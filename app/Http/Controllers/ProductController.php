@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use App\Http\Requests\SanitiseRequest;
 use App\Helpers\CacheCart;
 use App\Product;
 use Auth;
@@ -16,7 +16,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(SanitiseRequest $request)
     {
         return response()->json([
             "products" => Product::getProducts($request)->paginate(7), 
@@ -29,7 +29,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Product $product)
+    public function store(SanitiseRequest $request, Product $product)
     {
         $user = \App\User::attemptAuth();
 
