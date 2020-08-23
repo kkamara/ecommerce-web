@@ -11,10 +11,8 @@ function loginUser(email, password) {
         dispatch(request(userActions.POST_LOGIN_USER_PENDING));
         const headers = new Headers({ "Content-Type": "application/json" });
         headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
-        let url = APP_URL + "/user/login";
-        url = encodeURI(url);
+        const url = encodeURI(APP_URL + "/user/login");
 
-        console.log("querying server for " + url);
         await fetch(url, {
             body: JSON.stringify({ email, password }),
             method: "POST",

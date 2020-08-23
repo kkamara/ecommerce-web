@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
@@ -158,9 +159,14 @@ class RegisterController extends Controller
         }
 
         $token = JWTAuth::fromUser($user);
-        $user = $user->getAllData();
 
         $message = "Successful";
-        return response()->json(compact('user','token', "message"),201);
+        return response()->json(
+            array_merge(
+                ['user' => new UserResource($user)],
+                compact('token', "message")
+            ),
+            201
+        );
     }
 }

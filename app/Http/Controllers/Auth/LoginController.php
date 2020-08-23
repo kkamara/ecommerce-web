@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
@@ -87,7 +88,6 @@ class LoginController extends Controller
         }
 
         $user = \App\User::where("email", $credentials["email"])->first();
-        $responseData = $user->getAllData();
 
         // add to cart if cache cart not empty
         $cacheCart = CacheCart::getCacheCart($client_hash_key);
@@ -101,7 +101,7 @@ class LoginController extends Controller
         $message = "Successful Login";
         return response()->json(
             array_merge(
-                ["user" => $responseData],
+                ["user" => new UserResource($user)],
                 compact("message", "token", "cart")
             )
         );

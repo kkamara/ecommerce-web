@@ -106,28 +106,6 @@ class Navbar extends PureComponent {
                                             Home
                                         </Link>
                                     </li>
-                                    <div className="nav-item">
-                                        <Link
-                                            className="nav-link"
-                                            to={{
-                                                pathname: "/",
-                                                state: { sort_by: "pop" }
-                                            }}
-                                        >
-                                            Most Popular
-                                        </Link>
-                                    </div>
-                                    <div className="nav-item">
-                                        <Link
-                                            className="nav-link"
-                                            to={{
-                                                pathname: "/",
-                                                state: { sort_by: "top" }
-                                            }}
-                                        >
-                                            Top Rated
-                                        </Link>
-                                    </div>
                                 </ul>
                                 <ul className="navbar-nav mr-auto">
                                     <ProductQuickSearch {...this.props} />

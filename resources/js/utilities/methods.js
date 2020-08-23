@@ -18,7 +18,7 @@ export const getAuthToken = () => {
 
 export const getCacheHashToken = () => {
     const token = localStorage.getItem(CACHE_HASH_NAME);
-    console.log("token", token);
+
     if (!token) return storeNewCacheHashToken();
     return token
 };

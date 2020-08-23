@@ -25,8 +25,8 @@ function getProducts(pageNumber = null, params = {}) {
             }
         }
         url = encodeURI(url);
-        console.log("querying server for " + url);
-        const data = await fetch(url)
+
+        await fetch(url)
             .then(res => res.json())
             .then(json => {
                 dispatch(

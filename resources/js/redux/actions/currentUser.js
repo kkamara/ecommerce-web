@@ -8,7 +8,7 @@ function getCurrentUser() {
     return async dispatch => {
         dispatch(request(currentUserActions.GET_CURRENT_USER_PENDING));
 
-        let url = APP_URL + "/user/authenticate";
+        const url = encodeURI(APP_URL + "/user/authenticate");
         const token = getAuthToken();
         
         if (null === token) {
@@ -20,8 +20,6 @@ function getCurrentUser() {
             );
         }
         
-        url = encodeURI(url);
-        console.log("querying server for " + url);
         await fetch(url, {
             method: "GET",
             headers: new Headers({

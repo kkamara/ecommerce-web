@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Requests\SanitiseRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
-use App\Http\Requests\SanitiseRequest;
 use Validator;
 use App\User;
 use JWTAuth;
@@ -43,12 +44,11 @@ class UserController extends Controller
 
         $message = "Successful";
 
-        $responseData = $user->getAllData();
         $cart = $user->getDbCart();
 
         return response()->json(
             array_merge(
-                ["user" => $responseData],
+                ["user" => new UserResource($user)],
                 compact("message", "cart")
             )
         );
@@ -98,11 +98,10 @@ class UserController extends Controller
                     $data['slug'] = str_slug($slug, '-');
 
                     $requestUser->update($data);
-                    $user = $requestUser->getAllData();
 
                     return response()->json([
                         "message"=>"Successful",
-                        "user" => $user,
+                        "user" => new UserResource($user),
                     ]);
                 }
                 else

@@ -125,6 +125,38 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get role name associated with this user.
+     * 
+     * return string|bool
+     */
+    public function getRoleNameAttribute() {
+        $assignedRoles = $this->getRoleNames();
+        $role = false;
+
+        if(false == $assignedRoles->isEmpty())
+        {
+            $role = $assignedRoles[0];
+        }
+
+        return $role;
+    }
+
+    /**
+     * Get company name related to this user.
+     * 
+     * return string|bool
+     */
+    public function getCompanyNameAttribute() {
+        $assignedCompany = $this->company()->get();
+        $company = false;
+
+        if(false == $assignedCompany->isEmpty())
+        {
+            $company = $assignedCompany->first();
+        }
+    }
+
+    /**
      * This model relationship has many \App\Cart.
      *
      * @return  \Illuminate\Database\Eloquent\Model
@@ -437,41 +469,6 @@ class User extends Authenticatable implements JWTSubject
             'address' => false == $addressErrors->isEmpty() ? $addressErrors : array(),
             'billing' => false == $billingErrors->isEmpty() ? $billingErrors : array(),
             'present' => $present,
-        );
-    }
-
-    /**
-     * Get all data associated with this user
-     *
-     * @return self
-     */
-    public function getAllData()
-    {
-        $billingCards = $this->userPaymentConfig->all();
-        $addresses = $this->userAddress->all();
-
-        $assignedRole = $this->getRoleNames();
-        $role = false;
-
-        if(false == $assignedRole->isEmpty())
-        {
-            $role = $assignedRole[0];
-        }
-
-        $assignedCompany = $this->company()->get();
-        $company = false;
-
-        if(false == $assignedCompany->isEmpty())
-        {
-            $company = $assignedCompany->first();
-        }
-
-        return array_merge(
-            $this->attributes,
-            compact("billingCards"),
-            compact("addresses"),
-            compact("company"),
-            compact("role")
         );
     }
 }

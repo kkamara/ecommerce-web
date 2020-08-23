@@ -21,7 +21,6 @@ function updateCart(data) {
         let url = APP_URL + `/cart/update`;
         url = encodeURI(url);
 
-        console.log("querying server for " + url);
         await fetch(url, {
             method: "PUT",
             body: JSON.stringify(data),
@@ -76,7 +75,6 @@ function addToCart(ID) {
         let url = APP_URL + `/products/${ID}/store`;
         url = encodeURI(url);
 
-        console.log("querying server for " + url);
         await fetch(url, {
             method: "POST",
             headers,
@@ -127,7 +125,6 @@ function getCart() {
 
         url = encodeURI(url);
 
-        console.log("querying server for " + url);
         await fetch(url, {
             method: "POST",
             headers,

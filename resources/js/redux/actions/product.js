@@ -8,10 +8,8 @@ export default {
 function getProduct(id) {
     return async dispatch => {
         dispatch(request(productActions.GET_PRODUCT_PENDING));
-        let url = APP_URL + `/products/${id}`;
+        const url = encodeURI(APP_URL + `/products/${id}`);
 
-        url = encodeURI(url);
-        console.log("querying server for " + url);
         await fetch(url)
             .then(res => res.json())
             .then(json => {
