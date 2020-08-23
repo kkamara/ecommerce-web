@@ -28,6 +28,10 @@ function updateCart(data) {
                 dispatch(
                     success(cartActions.UPDATE_CART_SUCCESS, json.message)
                 );
+
+                // not good, but quick fix to get around 
+                // not storing inputs in class state
+                window.location.reload(false); 
             })
             .catch(err => {
                 dispatch(error(cartActions.UPDATE_CART_ERROR, err));
@@ -47,9 +51,6 @@ function updateCart(data) {
         }
 
         function success(type, payload) {
-            // not good, but quick fix to get around 
-            // not storing inputs in class state
-            window.location.reload(false); 
             return {
                 type,
                 payload

@@ -1,13 +1,8 @@
 import { currentUserActions } from "./types";
 
 const initialState = {
-    user: {
-        user: undefined,
-        isLoaded: false,
-        fetched: false,
-        logout: false,
-        errors: {}
-    }
+    isLoaded: false,
+    fetched: false,
 };
 const currentUserReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -21,6 +16,7 @@ const currentUserReducer = (state = initialState, action) => {
                 error: action.payload
             };
         case currentUserActions.GET_CURRENT_USER_SUCCESS:
+            if (state.error) delete state.error;
             return {
                 ...state,
                 fetched: true,

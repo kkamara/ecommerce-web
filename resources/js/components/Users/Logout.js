@@ -1,20 +1,15 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import { userActions } from "../../redux/actions/index";
 
 class Logout extends Component {
-    componentDidMount() {
+    componentDidUpdate() {
         const { fetched, isLoaded, user } = this.props.current_user;
-        const { history } = this.props;
 
-        if (typeof user !== "undefined") {
-            history.push("/404");
-        } else {
+        if (fetched && isLoaded && user) {
             this.props.logoutUser();
-
-            setTimeout(() => history.push("/"), 1000);
         }
     }
 
@@ -24,8 +19,7 @@ class Logout extends Component {
 }
 
 const mapStateToProps = state => ({
-    current_user: state.current_user.user,
-    user: state.user.user
+    current_user: state.current_user,
 });
 const mapDispatchToProps = dispatch => ({
     logoutUser: () => dispatch(userActions.logoutUser())

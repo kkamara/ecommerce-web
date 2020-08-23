@@ -9,7 +9,7 @@ import ProductQuickSearch from "./Products/ProductQuickSearch";
 
 class Navbar extends PureComponent {
     state = {
-        userRole: "",
+        userRole: null,
         isAuth: false
     };
 
@@ -24,9 +24,9 @@ class Navbar extends PureComponent {
     }
 
     getCart() {
-        const { fetched, user } = this.props.current_user;
+        const { isLoaded, fetched, user } = this.props.current_user;
 
-        if (typeof user !== "undefined" && fetched === true) {
+        if (isLoaded && fetched && user) {
             this.props.getCart(user);
         } else {
             this.props.getCart();
@@ -34,20 +34,19 @@ class Navbar extends PureComponent {
     }
 
     handleUserAuth = () => {
-        const { fetched, user } = this.props.current_user;
+        const { isLoaded, fetched, user } = this.props.current_user;
 
-        if (typeof user !== "undefined" && fetched === true) {
-            this.setUserRole(user);
-            this.setIsAuth(
-                typeof user === "object" && user !== null ? true : false
-            );
+        if (isLoaded && fetched && user) {
+            this.setUserRole(user.role);
+            this.setIsAuth(true);
+        } else {
+            this.setUserRole(null);
+            this.setIsAuth(false);
         }
     };
 
-    setUserRole = user => {
-        const newUserRole = user.role;
-
-        this.setState({ userRole: newUserRole });
+    setUserRole = userRole => {
+        this.setState({ userRole });
     };
 
     setIsAuth = isAuth => this.setState({ isAuth });

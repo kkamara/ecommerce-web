@@ -2,7 +2,7 @@ import { getCacheHashToken } from "../../utilities/methods";
 import { APP_URL, TOKEN_NAME } from "../../constants";
 import { userActions } from "../reducers/types";
 
-import { getCart } from "./cart";
+import { currentUserActions, cartActions } from "./index";
 
 export default { loginUser, logoutUser };
 
@@ -46,7 +46,8 @@ function loginUser(email, password) {
         }
 
         function success(type, payload) {
-            dispatch(getCart());
+            dispatch(currentUserActions.getCurrentUser());
+            dispatch(cartActions.getCart());
             return {
                 type,
                 payload
@@ -59,21 +60,23 @@ function logoutUser() {
     return async dispatch => {
         localStorage.removeItem(TOKEN_NAME);
 
-        dispatch(pending(userActions.GET_CURRENT_USER_PENDING));
-        dispatch(success(userActions.GET_CURRENT_USER_SUCCESS));
+        dispatch(pending(userActions.GET_LOGOUT_USER_PENDING));
+        dispatch(success(userActions.GET_LOGOUT_USER_SUCCESS));
+        window.location.href = "/";
 
         function pending(type) {
             return {
+                payload: null,
                 type,
-                payload
             };
         }
 
         function success(type) {
-            dispatch(getCart());
+            dispatch(currentUserActions.getCurrentUser());
+            dispatch(cartActions.getCart());
             return {
+                payload: null,
                 type,
-                payload
             };
         }
     };
