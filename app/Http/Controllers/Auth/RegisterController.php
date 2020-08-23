@@ -43,7 +43,7 @@ class RegisterController extends Controller
 
         $input = $request->input();
 
-        $client_hash_key = $request->get("client_hash_key");
+        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
 
         if ($client_hash_key === null) {
             return response()->json([
@@ -145,7 +145,7 @@ class RegisterController extends Controller
         UserPaymentConfig::create($data['user_payment_config']);
 
         // add to cart if cache cart not empty
-        $cacheCart = CacheCart::getCacheCart($request->get("client_hash_key"));
+        $cacheCart = CacheCart::getCacheCart($request->header("X-CLIENT-HASH-KEY"));
         if(!empty($cacheCart))
         {
             $user->moveCacheCartToDbCart($cacheCart, $client_hash_key);

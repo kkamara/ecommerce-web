@@ -7,8 +7,9 @@ export default { loginUser, logoutUser };
 function loginUser(email, password) {
     return async dispatch => {
         dispatch(request(userActions.POST_LOGIN_USER_PENDING));
+        const headers = new Headers({ "Content-Type": "application/json" });
+        headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
         let url = APP_URL + "/user/login";
-        url += `?client_hash_key=${getCacheHashToken()}`;
         url = encodeURI(url);
 
         let body = new FormData();
@@ -18,7 +19,8 @@ function loginUser(email, password) {
         console.log("querying server for " + url);
         await fetch(url, {
             method: "POST",
-            body
+            headers,
+            body,
         })
             .then(res => res.json())
             .then(json => {

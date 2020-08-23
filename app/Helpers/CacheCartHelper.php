@@ -96,7 +96,7 @@ class CacheCart
         if (!$request) {
             $request = request();
         }
-        $client_hash_key = $request->get("client_hash_key");
+        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
         /** Get existing session cart */
         $cacheCart = self::getCacheCart($client_hash_key);
         $array     = array();

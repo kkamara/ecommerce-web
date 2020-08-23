@@ -20,7 +20,7 @@ class CartController extends Controller
     public function show(Request $request)
     {
         $user = User::attemptAuth();
-        $client_hash_key = $request->get("client_hash_key");
+        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
 
         if(null === $user && null === $client_hash_key)
         {
@@ -62,7 +62,7 @@ class CartController extends Controller
     public function update(Request $request)
     {
         $user = User::attemptAuth();
-        $client_hash_key = $request->get("client_hash_key");
+        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
 
         if(null === $user && null === $client_hash_key)
         {

@@ -11,18 +11,17 @@ export default {
 function updateCart(data) {
     return async dispatch => {
         dispatch(request(cartActions.UPDATE_CART_PENDING));
+        const headers = new Headers({ "Content-Type": "application/json" });
+        headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
 
         let url = APP_URL + `/cart/update`;
-        url += `?client_hash_key=${getCacheHashToken()}`;
         url = encodeURI(url);
 
         console.log("querying server for " + url);
         await fetch(url, {
             method: "PUT",
             body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json",
-            }
+            headers,
         })
             .then(res => res.json())
             .then(json => {
@@ -62,14 +61,16 @@ function updateCart(data) {
 function addToCart(ID) {
     return async dispatch => {
         dispatch(request(cartActions.ADD_TO_CART_PENDING));
+        const headers = new Headers({ "Content-Type": "application/json" });
+        headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
 
         let url = APP_URL + `/products/${ID}/store`;
-        url += `?client_hash_key=${getCacheHashToken()}`;
         url = encodeURI(url);
 
         console.log("querying server for " + url);
         await fetch(url, {
-            method: "POST"
+            method: "POST",
+            headers,
         })
             .then(res => res.json())
             .then(json => {
@@ -109,13 +110,13 @@ function getCart(user) {
         dispatch(request(cartActions.GET_CART_PENDING));
         let url = APP_URL + `/cart`;
         console.log("user", user);
-        let headers;
+        const headers = new Headers({ "Content-Type": "application/json" });
         if (user) {
             headers = new Headers({
                 Authorization: `Bearer ${getAuthToken()}`
             });
         } else {
-            url += `?client_hash_key=${getCacheHashToken()}`;
+            headers.append('X-CLIENT-HASH-KEY', getCacheHashToken());
         }
 
         url = encodeURI(url);
@@ -123,7 +124,7 @@ function getCart(user) {
         console.log("querying server for " + url);
         await fetch(url, {
             method: "POST",
-            headers
+            headers,
         })
             .then(res => res.json())
             .then(json => {

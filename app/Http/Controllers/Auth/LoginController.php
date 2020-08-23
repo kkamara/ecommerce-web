@@ -45,7 +45,7 @@ class LoginController extends Controller
     {
         $message = "Unsuccessful Login";
 
-        $client_hash_key = $request->get("client_hash_key");
+        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
 
         if ($client_hash_key === null) {
             return response()->json([
