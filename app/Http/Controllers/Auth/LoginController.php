@@ -44,14 +44,13 @@ class LoginController extends Controller
      */
     public function create(SanitiseRequest $request)
     {
-        $message = "Unsuccessful Login";
-
         $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
 
         if ($client_hash_key === null) {
             return response()->json([
-                "message" => "Client hash key not given"
-            ], 409);
+                "error" => "Client hash key not given",
+                "message" => "Conflict",
+            ], HTTP_CONFLICT);
         }
 
         $validator = Validator::make($request->all(), [
@@ -63,7 +62,7 @@ class LoginController extends Controller
         {
             return response()->json([
                 "error" => $validator->errors(),
-                "message" => $message,
+                "message" => "Bad Request",
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -74,17 +73,17 @@ class LoginController extends Controller
             if (! $token = JWTAuth::attempt($credentials))
             {
                 return response()->json([
-                    'error' => 'invalid_credentials',
-                    "message" => $message,
-                ], 400);
+                    'error' => 'Invalid credentials',
+                    "message" => "Bad Request",
+                ], Response::HTTP_BAD_REQUEST);
             }
         }
         catch (JWTException $e)
         {
             return response()->json([
-                'error' => 'could_not_create_token',
-                "message" => $message,
-            ], 500);
+                'error' => 'Could not create token',
+                "message" => "Internal Server Error",
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         $user = \App\User::where("email", $credentials["email"])->first();
@@ -98,7 +97,6 @@ class LoginController extends Controller
 
         $cart = $user->getDbCart();
 
-        $message = "Successful Login";
         return response()->json(
             array_merge(
                 [
@@ -108,7 +106,7 @@ class LoginController extends Controller
                         "cart" => $cart,
                     ],
                 ],
-                compact("message")
+                ["message" => "Successful"],
             )
         );
     }

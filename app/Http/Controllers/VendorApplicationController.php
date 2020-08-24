@@ -34,7 +34,7 @@ class VendorApplicationController extends Controller
                 ]);
 
                 return response()->json([
-                    "message" => "Successful"
+                    "message" => "Created"
                 ], Response::HTTP_CREATED);
             }
             else
@@ -48,7 +48,7 @@ class VendorApplicationController extends Controller
         else
         {
             return response()->json([
-                "error" => ["Only a guest user can access this resource."],
+                "error" => "Only a guest user can access this resource.",
                 "message" => "Unauthorized"
             ], Response::HTTP_UNAUTHORIZED);
         }
@@ -75,7 +75,7 @@ class VendorApplicationController extends Controller
 
         return response()->json([
             "data" => $response,
-            "message" => "Successful"
+            "message" => "Created"
         ], Response::HTTP_CREATED);
     }
 }

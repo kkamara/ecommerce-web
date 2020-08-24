@@ -101,16 +101,16 @@ class UserPaymentConfigController extends Controller
                 else
                 {
                     return response()->json([
-                        'error' => ['Invalid country provided'],
-                        "message" => "Unsuccessful"
+                        'error' => 'Invalid country provided',
+                        "message" => "Bad Request"
                     ], Response::HTTP_BAD_REQUEST);
                 }
             }
             else
             {
                 return response()->json([
-                    'error' => ['Invalid expiry date provided.'],
-                    "message" => "Unsuccessful"
+                    'error' => 'Invalid expiry date provided.',
+                    "message" => "Bad Request"
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
@@ -118,7 +118,7 @@ class UserPaymentConfigController extends Controller
         {
             return response()->json([
                 'error' => $validator->errors()->all(),
-                "message" => "Unsuccessful"
+                "message" => "Bad Request"
             ], Response::HTTP_BAD_REQUEST);
         }
     }
@@ -187,24 +187,21 @@ class UserPaymentConfigController extends Controller
 
                         UserPaymentConfig::where('id', $userPaymentConfig->id)->update($data);
 
-                        return response()->json([
-                            "error" => ['Billing card successfully updated.'],
-                            "message" => "Successful"
-                        ]);
+                        return response()->json(["message" => "Successful"]);
                     }
                     else
                     {
                         return response()->json([
-                            'error' => ['Invalid country provided'],
-                            "message" => "Uncuccessful"
+                            'error' => 'Invalid country provided',
+                            "message" => "Bad Request"
                         ], Response::HTTP_BAD_REQUEST);
                     }
                 }
                 else
                 {
                     return response()->json([
-                        'error' => ['Invalid expiry date provided.'],
-                        "message" => "Uncuccessful"
+                        'error' => 'Invalid expiry date provided.',
+                        "message" => "Bad Request"
                     ], Response::HTTP_BAD_REQUEST);
                 }
             }
@@ -212,7 +209,7 @@ class UserPaymentConfigController extends Controller
             {
                 return response()->json([
                     'error' => $validator->errors()->all(),
-                    "message" => "Uncuccessful"
+                    "message" => "Bad Request"
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
@@ -249,15 +246,13 @@ class UserPaymentConfigController extends Controller
                 {
                     UserPaymentConfig::destroy($userPaymentConfig->id);
 
-                    return response()->json([
-                        "message" => "Successful",
-                    ]);
+                    return response()->json(["message" => "Successful"]);
                 }
                 else
                 {
                     return response()->json([
-                        'error', ['Billing card has not been deleted.'],
-                        "message" => "Unsuccessful"
+                        'error' => 'Billing card has not been deleted.',
+                        "message" => "Bad Request"
                     ], Response::HTTP_BAD_REQUEST);
                 }
             }
@@ -265,7 +260,7 @@ class UserPaymentConfigController extends Controller
             {
                 return response()->json([
                     'error', $validator->errors()->all(),
-                    "message" => "Unsuccessful"
+                    "message" => "Bad Request"
                 ], Response::HTTP_BAD_REQUEST);
             }
         }

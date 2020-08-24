@@ -21,27 +21,27 @@ class UserController extends Controller
         {
             if (! $user = JWTAuth::parseToken()->authenticate())
             {
-                $error = 'user_not_found';
+                $error = 'User not found';
                 $response = compact("error", "message");
-                return response()->json($response, 404);
+                return response()->json($response, Response::HTTP_NOT_FOUND);
             }
         }
         catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
         {
-            $error = 'token_expired';
+            $error = 'Token expired';
             $response = compact("error", "message");
             return response()->json($response, $e->getStatusCode());
         }
         catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e)
         {
-            $error = 'token_invalid';
+            $error = 'Invalid token';
             $response = compact("error", "message");
             return response()->json($response, $e->getStatusCode());
 
         }
         catch (\Tymon\JWTAuth\Exceptions\JWTException $e)
         {
-            $error = 'token_absent';
+            $error = 'Missing token';
             $response = compact("error", "message");
             return response()->json($response, $e->getStatusCode());
         }
@@ -111,8 +111,8 @@ class UserController extends Controller
                 else
                 {
                     return response()->json([
-                        'error' => ['Password is incorrect.'],
-                        "message" => "Unsuccessful"
+                        'error' => 'Password is incorrect.',
+                        "message" => "Bad Request"
                     ], Response::HTTP_BAD_REQUEST);
                 }
             }
@@ -120,7 +120,7 @@ class UserController extends Controller
             {
                 return response()->json([
                     'error' => $validator->errors()->all(),
-                    "message" => "Unsuccessful"
+                    "message" => "Bad Request"
                 ], Response::HTTP_BAD_REQUEST);
             }
         }

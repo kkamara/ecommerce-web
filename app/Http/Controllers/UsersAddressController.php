@@ -73,13 +73,13 @@ class UsersAddressController extends Controller
                 UsersAddress::create($data);
 
                 return response()->json([
-                    "message" => "Successful"
+                    "message" => "Created"
                 ], Response::HTTP_CREATED);
             }
             else
             {
                 return response()->json([
-                    'error' => ['Invalid country provided'],
+                    'error' => 'Invalid country provided',
                     "message" => "Bad Request",
                 ], Response::HTTP_BAD_REQUEST);
             }
@@ -147,7 +147,7 @@ class UsersAddressController extends Controller
                 else
                 {
                     return response()->json([
-                        'error' => ['Invalid country provided'],
+                        "error" => "Invalid country provided",
                         "message" => "Bad Request",
                     ], Response::HTTP_BAD_REQUEST);
                 }
@@ -155,7 +155,7 @@ class UsersAddressController extends Controller
             else
             {
                 return response()->json([
-                    'error' => $validator->errors()->all(),
+                    "error" => $validator->errors()->all(),
                     "message" => "Bad Request",
                 ], Response::HTTP_BAD_REQUEST);
             }

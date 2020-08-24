@@ -48,15 +48,16 @@ class RegisterController extends Controller
 
         if ($client_hash_key === null) {
             return response()->json([
-                "message" => "Client hash key not given"
-            ], 409);
+                "error" => "Client hash key not given",
+                "message" => "Conflict",
+            ], Response::HTTP_CONFLICT);
         }
 
         if(true === $registerErrors['present'])
         {
             return response()->json([
                 'error' => $registerErrors,
-                "message" => "Unsuccessful"
+                "message" => "Bad Request",
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -68,7 +69,7 @@ class RegisterController extends Controller
         {
             return response()->json([
                 'error' => 'Invalid expiry date provided.',
-                "message" => "Unsuccessful"
+                "message" => "Bad Request",
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -157,13 +158,13 @@ class RegisterController extends Controller
             $errors = array_merge($validator->errors(), compact("message"));
             return response()->json([
                 "error" => $validator->errors()->all(),
-            ], 400);
+                "message" => "Bad Request",
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $token = JWTAuth::fromUser($user);
         $cart = $user->getDbCart();
 
-        $message = "Successful";
         return response()->json(
             array_merge(
                 [
@@ -173,7 +174,7 @@ class RegisterController extends Controller
                         'cart' => $cart,
                     ],
                 ],
-                compact("message")
+                ["message" => "Successful"],
             ),
             201
         );

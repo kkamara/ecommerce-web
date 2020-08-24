@@ -41,7 +41,7 @@ class ProductController extends Controller
             if($user->id === $product->company->user_id)
             {
                 return response()->json([
-                    "error" => ['Unable to perform add to cart action on your own product.'],
+                    "error" => 'Unable to perform add to cart action on your own product.',
                     "message" => "Unauthorized"
                 ], Response::HTTP_UNAUTHORIZED);
             }
@@ -54,7 +54,7 @@ class ProductController extends Controller
         }
 
         return response()->json([
-            "message" => "Successful"
+            "message" => "Created"
         ], Response::HTTP_CREATED);
     }
 

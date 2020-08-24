@@ -231,7 +231,7 @@ class CompanyProductController extends Controller
                 break;
                 default:
                     $response = response()->json([
-                        "message" => "Unsuccessful"
+                        "message" => "Internal Server Error"
                     ], Response::HTTP_INTERNAL_SERVER_ERROR);
                 break;
             }

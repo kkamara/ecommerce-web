@@ -29,8 +29,9 @@ class CartController extends Controller
         {
             if (!$client_hash_key) {
                 return response()->json([
-                    "message" => "Client hash key not given"
-                ], 409);
+                    "error" => "Client hash key not given",
+                    "message" => "Conflict",
+                ], Response::HTTP_CONFLICT);
             }
             $cart = CacheCart::getCacheCart($client_hash_key);
         }

@@ -68,9 +68,7 @@ class ProductReviewController extends Controller
         else
         {
             return response()->json([
-                'error' => [
-                    "You have already reviewed this product."
-                ],
+                'error' => "You have already reviewed this product.",
                 "message" => "Unsuccessful"
             ], Response::HTTP_BAD_REQUEST);
         }
