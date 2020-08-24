@@ -16,32 +16,29 @@ class CompanyProductController extends Controller
      *
      * @param  string          $slug
      * @param  SanitiseRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index($slug, SanitiseRequest $request)
     {
-        $company = Company::where('slug', $slug)->firstOrFail();        
+        $company = Company::where('slug', $slug)->firstOrFail();
 
-        if(!$user = User::attemptAuth())
-        {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
-
-        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
-        {
-            $companyProducts = Product::getProducts($request)->getCompanyProducts($company->id)->paginate(7);
-
+        if(
+            !$user = User::attemptAuth() || 
+            !$user->hasRole('vendor') || 
+            !$company || 
+            !$company->belongsToUser($user->id)
+        ) {
             return response()->json([
-                'data' => $companyProducts,
-                "message" => "Successful"
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                'message' => "Unauthorized",
+                "message" => "Unauthorized"
             ], Response::HTTP_UNAUTHORIZED);
         }
+
+        return response()->json([
+            'data' => Product::getProducts($request)
+                ->getCompanyProducts($company->id)
+                ->paginate(7),
+            "message" => "Successful"
+        ]);
     }
 
     /**
@@ -49,77 +46,68 @@ class CompanyProductController extends Controller
      *
      * @param  string           $slug
      * @param  SanitiseRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store($slug, SanitiseRequest $request)
     {
         $company = Company::where('slug', $slug)->firstOrFail();
 
-        if(!$user = User::attemptAuth())
-        {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
-
-        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
-        {
-            $product = new Product;
-            $errors = $product->getErrors($request);
-
-            if(empty($errors))
-            {
-                $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
-
-                if(Input::hasFile('image'))
-                {
-                    $file = Input::file('image');
-                    $imageName = $file->getClientOriginalName();
-                }
-
-                /** store image file if provided */
-                if(isset($file) && isset($imageName))
-                {
-                    $imagePath = 'uploads/companies/'.$company->id.'/images/';
-                    $file->move(public_path($imagePath), $imageName);
-
-                    $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
-                }
-
-                /**
-                 * on the following line we use FILTER_SANITIZE_STRING on an expected float,
-                 * this is because FILTER_SANITIZE_NUMBER_FLOAT produces unexpected results
-                 */
-                $data = array(
-                    'user_id'           => $user->id,
-                    'company_id'        => $company->id,
-                    'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
-                    'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
-                    'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
-                    'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
-                    'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
-                    'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
-                    'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
-                    'image_path'        => $imagePath ?? NULL,
-                );
-                $product = $product->create($data);
-
-                return response()->json([
-                    "message" => "Successful"
-                ], Response::HTTP_CREATED);
-            }
-            else
-            {
-                return response()->json([
-                    'error' => $errors,
-                    "message" => "Unsuccessful"
-                ], Response::HTTP_BAD_REQUEST);
-            }
-        }
-        else
-        {
+        if(
+            !$user = User::attemptAuth() || 
+            !$user->hasRole('vendor') || 
+            !$company || 
+            !$company->belongsToUser($user->id)
+        ) {
             return response()->json([
                 "message" => "Unauthorized"
             ], Response::HTTP_UNAUTHORIZED);
         }
+
+        $product = new Product;
+        $errors = $product->getErrors($request);
+
+        if(!empty($errors))
+        {
+            return response()->json([
+                'error' => $errors,
+                "message" => "Unsuccessful"
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $useDefaultImage  = (bool) $request->input('use_default_image'); 
+
+        if(!$useDefaultImage && Input::hasFile('image'))
+        {
+            $file = Input::file('image');
+            $imageName = $file->getClientOriginalName();
+
+            /** store image file if provided */
+            if(isset($file) && isset($imageName))
+            {
+                $imagePath = 'uploads/companies/'.$company->id.'/images/';
+                $file->move(public_path($imagePath), $imageName);
+
+                $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
+            }
+        }
+
+        $newProductData = array(
+            'user_id'           => $user->id,
+            'company_id'        => $company->id,
+            'name'              => $request->input('name'),
+            'cost'              => number_format($request->input('cost')),
+            'shippable'         => (bool) $request->input('shippable'),
+            'free_delivery'     => (bool) $request->input('free_delivery'),
+            'short_description' => $request->input('short_description'),
+            'long_description'  => $request->input('long_description'),
+            'product_details'   => $request->input('product_details'),
+            'image_path'        => $imagePath ?: NULL,
+        );
+        $product = $product->create($newProductData);
+
+        return response()->json([
+            "message" => "Created"
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -128,72 +116,63 @@ class CompanyProductController extends Controller
      * @param  string           $slug
      * @param  Product          $product
      * @param  SanitiseRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update($slug, Product $product, SanitiseRequest $request)
     {
         $company = Company::where('slug', $slug)->firstOrFail();
 
-        if(!$user = User::attemptAuth())
-        {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
-
-        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
-        {
-            $errors = $product->getErrors($request);
-
-            if(empty($errors))
-            {
-                $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
-
-                if(Input::hasFile('image'))
-                {
-                    $file = Input::file('image');
-                    $imageName = $file->getClientOriginalName();
-                }
-
-                /** store image file if provided */
-                if(isset($file) && isset($imageName))
-                {
-                    $imagePath = 'uploads/companies/'.$company->id.'/images/';
-                    $file->move(public_path($imagePath), $imageName);
-
-                    $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
-                }
-
-                /**
-                 * on the following line we use FILTER_SANITIZE_STRING on an expected float,
-                 * this is because FILTER_SANITIZE_NUMBER_FLOAT produces unexpected results
-                 */
-                $data = array(
-                    'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
-                    'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
-                    'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
-                    'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
-                    'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
-                    'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
-                    'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
-                    'image_path'        => $imagePath ?? NULL,
-                );
-                $product->update($data);
-
-                return response()->json(["message" => 'Successful']);
-            }
-            else
-            {
-                return response()->json([
-                    'error' => $errors,
-                    "message" => "Unsuccessful"
-                ], Response::HTTP_BAD_REQUEST);
-            }
-        }
-        else
-        {
+        if(
+            !$user = User::attemptAuth() || 
+            !$user->hasRole('vendor') || 
+            !$company || 
+            !$company->belongsToUser($user->id)
+        ) {
             return response()->json([
                 "message" => "Unauthorized"
             ], Response::HTTP_UNAUTHORIZED);
         }
+
+        $errors = $product->getErrors($request);
+
+        if(!empty($errors))
+        {
+            return response()->json([
+                'error' => $errors,
+                "message" => "Bad Request"
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
+
+        if(!$useDefaultImage && Input::hasFile('image'))
+        {
+            $file = Input::file('image');
+            $imageName = $file->getClientOriginalName();
+
+            /** store image file if provided */
+            if(isset($file) && isset($imageName))
+            {
+                $imagePath = 'uploads/companies/'.$company->id.'/images/';
+                $file->move(public_path($imagePath), $imageName);
+
+                $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
+            }
+        }
+
+        $newProductData = array(
+            'name'              => $request->input('name'),
+            'cost'              => number_format($request->input('cost'), 2),
+            'shippable'         => (bool) $request->input('shippable'),
+            'free_delivery'     => (bool) $request->input('free_delivery'),
+            'short_description' => $request->input('short_description'),
+            'long_description'  => $request->input('long_description'),
+            'product_details'   => $request->input('product_details'),
+            'image_path'        => $imagePath ?: NULL,
+        );
+        $product->update($newProductData);
+
+        return response()->json(["message" => 'Successful']);
     }
 
     /**
@@ -202,47 +181,44 @@ class CompanyProductController extends Controller
      * @param  string          $slug
      * @param  Product         $product
      * @param  SanitiseRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($slug, Product $product, SanitiseRequest $request)
     {
-        $company = Company::where('slug', $slug)->firstOrFail();      
+        $company = Company::where('slug', $slug)->firstOrFail();
         
-        if(!$user = User::attemptAuth())
-        {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
-
-        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
-        {
-            switch($request->input('choice'))
-            {
-                case '0':
-                    $response = response()->json([
-                        "message" => 'Successful',
-                    ]);
-                break;
-                case '1':
-                    $product->delete();
-
-                    $response = response()->json([
-                        "message" => 'Successful',
-                    ]);
-                break;
-                default:
-                    $response = response()->json([
-                        "message" => "Internal Server Error"
-                    ], Response::HTTP_INTERNAL_SERVER_ERROR);
-                break;
-            }
-
-            return $response;
-        }
-        else
-        {
-            $response = response()->json([
+        if(
+            (!$user = User::attemptAuth()) || 
+            !$user->hasRole('vendor') || 
+            !$company || 
+            !$company->belongsToUser($user->id)
+        ) {
+            return response()->json([
                 "message" => "Unauthorized"
             ], Response::HTTP_UNAUTHORIZED);
         }
+
+        switch($request->input('choice'))
+        {
+            case '0':
+                $response = response()->json([
+                    "message" => 'Successful',
+                ]);
+            break;
+            case '1':
+                $product->delete();
+
+                $response = response()->json([
+                    "message" => 'Successful',
+                ]);
+            break;
+            default:
+                $response = response()->json([
+                    "message" => "Internal Server Error"
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            break;
+        }
+
+        return $response;
     }
 }

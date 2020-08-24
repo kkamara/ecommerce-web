@@ -66,16 +66,13 @@ class VendorApplicationController extends Controller
 
         if(VendorApplication::hasUserApplied($user->id))
         {
-            $response = true;
+            $data = true;
         }
         else
         {
-            $response = false;
+            $data = false;
         }
 
-        return response()->json([
-            "data" => $response,
-            "message" => "Created"
-        ], Response::HTTP_CREATED);
+        return response()->json(compact("data"));
     }
 }

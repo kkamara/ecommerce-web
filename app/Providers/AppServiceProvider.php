@@ -20,15 +20,6 @@ class AppServiceProvider extends ServiceProvider
         if(env('REDIRECT_HTTPS')) {
             $url->forceScheme('https');
         }
-        /*
-            view()->composer(['layouts.navbar', 'cart.show', 'order_history.create'], function($view) {
-                $view->with('cartCount', \App\Cart::count());
-            });
-
-            view()->composer(['cart.show', 'order_history.create'], function($view) {
-                $view->with('cartPrice', \App\Cart::price());
-            });
-        */
     }
 
     /**

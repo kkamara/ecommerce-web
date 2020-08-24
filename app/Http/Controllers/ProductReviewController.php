@@ -18,59 +18,47 @@ class ProductReviewController extends Controller
      */
     public function store(Product $product, SanitiseRequest $request)
     {
-        
-
-        $user = \App\User::attemptAuth();
-
-        if($product->didUserReviewProduct($user->id) === FALSE)
-        {
-            if($product->didUserPurchaseProduct($user->id))
-            {
-                $validator = Validator::make($request->all(), [
-                    'rating' => 'required|integer|min:0|max:5',
-                    'content' => 'max:600',
-                ]);
-
-                if(empty($validator->errors()->all()))
-                {
-                    $score = filter_var($request->input('rating'), FILTER_SANITIZE_NUMBER_INT);
-                    $content = $request->input('content', FILTER_SANITIZE_STRING);
-
-                    $data = array(
-                        'user_id' => $user->id,
-                        'score' => $score,
-                        'content' => $content,
-                    );
-
-                    $product->productReview()->create($data);
-                    $message = "Successful";
-
-                    return response()->json(array_merge(
-                        ["data" => $product], 
-                        compact("message"),
-                    ));
-                }
-                else
-                {
-                    return response()->json([
-                        'error' => $validator->errors()->all(),
-                        "message" => "Unsuccessful"
-                    ], Response::HTTP_BAD_REQUEST);
-                }
-            }
-            else
-            {
-                return response()->json([
-                    "message" => "Unauthorized"
-                ], Response::HTTP_UNAUTHORIZED);
-            }
+        if(
+            (!$user = User::attemptAuth()) || 
+            !$product->didUserPurchaseProduct($user->id)
+        ) {
+            return response()->json([
+                "message" => "Unauthorized"
+            ], Response::HTTP_UNAUTHORIZED);
         }
-        else
+
+        if($product->didUserReviewProduct($user->id))
         {
             return response()->json([
                 'error' => "You have already reviewed this product.",
                 "message" => "Unsuccessful"
             ], Response::HTTP_BAD_REQUEST);
         }
+
+        $validator = Validator::make($request->all(), [
+            'rating' => 'required|integer|min:0|max:5',
+            'content' => 'max:600',
+        ]);
+
+        if(!empty($validator->errors()->all()))
+        {
+            return response()->json([
+                'error' => $validator->errors()->all(),
+                "message" => "Unsuccessful"
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $data = array(
+            'user_id' => $user->id,
+            'score' => $request->input('rating'),
+            'content' => $request->input('content'),
+        );
+
+        $product->productReview()->create($data);
+
+        return response()->json([
+            "message" => "Successful",
+            "data" => $product,
+        ]);
     }
 }
