@@ -13,19 +13,19 @@
     "devDependencies": {
         "@babel/plugin-proposal-class-properties": "^7.5.0",
         "@babel/preset-react": "^7.0.0",
-        "axios": "^0.19",
+        "axios": "^0.21.1",
         "bootstrap": "^4.1.0",
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.5",
+        "nodemon": "^1.17.5",
         "popper.js": "^1.12",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
-        "sass-loader": "^7.1.0",
-        "nodemon": "^1.17.5"
+        "sass-loader": "^7.1.0"
     },
     "dependencies": {
         "query-string": "^6.8.2",
@@ -35,7 +35,7 @@
         "react-redux": "^7.1.0",
         "react-router-dom": "^5.0.1",
         "react-scripts": "^3.4.0",
-        "react-spinners": "^0.5.13",
+        "react-spinners": "^0.10.6",
         "redux": "^4.0.4",
         "redux-logger": "^3.0.6",
         "redux-promise-middleware": "^6.1.1",
