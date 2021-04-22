@@ -2,63 +2,126 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
-use App\Http\Requests\SanitiseRequest;
-use App\ProductReview;
+use Illuminate\Http\Request;
 use App\Product;
 use Validator;
 
 class ProductReviewController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \App\Http\Requests\SanitiseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Product $product, SanitiseRequest $request)
+    public function index()
     {
-        if(
-            (!$user = User::attemptAuth()) || 
-            !$product->didUserPurchaseProduct($user->id)
-        ) {
-            return response()->json([
-                "message" => "Unauthorized"
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        //
+    }
 
-        if($product->didUserReviewProduct($user->id))
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Product $product, Request $request)
+    {
+        $user = auth()->user();
+
+        if($product->didUserReviewProduct($user->id) === FALSE)
         {
-            return response()->json([
-                'error' => "You have already reviewed this product.",
-                "message" => "Unsuccessful"
-            ], Response::HTTP_BAD_REQUEST);
+            if($product->didUserPurchaseProduct($user->id))
+            {
+                $validator = Validator::make($request->all(), [
+                    'rating' => 'required|integer|min:0|max:5',
+                    'content' => 'max:600',
+                ]);
+
+                if(empty($validator->errors()->all()))
+                {
+                    $score = filter_var($request->input('rating'), FILTER_SANITIZE_NUMBER_INT);
+                    $content = $request->input('content', FILTER_SANITIZE_STRING);
+
+                    $data = array(
+                        'user_id' => $user->id,
+                        'score' => $score,
+                        'content' => $content,
+                    );
+
+                    $product->productReview()->create($data);
+
+                    return redirect()->back()->with('flashSuccess', 'We appreciate your review of this item.');
+                }
+                else
+                {
+                    return redirect()->back()->with([
+                        'errors' => $validator->errors()->all(),
+                    ]);
+                }
+            }
+            else
+            {
+                return abort(404);
+            }
         }
-
-        $validator = Validator::make($request->all(), [
-            'rating' => 'required|integer|min:0|max:5',
-            'content' => 'max:600',
-        ]);
-
-        if(!empty($validator->errors()->all()))
+        else
         {
-            return response()->json([
-                'error' => $validator->errors()->all(),
-                "message" => "Unsuccessful"
-            ], Response::HTTP_BAD_REQUEST);
+            return redirect()->back()->with('flashDanger', 'You have already reviewed this product.');
         }
+    }
 
-        $data = array(
-            'user_id' => $user->id,
-            'score' => $request->input('rating'),
-            'content' => $request->input('content'),
-        );
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
 
-        $product->productReview()->create($data);
+    }
 
-        return response()->json([
-            "message" => "Successful",
-            "data" => $product,
-        ]);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }

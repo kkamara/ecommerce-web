@@ -28,15 +28,6 @@ class Product extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * Attributes to automatically append onto the response.
-     * 
-     * @var array
-     */
-    protected $appends = [
-        'review', 'path', 'image_path', 'formatted_cost'
-    ];
-
-    /**
      * Set a publicily accessible identifier to get the path for this unique instance.
      * 
      * @return  string
@@ -120,7 +111,7 @@ class Product extends Model
      * Query products using request params.
      * 
      * @param  \Illuminate\Database\Eloquent\Model  $query
-     * @param  \App\Http\Requests\SanitiseRequest    $request
+     * @param  \Illuminate\Http\Request             $request
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function scopeGetProducts($query, $request)

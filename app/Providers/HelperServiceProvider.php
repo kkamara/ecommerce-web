@@ -23,7 +23,6 @@ class HelperServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        require_once app_path() . "/Helpers/CacheCartHelper.php";
-        require_once app_path() . "/Helpers/CommonHelper.php";
+        require_once app_path() . "/Helpers/SessionCartHelper.php";
     }
 }

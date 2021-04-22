@@ -110,7 +110,7 @@
                                                         <label>Country*:
                                                             <select name="country" class='form-control'>
                                                                 <option value="">Choose Your Country</option>
-                                                                @foreach(App\Helpers\CommonHelper::getCountriesList() as $shortName => $longName)
+                                                                @foreach(getCountriesList() as $shortName => $longName)
                                                                     @if(0)
                                                                         <option selected>
                                                                     @else
