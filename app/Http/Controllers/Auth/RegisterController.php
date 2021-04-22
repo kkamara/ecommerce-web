@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Response;
-use App\Http\Requests\SanitiseRequest;
-use App\Helpers\CacheCart;
+use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
 use Validator as Validate;
 use App\UserPaymentConfig;
 use App\UsersAddress;
@@ -38,27 +36,65 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
 
-    public function register(SanitiseRequest $request)
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+    }
+
+    public function createUser(Request $request)
+    {
+        return view('register.create', array(
+            'title' => 'Register'
+        ));
+    }
+
+    public function storeUser(Request $request)
     {
         $registerErrors = User::getRegisterErrors($request);
 
         $input = $request->input();
 
-        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
-
-        if ($client_hash_key === null) {
-            return response()->json([
-                "error" => "Client hash key not given",
-                "message" => "Conflict",
-            ], Response::HTTP_CONFLICT);
-        }
-
         if(true === $registerErrors['present'])
         {
-            return response()->json([
-                'error' => $registerErrors,
-                "message" => "Bad Request",
-            ], Response::HTTP_BAD_REQUEST);
+            return redirect()->back()->with(array(
+                'errors' => $registerErrors,
+                'input' => $input,
+            ));
         }
 
         $expiry_date = explode('-', request('expiry_date'));
@@ -67,10 +103,9 @@ class RegisterController extends Controller
 
         if(strtotime(date("$expiry_year-$expiry_month")) < strtotime(date('Y-m')))
         {
-            return response()->json([
-                'error' => 'Invalid expiry date provided.',
-                "message" => "Bad Request",
-            ], Response::HTTP_BAD_REQUEST);
+            return redirect()->back()->with('errors', [
+                'Invalid expiry date provided.'
+            ]);
         }
 
         $firstName = filter_var(request('first_name'), FILTER_SANITIZE_STRING);
@@ -146,37 +181,18 @@ class RegisterController extends Controller
         // create user payment config
         UserPaymentConfig::create($data['user_payment_config']);
 
-        // add to cart if cache cart not empty
-        $cacheCart = CacheCart::getCacheCart($request->header("X-CLIENT-HASH-KEY"));
-        if(!empty($cacheCart))
+        // // add to cart if cache cart not empty
+        $sessionCart = SessionCart::getSessionCart();
+        if(!empty($sessionCart))
         {
-            $user->moveCacheCartToDbCart($cacheCart, $client_hash_key);
+            $user->moveSessionCartToDbCart($sessionCart);
         }
 
-        if($validator->fails())
-        {
-            $errors = array_merge($validator->errors(), compact("message"));
-            return response()->json([
-                "error" => $validator->errors()->all(),
-                "message" => "Bad Request",
-            ], Response::HTTP_BAD_REQUEST);
-        }
+        Auth::attempt([
+            'email' => $user->email,
+            'password' => request('password')
+        ], 1);
 
-        $token = JWTAuth::fromUser($user);
-        $cart = $user->getDbCart();
-
-        return response()->json(
-            array_merge(
-                [
-                    'data' => [
-                        'user' => new UserResource($user),
-                        'token' => $token,
-                        'cart' => $cart,
-                    ],
-                ],
-                ["message" => "Successful"],
-            ),
-            201
-        );
+        return redirect()->route('home');
     }
 }

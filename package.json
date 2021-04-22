@@ -1,7 +1,6 @@
 {
     "private": true,
     "scripts": {
-        "postinstall": "npm run prod",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -11,35 +10,14 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "@babel/plugin-proposal-class-properties": "^7.5.0",
-        "@babel/preset-react": "^7.0.0",
-        "axios": "^0.21.1",
-        "bootstrap": "^4.1.0",
-        "cross-env": "^5.1",
-        "jquery": "^3.2",
-        "laravel-mix": "^4.0.7",
-        "lodash": "^4.17.5",
-        "nodemon": "^1.17.5",
+        "axios": "^0.19.0",
+        "babel-preset-react": "^6.24.1",
+        "bootstrap": "^4.3.1",
+        "cross-env": "^5.2.0",
+        "jquery": "^3.4.1",
+        "laravel-mix": "^2.0",
+        "lodash": "^4.17.11",
         "popper.js": "^1.12",
-        "react": "^16.2.0",
-        "react-dom": "^16.2.0",
-        "resolve-url-loader": "^2.3.1",
-        "sass": "^1.15.2",
-        "sass-loader": "^7.1.0"
-    },
-    "dependencies": {
-        "query-string": "^6.8.2",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6",
-        "react-js-pagination": "^3.0.2",
-        "react-redux": "^7.1.0",
-        "react-router-dom": "^5.0.1",
-        "react-scripts": "^3.4.0",
-        "react-spinners": "^0.10.6",
-        "redux": "^4.0.4",
-        "redux-logger": "^3.0.6",
-        "redux-promise-middleware": "^6.1.1",
-        "redux-thunk": "^2.3.0",
-        "uuid": "^8.3.0"
+        "vue": "^2.5.7"
     }
 }

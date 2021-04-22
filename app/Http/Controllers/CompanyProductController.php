@@ -2,223 +2,282 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SanitiseRequest;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 use App\Company;
 use App\Product;
-use Validator;
 
 class CompanyProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @param  string          $slug
-     * @param  SanitiseRequest $request
-     * @return Response
+     * @param  string  $slug
+     * @return \Illuminate\Http\Response
      */
-    public function index($slug, SanitiseRequest $request)
+    public function index($slug, Request $request)
     {
-        $company = Company::where('slug', $slug)->firstOrFail();
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
 
-        if(
-            !$user = User::attemptAuth() || 
-            !$user->hasRole('vendor') || 
-            !$company || 
-            !$company->belongsToUser($user->id)
-        ) {
-            return response()->json([
-                "message" => "Unauthorized"
-            ], Response::HTTP_UNAUTHORIZED);
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            $companyProducts = Product::getProducts($request)->getCompanyProducts($company->id)->paginate(7);
+
+            return view('company_product.index', [
+                'title' => 'My Products',
+                'companyProducts' => $companyProducts->appends(request()->except('page')),
+                'input' => $request->all(),
+            ]);
         }
+        else
+        {
+            return abort(404);
+        }
+    }
 
-        return response()->json([
-            'data' => Product::getProducts($request)
-                ->getCompanyProducts($company->id)
-                ->paginate(7),
-            "message" => "Successful"
-        ]);
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param  string  $slug
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function create($slug, Request $request)
+    {
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
+
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            return view('company_product.create', [
+                'title' => 'Add a Product',
+            ]);
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  string           $slug
-     * @param  SanitiseRequest  $request
-     * @return Response
+     * @param  string  $slug
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store($slug, SanitiseRequest $request)
+    public function store($slug, Request $request)
     {
-        $company = Company::where('slug', $slug)->firstOrFail();
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
 
-        if(
-            !$user = User::attemptAuth() || 
-            !$user->hasRole('vendor') || 
-            !$company || 
-            !$company->belongsToUser($user->id)
-        ) {
-            return response()->json([
-                "message" => "Unauthorized"
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $product = new Product;
-        $errors = $product->getErrors($request);
-
-        if(!empty($errors))
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
-            return response()->json([
-                'error' => $errors,
-                "message" => "Unsuccessful"
-            ], Response::HTTP_BAD_REQUEST);
-        }
+            $product = new Product;
+            $errors = $product->getErrors($request);
 
-        $useDefaultImage  = (bool) $request->input('use_default_image'); 
-
-        if(!$useDefaultImage && Input::hasFile('image'))
-        {
-            $file = Input::file('image');
-            $imageName = $file->getClientOriginalName();
-
-            /** store image file if provided */
-            if(isset($file) && isset($imageName))
+            if(empty($errors))
             {
-                $imagePath = 'uploads/companies/'.$company->id.'/images/';
-                $file->move(public_path($imagePath), $imageName);
+                $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
 
-                $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
+                if(Input::hasFile('image'))
+                {
+                    $file = Input::file('image');
+                    $imageName = $file->getClientOriginalName();
+                }
+
+                /** store image file if provided */
+                if(isset($file) && isset($imageName))
+                {
+                    $imagePath = 'uploads/companies/'.$company->id.'/images/';
+                    $file->move(public_path($imagePath), $imageName);
+
+                    $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
+                }
+
+                /**
+                 * on the following line we use FILTER_SANITIZE_STRING on an expected float,
+                 * this is because FILTER_SANITIZE_NUMBER_FLOAT produces unexpected results
+                 */
+                $data = array(
+                    'user_id'           => $user->id,
+                    'company_id'        => $company->id,
+                    'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
+                    'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
+                    'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
+                    'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
+                    'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
+                    'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
+                    'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
+                    'image_path'        => $imagePath ?? NULL,
+                );
+                $product = $product->create($data);
+
+                return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Product has been added to your listings.');
+            }
+            else
+            {
+                return view('company_product.create', [
+                    'title' => 'Add a Product',
+                    'errors' => $errors,
+                    'input' => $request->input(),
+                ]);
             }
         }
+        else
+        {
+            return abort(404);
+        }
+    }
 
-        $newProductData = array(
-            'user_id'           => $user->id,
-            'company_id'        => $company->id,
-            'name'              => $request->input('name'),
-            'cost'              => number_format($request->input('cost')),
-            'shippable'         => (bool) $request->input('shippable'),
-            'free_delivery'     => (bool) $request->input('free_delivery'),
-            'short_description' => $request->input('short_description'),
-            'long_description'  => $request->input('long_description'),
-            'product_details'   => $request->input('product_details'),
-            'image_path'        => $imagePath ?: NULL,
-        );
-        $product = $product->create($newProductData);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  string  $slug
+     * @param  \App\Product $product
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($slug, Product $product, Request $request)
+    {
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
 
-        return response()->json([
-            "message" => "Created"
-        ], Response::HTTP_CREATED);
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            return view('company_product.edit', [
+                'title' => 'Edit '.$product->name,
+            ])->with(compact('product'));
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  string           $slug
-     * @param  Product          $product
-     * @param  SanitiseRequest  $request
-     * @return Response
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $slug
+     * @param  \App\Product $product
+     * @return \Illuminate\Http\Response
      */
-    public function update($slug, Product $product, SanitiseRequest $request)
+    public function update($slug, Product $product, Request $request)
     {
-        $company = Company::where('slug', $slug)->firstOrFail();
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
 
-        if(
-            !$user = User::attemptAuth() || 
-            !$user->hasRole('vendor') || 
-            !$company || 
-            !$company->belongsToUser($user->id)
-        ) {
-            return response()->json([
-                "message" => "Unauthorized"
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $errors = $product->getErrors($request);
-
-        if(!empty($errors))
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
-            return response()->json([
-                'error' => $errors,
-                "message" => "Bad Request"
-            ], Response::HTTP_BAD_REQUEST);
-        }
+            $errors = $product->getErrors($request);
 
-        $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
-
-        if(!$useDefaultImage && Input::hasFile('image'))
-        {
-            $file = Input::file('image');
-            $imageName = $file->getClientOriginalName();
-
-            /** store image file if provided */
-            if(isset($file) && isset($imageName))
+            if(empty($errors))
             {
-                $imagePath = 'uploads/companies/'.$company->id.'/images/';
-                $file->move(public_path($imagePath), $imageName);
+                $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
 
-                $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
+                if(Input::hasFile('image'))
+                {
+                    $file = Input::file('image');
+                    $imageName = $file->getClientOriginalName();
+                }
+
+                /** store image file if provided */
+                if(isset($file) && isset($imageName))
+                {
+                    $imagePath = 'uploads/companies/'.$company->id.'/images/';
+                    $file->move(public_path($imagePath), $imageName);
+
+                    $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
+                }
+
+                /**
+                 * on the following line we use FILTER_SANITIZE_STRING on an expected float,
+                 * this is because FILTER_SANITIZE_NUMBER_FLOAT produces unexpected results
+                 */
+                $data = array(
+                    'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
+                    'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
+                    'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
+                    'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
+                    'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
+                    'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
+                    'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
+                    'image_path'        => $imagePath ?? NULL,
+                );
+                $product->update($data);
+
+                return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Product details have been updated.');
+            }
+            else
+            {
+                return redirect()->back()->with([
+                    'product' => $product,
+                    'errors' => $errors,
+                    'input' => $request->input(),
+                ]);
             }
         }
+        else
+        {
+            return abort(404);
+        }
+    }
 
-        $newProductData = array(
-            'name'              => $request->input('name'),
-            'cost'              => number_format($request->input('cost'), 2),
-            'shippable'         => (bool) $request->input('shippable'),
-            'free_delivery'     => (bool) $request->input('free_delivery'),
-            'short_description' => $request->input('short_description'),
-            'long_description'  => $request->input('long_description'),
-            'product_details'   => $request->input('product_details'),
-            'image_path'        => $imagePath ?: NULL,
-        );
-        $product->update($newProductData);
+    public function delete($slug, Product $product, Request $request)
+    {
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
 
-        return response()->json(["message" => 'Successful']);
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
+        {
+            return view('company_product.delete', [
+                'title' => 'Delete '.$product->name,
+            ])->with(compact('product'));
+        }
+        else
+        {
+            return abort(404);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string          $slug
-     * @param  Product         $product
-     * @param  SanitiseRequest $request
-     * @return Response
+     * @param  string  $slug
+     * @param  \App\Product $product
+     * @return \Illuminate\Http\Response
      */
-    public function destroy($slug, Product $product, SanitiseRequest $request)
+    public function destroy($slug, Product $product, Request $request)
     {
-        $company = Company::where('slug', $slug)->firstOrFail();
-        
-        if(
-            (!$user = User::attemptAuth()) || 
-            !$user->hasRole('vendor') || 
-            !$company || 
-            !$company->belongsToUser($user->id)
-        ) {
-            return response()->json([
-                "message" => "Unauthorized"
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+        $company = Company::where('slug', $slug)->first();
+        $user = auth()->user();
 
-        switch($request->input('choice'))
+        if($user->hasRole('vendor') && $company !== NULL && $company->belongsToUser($user->id))
         {
-            case '0':
-                $response = response()->json([
-                    "message" => 'Successful',
-                ]);
-            break;
-            case '1':
-                $product->delete();
+            switch($request->input('choice'))
+            {
+                case '0':
+                    return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Your item listing has not been removed.');
+                break;
+                case '1':
+                    $product->delete();
 
-                $response = response()->json([
-                    "message" => 'Successful',
-                ]);
-            break;
-            default:
-                $response = response()->json([
-                    "message" => "Internal Server Error"
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
-            break;
+                    return redirect()->route('companyProductHome', $company->slug)->with('flashSuccess', 'Your item listing was successfully removed.');
+                break;
+                default:
+                    return redirect()->back()->with('flashDanger', 'Oops, something went wrong. Contact system administrator.');
+                break;
+            }
         }
-
-        return $response;
+        else
+        {
+            return abort(404);
+        }
     }
 }

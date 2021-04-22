@@ -49,7 +49,7 @@ class VendorApplication extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $query
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public static function scopeOnlyNew($query)
+    public static function scopeWhereFresh($query)
     {
         return $query->where('accepted', '=', NULL);
     }

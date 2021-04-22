@@ -3,15 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
-use App\Http\Requests\SanitiseRequest;
-use App\Helpers\CacheCart;
+use App\Helpers\SessionCart;
+use Illuminate\Http\Request;
 use Validator;
-use JWTAuth;
 use Auth;
 
 class LoginController extends Controller
@@ -37,77 +32,88 @@ class LoginController extends Controller
     protected $redirectTo = '/';
 
     /**
-     * Authenticate user
+     * Create a new controller instance.
      *
-     * @param  \App\Http\Requests\SanitiseRequest $request
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function create(SanitiseRequest $request)
+    public function __construct()
     {
-        $client_hash_key = $request->header("X-CLIENT-HASH-KEY");
+        $this->middleware('guest')->except('delete');
+    }
 
-        if ($client_hash_key === null) {
-            return response()->json([
-                "error" => "Client hash key not given",
-                "message" => "Conflict",
-            ], HTTP_CONFLICT);
-        }
+    public function create()
+    {
+        return view('login.create', array(
+            'title' => 'Login',
+            'fromOrder' => request('fromOrder')
+        ));
+    }
 
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'email' => 'required',
             'password' => 'required',
         ]);
 
-        if($validator->fails())
+        if(empty($validator->errors()->all()))
         {
-            return response()->json([
-                "error" => $validator->errors(),
-                "message" => "Bad Request",
-            ], Response::HTTP_BAD_REQUEST);
-        }
+            $email = filter_var(request('email'), FILTER_SANITIZE_EMAIL);
 
-        $credentials = $request->only('email', 'password');
+            $creds = array(
+                'email' => request('email'),
+                'password' => request('password'),
+            );
 
-        try
-        {
-            if (! $token = JWTAuth::attempt($credentials))
+            if(Auth::attempt($creds))
             {
-                return response()->json([
-                    'error' => 'Invalid credentials',
-                    "message" => "Bad Request",
-                ], Response::HTTP_BAD_REQUEST);
+                $user = auth()->user();
+                $sessionCart = SessionCart::getSessionCart();
+
+                /**
+                * login
+                * if login then redirect to checkout page if was prompted to login/register
+                * if normal login then redirect to home
+                * redirect back if false
+                */
+
+                if(! empty($sessionCart))
+                {
+                    $user->moveSessionCartToDbCart($sessionCart);
+
+                    return redirect()->route('orderCreate');
+                }
+                else
+                {
+                    return redirect()->route('home');
+                }
+            }
+            else
+            {
+                return view('login.create', array(
+                    'title' => 'Login',
+                    'input' => $request->input(),
+                    'errors' => array('Invalid login credentials provided'),
+                ));
             }
         }
-        catch (JWTException $e)
+        else
         {
-            return response()->json([
-                'error' => 'Could not create token',
-                "message" => "Internal Server Error",
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return view('login.create', array(
+                'title' => 'Login',
+                'input' => $request->input(),
+                'errors' => $validator->errors()->all(),
+            ));
         }
+    }
 
-        $user = \App\User::where("email", $credentials["email"])->first();
+    public function edit() {}
+    public function update() {}
 
-        // add to cart if cache cart not empty
-        $cacheCart = CacheCart::getCacheCart($client_hash_key);
-        if(!empty($cacheCart))
-        {
-            $user->moveCacheCartToDbCart($cacheCart, $client_hash_key);
-        }
+    public function delete()
+    {
+        Auth::logout();
 
-        $cart = $user->getDbCart();
-
-        return response()->json(
-            array_merge(
-                [
-                    "data" => [
-                        "user" => new UserResource($user),
-                        "token" => $token,
-                        "cart" => $cart,
-                    ],
-                ],
-                ["message" => "Successful"],
-            )
-        );
+        return redirect()->route('home');
     }
 }
