@@ -3,57 +3,56 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
-use App\Helpers\CacheCart;
+use Illuminate\Support\Facades\Session;
+use App\Helpers\SessionCart;
 use Auth;
 
 class Cart extends Model
 {
-    /**
+    /** 
      * This models table name is 'cart' instead of 'carts' so must be set explicitly here.
-     *
+     * 
      * @var string
      */
     protected $table = 'cart';
 
-    /**
-     * This models immutable values are stored in this array.
-     *
+    /** 
+     * This models immutable values are stored in this array. 
+     * 
      * @var array
      */
     protected $guarded = [];
 
-    /**
+    /** 
      * Disable created_at and updated_at columns for this model.
-     *
+     * 
      * @var bool
      */
     public $timestamps = false;
 
     /**
-     * Gets the number of items in the user's session or db cart,
+     * Gets the number of items in the user's session or db cart, 
      * depending on whether the user is authenticated.
-     *
-     * @param   string  $client_hash_key
+     * 
      * @return  int
      */
-    public static function count($client_hash_key)
+    public static function count()
     {
         $count = 0;
 
         if(Auth::check())
         {
             $user = auth()->user();
-            $cacheCart = $user->getDbCart();
+            $sessionCart = $user->getDbCart();
         }
         else
         {
-            $cacheCart = CacheCart::getCacheCart($client_hash_key);
+            $sessionCart = Session::get('cc');
         }
 
-        if(empty($cacheCart)) return 0;
+        if(empty($sessionCart)) return 0;
 
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             $count += $cc['amount'];
         }
@@ -62,29 +61,28 @@ class Cart extends Model
     }
 
     /**
-     * Gets the price of the total amount of items in the session or db cart,
+     * Gets the price of the total amount of items in the session or db cart, 
      * depending on whether the user is authenticated.
-     *
-     * @param   string  $client_hash_key
+     * 
      * @return  string
      */
-    public static function price($client_hash_key)
+    public static function price()
     {
         $price = 0;
 
         if(Auth::check())
         {
             $user = auth()->user();
-            $cacheCart = $user->getDbCart();
+            $sessionCart = $user->getDbCart();
         }
         else
         {
-            $cacheCart = CacheCart::getCacheCart($client_hash_key);
+            $sessionCart = SessionCart::getSessionCart();
         }
 
-        if(empty($cacheCart)) return '£0.00';
+        if(empty($sessionCart)) return '£0.00';
 
-        foreach($cacheCart as $cc)
+        foreach($sessionCart as $cc)
         {
             $price += $cc['product']->cost * $cc['amount'];
         }
@@ -94,7 +92,7 @@ class Cart extends Model
 
     /**
      * This model relationship belongs to \App\User.
-     *
+     * 
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function user()
@@ -104,7 +102,7 @@ class Cart extends Model
 
     /**
      * This model relationship belongs to \App\Product.
-     *
+     * 
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
@@ -114,7 +112,7 @@ class Cart extends Model
 
     /**
      * Gets the products assigned to the authenticated user.
-     *
+     * 
      * @return array|int
      */
     public function getDbCart()

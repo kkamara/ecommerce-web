@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProductResource;
-use App\Http\Requests\SanitiseRequest;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\Response;
-use App\Helpers\CacheCart;
+use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
 use App\Product;
 use Auth;
 
@@ -17,11 +14,14 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(SanitiseRequest $request)
+    public function index(Request $request)
     {
-        return response()->json([
-            "data" => Product::getProducts($request)->paginate(7), 
-            "message" => "Successful",
+        $products = Product::getProducts($request)->paginate(7);
+
+        return view('product.index', [
+            'title' => 'Products',
+            'products' => $products->appends(request()->except('page')),
+            'input' => $request->all(),
         ]);
     }
 
@@ -30,32 +30,35 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(SanitiseRequest $request, Product $product)
+    public function create(Product $product)
     {
-        $user = \App\User::attemptAuth();
-
-        if(null !== $user)
+        if(Auth::check())
         {
             $user = auth()->user();
 
             if($user->id === $product->company->user_id)
-            {
-                return response()->json([
-                    "error" => 'Unable to perform add to cart action on your own product.',
-                    "message" => "Unauthorized"
-                ], Response::HTTP_UNAUTHORIZED);
-            }
+                return redirect()->back()->with('flashDanger', 'Unable to perform add to cart action on your own product.');
 
             $user->addProductToDbCart($product);
         }
         else
         {
-            CacheCart::addProductToCacheCart($product, $request->header("X-CLIENT-HASH-KEY"));
+            SessionCart::addProductToSessionCart($product);
         }
 
-        return response()->json([
-            "message" => "Created"
-        ], Response::HTTP_CREATED);
+        return redirect()->route('productShow', $product->id)
+                         ->with('flashSuccess', $product->name.' added to cart');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
     }
 
     /**
@@ -66,9 +69,54 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json([
-            "data" => new ProductResource($product),
-            "message" => "Successful"
-        ]);
+        $user = auth()->user();
+
+        $reviews = $product->productReview()->get();
+
+        $permissionToReview = FALSE;
+
+        if(isset($user))
+            $permissionToReview = $product->didUserPurchaseProduct($user->id);
+
+        return view('product.show', [
+            'title' => $product->name,
+        ])
+        ->with(compact('product'))
+        ->with(compact('reviews'))
+        ->with(compact('permissionToReview'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\r  $r
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(r $r)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\r  $r
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, r $r)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\r  $r
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(r $r)
+    {
+        //
     }
 }

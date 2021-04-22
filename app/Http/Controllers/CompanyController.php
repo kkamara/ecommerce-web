@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SanitiseRequest;
 use App\Company;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -30,10 +30,10 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\SanitiseRequest $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SanitiseRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -63,11 +63,11 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\SanitiseRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(SanitiseRequest $request, Company $company)
+    public function update(Request $request, Company $company)
     {
         //
     }

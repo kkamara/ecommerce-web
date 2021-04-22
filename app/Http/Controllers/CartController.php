@@ -2,71 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SanitiseRequest;
-use Illuminate\Http\Response;
-use App\Helpers\CacheCart;
-use App\User;
-use App\Cart;
+use Illuminate\Http\Request;
+use App\Helpers\SessionCart;
 use Auth;
 
 class CartController extends Controller
-{
+{    
     /**
      * Display the specified resource.
      *
-     * @param  \App\Http\Requests\SanitiseRequest $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(\App\Http\Requests\SanitiseRequest $request)
+    public function show()
     {
-        $client_hash_key = $request->header('X_CLIENT_HASH_KEY');
-        
-        if($user = User::attemptAuth())
+        if(Auth::check())
         {
+            $user = auth()->user();
             $cart = $user->getDbCart();
         }
         else
         {
-            if (!$client_hash_key) {
-                return response()->json([
-                    "error" => "Client hash key not given",
-                    "message" => "Conflict",
-                ], Response::HTTP_CONFLICT);
-            }
-            $cart = CacheCart::getCacheCart($client_hash_key);
+            $cart = SessionCart::getSessionCart();
         }
 
-        if(false == $cart) $cart = array();
-
-        $cost = Cart::price($client_hash_key);
-        $count = Cart::count($client_hash_key);
-
-        $message = "Successful";
-        return response()->json(
-            array_merge(
-                ["data" => compact("cart", "cost", "count")], 
-                compact("message"),
-            )
-        );
+        return view('cart.show', compact('cart'))->withTitle('Cart');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\SanitiseRequest $request
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-    */
-    public function update(SanitiseRequest $request)
+     */
+    public function update(Request $request)
     {
-        if($user = User::attemptAuth())
+        if(Auth::check())
         {
+            $user = auth()->user();
             $user->updateDbCartAmount($request);
         }
         else
         {
-            CacheCart::updateCacheCartAmount($request);
+            SessionCart::updateSessionCartAmount($request);
         }
 
-        return response()->json(["message"=>"Successful"]);
+        return redirect()->route('cartShow')
+                ->with('flashSuccess', 'Your cart was successfully updated!');
     }
 }

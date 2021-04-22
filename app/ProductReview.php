@@ -16,15 +16,6 @@ class ProductReview extends Model
     protected $guarded = [];
 
     /**
-     * Attributes to automatically append onto the response.
-     * 
-     * @var array
-     */
-    protected $appends = [
-        'short_content', 'is_flagged_exceeding_limit'
-    ];
-
-    /**
      * This model relationship has \App\FlaggedProductReview
      *
      * @return \Illuminate\Database\Eloquent\Model
@@ -59,7 +50,7 @@ class ProductReview extends Model
      *
      * @return bool
      */
-    public function getisFlaggedExceedingLimitAttribute()
+    public function isFlaggedFiveTimes()
     {
         return FlaggedProductReview::getFlagCount($this->attributes['id']) > 4;
     }

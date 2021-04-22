@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SanitiseRequest;
+use Illuminate\Http\Request;
 use App\FlaggedProductReview;
-use Illuminate\Http\Response;
 use App\ProductReview;
 
 class FlaggedProductReviewController extends Controller
@@ -12,10 +11,10 @@ class FlaggedProductReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\SanitiseRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductReview $productReview, SanitiseRequest $request)
+    public function store(ProductReview $productReview, Request $request)
     {
         $ip = $request->ip();
 
@@ -26,14 +25,11 @@ class FlaggedProductReviewController extends Controller
                 'flagged_from_ip' => $ip,
             ]);
 
-            return response()->json(["message" => "Successful"]);
+            return redirect()->back()->with('flashSuccess', 'Product review has been flagged and will be reviewed by moderators. Thanks!');
         }
         else
         {
-            return response()->json([
-                "error" => 'You have already flagged that review.',
-                "message" => "Unsuccessful"
-            ], Response::HTTP_BAD_REQUEST);
+            return redirect()->back()->with('flashDanger', 'You have already flagged that review.');
         }
     }
 }
