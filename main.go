@@ -24,6 +24,4 @@ func main() {
 	})
 
 	log.Fatal(app.Listen(":3000"))
-
-	app.Listen(":3000")
 }
