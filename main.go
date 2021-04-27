@@ -15,6 +15,7 @@ func main() {
 
 	app.Use(logger.New())
 
+	app.Static("/", "resources")
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("index", fiber.Map{
