@@ -17,7 +17,7 @@ import (
 func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
-		panic(err)
+		return
 	}
 	res := db.Create(&newProduct)
 	user = newProduct

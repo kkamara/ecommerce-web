@@ -24,7 +24,7 @@ func IsAcceptedRole(role string) bool {
 func Create(newUser *schemas.User) (user *schemas.User, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
-		panic(err)
+		return
 	}
 	const createdFormat = "2006-01-02 15:04:05"
 	newUser.CreatedAt = time.Now().Format(createdFormat)
@@ -48,7 +48,7 @@ func Create(newUser *schemas.User) (user *schemas.User, err error) {
 func GetAll() (users []*schemas.User, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
-		panic(err)
+		return
 	}
 	res := db.Find(&users)
 	err = res.Error
