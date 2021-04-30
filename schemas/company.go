@@ -1,6 +1,6 @@
 package schemas
 
-type Companychema struct {
+type Company struct {
 	Id              uint64 `json:"id"`
 	Slug            string `json:"slug"`
 	UserId          uint64 `json:"user_id"`
