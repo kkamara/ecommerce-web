@@ -1,0 +1,30 @@
+<div class="list-group">
+
+    {{if .Products}}
+        {{range .Products}}
+
+            <a href="/products/{{ .Id }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                <img style='max-height:100px' src="{{ .ImagePath }}" class='img-responsive'>
+                <h5 class="mb-1">{{ .Name }}</h5>
+                <h3>
+                    <strong>
+                        {{ formattedCost .Cost }}
+                    </strong>
+                </h3>
+                </div>
+                <p class="mb-1">{{ .ShortDescription }}.</p>
+                <!-- <small>$product->company->name.</small> -->
+                <div class="float-right">
+                    Average Rating: {{ if (productReview .Id) !== '0.00') {{ (productReview .Id) }} {{else}} None {{end}}
+                </div>
+            </a>
+
+        {{end}}
+    {{else}}
+        <p>No products available.</p>
+    {{end}}
+
+</div>
+
+<br/>
