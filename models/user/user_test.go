@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/bxcodec/faker/v3"
-	"github.com/kkamara/laravel-ecommerce/models/helper"
-	"github.com/kkamara/laravel-ecommerce/schemas"
+	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/schemas"
 )
 
 func TestGetAllUsers(t *testing.T) {

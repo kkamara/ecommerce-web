@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/kkamara/laravel-ecommerce/schemas"
+	"github.com/kkamara/go-ecommerce/schemas"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
