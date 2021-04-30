@@ -3,7 +3,7 @@ package product_review
 import (
 	"fmt"
 
-	"github.com/kkamara/laravel-ecommerce/config"
+	"github.com/kkamara/go-ecommerce/config"
 )
 
 func GetAggRating(productId uint64) string {

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/kkamara/laravel-ecommerce/engine"
-	"github.com/kkamara/laravel-ecommerce/handlers/home"
+	"github.com/kkamara/go-ecommerce/engine"
+	"github.com/kkamara/go-ecommerce/handlers/home"
 )
 
 func main() {

@@ -2,7 +2,7 @@ package home
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/kkamara/laravel-ecommerce/models/product"
+	"github.com/kkamara/go-ecommerce/models/product"
 )
 
 func GetHomeHandler(c *fiber.Ctx) error {

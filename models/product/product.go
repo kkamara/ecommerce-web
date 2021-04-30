@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/bxcodec/faker/v3"
-	"github.com/kkamara/laravel-ecommerce/config"
-	"github.com/kkamara/laravel-ecommerce/models/company"
-	"github.com/kkamara/laravel-ecommerce/models/helper"
-	"github.com/kkamara/laravel-ecommerce/models/user"
-	"github.com/kkamara/laravel-ecommerce/schemas"
+	"github.com/kkamara/go-ecommerce/config"
+	"github.com/kkamara/go-ecommerce/models/company"
+	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/user"
+	"github.com/kkamara/go-ecommerce/schemas"
 )
 
 func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {

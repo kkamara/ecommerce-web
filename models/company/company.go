@@ -1,8 +1,8 @@
 package company
 
 import (
-	"github.com/kkamara/laravel-ecommerce/config"
-	"github.com/kkamara/laravel-ecommerce/schemas"
+	"github.com/kkamara/go-ecommerce/config"
+	"github.com/kkamara/go-ecommerce/schemas"
 )
 
 func Random() (company *schemas.Company, err error) {
