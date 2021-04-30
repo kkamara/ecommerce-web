@@ -1,5 +1,7 @@
 package schemas
 
+var AcceptedUserRoles = []string{"moderator", "vendor"}
+
 type User struct {
 	Id            uint64 `json:"id"`
 	Slug          string `json:"slug"`
@@ -8,6 +10,7 @@ type User struct {
 	Email         string `json:"email"`
 	Password      string `json:"password"`
 	RememberToken string `json:"remember_token,omitempty"`
+	Role          string `json:"role"`
 	CreatedAt     string `json:"created_at"`
 	UpdatedAt     string `json:"updated_at"`
 	DeletedAt     string `json:"deleted_at,omitempty"`
