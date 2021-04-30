@@ -1,6 +1,6 @@
 package schemas
 
-type OrderHistoryProduct struct {
+type OrderProduct struct {
 	Id             uint64  `json:"id"`
 	OrderHistoryId uint64  `json:"order_history_id"`
 	ProductId      uint64  `json:"product_id"`
