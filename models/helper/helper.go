@@ -34,14 +34,30 @@ func RandFloat(min, max float64) float64 {
 	return min + rand.Float64()*(max-min)
 }
 
-func Paginate(page, page_size string) func(db *gorm.DB) *gorm.DB {
+var DefaultPage = 1
+var DefaultPageSize = 7
+
+func GetPaginationOptions(page, pageSize string) (paginationOptions map[string]int) {
+	var err error
+	defaultValue := map[string]int{"page": DefaultPage, "page_size": DefaultPageSize}
+	paginationOptions = defaultValue
+	paginationOptions["page"], err = strconv.Atoi(page)
+	if err != nil {
+		return defaultValue
+	}
+	paginationOptions["page_size"], err = strconv.Atoi(pageSize)
+	if err != nil {
+		return defaultValue
+	}
+	return
+}
+
+func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		page, _ := strconv.Atoi(page)
 		if page == 0 {
 			page = 1
 		}
 
-		pageSize, _ := strconv.Atoi(page_size)
 		switch {
 		case pageSize > 100:
 			pageSize = 100

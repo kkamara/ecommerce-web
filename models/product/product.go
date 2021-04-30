@@ -2,6 +2,7 @@ package product
 
 import (
 	"fmt"
+	"math"
 	mathrand "math/rand"
 	"strconv"
 	"time"
@@ -27,11 +28,20 @@ func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
 	return
 }
 
-func GetProducts(page, page_size string) (products []*schemas.Product, err error) {
+func GetProducts(page, page_size int) (
+	products []*schemas.Product,
+	pageNum int,
+	pageCount int64,
+	err error,
+) {
+	pageNum = page
 	db, err := config.OpenDB()
 	if err != nil {
 		return
 	}
+	db.Find(&products).Count(&pageCount)
+	var toCeil float64 = float64(pageCount) / float64(page_size)
+	pageCount = int64(math.Ceil(toCeil))
 	db.Scopes(helper.Paginate(page, page_size)).Find(&products)
 	return
 }
@@ -46,25 +56,27 @@ func Random() (product *schemas.Product, err error) {
 }
 
 func Seed() (err error) {
-	company, err := company.Random()
-	if err != nil {
-		return
-	}
-	user, err := user.Random("vendor")
-	if err != nil {
-		return
-	}
-	for count := 0; count < 5; count++ {
+	for count := 0; count < 30; count++ {
+		var c *schemas.Company
+		c, err = company.Random()
+		if err != nil {
+			return
+		}
+		var u *schemas.User
+		u, err = user.Random("vendor")
+		if err != nil {
+			return
+		}
 		const createdFormat = "2006-01-02 15:04:05"
 		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", helper.RandFloat(0, 500)), 32)
 		product := &schemas.Product{
-			UserId:           user.Id,
-			CompanyId:        company.Id,
-			Name:             faker.ID,
-			ShortDescription: faker.PARAGRAPH,
+			UserId:           u.Id,
+			CompanyId:        c.Id,
+			Name:             faker.MacAddress(),
+			ShortDescription: faker.Paragraph(),
 			LongDescription:  "",
-			ProductDetails:   faker.PARAGRAPH,
-			ImagePath:        "",
+			ProductDetails:   faker.Sentence(),
+			ImagePath:        "img/not-found.jpg",
 			Cost:             cost,
 			Shippable:        mathrand.Intn(2) == 1,
 			FreeDelivery:     mathrand.Intn(2) == 1,
