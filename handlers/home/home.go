@@ -15,8 +15,8 @@ func GetHomeHandler(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"error": "Failed to fetch products."})
 	}
 
-	return c.Render("index", fiber.Map{
-		"Title":    "Hello, World!",
+	return c.Render("home/index", fiber.Map{
+		"Title":    "Home",
 		"Products": products,
 	}, "layouts/master")
 }
