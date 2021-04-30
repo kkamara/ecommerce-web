@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/kkamara/laravel-ecommerce/engine"
+	"github.com/kkamara/laravel-ecommerce/handlers/home"
 )
 
 func main() {
@@ -17,11 +18,7 @@ func main() {
 
 	app.Static("/", "resources")
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{
-			"Title": "Hello, World!",
-		}, "layouts/master")
-	})
+	app.Get("/", home.GetHomeHandler)
 
 	log.Fatal(app.Listen(":3000"))
 }
