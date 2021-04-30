@@ -17,8 +17,16 @@ func OpenDB() (db *gorm.DB, err error) {
 	}
 
 	db.AutoMigrate(
+		&schemas.Cart{},
+		&schemas.Company{},
+		&schemas.OrderProduct{},
+		&schemas.ProductFlaggedReview{},
+		&schemas.ProductReview{},
 		&schemas.Product{},
+		&schemas.UserAddress{},
+		&schemas.UserPaymentConfig{},
 		&schemas.User{},
+		&schemas.VendorApplication{},
 	)
 	return
 }
