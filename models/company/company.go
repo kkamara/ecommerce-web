@@ -7,7 +7,8 @@ import (
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
-	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/helper/strings"
+	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
@@ -17,10 +18,10 @@ func Create(newCompany *schemas.Company) (company *schemas.Company, err error) {
 	if nil != err {
 		return
 	}
-	now := helper.Now()
+	now := time.Now()
 	newCompany.CreatedAt = now
 	newCompany.UpdatedAt = now
-	newCompany.Slug = helper.Slugify(newCompany.Name, "-")
+	newCompany.Slug = strings.Slugify(newCompany.Name, "-")
 	res := db.Create(&newCompany)
 	if res.RowsAffected < 1 {
 		err = errors.New("error creating resource")
@@ -99,7 +100,7 @@ func Seed() (err error) {
 		}
 
 		firstName, lastName := faker.FirstName(), faker.LastName()
-		slug := helper.Slugify(
+		slug := strings.Slugify(
 			fmt.Sprintf("%s %s", firstName, lastName),
 			"-",
 		)

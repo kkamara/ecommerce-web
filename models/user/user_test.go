@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/bxcodec/faker/v3"
-	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/helper/password"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
 
@@ -43,7 +43,7 @@ func TestIsAcceptedRole(t *testing.T) {
 }
 
 func TestGetAllUsers(t *testing.T) {
-	password, err := helper.HashPassword("secret")
+	pwd, err := password.HashPassword("secret")
 	if err != nil {
 		t.Error(err)
 	}
@@ -51,7 +51,7 @@ func TestGetAllUsers(t *testing.T) {
 		FirstName: faker.FirstName(),
 		LastName:  faker.LastName(),
 		Email:     faker.Email(),
-		Password:  password,
+		Password:  pwd,
 		Role:      "",
 	}
 	user, err := Create(u)
