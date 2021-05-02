@@ -56,17 +56,21 @@ func Random() (product *schemas.Product, err error) {
 }
 
 func Seed() (err error) {
+	var (
+		c *schemas.Company
+		u *schemas.User
+	)
+
 	for count := 0; count < 30; count++ {
-		var c *schemas.Company
 		c, err = company.Random()
 		if err != nil {
 			return
 		}
-		var u *schemas.User
 		u, err = user.Random("vendor")
 		if err != nil {
 			return
 		}
+
 		const createdFormat = "2006-01-02 15:04:05"
 		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", helper.RandFloat(0, 500)), 32)
 		product := &schemas.Product{
