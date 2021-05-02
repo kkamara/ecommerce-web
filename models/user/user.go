@@ -7,7 +7,9 @@ import (
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
-	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/helper/password"
+	"github.com/kkamara/go-ecommerce/models/helper/strings"
+	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
 
@@ -28,10 +30,10 @@ func Create(newUser *schemas.User) (user *schemas.User, err error) {
 	if nil != err {
 		return
 	}
-	now := helper.Now()
+	now := time.Now()
 	newUser.CreatedAt = now
 	newUser.UpdatedAt = now
-	newUser.Slug = helper.Slugify(
+	newUser.Slug = strings.Slugify(
 		fmt.Sprintf("%s %s", newUser.FirstName, newUser.LastName),
 		"-",
 	)
@@ -69,8 +71,8 @@ func Random(role string) (user *schemas.User, err error) {
 	var count int64
 	db.Where("role = ?", role).Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
 	if count == 0 {
-		var password string
-		password, err = helper.HashPassword("secret")
+		var pwd string
+		pwd, err = password.HashPassword("secret")
 		if err != nil {
 			return
 		}
@@ -79,7 +81,7 @@ func Random(role string) (user *schemas.User, err error) {
 			FirstName: faker.FirstName(),
 			LastName:  faker.LastName(),
 			Email:     faker.Email(),
-			Password:  password,
+			Password:  pwd,
 			Role:      role,
 		}
 		user, err = Create(u)
@@ -92,13 +94,13 @@ func Random(role string) (user *schemas.User, err error) {
 
 func Seed() (err error) {
 	for count := 0; count < 30; count++ {
-		var password string
-		password, err = helper.HashPassword("secret")
+		var pwd string
+		pwd, err = password.HashPassword("secret")
 		if err != nil {
 			return
 		}
 		firstName, lastName := faker.FirstName(), faker.LastName()
-		slug := helper.Slugify(
+		slug := strings.Slugify(
 			fmt.Sprintf("%s %s", firstName, lastName),
 			"-",
 		)
@@ -114,7 +116,7 @@ func Seed() (err error) {
 			FirstName: firstName,
 			LastName:  lastName,
 			Email:     faker.Email(),
-			Password:  password,
+			Password:  pwd,
 			Role:      role,
 		}
 
