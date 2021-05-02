@@ -8,11 +8,12 @@ import (
 	"github.com/kkamara/go-ecommerce/engine"
 	"github.com/kkamara/go-ecommerce/handlers/home"
 	"github.com/kkamara/go-ecommerce/models/product"
+	"github.com/kkamara/go-ecommerce/models/user"
 )
 
 func Seed() (err error) {
 	type modelType func() error
-	models := []modelType{product.Seed}
+	models := []modelType{product.Seed, user.Seed}
 	for _, m := range models {
 		err = m()
 		if err != nil {

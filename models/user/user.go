@@ -3,8 +3,7 @@ package user
 import (
 	"errors"
 	"fmt"
-	"strings"
-	"time"
+	"math/rand"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
@@ -89,6 +88,42 @@ func Random(role string) (user *schemas.User, err error) {
 			Role:      role,
 		}
 		user, err = Create(u)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+func Seed() (err error) {
+	for count := 0; count < 30; count++ {
+		var password string
+		password, err = helper.HashPassword("secret")
+		if err != nil {
+			return
+		}
+		firstName, lastName := faker.FirstName(), faker.LastName()
+		slug := helper.Slugify(
+			fmt.Sprintf("%s %s", firstName, lastName),
+			"-",
+		)
+		var role string
+		switch rand.Intn(3) {
+		case 1:
+			role = "vendor"
+		case 2:
+			role = "moderator"
+		}
+		user := &schemas.User{
+			Slug:      slug,
+			FirstName: firstName,
+			LastName:  lastName,
+			Email:     faker.Email(),
+			Password:  password,
+			Role:      role,
+		}
+
+		_, err = Create(user)
 		if err != nil {
 			return
 		}
