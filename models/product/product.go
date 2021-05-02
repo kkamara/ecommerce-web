@@ -5,13 +5,13 @@ import (
 	"math"
 	mathrand "math/rand"
 	"strconv"
-	"time"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/helper/number"
 	"github.com/kkamara/go-ecommerce/models/helper/pagination"
+	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
@@ -21,6 +21,9 @@ func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
 	if nil != err {
 		return
 	}
+	now := time.Now()
+	newProduct.CreatedAt = now
+	newProduct.UpdatedAt = now
 	res := db.Create(&newProduct)
 	user = newProduct
 	if err = res.Error; err != nil {
