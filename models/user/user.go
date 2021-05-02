@@ -62,10 +62,10 @@ func Random(role string) (user *schemas.User, err error) {
 	if err != nil {
 		return
 	}
-		if acceptedRole := IsAcceptedRole(role); !acceptedRole {
-			err = fmt.Errorf("role %s is not in the accepted list", role)
-			return
-		}
+	if acceptedRole := IsAcceptedRole(role); !acceptedRole {
+		err = fmt.Errorf("role %s is not in the accepted list", role)
+		return
+	}
 	var count int64
 	db.Where("role = ?", role).Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
 	if count == 0 {
