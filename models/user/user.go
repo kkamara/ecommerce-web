@@ -50,7 +50,7 @@ func GetAll() (users []*schemas.User, err error) {
 	if nil != err {
 		return
 	}
-	res := db.Find(&users)
+	res := db.Where("deleted_at = ?", "").Find(&users)
 	err = res.Error
 	return
 }
@@ -70,7 +70,7 @@ func Random(role string) (user *schemas.User, err error) {
 		}
 	}
 	var count int64
-	q.Order("RANDOM()").Limit(1).Find(&user).Count(&count)
+	q.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
 	if count == 0 {
 		var password string
 		password, err = helper.HashPassword("secret")

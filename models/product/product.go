@@ -39,7 +39,7 @@ func GetProducts(page, page_size int) (
 	if err != nil {
 		return
 	}
-	db.Find(&products).Count(&pageCount)
+	db.Where("deleted_at = ?", "").Find(&products).Count(&pageCount)
 	var toCeil float64 = float64(pageCount) / float64(page_size)
 	pageCount = int64(math.Ceil(toCeil))
 	db.Scopes(helper.Paginate(page, page_size)).Find(&products)
@@ -51,7 +51,7 @@ func Random() (product *schemas.Product, err error) {
 	if err != nil {
 		return
 	}
-	db.Order("RANDOM()").Limit(1).Find(&product)
+	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&product)
 	return
 }
 
