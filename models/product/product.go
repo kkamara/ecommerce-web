@@ -5,13 +5,13 @@ import (
 	"math"
 	mathrand "math/rand"
 	"strconv"
-	"time"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/helper/number"
 	"github.com/kkamara/go-ecommerce/models/helper/pagination"
+	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
@@ -21,6 +21,9 @@ func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
 	if nil != err {
 		return
 	}
+	now := time.Now()
+	newProduct.CreatedAt = now
+	newProduct.UpdatedAt = now
 	res := db.Create(&newProduct)
 	user = newProduct
 	if err = res.Error; err != nil {
@@ -72,7 +75,7 @@ func Seed() (err error) {
 			return
 		}
 
-		const createdFormat = "2006-01-02 15:04:05"
+		now := time.Now()
 		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", number.RandFloat(0, 500)), 32)
 		product := &schemas.Product{
 			UserId:           u.Id,
@@ -85,8 +88,8 @@ func Seed() (err error) {
 			Cost:             cost,
 			Shippable:        mathrand.Intn(2) == 1,
 			FreeDelivery:     mathrand.Intn(2) == 1,
-			CreatedAt:        time.Now().Format(createdFormat),
-			UpdatedAt:        time.Now().Format(createdFormat),
+			CreatedAt:        now,
+			UpdatedAt:        now,
 			DeletedAt:        "",
 		}
 
