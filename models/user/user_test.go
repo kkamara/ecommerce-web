@@ -8,6 +8,40 @@ import (
 	"github.com/kkamara/go-ecommerce/schemas"
 )
 
+func TestIsAcceptedRole(t *testing.T) {
+	var (
+		acceptedRole bool
+		expected     = true
+	)
+	acceptedRole = IsAcceptedRole("")
+	expected = true
+	if acceptedRole != expected {
+		t.Errorf(
+			"expected: %v, received %v",
+			expected,
+			acceptedRole,
+		)
+	}
+
+	acceptedRole = IsAcceptedRole("vendor")
+	if acceptedRole != expected {
+		t.Errorf(
+			"expected: %v, received %v",
+			expected,
+			acceptedRole,
+		)
+	}
+
+	acceptedRole = IsAcceptedRole("moderator")
+	if acceptedRole != expected {
+		t.Errorf(
+			"expected: %v, received %v",
+			expected,
+			acceptedRole,
+		)
+	}
+}
+
 func TestGetAllUsers(t *testing.T) {
 	password, err := helper.HashPassword("secret")
 	if err != nil {

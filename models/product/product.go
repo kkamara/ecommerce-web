@@ -39,7 +39,7 @@ func GetProducts(page, page_size int) (
 	if err != nil {
 		return
 	}
-	db.Find(&products).Count(&pageCount)
+	db.Where("deleted_at = ?", "").Find(&products).Count(&pageCount)
 	var toCeil float64 = float64(pageCount) / float64(page_size)
 	pageCount = int64(math.Ceil(toCeil))
 	db.Scopes(helper.Paginate(page, page_size)).Find(&products)
@@ -51,22 +51,26 @@ func Random() (product *schemas.Product, err error) {
 	if err != nil {
 		return
 	}
-	db.Order("RANDOM()").Limit(1).Find(&product)
+	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&product)
 	return
 }
 
 func Seed() (err error) {
+	var (
+		c *schemas.Company
+		u *schemas.User
+	)
+
 	for count := 0; count < 30; count++ {
-		var c *schemas.Company
 		c, err = company.Random()
 		if err != nil {
 			return
 		}
-		var u *schemas.User
 		u, err = user.Random("vendor")
 		if err != nil {
 			return
 		}
+
 		const createdFormat = "2006-01-02 15:04:05"
 		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", helper.RandFloat(0, 500)), 32)
 		product := &schemas.Product{

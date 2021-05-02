@@ -3,11 +3,11 @@ package company
 import (
 	"errors"
 	"fmt"
-	"strings"
-	"time"
+	"math/rand"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
+	"github.com/kkamara/go-ecommerce/models/helper"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
@@ -17,13 +17,10 @@ func Create(newCompany *schemas.Company) (company *schemas.Company, err error) {
 	if nil != err {
 		return
 	}
-	const createdFormat = "2006-01-02 15:04:05"
-	newCompany.CreatedAt = time.Now().Format(createdFormat)
-	newCompany.UpdatedAt = time.Now().Format(createdFormat)
-	newCompany.Slug = strings.Join(
-		strings.Split(strings.ToLower(newCompany.Name), " "),
-		"-",
-	)
+	now := helper.Now()
+	newCompany.CreatedAt = now
+	newCompany.UpdatedAt = now
+	newCompany.Slug = helper.Slugify(newCompany.Name, "-")
 	res := db.Create(&newCompany)
 	if res.RowsAffected < 1 {
 		err = errors.New("error creating resource")
@@ -61,12 +58,16 @@ func Random() (company *schemas.Company, err error) {
 		return
 	}
 	var count int64
-	db.Order("RANDOM()").Limit(1).Find(&company).Count(&count)
+	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&company).Count(&count)
 	if count == 0 {
 		var u *schemas.User
 		u, err = user.Random("vendor")
 		if err != nil {
 			return
+		}
+		var buildingName string
+		if rand.Intn(2) == 1 {
+			buildingName = fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName())
 		}
 
 		c := &schemas.Company{
@@ -74,13 +75,52 @@ func Random() (company *schemas.Company, err error) {
 			Name:            fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName()),
 			MobileNumber:    faker.Phonenumber(),
 			MobileNumberExt: "+44",
-			BuildingName:    faker.Username(),
+			BuildingName:    buildingName,
 			StreetAddress1:  faker.MacAddress(),
 			City:            "London",
 			Country:         "United Kingdom",
 			Postcode:        faker.E164PhoneNumber(),
 		}
 		company, err = Create(c)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+func Seed() (err error) {
+	var u *schemas.User
+
+	for count := 0; count < 30; count++ {
+		u, err = user.Random("vendor")
+		if err != nil {
+			return
+		}
+
+		firstName, lastName := faker.FirstName(), faker.LastName()
+		slug := helper.Slugify(
+			fmt.Sprintf("%s %s", firstName, lastName),
+			"-",
+		)
+		var buildingName string
+		if rand.Intn(2) == 1 {
+			buildingName = fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName())
+		}
+		company := &schemas.Company{
+			Slug:            slug,
+			UserId:          u.Id,
+			Name:            fmt.Sprintf("%s %s", firstName, lastName),
+			MobileNumber:    faker.Phonenumber(),
+			MobileNumberExt: "+44",
+			BuildingName:    buildingName,
+			StreetAddress1:  faker.MacAddress(),
+			City:            "London",
+			Country:         "United Kingdom",
+			Postcode:        faker.E164PhoneNumber(),
+		}
+
+		_, err = Create(company)
 		if err != nil {
 			return
 		}

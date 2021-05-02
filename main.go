@@ -7,12 +7,14 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/kkamara/go-ecommerce/engine"
 	"github.com/kkamara/go-ecommerce/handlers/home"
+	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/product"
+	"github.com/kkamara/go-ecommerce/models/user"
 )
 
 func Seed() (err error) {
 	type modelType func() error
-	models := []modelType{product.Seed}
+	models := []modelType{user.Seed, company.Seed, product.Seed}
 	for _, m := range models {
 		err = m()
 		if err != nil {

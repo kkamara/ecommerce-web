@@ -4,10 +4,25 @@ import (
 	"encoding/base64"
 	"math/rand"
 	"strconv"
+	"strings"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
+
+const createdFormat = "2006-01-02 15:04:05"
+
+func Now() string {
+	return time.Now().Format(createdFormat)
+}
+
+func Slugify(s, joiner string) string {
+	return strings.Join(
+		strings.Split(strings.ToLower(s), " "),
+		joiner,
+	)
+}
 
 func HashPassword(password string) (hashPassword string, err error) {
 	var passwordBytes = []byte(password)
@@ -34,8 +49,8 @@ func RandFloat(min, max float64) float64 {
 	return min + rand.Float64()*(max-min)
 }
 
-var DefaultPage = 1
-var DefaultPageSize = 7
+const DefaultPage = 1
+const DefaultPageSize = 7
 
 func GetPaginationOptions(page, pageSize string) (paginationOptions map[string]int) {
 	var err error
