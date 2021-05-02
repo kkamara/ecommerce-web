@@ -64,13 +64,17 @@ func Random() (company *schemas.Company, err error) {
 		if err != nil {
 			return
 		}
+		var buildingName string
+		if rand.Intn(2) == 1 {
+			buildingName = fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName())
+		}
 
 		c := &schemas.Company{
 			UserId:          u.Id,
 			Name:            fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName()),
 			MobileNumber:    faker.Phonenumber(),
 			MobileNumberExt: "+44",
-			BuildingName:    faker.Username(),
+			BuildingName:    buildingName,
 			StreetAddress1:  faker.MacAddress(),
 			City:            "London",
 			Country:         "United Kingdom",
