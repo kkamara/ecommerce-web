@@ -34,8 +34,8 @@ func RandFloat(min, max float64) float64 {
 	return min + rand.Float64()*(max-min)
 }
 
-var DefaultPage = 1
-var DefaultPageSize = 7
+const DefaultPage = 1
+const DefaultPageSize = 7
 
 func GetPaginationOptions(page, pageSize string) (paginationOptions map[string]int) {
 	var err error
