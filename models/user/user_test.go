@@ -11,7 +11,7 @@ import (
 func TestGetAllUsers(t *testing.T) {
 	password, err := helper.HashPassword("secret")
 	if err != nil {
-		return
+		t.Error(err)
 	}
 	u := &schemas.User{
 		FirstName: faker.FirstName(),
@@ -22,7 +22,7 @@ func TestGetAllUsers(t *testing.T) {
 	}
 	user, err := Create(u)
 	if err != nil {
-		return
+		t.Error(err)
 	}
 	users, err := GetAll()
 	if err != nil {
