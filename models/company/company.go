@@ -61,7 +61,7 @@ func Random() (company *schemas.Company, err error) {
 		return
 	}
 	var count int64
-	db.Order("RANDOM()").Limit(1).Find(&company).Count(&count)
+	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&company).Count(&count)
 	if count == 0 {
 		var u *schemas.User
 		u, err = user.Random("vendor")
