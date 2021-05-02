@@ -10,7 +10,8 @@ import (
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/company"
-	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/helper/number"
+	"github.com/kkamara/go-ecommerce/models/helper/pagination"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
@@ -42,7 +43,7 @@ func GetProducts(page, page_size int) (
 	db.Where("deleted_at = ?", "").Find(&products).Count(&pageCount)
 	var toCeil float64 = float64(pageCount) / float64(page_size)
 	pageCount = int64(math.Ceil(toCeil))
-	db.Scopes(helper.Paginate(page, page_size)).Find(&products)
+	db.Scopes(pagination.Paginate(page, page_size)).Find(&products)
 	return
 }
 
@@ -72,7 +73,7 @@ func Seed() (err error) {
 		}
 
 		const createdFormat = "2006-01-02 15:04:05"
-		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", helper.RandFloat(0, 500)), 32)
+		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", number.RandFloat(0, 500)), 32)
 		product := &schemas.Product{
 			UserId:           u.Id,
 			CompanyId:        c.Id,

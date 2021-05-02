@@ -4,14 +4,14 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/helper/pagination"
 	"github.com/kkamara/go-ecommerce/models/product"
 )
 
 func GetHomeHandler(c *fiber.Ctx) error {
-	paginationOptions := helper.GetPaginationOptions(
-		c.Query("page", fmt.Sprintf("%d", helper.DefaultPage)),
-		c.Query("page_size", fmt.Sprintf("%d", helper.DefaultPageSize)),
+	paginationOptions := pagination.GetPaginationOptions(
+		c.Query("page", fmt.Sprintf("%d", pagination.DefaultPage)),
+		c.Query("page_size", fmt.Sprintf("%d", pagination.DefaultPageSize)),
 	)
 	products, pageNum, pageCount, err := product.GetProducts(
 		paginationOptions["page"],
