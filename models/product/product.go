@@ -72,7 +72,7 @@ func Seed() (err error) {
 			return
 		}
 
-		const createdFormat = "2006-01-02 15:04:05"
+		now := time.Now()
 		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", number.RandFloat(0, 500)), 32)
 		product := &schemas.Product{
 			UserId:           u.Id,
@@ -85,8 +85,8 @@ func Seed() (err error) {
 			Cost:             cost,
 			Shippable:        mathrand.Intn(2) == 1,
 			FreeDelivery:     mathrand.Intn(2) == 1,
-			CreatedAt:        time.Now().Format(createdFormat),
-			UpdatedAt:        time.Now().Format(createdFormat),
+			CreatedAt:        now,
+			UpdatedAt:        now,
 			DeletedAt:        "",
 		}
 
