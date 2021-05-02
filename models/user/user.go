@@ -26,11 +26,11 @@ func Create(newUser *schemas.User) (user *schemas.User, err error) {
 	if nil != err {
 		return
 	}
-	const createdFormat = "2006-01-02 15:04:05"
-	newUser.CreatedAt = time.Now().Format(createdFormat)
-	newUser.UpdatedAt = time.Now().Format(createdFormat)
-	newUser.Slug = strings.Join(
-		[]string{strings.ToLower(newUser.FirstName), strings.ToLower(newUser.LastName)},
+	now := helper.Now()
+	newUser.CreatedAt = now
+	newUser.UpdatedAt = now
+	newUser.Slug = helper.Slugify(
+		fmt.Sprintf("%s %s", newUser.FirstName, newUser.LastName),
 		"-",
 	)
 	res := db.Create(&newUser)

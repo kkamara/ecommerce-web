@@ -3,11 +3,10 @@ package company
 import (
 	"errors"
 	"fmt"
-	"strings"
-	"time"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
+	"github.com/kkamara/go-ecommerce/models/helper"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
@@ -17,13 +16,10 @@ func Create(newCompany *schemas.Company) (company *schemas.Company, err error) {
 	if nil != err {
 		return
 	}
-	const createdFormat = "2006-01-02 15:04:05"
-	newCompany.CreatedAt = time.Now().Format(createdFormat)
-	newCompany.UpdatedAt = time.Now().Format(createdFormat)
-	newCompany.Slug = strings.Join(
-		strings.Split(strings.ToLower(newCompany.Name), " "),
-		"-",
-	)
+	now := helper.Now()
+	newCompany.CreatedAt = now
+	newCompany.UpdatedAt = now
+	newCompany.Slug = helper.Slugify(newCompany.Name, "-")
 	res := db.Create(&newCompany)
 	if res.RowsAffected < 1 {
 		err = errors.New("error creating resource")
