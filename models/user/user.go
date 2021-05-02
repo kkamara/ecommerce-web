@@ -62,17 +62,12 @@ func Random(role string) (user *schemas.User, err error) {
 	if err != nil {
 		return
 	}
-	q := db
-	if len(role) != 0 {
-		q = q.Where("role = ?", role)
-	} else {
 		if acceptedRole := IsAcceptedRole(role); !acceptedRole {
 			err = fmt.Errorf("role %s is not in the accepted list", role)
 			return
 		}
-	}
 	var count int64
-	q.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
+	db.Where("role = ?", role).Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
 	if count == 0 {
 		var password string
 		password, err = helper.HashPassword("secret")
