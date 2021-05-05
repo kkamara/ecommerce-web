@@ -1,41 +1,13 @@
-package helper
+package pagination
 
 import (
-	"encoding/base64"
-	"math/rand"
 	"strconv"
 
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-func HashPassword(password string) (hashPassword string, err error) {
-	var passwordBytes = []byte(password)
-
-	hashedPasswordBytes, err := bcrypt.
-		GenerateFromPassword(passwordBytes, bcrypt.MinCost)
-
-	if err != nil {
-		return
-	}
-
-	hashPassword = base64.URLEncoding.EncodeToString(hashedPasswordBytes)
-
-	return
-}
-
-func VerifyPassword(hashedPassword, currPassword string) bool {
-	err := bcrypt.CompareHashAndPassword(
-		[]byte(hashedPassword), []byte(currPassword))
-	return err != nil
-}
-
-func RandFloat(min, max float64) float64 {
-	return min + rand.Float64()*(max-min)
-}
-
-var DefaultPage = 1
-var DefaultPageSize = 7
+const DefaultPage = 1
+const DefaultPageSize = 7
 
 func GetPaginationOptions(page, pageSize string) (paginationOptions map[string]int) {
 	var err error

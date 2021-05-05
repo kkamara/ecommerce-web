@@ -4,25 +4,59 @@ import (
 	"testing"
 
 	"github.com/bxcodec/faker/v3"
-	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/helper/password"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
 
+func TestIsAcceptedRole(t *testing.T) {
+	var (
+		acceptedRole bool
+		expected     = true
+	)
+	acceptedRole = IsAcceptedRole("")
+	expected = true
+	if acceptedRole != expected {
+		t.Errorf(
+			"expected: %v, received %v",
+			expected,
+			acceptedRole,
+		)
+	}
+
+	acceptedRole = IsAcceptedRole("vendor")
+	if acceptedRole != expected {
+		t.Errorf(
+			"expected: %v, received %v",
+			expected,
+			acceptedRole,
+		)
+	}
+
+	acceptedRole = IsAcceptedRole("moderator")
+	if acceptedRole != expected {
+		t.Errorf(
+			"expected: %v, received %v",
+			expected,
+			acceptedRole,
+		)
+	}
+}
+
 func TestGetAllUsers(t *testing.T) {
-	password, err := helper.HashPassword("secret")
+	pwd, err := password.HashPassword("secret")
 	if err != nil {
-		return
+		t.Error(err)
 	}
 	u := &schemas.User{
 		FirstName: faker.FirstName(),
 		LastName:  faker.LastName(),
 		Email:     faker.Email(),
-		Password:  password,
+		Password:  pwd,
 		Role:      "",
 	}
 	user, err := Create(u)
 	if err != nil {
-		return
+		t.Error(err)
 	}
 	users, err := GetAll()
 	if err != nil {

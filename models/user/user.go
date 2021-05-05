@@ -3,16 +3,20 @@ package user
 import (
 	"errors"
 	"fmt"
-	"strings"
-	"time"
+	"math/rand"
 
 	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
-	"github.com/kkamara/go-ecommerce/models/helper"
+	"github.com/kkamara/go-ecommerce/models/helper/password"
+	"github.com/kkamara/go-ecommerce/models/helper/strings"
+	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/schemas"
 )
 
 func IsAcceptedRole(role string) bool {
+	if role == "" {
+		return true
+	}
 	for _, acceptedRole := range schemas.AcceptedUserRoles {
 		if role == acceptedRole {
 			return true
@@ -26,11 +30,11 @@ func Create(newUser *schemas.User) (user *schemas.User, err error) {
 	if nil != err {
 		return
 	}
-	const createdFormat = "2006-01-02 15:04:05"
-	newUser.CreatedAt = time.Now().Format(createdFormat)
-	newUser.UpdatedAt = time.Now().Format(createdFormat)
-	newUser.Slug = strings.Join(
-		[]string{strings.ToLower(newUser.FirstName), strings.ToLower(newUser.LastName)},
+	now := time.Now()
+	newUser.CreatedAt = now
+	newUser.UpdatedAt = now
+	newUser.Slug = strings.Slugify(
+		fmt.Sprintf("%s %s", newUser.FirstName, newUser.LastName),
 		"-",
 	)
 	res := db.Create(&newUser)
@@ -50,7 +54,7 @@ func GetAll() (users []*schemas.User, err error) {
 	if nil != err {
 		return
 	}
-	res := db.Find(&users)
+	res := db.Where("deleted_at = ?", "").Find(&users)
 	err = res.Error
 	return
 }
@@ -60,20 +64,15 @@ func Random(role string) (user *schemas.User, err error) {
 	if err != nil {
 		return
 	}
-	q := db
-	if len(role) != 0 {
-		q = q.Where("role = ?", role)
-	} else {
-		if acceptedRole := IsAcceptedRole(role); !acceptedRole {
-			err = fmt.Errorf("role %s is not in the accepted list", role)
-			return
-		}
+	if acceptedRole := IsAcceptedRole(role); !acceptedRole {
+		err = fmt.Errorf("role %s is not in the accepted list", role)
+		return
 	}
 	var count int64
-	q.Order("RANDOM()").Limit(1).Find(&user).Count(&count)
+	db.Where("role = ?", role).Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
 	if count == 0 {
-		var password string
-		password, err = helper.HashPassword("secret")
+		var pwd string
+		pwd, err = password.HashPassword("secret")
 		if err != nil {
 			return
 		}
@@ -82,10 +81,46 @@ func Random(role string) (user *schemas.User, err error) {
 			FirstName: faker.FirstName(),
 			LastName:  faker.LastName(),
 			Email:     faker.Email(),
-			Password:  password,
+			Password:  pwd,
 			Role:      role,
 		}
 		user, err = Create(u)
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+func Seed() (err error) {
+	for count := 0; count < 30; count++ {
+		var pwd string
+		pwd, err = password.HashPassword("secret")
+		if err != nil {
+			return
+		}
+		firstName, lastName := faker.FirstName(), faker.LastName()
+		slug := strings.Slugify(
+			fmt.Sprintf("%s %s", firstName, lastName),
+			"-",
+		)
+		var role string
+		switch rand.Intn(3) {
+		case 1:
+			role = "vendor"
+		case 2:
+			role = "moderator"
+		}
+		user := &schemas.User{
+			Slug:      slug,
+			FirstName: firstName,
+			LastName:  lastName,
+			Email:     faker.Email(),
+			Password:  pwd,
+			Role:      role,
+		}
+
+		_, err = Create(user)
 		if err != nil {
 			return
 		}
