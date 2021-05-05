@@ -110,3 +110,10 @@ func TestRandomVendorRole(t *testing.T) {
 		)
 	}
 }
+
+func TestRandomAnyRole(t *testing.T) {
+	_, err := Random("?")
+	if err != nil {
+		t.Error(err)
+	}
+}
