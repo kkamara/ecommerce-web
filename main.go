@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -25,6 +27,10 @@ func Seed() (err error) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
 	app := *fiber.New(fiber.Config{
 		Views: engine.GetEngine(),
 	})
@@ -40,5 +46,5 @@ func main() {
 
 	app.Get("/", home.GetHomeHandler)
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(fmt.Sprintf(":%s", port)))
 }
