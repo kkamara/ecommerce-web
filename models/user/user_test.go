@@ -3,9 +3,9 @@ package user
 import (
 	"testing"
 
-	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/models/helper/password"
 	"github.com/kkamara/go-ecommerce/schemas"
+	"syreclabs.com/go/faker"
 )
 
 func TestIsAcceptedRole(t *testing.T) {
@@ -47,10 +47,11 @@ func TestGetAllUsers(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	name := faker.Name()
 	u := &schemas.User{
-		FirstName: faker.FirstName(),
-		LastName:  faker.LastName(),
-		Email:     faker.Email(),
+		FirstName: name.FirstName(),
+		LastName:  name.LastName(),
+		Email:     faker.Internet().SafeEmail(),
 		Password:  pwd,
 		Role:      "",
 	}

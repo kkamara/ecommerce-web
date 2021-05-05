@@ -2,15 +2,14 @@ package company
 
 import (
 	"errors"
-	"fmt"
 	"math/rand"
 
-	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/helper/strings"
 	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
+	"syreclabs.com/go/faker"
 )
 
 func Create(newCompany *schemas.Company) (company *schemas.Company, err error) {
@@ -68,19 +67,18 @@ func Random() (company *schemas.Company, err error) {
 		}
 		var buildingName string
 		if rand.Intn(2) == 1 {
-			buildingName = fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName())
+			buildingName = faker.Company().Name()
 		}
 
 		c := &schemas.Company{
-			UserId:          u.Id,
-			Name:            fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName()),
-			MobileNumber:    faker.Phonenumber(),
-			MobileNumberExt: "+44",
-			BuildingName:    buildingName,
-			StreetAddress1:  faker.MacAddress(),
-			City:            "London",
-			Country:         "United Kingdom",
-			Postcode:        faker.E164PhoneNumber(),
+			UserId:         u.Id,
+			Name:           faker.Company().Name(),
+			MobileNumber:   faker.PhoneNumber().CellPhone(),
+			BuildingName:   buildingName,
+			StreetAddress1: faker.Address().StreetAddress(),
+			City:           "London",
+			Country:        "United Kingdom",
+			Postcode:       faker.Address().Postcode(),
 		}
 		company, err = Create(c)
 		if err != nil {
@@ -99,26 +97,22 @@ func Seed() (err error) {
 			return
 		}
 
-		firstName, lastName := faker.FirstName(), faker.LastName()
-		slug := strings.Slugify(
-			fmt.Sprintf("%s %s", firstName, lastName),
-			"-",
-		)
+		companyName := faker.Company().Name()
+
 		var buildingName string
 		if rand.Intn(2) == 1 {
-			buildingName = fmt.Sprintf("%s %s", faker.FirstName(), faker.LastName())
+			buildingName = faker.Company().Name()
 		}
 		company := &schemas.Company{
-			Slug:            slug,
-			UserId:          u.Id,
-			Name:            fmt.Sprintf("%s %s", firstName, lastName),
-			MobileNumber:    faker.Phonenumber(),
-			MobileNumberExt: "+44",
-			BuildingName:    buildingName,
-			StreetAddress1:  faker.MacAddress(),
-			City:            "London",
-			Country:         "United Kingdom",
-			Postcode:        faker.E164PhoneNumber(),
+			Slug:           strings.Slugify(companyName, "-"),
+			UserId:         u.Id,
+			Name:           companyName,
+			MobileNumber:   faker.PhoneNumber().CellPhone(),
+			BuildingName:   buildingName,
+			StreetAddress1: faker.Address().StreetAddress(),
+			City:           "London",
+			Country:        "United Kingdom",
+			Postcode:       faker.Address().Postcode(),
 		}
 
 		_, err = Create(company)
