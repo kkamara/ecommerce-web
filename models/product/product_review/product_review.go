@@ -13,7 +13,7 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func Create(newReview *schemas.ProductReview) (company *schemas.ProductReview, err error) {
+func Create(newReview *schemas.ProductReview) (productReview *schemas.ProductReview, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -26,7 +26,7 @@ func Create(newReview *schemas.ProductReview) (company *schemas.ProductReview, e
 		err = errors.New("error creating resource")
 		return
 	}
-	company = newReview
+	productReview = newReview
 	if err = res.Error; err != nil {
 		return
 	}
@@ -52,6 +52,15 @@ func GetAggRating(productId uint64) string {
 		return defaultValue
 	}
 	return fmt.Sprintf("%.2f", review)
+}
+
+func Random() (productReview *schemas.ProductReview, err error) {
+	db, err := config.OpenDB()
+	if err != nil {
+		return
+	}
+	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&productReview)
+	return
 }
 
 func Seed() (err error) {

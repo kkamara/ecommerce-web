@@ -17,7 +17,7 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
+func Create(newProduct *schemas.Product) (product *schemas.Product, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -26,7 +26,7 @@ func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
 	newProduct.CreatedAt = now
 	newProduct.UpdatedAt = now
 	res := db.Create(&newProduct)
-	user = newProduct
+	product = newProduct
 	if err = res.Error; err != nil {
 		return
 	}
