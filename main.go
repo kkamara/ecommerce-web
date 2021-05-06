@@ -9,9 +9,14 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/kkamara/go-ecommerce/engine"
 	"github.com/kkamara/go-ecommerce/handlers/home"
+	"github.com/kkamara/go-ecommerce/models/cart"
 	"github.com/kkamara/go-ecommerce/models/company"
+	"github.com/kkamara/go-ecommerce/models/company/vendor_application"
 	"github.com/kkamara/go-ecommerce/models/order"
+	"github.com/kkamara/go-ecommerce/models/order/order_product"
 	"github.com/kkamara/go-ecommerce/models/product"
+	"github.com/kkamara/go-ecommerce/models/product/flagged_review"
+	"github.com/kkamara/go-ecommerce/models/product/product_review"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/models/user/address"
 	"github.com/kkamara/go-ecommerce/models/user/payment"
@@ -23,9 +28,14 @@ func Seed() (err error) {
 		user.Seed,
 		company.Seed,
 		product.Seed,
+		product_review.Seed,
+		flagged_review.Seed,
 		order.Seed,
+		order_product.Seed,
 		address.Seed,
 		payment.Seed,
+		cart.Seed,
+		vendor_application.Seed,
 	}
 	for _, m := range models {
 		err = m()
