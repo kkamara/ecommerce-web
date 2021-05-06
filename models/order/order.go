@@ -7,7 +7,6 @@ import (
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/helper/number"
 	"github.com/kkamara/go-ecommerce/models/helper/time"
-	"github.com/kkamara/go-ecommerce/models/product"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/models/user/address"
 	"github.com/kkamara/go-ecommerce/models/user/payment"
@@ -34,19 +33,23 @@ func Create(newCart *schemas.Order) (company *schemas.Order, err error) {
 	return
 }
 
+func Random() (order *schemas.Order, err error) {
+	db, err := config.OpenDB()
+	if err != nil {
+		return
+	}
+	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&order)
+	return
+}
+
 func Seed() (err error) {
 	for count := 0; count < 30; count++ {
 		var (
 			u    *schemas.User
-			p    *schemas.Product
 			pc   *schemas.UserPaymentConfig
 			addr *schemas.UserAddress
 		)
 		u, err = user.Random("")
-		if err != nil {
-			return
-		}
-		p, err = product.Random()
 		if err != nil {
 			return
 		}
@@ -60,7 +63,6 @@ func Seed() (err error) {
 		}
 		order := &schemas.Order{
 			UserId:              u.Id,
-			ProductId:           p.Id,
 			UserPaymentConfigId: pc.Id,
 			UserAddressId:       addr.Id,
 			ReferenceNumber:     fmt.Sprintf("%d", number.RandInt(200000, 100000)),
