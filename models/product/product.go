@@ -77,7 +77,11 @@ func Seed() (err error) {
 		}
 
 		now := time.Now()
-		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", number.RandFloat(0, 500)), 32)
+		cost, _ := strconv.ParseUint(
+			fmt.Sprintf("%d", number.RandInt(0, 500)),
+			10,
+			64,
+		)
 		product := &schemas.Product{
 			UserId:           u.Id,
 			CompanyId:        c.Id,
