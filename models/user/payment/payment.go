@@ -14,7 +14,7 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func Create(newPayment *schemas.UserPaymentConfig) (company *schemas.UserPaymentConfig, err error) {
+func Create(newPayment *schemas.UserPaymentConfig) (payment *schemas.UserPaymentConfig, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -27,7 +27,7 @@ func Create(newPayment *schemas.UserPaymentConfig) (company *schemas.UserPayment
 		err = errors.New("error creating resource")
 		return
 	}
-	company = newPayment
+	payment = newPayment
 	if err = res.Error; err != nil {
 		return
 	}
