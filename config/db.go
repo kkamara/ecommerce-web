@@ -20,6 +20,7 @@ func OpenDB() (db *gorm.DB, err error) {
 		&schemas.Cart{},
 		&schemas.Company{},
 		&schemas.OrderProduct{},
+		&schemas.Order{},
 		&schemas.ProductFlaggedReview{},
 		&schemas.ProductReview{},
 		&schemas.Product{},
