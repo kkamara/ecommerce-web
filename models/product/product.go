@@ -1,10 +1,8 @@
 package product
 
 import (
-	"fmt"
 	"math"
 	mathrand "math/rand"
-	"strconv"
 	"strings"
 
 	"github.com/kkamara/go-ecommerce/config"
@@ -77,11 +75,7 @@ func Seed() (err error) {
 		}
 
 		now := time.Now()
-		cost, _ := strconv.ParseUint(
-			fmt.Sprintf("%d", number.RandInt(0, 500)),
-			10,
-			64,
-		)
+		cost, _ := number.GetRandomCost()
 		product := &schemas.Product{
 			UserId:           u.Id,
 			CompanyId:        c.Id,
