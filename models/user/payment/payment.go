@@ -34,6 +34,21 @@ func Create(newPayment *schemas.UserPaymentConfig) (company *schemas.UserPayment
 	return
 }
 
+func GetPayment(userId uint64) (paymentConfig *schemas.UserPaymentConfig, err error) {
+	db, err := config.OpenDB()
+	if nil != err {
+		return
+	}
+	res := db.Model(&schemas.UserPaymentConfig{}).Joins(
+		"left join users on user_payment_configs.user_id = users.id",
+	).Where(
+		"users.id = ?",
+		userId,
+	).Limit(1).Find(&paymentConfig)
+	err = res.Error
+	return
+}
+
 func Random() (paymentConfig *schemas.UserPaymentConfig, err error) {
 	db, err := config.OpenDB()
 	if err != nil {
