@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/helper/password"
 	"github.com/kkamara/go-ecommerce/models/helper/strings"
 	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/schemas"
+	"gorm.io/gorm"
+	"syreclabs.com/go/faker"
 )
 
 func IsAcceptedRole(role string) bool {
@@ -60,16 +61,23 @@ func GetAll() (users []*schemas.User, err error) {
 }
 
 func Random(role string) (user *schemas.User, err error) {
+	var anyRoleFlag = "?"
 	db, err := config.OpenDB()
 	if err != nil {
 		return
 	}
-	if acceptedRole := IsAcceptedRole(role); !acceptedRole {
+	if acceptedRole := IsAcceptedRole(role); role != anyRoleFlag && !acceptedRole {
 		err = fmt.Errorf("role %s is not in the accepted list", role)
 		return
 	}
-	var count int64
-	db.Where("role = ?", role).Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
+	var (
+		count int64
+		q     *gorm.DB = db
+	)
+	if role != anyRoleFlag {
+		q = db.Where("role = ?", role)
+	}
+	q.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
 	if count == 0 {
 		var pwd string
 		pwd, err = password.HashPassword("secret")
@@ -77,10 +85,11 @@ func Random(role string) (user *schemas.User, err error) {
 			return
 		}
 
+		name := faker.Name()
 		u := &schemas.User{
-			FirstName: faker.FirstName(),
-			LastName:  faker.LastName(),
-			Email:     faker.Email(),
+			FirstName: name.FirstName(),
+			LastName:  name.LastName(),
+			Email:     faker.Internet().SafeEmail(),
 			Password:  pwd,
 			Role:      role,
 		}
@@ -99,9 +108,9 @@ func Seed() (err error) {
 		if err != nil {
 			return
 		}
-		firstName, lastName := faker.FirstName(), faker.LastName()
+		name := faker.Name()
 		slug := strings.Slugify(
-			fmt.Sprintf("%s %s", firstName, lastName),
+			fmt.Sprintf("%s %s", name.FirstName(), name.LastName()),
 			"-",
 		)
 		var role string
@@ -113,9 +122,9 @@ func Seed() (err error) {
 		}
 		user := &schemas.User{
 			Slug:      slug,
-			FirstName: firstName,
-			LastName:  lastName,
-			Email:     faker.Email(),
+			FirstName: name.FirstName(),
+			LastName:  name.LastName(),
+			Email:     faker.Internet().SafeEmail(),
 			Password:  pwd,
 			Role:      role,
 		}

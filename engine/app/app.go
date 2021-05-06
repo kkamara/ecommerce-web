@@ -13,6 +13,8 @@ func Unescape(s string) template.HTML {
 	return template.HTML(s)
 }
 
-func FormattedCost(cost float64) string {
-	return fmt.Sprintf("£%.2f", cost)
+func FormattedCost(cost uint64) string {
+	var c float64 = float64(cost)
+	c /= 100
+	return fmt.Sprintf("£%.2f", c)
 }

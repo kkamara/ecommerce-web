@@ -5,8 +5,8 @@ import (
 	"math"
 	mathrand "math/rand"
 	"strconv"
+	"strings"
 
-	"github.com/bxcodec/faker/v3"
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/helper/number"
@@ -14,9 +14,10 @@ import (
 	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
+	"syreclabs.com/go/faker"
 )
 
-func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
+func Create(newProduct *schemas.Product) (product *schemas.Product, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -25,7 +26,7 @@ func Create(newProduct *schemas.Product) (user *schemas.Product, err error) {
 	newProduct.CreatedAt = now
 	newProduct.UpdatedAt = now
 	res := db.Create(&newProduct)
-	user = newProduct
+	product = newProduct
 	if err = res.Error; err != nil {
 		return
 	}
@@ -76,14 +77,18 @@ func Seed() (err error) {
 		}
 
 		now := time.Now()
-		cost, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", number.RandFloat(0, 500)), 32)
+		cost, _ := strconv.ParseUint(
+			fmt.Sprintf("%d", number.RandInt(0, 500)),
+			10,
+			64,
+		)
 		product := &schemas.Product{
 			UserId:           u.Id,
 			CompanyId:        c.Id,
-			Name:             faker.MacAddress(),
-			ShortDescription: faker.Paragraph(),
+			Name:             faker.Commerce().ProductName(),
+			ShortDescription: strings.Join(faker.Lorem().Paragraphs(1), ""),
 			LongDescription:  "",
-			ProductDetails:   faker.Sentence(),
+			ProductDetails:   strings.Join(faker.Lorem().Paragraphs(3), "\n\n"),
 			ImagePath:        "img/not-found.jpg",
 			Cost:             cost,
 			Shippable:        mathrand.Intn(2) == 1,
