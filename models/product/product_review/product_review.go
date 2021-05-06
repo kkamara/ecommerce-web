@@ -1,11 +1,37 @@
 package product_review
 
 import (
+	"errors"
 	"fmt"
+	"math/rand"
 
 	"github.com/kkamara/go-ecommerce/config"
+	"github.com/kkamara/go-ecommerce/models/helper/time"
+	"github.com/kkamara/go-ecommerce/models/product"
+	"github.com/kkamara/go-ecommerce/models/user"
 	"github.com/kkamara/go-ecommerce/schemas"
+	"syreclabs.com/go/faker"
 )
+
+func Create(newReview *schemas.ProductReview) (company *schemas.ProductReview, err error) {
+	db, err := config.OpenDB()
+	if nil != err {
+		return
+	}
+	now := time.Now()
+	newReview.CreatedAt = now
+	newReview.UpdatedAt = now
+	res := db.Create(&newReview)
+	if res.RowsAffected < 1 {
+		err = errors.New("error creating resource")
+		return
+	}
+	company = newReview
+	if err = res.Error; err != nil {
+		return
+	}
+	return
+}
 
 func GetAggRating(productId uint64) string {
 	defaultValue := "None"
@@ -26,4 +52,43 @@ func GetAggRating(productId uint64) string {
 		return defaultValue
 	}
 	return fmt.Sprintf("%.2f", review)
+}
+
+func Seed() (err error) {
+	for count := 0; count < 30; count++ {
+		var (
+			u *schemas.User
+			p *schemas.Product
+		)
+		u, err = user.Random("")
+		if err != nil {
+			return
+		}
+		p, err = product.Random()
+		if err != nil {
+			return
+		}
+		order := &schemas.ProductReview{
+			UserId:    u.Id,
+			ProductId: p.Id,
+			Score:     uint8(rand.Intn(11)),
+		}
+		if rand.Intn(2) != 1 {
+			order.Content = faker.Lorem().Paragraph(rand.Intn(6))
+		}
+		if rand.Intn(2) != 1 {
+			u, err = user.Random("")
+			if err != nil {
+				return
+			}
+			order.FlaggedReviewDecidedBy = u.Id
+			order.FlaggedReviewDecisionReason = faker.Lorem().Paragraph(rand.Intn(6))
+		}
+
+		_, err = Create(order)
+		if err != nil {
+			return
+		}
+	}
+	return
 }
