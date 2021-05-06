@@ -31,6 +31,21 @@ func Create(newAddress *schemas.UserAddress) (company *schemas.UserAddress, err 
 	return
 }
 
+func GetAddress(userId uint64) (addressConfig *schemas.UserAddress, err error) {
+	db, err := config.OpenDB()
+	if nil != err {
+		return
+	}
+	res := db.Model(&schemas.UserAddress{}).Joins(
+		"left join users on user_addresses.user_id = users.id",
+	).Where(
+		"users.id = ?",
+		userId,
+	).Limit(1).Find(&addressConfig)
+	err = res.Error
+	return
+}
+
 func Random() (userAddress *schemas.UserAddress, err error) {
 	db, err := config.OpenDB()
 	if err != nil {
