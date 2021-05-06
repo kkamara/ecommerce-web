@@ -12,6 +12,7 @@ import (
 	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/company/vendor_application"
 	"github.com/kkamara/go-ecommerce/models/order"
+	"github.com/kkamara/go-ecommerce/models/order/order_product"
 	"github.com/kkamara/go-ecommerce/models/product"
 	"github.com/kkamara/go-ecommerce/models/product/flagged_review"
 	"github.com/kkamara/go-ecommerce/models/product/product_review"
@@ -27,11 +28,12 @@ func Seed() (err error) {
 		company.Seed,
 		vendor_application.Seed,
 		product.Seed,
+		product_review.Seed,
+		flagged_review.Seed,
 		order.Seed,
+		order_product.Seed,
 		address.Seed,
 		payment.Seed,
-		flagged_review.Seed,
-		product_review.Seed,
 	}
 	for _, m := range models {
 		err = m()

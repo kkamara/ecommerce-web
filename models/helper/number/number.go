@@ -1,7 +1,9 @@
 package number
 
 import (
+	"fmt"
 	"math/rand"
+	"strconv"
 )
 
 func RandFloat(min, max int) float64 {
@@ -10,4 +12,12 @@ func RandFloat(min, max int) float64 {
 
 func RandInt(min, max int) int {
 	return int(RandFloat(min, max))
+}
+
+func GetRandomCost() (uint64, error) {
+	return strconv.ParseUint(
+		fmt.Sprintf("%d", RandInt(0, 500)),
+		10,
+		64,
+	)
 }
