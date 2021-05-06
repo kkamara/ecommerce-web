@@ -14,7 +14,7 @@ import (
 	"github.com/kkamara/go-ecommerce/schemas"
 )
 
-func Create(newCart *schemas.Order) (order *schemas.Order, err error) {
+func Create(newCart *schemas.Order) (company *schemas.Order, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -27,7 +27,7 @@ func Create(newCart *schemas.Order) (order *schemas.Order, err error) {
 		err = errors.New("error creating resource")
 		return
 	}
-	order = newCart
+	company = newCart
 	if err = res.Error; err != nil {
 		return
 	}

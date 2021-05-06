@@ -11,7 +11,7 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func Create(newAddress *schemas.UserAddress) (address *schemas.UserAddress, err error) {
+func Create(newAddress *schemas.UserAddress) (company *schemas.UserAddress, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -24,7 +24,7 @@ func Create(newAddress *schemas.UserAddress) (address *schemas.UserAddress, err 
 		err = errors.New("error creating resource")
 		return
 	}
-	address = newAddress
+	company = newAddress
 	if err = res.Error; err != nil {
 		return
 	}

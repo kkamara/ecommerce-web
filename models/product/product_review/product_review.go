@@ -13,7 +13,7 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func Create(newReview *schemas.ProductReview) (productReview *schemas.ProductReview, err error) {
+func Create(newReview *schemas.ProductReview) (company *schemas.ProductReview, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -26,7 +26,7 @@ func Create(newReview *schemas.ProductReview) (productReview *schemas.ProductRev
 		err = errors.New("error creating resource")
 		return
 	}
-	productReview = newReview
+	company = newReview
 	if err = res.Error; err != nil {
 		return
 	}
