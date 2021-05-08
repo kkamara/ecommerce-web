@@ -2,7 +2,7 @@ package schemas
 
 type OrderProduct struct {
 	Id           uint64 `json:"id"`
-	OrderId      uint64 `json:"order_history_id"`
+	OrderId      uint64 `json:"order_id"`
 	ProductId    uint64 `json:"product_id"`
 	Quantity     uint8  `json:"amount"`
 	Cost         uint64 `json:"cost"`

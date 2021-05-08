@@ -38,7 +38,60 @@ func Random() (vendorApplication *schemas.VendorApplication, err error) {
 	if err != nil {
 		return
 	}
-	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&vendorApplication)
+	var (
+		count         int64
+		guestRole     = ""
+		moderatorRole = "moderator"
+	)
+	res := db.Where(
+		"deleted_at = ?", "",
+	).Order("RANDOM()").Limit(1).Find(&vendorApplication).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
+	if count == 0 {
+		var u *schemas.User
+		u, err = user.Random(guestRole)
+		if err != nil {
+			return
+		}
+		var buildingName string
+		if rand.Intn(2) == 1 {
+			buildingName = faker.Company().Name()
+		}
+		fakerAddress := faker.Address()
+		addr := &schemas.UserAddress{
+			UserId:         u.Id,
+			MobileNumber:   faker.PhoneNumber().CellPhone(),
+			BuildingName:   buildingName,
+			StreetAddress1: fakerAddress.StreetAddress(),
+			City:           fakerAddress.City(),
+			Country:        fakerAddress.Country(),
+			Postcode:       fakerAddress.Postcode(),
+		}
+		addr, err = address.Create(addr)
+		if err != nil {
+			return
+		}
+		var dbu *schemas.User
+		dbu, err = user.Random(moderatorRole)
+		if err != nil {
+			return
+		}
+		va := &schemas.VendorApplication{
+			UserId:              u.Id,
+			UserAddressId:       addr.Id,
+			ProposedCompanyName: faker.Company().Name(),
+			Accepted:            mathrand.Intn(2) == 1,
+			DecidedBy:           dbu.Id,
+			DecisionReason:      faker.Lorem().Paragraph(mathrand.Intn(100)),
+		}
+
+		vendorApplication, err = Create(va)
+		if err != nil {
+			return
+		}
+	}
 	return
 }
 

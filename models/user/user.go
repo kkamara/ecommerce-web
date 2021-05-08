@@ -74,7 +74,10 @@ func Random(role string) (user *schemas.User, err error) {
 	if role != anyRoleFlag {
 		q = db.Where("role = ?", role)
 	}
-	q.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
+	res := q.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&user).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
 	if count == 0 {
 		var pwd string
 		pwd, err = password.HashPassword("secret")

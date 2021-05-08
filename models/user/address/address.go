@@ -52,7 +52,10 @@ func Random() (userAddress *schemas.UserAddress, err error) {
 		return
 	}
 	var count int64
-	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&userAddress).Count(&count)
+	res := db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&userAddress).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
 	if count == 0 {
 		var u *schemas.User
 		u, err = user.Random("")

@@ -156,7 +156,48 @@ func Random() (product *schemas.Product, err error) {
 	if err != nil {
 		return
 	}
-	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&product)
+	var (
+		count int64
+		c     *schemas.Company
+		u     *schemas.User
+	)
+	res := db.Limit(1).Find(&product).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
+	if count == 0 {
+		c, err = company.Random()
+		if err != nil {
+			return
+		}
+		u, err = user.Random("vendor")
+		if err != nil {
+			return
+		}
+
+		now := time.Now()
+		cost, _ := number.GetRandomCost()
+		newProduct := &schemas.Product{
+			UserId:           u.Id,
+			CompanyId:        c.Id,
+			Name:             faker.Commerce().ProductName(),
+			ShortDescription: strings.Join(faker.Lorem().Paragraphs(1), ""),
+			LongDescription:  "",
+			ProductDetails:   strings.Join(faker.Lorem().Paragraphs(3), "\n\n"),
+			ImagePath:        "img/not-found.jpg",
+			Cost:             cost,
+			Shippable:        mathrand.Intn(2) == 1,
+			FreeDelivery:     mathrand.Intn(2) == 1,
+			CreatedAt:        now,
+			UpdatedAt:        now,
+			DeletedAt:        "",
+		}
+
+		product, err = Create(newProduct)
+		if err != nil {
+			return
+		}
+	}
 	return
 }
 

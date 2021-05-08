@@ -55,7 +55,12 @@ func Random() (paymentConfig *schemas.UserPaymentConfig, err error) {
 		return
 	}
 	var count int64
-	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&paymentConfig).Count(&count)
+	res := db.Where(
+		"deleted_at = ?", "",
+	).Order("RANDOM()").Limit(1).Find(&paymentConfig).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
 	if count == 0 {
 		var u *schemas.User
 		u, err = user.Random("")
@@ -84,7 +89,7 @@ func Random() (paymentConfig *schemas.UserPaymentConfig, err error) {
 			return
 		}
 		address := faker.Address()
-		payment := &schemas.UserPaymentConfig{
+		newPayment := &schemas.UserPaymentConfig{
 			UserId:         u.Id,
 			CardHolderName: fmt.Sprintf("%s %s", u.FirstName, u.LastName),
 			CardNumber:     uint8(cc),
@@ -97,7 +102,8 @@ func Random() (paymentConfig *schemas.UserPaymentConfig, err error) {
 			Country:        address.Country(),
 			Postcode:       address.Postcode(),
 		}
-		paymentConfig, err = Create(payment)
+
+		paymentConfig, err = Create(newPayment)
 		if err != nil {
 			return
 		}

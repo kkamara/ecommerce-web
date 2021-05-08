@@ -35,7 +35,31 @@ func Random() (flaggedReview *schemas.ProductFlaggedReview, err error) {
 	if err != nil {
 		return
 	}
-	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&flaggedReview)
+	var (
+		count int64
+		pr    *schemas.ProductReview
+	)
+	res := db.Where(
+		"deleted_at = ?", "",
+	).Order("RANDOM()").Limit(1).Find(&flaggedReview).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
+	if count == 0 {
+		pr, err = product_review.Random()
+		if err != nil {
+			return
+		}
+		newFlaggedReview := &schemas.ProductFlaggedReview{
+			ProductReviewsId: pr.Id,
+			FlaggedFromIp:    faker.Internet().IpV4Address(),
+		}
+
+		flaggedReview, err = Create(newFlaggedReview)
+		if err != nil {
+			return
+		}
+	}
 	return
 }
 
