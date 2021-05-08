@@ -1,1 +1,1 @@
-web: bin/go-ecommerce
+web: SEED=true bin/go-ecommerce
