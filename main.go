@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -24,6 +25,17 @@ import (
 )
 
 func Seed() (err error) {
+	seed := os.Getenv("SEED")
+	if seed == "" {
+		return
+	}
+	seedValue, err := strconv.ParseBool(seed)
+	if err != nil {
+		return
+	}
+	if !seedValue {
+		return
+	}
 	type modelType func() error
 	models := []modelType{
 		user.Seed,
