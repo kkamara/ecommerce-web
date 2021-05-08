@@ -22,7 +22,7 @@ func TestGetProductReviews(t *testing.T) {
 	pr := &schemas.ProductReview{
 		UserId:    u.Id,
 		ProductId: product.Id,
-		Score:     uint8(rand.Intn(11)),
+		Score:     uint8(rand.Intn(6)),
 	}
 	if rand.Intn(2) != 1 {
 		pr.Content = faker.Lorem().Paragraph(rand.Intn(6))

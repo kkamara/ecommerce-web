@@ -96,7 +96,7 @@ func Random() (productReview *schemas.ProductReview, err error) {
 		newProductReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
-			Score:     uint8(rand.Intn(11)),
+			Score:     uint8(rand.Intn(6)),
 		}
 		if rand.Intn(2) != 1 {
 			newProductReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
@@ -135,7 +135,7 @@ func Seed() (err error) {
 		productReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
-			Score:     uint8(rand.Intn(11)),
+			Score:     uint8(rand.Intn(6)),
 		}
 		if rand.Intn(2) != 1 {
 			productReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
