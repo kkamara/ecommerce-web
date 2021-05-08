@@ -38,7 +38,7 @@ func DidUserBuyProduct(userId, productId uint64) (userBoughtProduct bool, err er
 		return
 	}
 	var count int64
-	res := db.Debug().Joins(
+	res := db.Joins(
 		"left join products on order_products.product_id = products.id",
 	).Joins(
 		"left join orders on order_products.order_id = orders.id",
