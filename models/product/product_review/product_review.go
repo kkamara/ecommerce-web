@@ -33,6 +33,20 @@ func Create(newReview *schemas.ProductReview) (company *schemas.ProductReview, e
 	return
 }
 
+func GetProductReviews(productId uint64) (productReviews []*schemas.ProductReview, err error) {
+	db, err := config.OpenDB()
+	if nil != err {
+		return
+	}
+	res := db.Where(
+		"product_id = ?", productId,
+	).Where(
+		"deleted_at = ?", "",
+	).Find(&productReviews)
+	err = res.Error
+	return
+}
+
 func GetAggRating(productId uint64) string {
 	defaultValue := "None"
 	db, err := config.OpenDB()
@@ -77,24 +91,24 @@ func Seed() (err error) {
 		if err != nil {
 			return
 		}
-		order := &schemas.ProductReview{
+		productReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
 			Score:     uint8(rand.Intn(11)),
 		}
 		if rand.Intn(2) != 1 {
-			order.Content = faker.Lorem().Paragraph(rand.Intn(6))
+			productReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
 		}
 		if rand.Intn(2) != 1 {
 			u, err = user.Random("")
 			if err != nil {
 				return
 			}
-			order.FlaggedReviewDecidedBy = u.Id
-			order.FlaggedReviewDecisionReason = faker.Lorem().Paragraph(rand.Intn(6))
+			productReview.FlaggedReviewDecidedBy = u.Id
+			productReview.FlaggedReviewDecisionReason = faker.Lorem().Paragraph(rand.Intn(6))
 		}
 
-		_, err = Create(order)
+		_, err = Create(productReview)
 		if err != nil {
 			return
 		}

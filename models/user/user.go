@@ -15,9 +15,6 @@ import (
 )
 
 func IsAcceptedRole(role string) bool {
-	if role == "" {
-		return true
-	}
 	for _, acceptedRole := range schemas.AcceptedUserRoles {
 		if role == acceptedRole {
 			return true
