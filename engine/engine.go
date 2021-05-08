@@ -6,6 +6,8 @@ import (
 	"github.com/kkamara/go-ecommerce/engine/cart"
 	companyEngine "github.com/kkamara/go-ecommerce/engine/company"
 	"github.com/kkamara/go-ecommerce/engine/pagination"
+	"github.com/kkamara/go-ecommerce/engine/product"
+	"github.com/kkamara/go-ecommerce/engine/product/flagged_review"
 	"github.com/kkamara/go-ecommerce/engine/product/product_review"
 	"github.com/kkamara/go-ecommerce/engine/user"
 )
@@ -13,16 +15,21 @@ import (
 func GetEngine() (engine *html.Engine) {
 	engine = html.New("./views", ".html")
 	engine.AddFunc("appname", app.AppName)
-	engine.AddFunc("unescape", app.Unescape)
+	engine.AddFunc("htmlSafe", app.HtmlSafe)
+	engine.AddFunc("newlinestobr", app.NewLinesToBR)
 	engine.AddFunc("matchstring", app.MatchString)
+	engine.AddFunc("timesince", app.TimeSince)
 	engine.AddFunc("cartCount", cart.CartCount)
 	engine.AddFunc("cartPrice", cart.CartPrice)
 	engine.AddFunc("role", user.Role)
 	engine.AddFunc("userauth", user.Userauth)
-	engine.AddFunc("companySlug", companyEngine.CompanySlug)
 	engine.AddFunc("userSlug", user.UserSlug)
+	engine.AddFunc("isAuthUser", user.IsAuthUser)
+	engine.AddFunc("companySlug", companyEngine.CompanySlug)
 	engine.AddFunc("formattedCost", app.FormattedCost)
+	engine.AddFunc("doesUserOwnProduct", product.DoesUserOwnProduct)
 	engine.AddFunc("productReview", product_review.ProductReview)
+	engine.AddFunc("isFlaggedFiveTimes", flagged_review.IsFlaggedFiveTimes)
 	engine.AddFunc("companyName", companyEngine.CompanyName)
 	engine.AddFunc("shouldDisableLessPage", pagination.ShouldDisableLessPage)
 	engine.AddFunc("shouldDisablePrevPage", pagination.ShouldDisablePrevPage)
