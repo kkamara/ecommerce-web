@@ -77,24 +77,24 @@ func Seed() (err error) {
 		if err != nil {
 			return
 		}
-		order := &schemas.ProductReview{
+		productReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
 			Score:     uint8(rand.Intn(11)),
 		}
 		if rand.Intn(2) != 1 {
-			order.Content = faker.Lorem().Paragraph(rand.Intn(6))
+			productReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
 		}
 		if rand.Intn(2) != 1 {
 			u, err = user.Random("")
 			if err != nil {
 				return
 			}
-			order.FlaggedReviewDecidedBy = u.Id
-			order.FlaggedReviewDecisionReason = faker.Lorem().Paragraph(rand.Intn(6))
+			productReview.FlaggedReviewDecidedBy = u.Id
+			productReview.FlaggedReviewDecisionReason = faker.Lorem().Paragraph(rand.Intn(6))
 		}
 
-		_, err = Create(order)
+		_, err = Create(productReview)
 		if err != nil {
 			return
 		}
