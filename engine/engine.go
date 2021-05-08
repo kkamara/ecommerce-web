@@ -14,6 +14,7 @@ func GetEngine() (engine *html.Engine) {
 	engine = html.New("./views", ".html")
 	engine.AddFunc("appname", app.AppName)
 	engine.AddFunc("unescape", app.Unescape)
+	engine.AddFunc("matchstring", app.MatchString)
 	engine.AddFunc("cartCount", cart.CartCount)
 	engine.AddFunc("cartPrice", cart.CartPrice)
 	engine.AddFunc("role", user.Role)

@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/kkamara/go-ecommerce/engine"
 	"github.com/kkamara/go-ecommerce/handlers/home"
+	productRoutes "github.com/kkamara/go-ecommerce/handlers/product"
 	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/company/vendor_application"
 	"github.com/kkamara/go-ecommerce/models/order"
@@ -62,7 +63,8 @@ func main() {
 
 	app.Static("/", "resources")
 
-	app.Get("/", home.GetHomeHandler)
+	app.Get("/", home.IndexHandler)
+	app.Get("/products", productRoutes.IndexHandler)
 
 	log.Fatal(app.Listen(fmt.Sprintf(":%s", port)))
 }
