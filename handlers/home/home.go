@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/kkamara/go-ecommerce/models/helper/pagination"
 	"github.com/kkamara/go-ecommerce/models/product"
+	"github.com/kkamara/go-ecommerce/schemas"
 )
 
 func IndexHandler(c *fiber.Ctx) error {
@@ -18,8 +19,15 @@ func IndexHandler(c *fiber.Ctx) error {
 		paginationOptions["page_size"],
 	)
 	if err != nil {
-		c.Context().SetStatusCode(500)
-		return c.JSON(fiber.Map{"error": "Failed to fetch products."})
+		status := 500
+		var errors []*schemas.Errors
+		errors = append(errors, &schemas.Errors{Error: "Failed to fetch products."})
+
+		return c.Render("error/error", fiber.Map{
+			"Title":  fmt.Sprintf("%d Error", status),
+			"Status": 500,
+			"Errors": errors,
+		})
 	}
 
 	return c.Render("home/index", fiber.Map{
