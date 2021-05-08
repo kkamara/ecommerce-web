@@ -134,7 +134,7 @@ func SearchProducts(params map[string]string, page, page_size int) (
 		reviewSelect := "avg(product_reviews.score) as review"
 		q.Select(fmt.Sprintf("%s, %s", productSelect, reviewSelect)).Joins(
 			"left join product_reviews on products.id = product_reviews.product_id",
-		).Group("product_reviews.product_id").Order("products.review DESC")
+		).Group("product_reviews.product_id").Order("review DESC")
 	case "low":
 		q.Order("products.cost ASC")
 	case "hig":
