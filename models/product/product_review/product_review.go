@@ -4,8 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"strings"
 
 	"github.com/kkamara/go-ecommerce/config"
+	"github.com/kkamara/go-ecommerce/models/helper/number"
 	"github.com/kkamara/go-ecommerce/models/helper/time"
 	"github.com/kkamara/go-ecommerce/models/product"
 	"github.com/kkamara/go-ecommerce/models/user"
@@ -96,10 +98,10 @@ func Random() (productReview *schemas.ProductReview, err error) {
 		newProductReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
-			Score:     uint8(rand.Intn(11)),
+			Score:     uint8(rand.Intn(6)),
 		}
 		if rand.Intn(2) != 1 {
-			newProductReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
+			newProductReview.Content = strings.Join(faker.Lorem().Words(number.RandInt(50, 150)), "\n\n")
 		}
 		if rand.Intn(2) != 1 {
 			u, err = user.Random("")
@@ -119,7 +121,7 @@ func Random() (productReview *schemas.ProductReview, err error) {
 }
 
 func Seed() (err error) {
-	for count := 0; count < 30; count++ {
+	for count := 0; count < 100; count++ {
 		var (
 			u *schemas.User
 			p *schemas.Product
@@ -135,10 +137,10 @@ func Seed() (err error) {
 		productReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
-			Score:     uint8(rand.Intn(11)),
+			Score:     uint8(rand.Intn(6)),
 		}
-		if rand.Intn(2) != 1 {
-			productReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
+		if rand.Intn(3) != 2 {
+			productReview.Content = strings.Join(faker.Lorem().Sentences(number.RandInt(3, 10)), "\n\n")
 		}
 		if rand.Intn(2) != 1 {
 			u, err = user.Random("")
