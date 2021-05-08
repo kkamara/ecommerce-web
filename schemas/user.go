@@ -1,6 +1,6 @@
 package schemas
 
-var AcceptedUserRoles = []string{"moderator", "vendor"}
+var AcceptedUserRoles = []string{"", "moderator", "vendor"}
 
 type User struct {
 	Id            uint64 `json:"id"`

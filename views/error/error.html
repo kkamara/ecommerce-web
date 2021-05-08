@@ -1,0 +1,10 @@
+<pre>
+    <p>Status code: {{ .Status }}</p>
+
+    <p>Errors:</p>
+    <ul>
+        {{ range .Errors }}
+            <li>{{ .Error }}</li>
+        {{end}}
+    </ul>
+</pre>
