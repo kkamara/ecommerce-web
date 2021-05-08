@@ -8,7 +8,7 @@ import (
 	"github.com/kkamara/go-ecommerce/models/product"
 )
 
-func GetHomeHandler(c *fiber.Ctx) error {
+func IndexHandler(c *fiber.Ctx) error {
 	paginationOptions := pagination.GetPaginationOptions(
 		c.Query("page", fmt.Sprintf("%d", pagination.DefaultPage)),
 		c.Query("page_size", fmt.Sprintf("%d", pagination.DefaultPageSize)),
