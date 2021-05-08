@@ -33,6 +33,20 @@ func Create(newReview *schemas.ProductReview) (company *schemas.ProductReview, e
 	return
 }
 
+func GetProductReviews(productId uint64) (productReviews []*schemas.ProductReview, err error) {
+	db, err := config.OpenDB()
+	if nil != err {
+		return
+	}
+	res := db.Where(
+		"product_id = ?", productId,
+	).Where(
+		"deleted_at = ?", "",
+	).Find(&productReviews)
+	err = res.Error
+	return
+}
+
 func GetAggRating(productId uint64) string {
 	defaultValue := "None"
 	db, err := config.OpenDB()
