@@ -1,8 +1,10 @@
 package product
 
 import (
+	"fmt"
 	"math"
 	mathrand "math/rand"
+	"strconv"
 	"strings"
 
 	"github.com/kkamara/go-ecommerce/config"
