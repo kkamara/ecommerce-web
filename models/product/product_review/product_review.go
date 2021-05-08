@@ -73,7 +73,48 @@ func Random() (productReview *schemas.ProductReview, err error) {
 	if err != nil {
 		return
 	}
-	db.Where("deleted_at = ?", "").Order("RANDOM()").Limit(1).Find(&productReview)
+	var (
+		count int64
+		u     *schemas.User
+		p     *schemas.Product
+	)
+	res := db.Where(
+		"deleted_at = ?", "",
+	).Order("RANDOM()").Limit(1).Find(&productReview).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
+	if count == 0 {
+		u, err = user.Random("")
+		if err != nil {
+			return
+		}
+		p, err = product.Random()
+		if err != nil {
+			return
+		}
+		newProductReview := &schemas.ProductReview{
+			UserId:    u.Id,
+			ProductId: p.Id,
+			Score:     uint8(rand.Intn(11)),
+		}
+		if rand.Intn(2) != 1 {
+			newProductReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
+		}
+		if rand.Intn(2) != 1 {
+			u, err = user.Random("")
+			if err != nil {
+				return
+			}
+			newProductReview.FlaggedReviewDecidedBy = u.Id
+			newProductReview.FlaggedReviewDecisionReason = faker.Lorem().Paragraph(rand.Intn(6))
+		}
+
+		productReview, err = Create(newProductReview)
+		if err != nil {
+			return
+		}
+	}
 	return
 }
 
