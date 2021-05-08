@@ -32,6 +32,24 @@ func Create(newOrderProduct *schemas.OrderProduct) (company *schemas.OrderProduc
 	return
 }
 
+func DidUserBuyProduct(userId, productId uint64) (userBoughtProduct bool, err error) {
+	db, err := config.OpenDB()
+	if nil != err {
+		return
+	}
+	var count int64
+	res := db.Debug().Joins(
+		"left join products on order_products.product_id = products.id",
+	).Joins(
+		"left join orders on order_products.order_id = orders.id",
+	).Where(
+		"orders.user_id = ? and products.id = ?", userId, productId,
+	).Find(&schemas.OrderProduct{}).Count(&count)
+	userBoughtProduct = count > 0
+	err = res.Error
+	return
+}
+
 func Seed() (err error) {
 	for count := 0; count < 30; count++ {
 		var (
