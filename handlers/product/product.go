@@ -19,7 +19,6 @@ func IndexHandler(c *fiber.Ctx) error {
 		"max":     c.Query("max", ""),
 		"query":   c.Query("query", ""),
 	}
-	fmt.Printf("%+v", params)
 	products, pageNum, pageCount, totalRecords, err := product.SearchProducts(
 		params,
 		paginationOptions["page"],
