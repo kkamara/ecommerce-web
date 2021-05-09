@@ -12,6 +12,7 @@ type Product struct {
 	Cost             uint64           `json:"cost"`
 	Shippable        bool             `json:"shippable"`
 	FreeDelivery     bool             `json:"free_delivery"`
+	Review           float64          `json:"review,omitempty"`
 	Reviews          []*ProductReview `json:"reviews,omitempty"`
 	CreatedAt        string           `json:"created_at"`
 	UpdatedAt        string           `json:"updated_at"`

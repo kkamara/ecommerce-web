@@ -25,6 +25,10 @@ func FormattedCost(cost uint64) string {
 	return fmt.Sprintf("£%.2f", c)
 }
 
+func FormattedFloat64(v float64) string {
+	return fmt.Sprintf("%.2f", v)
+}
+
 func MatchString(subject, match string) bool {
 	return subject == match
 }
