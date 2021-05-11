@@ -13,7 +13,7 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func Create(newReview *schemas.ProductReview) (productReview *schemas.ProductReview, err error) {
+func Create(newReview *schemas.ProductReview) (company *schemas.ProductReview, err error) {
 	db, err := config.OpenDB()
 	if nil != err {
 		return
@@ -26,7 +26,7 @@ func Create(newReview *schemas.ProductReview) (productReview *schemas.ProductRev
 		err = errors.New("error creating resource")
 		return
 	}
-	productReview = newReview
+	company = newReview
 	if err = res.Error; err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func Random() (productReview *schemas.ProductReview, err error) {
 		newProductReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
-			Score:     uint8(rand.Intn(11)),
+			Score:     uint8(rand.Intn(6)),
 		}
 		if rand.Intn(2) != 1 {
 			newProductReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
@@ -135,7 +135,7 @@ func Seed() (err error) {
 		productReview := &schemas.ProductReview{
 			UserId:    u.Id,
 			ProductId: p.Id,
-			Score:     uint8(rand.Intn(11)),
+			Score:     uint8(rand.Intn(6)),
 		}
 		if rand.Intn(2) != 1 {
 			productReview.Content = faker.Lorem().Paragraph(rand.Intn(6))
