@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/kkamara/go-ecommerce/engine"
 	"github.com/kkamara/go-ecommerce/handlers/home"
+	"github.com/kkamara/go-ecommerce/handlers/http"
 	productRoutes "github.com/kkamara/go-ecommerce/handlers/product"
 	"github.com/kkamara/go-ecommerce/models/cart"
 	"github.com/kkamara/go-ecommerce/models/company"
@@ -80,6 +81,9 @@ func main() {
 	app.Get("/", home.IndexHandler)
 	app.Get("/products", productRoutes.IndexHandler)
 	app.Get("/products/:id", productRoutes.ShowHandler)
+
+	// Http status handlers
+	app.Get("/404", http.Status404Handler)
 
 	log.Fatal(app.Listen(fmt.Sprintf(":%s", port)))
 }
