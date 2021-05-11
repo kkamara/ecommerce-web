@@ -4,6 +4,7 @@ module github.com/kkamara/go-ecommerce
 go 1.16
 
 require (
+	github.com/brianvoe/gofakeit/v6 v6.4.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/gofiber/fiber/v2 v2.8.0
 	github.com/gofiber/template v1.6.8

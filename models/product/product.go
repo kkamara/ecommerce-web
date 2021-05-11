@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/kkamara/go-ecommerce/config"
 	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/helper/number"
@@ -261,7 +262,7 @@ func Seed() (err error) {
 			ShortDescription: strings.Join(faker.Lorem().Paragraphs(1), ""),
 			LongDescription:  "",
 			ProductDetails:   strings.Join(faker.Lorem().Paragraphs(3), "\n\n"),
-			ImagePath:        "img/not-found.jpg",
+			ImagePath:        gofakeit.ImageURL(100, 100),
 			Cost:             cost,
 			Shippable:        mathrand.Intn(2) == 1,
 			FreeDelivery:     mathrand.Intn(2) == 1,
