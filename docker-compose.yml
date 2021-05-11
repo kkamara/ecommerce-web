@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: appuser
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: ecommerce
+    container_name: e-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - ecommerce
+  db:
+    image: mysql:5.7
+    container_name: e-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - ecommerce
+    ports:
+      - 3306:3306 # expose db to remote services like workbench
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: e-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    networks:
+      - ecommerce
+
+networks:
+  ecommerce:
+    driver: bridge
