@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/kkamara/go-ecommerce/engine"
 	"github.com/kkamara/go-ecommerce/handlers/home"
 	productRoutes "github.com/kkamara/go-ecommerce/handlers/product"
+	"github.com/kkamara/go-ecommerce/models/cart"
 	"github.com/kkamara/go-ecommerce/models/company"
 	"github.com/kkamara/go-ecommerce/models/company/vendor_application"
 	"github.com/kkamara/go-ecommerce/models/order"
@@ -23,11 +25,21 @@ import (
 )
 
 func Seed() (err error) {
+	seed := os.Getenv("SEED")
+	if seed == "" {
+		return
+	}
+	seedValue, err := strconv.ParseBool(seed)
+	if err != nil {
+		return
+	}
+	if !seedValue {
+		return
+	}
 	type modelType func() error
 	models := []modelType{
 		user.Seed,
 		company.Seed,
-		vendor_application.Seed,
 		product.Seed,
 		product_review.Seed,
 		flagged_review.Seed,
@@ -35,6 +47,8 @@ func Seed() (err error) {
 		order_product.Seed,
 		address.Seed,
 		payment.Seed,
+		cart.Seed,
+		vendor_application.Seed,
 	}
 	for _, m := range models {
 		err = m()
