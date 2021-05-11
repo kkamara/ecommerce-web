@@ -67,7 +67,7 @@ func GetProduct(id uint64) (product *schemas.Product, err error) {
 		return
 	}
 	res := db.Select(
-		`products.*, avg(product_reviews.score) as review, product_reviews.*`,
+		`products.*, product_reviews.*`,
 	).Joins(
 		"left join product_reviews on products.id = product_reviews.product_id",
 	).Where(
