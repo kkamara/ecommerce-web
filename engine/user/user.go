@@ -14,3 +14,8 @@ func UserSlug() string {
 	// to implement
 	return ""
 }
+
+func IsAuthUser(givenId uint64) bool {
+	// to implement
+	return false
+}

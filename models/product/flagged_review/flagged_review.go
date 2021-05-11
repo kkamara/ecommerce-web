@@ -30,6 +30,22 @@ func Create(newFlaggedReview *schemas.ProductFlaggedReview) (flaggedReview *sche
 	return
 }
 
+func GetProductReviewFlagCount(productReviewId uint64) (flaggedCount uint64, err error) {
+	db, err := config.OpenDB()
+	if err != nil {
+		return
+	}
+	res := db.Model(&schemas.ProductFlaggedReview{}).Select(
+		"count(product_flagged_reviews.id)",
+	).Joins(
+		"left join product_reviews on product_flagged_reviews.product_reviews_id = product_reviews.id",
+	).Where(
+		"product_reviews.id = ?", productReviewId,
+	).Find(&flaggedCount)
+	err = res.Error
+	return
+}
+
 func Random() (flaggedReview *schemas.ProductFlaggedReview, err error) {
 	db, err := config.OpenDB()
 	if err != nil {

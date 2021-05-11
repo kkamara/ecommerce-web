@@ -1,9 +1,10 @@
-module github.com/kkamara/laravel-ecommerce
+module github.com/kkamara/go-ecommerce
 
 // +heroku goVersion go1.16
 go 1.16
 
 require (
+	github.com/dustin/go-humanize v1.0.0
 	github.com/gofiber/fiber/v2 v2.8.0
 	github.com/gofiber/template v1.6.8
 	github.com/klauspost/compress v1.12.1 // indirect

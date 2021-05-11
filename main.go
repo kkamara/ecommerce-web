@@ -79,6 +79,7 @@ func main() {
 
 	app.Get("/", home.IndexHandler)
 	app.Get("/products", productRoutes.IndexHandler)
+	app.Get("/products/:id", productRoutes.ShowHandler)
 
 	log.Fatal(app.Listen(fmt.Sprintf(":%s", port)))
 }

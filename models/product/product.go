@@ -47,7 +47,7 @@ func GetProducts(page, page_size int) (
 	}
 	var toCeil float64 = float64(pageCount) / float64(page_size)
 	pageCount = int64(math.Ceil(toCeil))
-	db.Scopes(pagination.Paginate(page, page_size)).Select(
+	res := db.Scopes(pagination.Paginate(page, page_size)).Select(
 		`products.id, products.name, products.user_id, products.company_id,
 		products.short_description, products.long_description, products.product_details,
 		products.image_path, products.cost, products.shippable, products.free_delivery,
@@ -57,6 +57,41 @@ func GetProducts(page, page_size int) (
 	).Order(
 		"products.id",
 	).Find(&products).Count(&pageCount)
+	err = res.Error
+	return
+}
+
+func GetProduct(id uint64) (product *schemas.Product, err error) {
+	db, err := config.OpenDB()
+	if err != nil {
+		return
+	}
+	res := db.Select(
+		`products.*, avg(product_reviews.score) as review, product_reviews.*`,
+	).Joins(
+		"left join product_reviews on products.id = product_reviews.product_id",
+	).Where(
+		"products.deleted_at = ? and products.id = ?", "", id,
+	).Find(&product)
+	err = res.Error
+	return
+}
+
+func DoesUserOwnProduct(userId, productId uint64) (userOwnsProduct bool, err error) {
+	db, err := config.OpenDB()
+	if err != nil {
+		return
+	}
+	var count int64
+	res := db.Model(&schemas.Product{}).Where(
+		"products.user_id = ? and products.id = ?",
+		userId,
+		productId,
+	).Count(&count)
+	if err = res.Error; err != nil {
+		return
+	}
+	userOwnsProduct = count > 0
 	return
 }
 
@@ -161,7 +196,7 @@ func Random() (product *schemas.Product, err error) {
 		c     *schemas.Company
 		u     *schemas.User
 	)
-	res := db.Limit(1).Find(&product).Count(&count)
+	res := db.Order("RANDOM()").Limit(1).Find(&product).Count(&count)
 	if err = res.Error; err != nil {
 		return
 	}
