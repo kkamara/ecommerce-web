@@ -1,10 +1,25 @@
-<pre>
-    <p>Status code: {{ .Status }}</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <p>Errors:</p>
-    <ul>
-        {{ range .Errors }}
-            <li>{{ .Error }}</li>
-        {{end}}
-    </ul>
-</pre>
+    <title>{{.Title}} | {{appname}}</title>
+
+</head>
+<body>
+
+    <pre>
+        <p>Status code: {{ .Status }}</p>
+
+        <p>Errors:</p>
+        <ul>
+            {{ range .Errors }}
+                <li>{{ .Error }}</li>
+            {{end}}
+        </ul>
+    </pre>
+
+</body>
+</html>
