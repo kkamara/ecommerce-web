@@ -1,1 +1,1 @@
-web: bin/go-ecommerce
+web: vendor/bin/heroku-php-apache2 public/
