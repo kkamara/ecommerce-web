@@ -27,6 +27,7 @@ func GetEngine() (engine *html.Engine) {
 	engine.AddFunc("isAuthUser", user.IsAuthUser)
 	engine.AddFunc("companySlug", companyEngine.CompanySlug)
 	engine.AddFunc("formattedCost", app.FormattedCost)
+	engine.AddFunc("formattedFloat64", app.FormattedFloat64)
 	engine.AddFunc("doesUserOwnProduct", product.DoesUserOwnProduct)
 	engine.AddFunc("productReview", product_review.ProductReview)
 	engine.AddFunc("isFlaggedFiveTimes", flagged_review.IsFlaggedFiveTimes)
