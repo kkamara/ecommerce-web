@@ -15,7 +15,6 @@ package-lock.json
 public/images/companies/*
 public/images/products/*
 /bootstrap
-/public
 /storage
 /.env
 public/js/app.js
