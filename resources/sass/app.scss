@@ -1,0 +1,14 @@
+// Variables
+@import "variables";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+#app {
+    margin-top:50px;
+    margin-bottom:50px;
+}
+
+img {
+    cursor:pointer;
+}
