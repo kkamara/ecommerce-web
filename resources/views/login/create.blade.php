@@ -7,13 +7,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="col-md-4 offset-md-4">
-                        <div class="card-title">
-                            <a href="{{ route('registerHome') }}" class="btn btn-info btn-sm">
-                                Click here to <strong>create an account</strong>
-                            </a>
-                        </div>
-                        <div class="card-text">
-                            <form class='form' action="{{ route('loginCreate') }}" method='POST'>
+                        <form class='form' action="{{ route('loginCreate') }}" method='POST'>
+                            {{ csrf_field() }}
+                            <div class="card-title">
+                                <a href="{{ route('registerHome') }}" class="btn btn-info btn-sm">
+                                    Click here to <strong>create an account</strong>
+                                </a>
+                            </div>
+                            <div class="card-text">
                                 {{ csrf_field() }}
                                 {{ method_field('PUT') }}
                                     @include('layouts.errors')
@@ -37,7 +38,6 @@
                                         />
                                     </div>
                                     <div class="form-group">
-                                        {{ csrf_field() }}
                                         <label for="password">Password</label>
                                         <input
                                             type="password"
@@ -47,12 +47,12 @@
                                         />
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="card-footer">
-                            <input type="submit" class='btn btn-success pull-right' value='Login'>
-                            <div class="clearfix"></div>
-                        </div>
+                            </div>
+                            <div class="card-footer">
+                                <input type="submit" class='btn btn-success pull-right' value='Login'>
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
