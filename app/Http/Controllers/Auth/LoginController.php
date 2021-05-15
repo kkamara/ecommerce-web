@@ -43,9 +43,25 @@ class LoginController extends Controller
 
     public function create()
     {
+        /** @var array to store seeder logins for site users */
+        $logins = array(
+            'mod' => array(
+                'email' => 'mod@mail.com',
+                'pass'  => 'secret',
+            ),
+            'vendor' => array(
+                'email' => 'vendor@mail.com',
+                'pass'  => 'secret',
+            ),
+            'guest' => array(
+                'email' => 'guest@mail.com',
+                'pass'  => 'secret',
+            ),
+        );
         return view('login.create', array(
             'title' => 'Login',
-            'fromOrder' => request('fromOrder')
+            'fromOrder' => request('fromOrder'),
+            'logins' => $logins,
         ));
     }
 

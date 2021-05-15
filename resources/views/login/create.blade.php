@@ -12,37 +12,59 @@
                                 Click here to <strong>create an account</strong>
                             </a>
                         </div>
-                        <form class='form' action="{{ route('loginCreate') }}" method='POST'>
-                            {{ csrf_field() }}
-                            {{ method_field('PUT') }}
-                            <div class="card-text">
-                                @include('layouts.errors')
+                        <div class="card-text">
+                            <form class='form' action="{{ route('loginCreate') }}" method='POST'>
+                                {{ csrf_field() }}
+                                {{ method_field('PUT') }}
+                                    @include('layouts.errors')
 
-                                <div class="form-group">
-                                    <div class="form-control">
-                                        <label>Email
-                                            <input type="text" class='form-control' name='email' value="{{ $input['email'] ?? '' }}">
-                                        </label>
+                                    <p>Logins</p>
+                                    <ul>
+                                        @foreach($logins as $role => $login)
+                                            <li>{{$login['email']}}</li>
+                                        @endforeach
+                                    </ul>
+
+                                    <br/>
+
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input
+                                            type="text"
+                                            class='form-control'
+                                            name='email'
+                                            value="{{ $input['email'] ?? '' }}"
+                                        />
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-control">
+                                    <div class="form-group">
                                         {{ csrf_field() }}
-                                        <label>Password
-                                            <input type="password" class='form-control' name='password'>
-                                        </label>
+                                        <label for="password">Password</label>
+                                        <input
+                                            type="password"
+                                            class='form-control'
+                                            name='password'
+                                            value="secret"
+                                        />
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <input type="submit" class='btn btn-success pull-right' value='Login'>
-                                <div class="clearfix"></div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <input type="submit" class='btn btn-success pull-right' value='Login'>
+                            <div class="clearfix"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+@stop
+
+@section('scripts')
+    <script>
+        $(document).ready(() => {
+            $('.role-tooltip').tooltip();
+        });
+    </script>
 @stop
