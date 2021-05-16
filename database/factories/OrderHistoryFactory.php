@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\OrderHistory;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +13,7 @@ use Faker\Generator as Faker;
 | model instances for testing / seeding your application's database.
 |
 */
-$factory->define(App\OrderHistory::class, function(Faker $faker) {
+$factory->define(OrderHistory::class, function(Faker $faker) {
     $user = App\User::inRandomOrder()->first();
     $product = App\Product::inRandomOrder()->first();
 
@@ -20,5 +21,7 @@ $factory->define(App\OrderHistory::class, function(Faker $faker) {
         'user_id' => $user->id,
         'cost' => $product->cost,
         'user_payment_config_id' => $user->userPaymentConfig[0]->id,
+        'users_addresses_id' => $user->userAddress[0]->id,
+        'reference_number' => OrderHistory::generateRefNum(),
     ];
 });
