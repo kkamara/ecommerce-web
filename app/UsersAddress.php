@@ -2,34 +2,34 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class UsersAddress extends Model
 {
-    /** This model uses the SoftDeletes trait for a deleted_at datetime column. */
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
-    /** 
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 
     /**
-     * This model relationship belongs to \App\User
-     * 
+     * This model relationship belongs to \App\Models\User
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     /**
      * This model relationship belongs to \App\OrderHistory
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
@@ -39,7 +39,7 @@ class UsersAddress extends Model
 
     /**
      * Set a publicily accessible identifier to get the formatted phone number for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getFormattedPhoneNumberAttribute()
@@ -49,7 +49,7 @@ class UsersAddress extends Model
 
     /**
      * Set a publicily accessible identifier to get the formatted mobile number for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getFormattedMobileNumberAttribute()

@@ -1,5 +1,8 @@
 <?php
 
+namespace Database\Seeders;
+
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Seeder;
 use App\UserPaymentConfig;
 use App\ProductReview;
@@ -7,7 +10,7 @@ use App\OrderHistory;
 use App\UsersAddress;
 use App\Product;
 use App\Company;
-use App\User;
+use App\Models\User;
 
 class DevSeeder extends Seeder
 {
@@ -15,7 +18,7 @@ class DevSeeder extends Seeder
      * @return User
      */
     private function makeModerator() {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'first_name' => 'Mod',
             'last_name' => 'User',
             'email' => 'mod@mail.com',
@@ -28,7 +31,7 @@ class DevSeeder extends Seeder
      * @return User
      */
     private function makeVendor() {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'first_name' => 'Vendor',
             'last_name' => 'User',
             'email' => 'vendor@mail.com',
@@ -41,7 +44,7 @@ class DevSeeder extends Seeder
      * @return User
      */
     private function makeGuest() {
-        return factory(User::class)->create([
+        return User::factory()->create([
             'first_name' => 'Guest',
             'last_name' => 'User',
             'email' => 'guest@mail.com',
@@ -54,7 +57,8 @@ class DevSeeder extends Seeder
      */
     private function setupPaymentConfigs($users) {
         foreach($users as $user) {
-            factory(UserPaymentConfig::class)->create([
+            Log::debug($user);
+            UserPaymentConfig::factory()->create([
                 'user_id' => $user->id,
                 'card_holder_name' => $user->name
             ]);
@@ -66,7 +70,7 @@ class DevSeeder extends Seeder
      * @return void
      */
     private function setupPaymentConfig($user) {
-        return factory(UserPaymentConfig::class)->create([
+        return UserPaymentConfig::factory()->create([
             'user_id' => $user->id,
             'card_holder_name' => $user->name
         ]);
@@ -78,7 +82,7 @@ class DevSeeder extends Seeder
      */
     private function setupAddressConfigs($users) {
         foreach($users as $user) {
-            factory(UsersAddress::class)->create([
+            UsersAddress::factory()->create([
                 'user_id' => $user->id,
             ]);
         }
@@ -89,7 +93,7 @@ class DevSeeder extends Seeder
      * @return Company
      */
     private function makeCompany(User $user) {
-        return factory(Company::class)->create(['user_id' => $user->id,]);
+        return Company::factory()->create(['user_id' => $user->id,]);
     }
 
     /**
@@ -99,7 +103,7 @@ class DevSeeder extends Seeder
      * @return Product|Product[]
      */
     private function makeProducts(User $user, Company $company, int $count=1000) {
-        return factory(Product::class, $count)->create([
+        return Product::factory()->count($count)->create([
             'user_id' => $user->id,
             'company_id' => $company->id,
         ]);
@@ -110,7 +114,7 @@ class DevSeeder extends Seeder
      * @return void
      */
     private function makeProductReviews($count=2000) {
-        factory(ProductReview::class, $count)->create();
+        ProductReview::factory()->count($count)->create();
     }
 
     /**
@@ -123,9 +127,9 @@ class DevSeeder extends Seeder
         foreach($users as $user) {
             $usersPaymentConfig = UserPaymentConfig::where('user_id', $user->id)
                 ->inRandomOrder()
-                ->first() ?: 
+                ->first() ?:
                 $this->setupPaymentConfig($user);
-            factory(OrderHistory::class, $count)->create([
+            OrderHistory::factory()->count($count)->create([
                 'user_id' => $user->id,
                 'user_payment_config_id' => $usersPaymentConfig->id,
             ]);
@@ -139,16 +143,18 @@ class DevSeeder extends Seeder
      */
     public function run()
     {
-        $modUser = $this->makeModerator();
-        $vendorUser = $this->makeVendor();
-        $guestUser = $this->makeGuest();
+        $users = array(
+            'mod' => $this->makeModerator(),
+            'vendor' => $this->makeVendor(),
+            'guest' => $this->makeGuest(),
+        );
 
-        $this->setupPaymentConfigs([$modUser, $vendorUser, $guestUser]);
-        $this->setupAddressConfigs([$modUser, $vendorUser, $guestUser]);
+        $this->setupPaymentConfigs(array_values($users));
+        $this->setupAddressConfigs(array_values($users));
 
-        $company = $this->makeCompany($vendorUser);
-        $this->makeProducts($vendorUser, $company);
+        $company = $this->makeCompany($users['vendor']);
+        $this->makeProducts($users['vendor'], $company);
         $this->makeProductReviews();
-        $this->makeOrderHistories([$guestUser]);
+        $this->makeOrderHistories([$users['guest']]);
     }
 }

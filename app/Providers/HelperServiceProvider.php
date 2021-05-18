@@ -9,21 +9,21 @@ require_once app_path() . "/Helpers/CommonHelper.php";
 class HelperServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
-    /**
      * Register services.
      *
      * @return void
      */
     public function register()
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
     {
         require_once app_path() . "/Helpers/SessionCartHelper.php";
     }

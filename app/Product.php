@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Input;
@@ -10,26 +11,25 @@ use Validator;
 
 class Product extends Model
 {
-    /** This model uses the SoftDeletes trait for a deleted_at datetime column. */
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
-    /** 
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 
-    /** 
+    /**
      * This models immutable date values.
-     * 
+     *
      * @var array
      */
     protected $dates = ['deleted_at'];
 
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getPathAttribute()
@@ -39,7 +39,7 @@ class Product extends Model
 
     /**
      * Set a publicily accessible identifier to get the image path for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getImagePathAttribute()
@@ -49,7 +49,7 @@ class Product extends Model
 
     /**
      * This model relationship belongs to \App\Company.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function company()
@@ -59,7 +59,7 @@ class Product extends Model
 
     /**
      * This model relationship has many to \App\ProductReview.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function productReview()
@@ -69,7 +69,7 @@ class Product extends Model
 
     /**
      * This model relationship has many to \App\OrderHistoryProducts.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistoryProducts()
@@ -78,18 +78,18 @@ class Product extends Model
     }
 
     /**
-     * This model relationship belongs to \App\User.
-     * 
+     * This model relationship belongs to \App\Models\User.
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     /**
      * Return the formatted cost attribute.
-     * 
+     *
      * @return  string
      */
     public function getFormattedCostAttribute()
@@ -99,7 +99,7 @@ class Product extends Model
 
     /**
      * Return the cost attribute.
-     * 
+     *
      * @return  string
      */
     public function getCostAttribute()
@@ -109,7 +109,7 @@ class Product extends Model
 
     /**
      * Query products using request params.
-     * 
+     *
      * @param  \Illuminate\Database\Eloquent\Model  $query
      * @param  \Illuminate\Http\Request             $request
      * @return \Illuminate\Database\Eloquent\Model
@@ -121,9 +121,9 @@ class Product extends Model
         $max         = $request->input('max_price');
         $sort_by     = $request->input('sort_by');
 
-        $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id', 
-                       'products.short_description', 'products.long_description', 'products.product_details', 
-                       'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery', 
+        $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id',
+                       'products.short_description', 'products.long_description', 'products.product_details',
+                       'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery',
                        'products.created_at', 'products.updated_at');
         $whereClause = array();
 
@@ -180,8 +180,8 @@ class Product extends Model
 
     /**
      * Find whether a given user has purchased this product instance.
-     * 
-     * @param  \App\User  $userId
+     *
+     * @param  \App\Models\User  $userId
      * @return bool
      */
     public function didUserPurchaseProduct($userId)
@@ -203,8 +203,8 @@ class Product extends Model
 
     /**
      * Find whether a given user has reviewed this product instance.
-     * 
-     * @param  \App\User  $userId
+     *
+     * @param  \App\Models\User  $userId
      * @return bool
      */
     public function didUserReviewProduct($userId)
@@ -222,7 +222,7 @@ class Product extends Model
 
     /**
      * Return the review attribute.
-     * 
+     *
      * @return  string
      */
     public function getReviewAttribute()

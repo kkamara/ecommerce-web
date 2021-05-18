@@ -2,33 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Helpers\SessionCart;
-use Validator as Validate;
 use App\UserPaymentConfig;
 use App\UsersAddress;
-use App\User;
+use App\Models\User;
 use Auth;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
     /**
      * Where to redirect users after registration.
      *
@@ -65,7 +51,7 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\User
+     * @return \App\Models\User
      */
     protected function create(array $data)
     {
@@ -130,11 +116,16 @@ class RegisterController extends Controller
         $cardHolderName = filter_var(request('card_holder_name'), FILTER_SANITIZE_STRING);
         $cardNumber = filter_var(request('card_number'), FILTER_SANITIZE_STRING);
 
-        $slug = str_slug($firstName . ' ' . $lastName, '-');
+        $slug = Str::slug($firstName . ' ' . $lastName, '-');
 
         if(! User::slugIsUnique($slug))
         {
             $slug = User::generateUniqueSlug($slug);
+        }
+
+        $expiryMonth = mt_rand(0, 13);
+        if (strlen($expiryMonth) < 10) {
+            $expiryMonth = '0'.$expiryMonth;
         }
 
         $data = array(
@@ -164,7 +155,7 @@ class RegisterController extends Controller
                 'card_holder_name' => $cardHolderName,
                 'card_number' => $cardNumber,
                 'expiry_month' => $expiryMonth,
-                'expiry_year' => $expiryYear,
+                'expiry_year' => mt_rand(2024, 2030),
             ),
         );
         $data['user_payment_config'] = array_merge($data['user_address'], $data['user_payment_config']);

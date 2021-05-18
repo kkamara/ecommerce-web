@@ -2,17 +2,18 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use App\FlaggedProductReview;
-use App\ProductReview;
 
 class FlaggedProductReview extends Model
 {
-    /** 
+    use HasFactory;
+
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 

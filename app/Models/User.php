@@ -1,35 +1,33 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use App\Helpers\SessionCart;
-
 use Validator;
 
 class User extends Authenticatable
 {
-    /** This model uses the Notifiable trait for notifications. */
-    use Notifiable;
-
-    /** This model uses the SoftDeletes trait for a deleted_at datetime column. */
-    use SoftDeletes;
-    
-    /** This model uses the HasRoles trait for a user being able to have a role. */
-    use HasRoles;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'slug',
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -37,19 +35,29 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
-    /** 
-     * This models immutable date values.
-     * 
+    /**
+     * The attributes that should be cast to native types.
+     *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * The attributes that shouldn't be overwritten.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getPathAttribute()
@@ -59,7 +67,7 @@ class User extends Authenticatable
 
     /**
      * Set a publicily accessible identifier to get the name attribute for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getNameAttribute()
@@ -69,7 +77,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has many \App\Cart.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function cart()
@@ -79,7 +87,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has one \App\Company.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function company()
@@ -89,7 +97,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has many \App\OrderHistory.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
@@ -99,7 +107,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has many \App\Product.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
@@ -109,7 +117,7 @@ class User extends Authenticatable
 
     /**
      * Get errors in request data.
-     * 
+     *
      * @param  array  $data
      * @return array
      */
@@ -140,7 +148,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has many \App\ProductReview.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function productReview()
@@ -150,7 +158,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has many \App\UserPaymentConfig.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userPaymentConfig()
@@ -160,7 +168,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has many \App\UsersAddress.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userAddress()
@@ -170,7 +178,7 @@ class User extends Authenticatable
 
     /**
      * This model relationship has many \App\UsersAddress.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function vendorApplication()
@@ -180,7 +188,7 @@ class User extends Authenticatable
 
     /**
      * Adds a given product to db cart for this user.
-     * 
+     *
      * @param  \App\Product  $product
      */
     public function addProductToDbCart($product)
@@ -193,13 +201,13 @@ class User extends Authenticatable
 
     /**
      * Moves cache cart to db cart for this user on login.
-     * 
+     *
      * @param  array  $sessionCart
      */
     public function moveSessionCartToDbCart($sessionCart)
     {
         $userId = $this->attributes['id'];
-        
+
         foreach($sessionCart as $cc)
         {
             if($cc['product']->user_id !== $userId)
@@ -219,7 +227,7 @@ class User extends Authenticatable
 
     /**
      * Gets the database cart for this user.
-     * 
+     *
      * @return array|int
      */
     public function getDbCart()
@@ -257,7 +265,7 @@ class User extends Authenticatable
 
     /**
      * Updates the respective number of products in the user's database cart.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      */
     public function updateDbCartAmount($request)
@@ -300,7 +308,7 @@ class User extends Authenticatable
 
     /**
      * Checks whether a given slug already exists for an instance of this model.
-     * 
+     *
      * @param  string  $slug
      * @return bool
      */
@@ -313,7 +321,7 @@ class User extends Authenticatable
 
     /**
      * Checks a given slug is unique and creates a new unique slug if necessary.
-     * 
+     *
      * @param  string  $slug
      * @return string
      */
@@ -328,10 +336,10 @@ class User extends Authenticatable
 
         return $slug;
     }
-    
+
     /**
      * Check if an instance of this model has a role.
-     * 
+     *
      * @return bool
      */
     public function hasNoRole()
@@ -339,7 +347,7 @@ class User extends Authenticatable
         return !$this->hasRole('vendor') && !$this->hasRole('moderator');
     }
 
-    public static function getRegisterErrors(Request $request) 
+    public static function getRegisterErrors(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:191',
@@ -383,6 +391,6 @@ class User extends Authenticatable
             'address' => false == $addressErrors->isEmpty() ? $addressErrors : array(),
             'billing' => false == $billingErrors->isEmpty() ? $billingErrors : array(),
             'present' => $present,
-        ); 
+        );
     }
 }

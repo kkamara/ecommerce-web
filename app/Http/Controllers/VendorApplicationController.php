@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\VendorApplication;
 use App\UsersAddress;
-use App\User;
+use App\Models\User;
 
 class VendorApplicationController extends Controller
 {

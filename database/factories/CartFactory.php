@@ -1,23 +1,34 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
-$factory->define(App\Cart::class, function(Faker $faker) {
-    $user = App\User::inRandomOrder()->first();
-    $product = App\Product::inRandomOrder()->first();
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Product;
+use App\Cart;
 
-    return [
-        'user_id' => $user->id,
-        'product_id' => $product->id,
-    ];
-});
+class CartFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Cart::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $user = User::inRandomOrder()->first();
+        $product = Product::inRandomOrder()->first();
+
+        return [
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+        ];
+    }
+}

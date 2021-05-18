@@ -2,20 +2,23 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderHistoryProducts extends Model
 {
-    /** 
+    use HasFactory;
+
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 
     /**
      * This model instance belongs to \App\OrderHistory.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
@@ -25,7 +28,7 @@ class OrderHistoryProducts extends Model
 
     /**
      * This model instance belongs to \App\Product.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
@@ -35,7 +38,7 @@ class OrderHistoryProducts extends Model
 
     /**
      * Return a formatted cost attribute.
-     * 
+     *
      * @return  string
      */
     public function getFormattedCostAttribute()

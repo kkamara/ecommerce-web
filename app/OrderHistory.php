@@ -2,29 +2,31 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\OrderHistoryProducts;
 
 class OrderHistory extends Model
 {
-    
-    /** 
+    use HasFactory;
+
+    /**
      * This models table name is 'order_history' instead of 'order_histories' so must be set explicitly here.
-     * 
+     *
      * @var string
      */
     protected $table = 'order_history';
 
-    /** 
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 
     /**
      * Generates a new reference number.
-     * 
+     *
      * @return string
      */
     public static function generateRefNum()
@@ -34,18 +36,18 @@ class OrderHistory extends Model
     }
 
     /**
-     * This model relationship belongs to \App\User.
-     * 
+     * This model relationship belongs to \App\Models\User.
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
      * This model relationship belongs to \App\Product.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
@@ -55,7 +57,7 @@ class OrderHistory extends Model
 
     /**
      * This model relationship belongs to \App\UserPaymentConfig.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userPaymentConfig()
@@ -65,7 +67,7 @@ class OrderHistory extends Model
 
     /**
      * This model relationship has many \App\OrderHistoryProducts.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistoryProducts()
@@ -75,7 +77,7 @@ class OrderHistory extends Model
 
     /**
      * This model relationship belongs to \App\UsersAddress.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function usersAddresses()
@@ -85,7 +87,7 @@ class OrderHistory extends Model
 
     /**
      * Gets total price of items in a single order.
-     * 
+     *
      * @return  int
      */
     public function getAmountTotalAttribute()
@@ -97,7 +99,7 @@ class OrderHistory extends Model
 
     /**
      * Return the formatted cost attribute.
-     * 
+     *
      * @return  string
      */
     public function getFormattedCostAttribute()
