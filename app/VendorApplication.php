@@ -2,23 +2,26 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\UsersAddress;
+use App\Models\UsersAddress;
 use App\Company;
 
 class VendorApplication extends Model
 {
-    /** 
+    use HasFactory;
+
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 
     /**
      * Checks if a given user has applied with no response.
-     * 
-     * @param  \App\User  $userId
+     *
+     * @param  \App\Models\User  $userId
      * @return bool
      */
     public static function hasUserApplied($userId)
@@ -31,8 +34,8 @@ class VendorApplication extends Model
 
     /**
      * Checks if a given user has been rejected.
-     * 
-     * @param   \App\User  $userId
+     *
+     * @param   \App\Models\User  $userId
      * @return  bool
      */
     public static function hasApplicationBeenRejected($userId)
@@ -45,7 +48,7 @@ class VendorApplication extends Model
 
     /**
      * Adds onto a query for where vendor applications are unanswered.
-     * 
+     *
      * @param  \Illuminate\Database\Eloquent\Model  $query
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -55,13 +58,13 @@ class VendorApplication extends Model
     }
 
     /**
-     * This model relationship belongs to \App\User
-     * 
+     * This model relationship belongs to \App\Models\User
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**

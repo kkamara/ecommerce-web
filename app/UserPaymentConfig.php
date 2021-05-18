@@ -2,31 +2,34 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
 class UserPaymentConfig extends Model
 {
-    /** 
+    use HasFactory;
+
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 
     /**
-     * This model relationship belongs to \App\User.
-     * 
+     * This model relationship belongs to \App\Models\User.
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
      * This model relationship belongs to \App\OrderHistory.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
@@ -36,7 +39,7 @@ class UserPaymentConfig extends Model
 
     /**
      * Set a publicily accessible identifier to get the hidden cart number for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getHiddenCardNumberAttribute()
@@ -52,7 +55,7 @@ class UserPaymentConfig extends Model
 
     /**
      * Set a publicily accessible identifier to get the expiry date for this unique instance.
-     * 
+     *
      * @return  \Carbon\Carbon
      */
     public function getExpiryDateAttribute()
@@ -62,7 +65,7 @@ class UserPaymentConfig extends Model
 
     /**
      * Set a publicily accessible identifier to get the edit expiry date for this unique instance.
-     * 
+     *
      * @return  \Carbon\Carbon
      */
     public function getEditExpiryDateAttribute()
@@ -72,7 +75,7 @@ class UserPaymentConfig extends Model
 
     /**
      * Set a publicily accessible identifier to get the edit expiry date for this unique instance.
-     * 
+     *
      * @return  \Carbon\Carbon
      */
     public function getFormattedPhoneNumberAttribute()
@@ -82,7 +85,7 @@ class UserPaymentConfig extends Model
 
     /**
      * Set a publicily accessible identifier to get the formatted mobile number for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getFormattedMobileNumberAttribute()

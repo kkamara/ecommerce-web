@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Controller;
 use App\Helpers\SessionCart;
 use Illuminate\Http\Request;
@@ -11,25 +10,28 @@ use Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
     protected $redirectTo = '/';
+
+    /** @var array to store seeder logins for site users */
+    protected $logins = array(
+        'mod' => array(
+            'email' => 'mod@mail.com',
+            'pass'  => 'secret',
+        ),
+        'vendor' => array(
+            'email' => 'vendor@mail.com',
+            'pass'  => 'secret',
+        ),
+        'guest' => array(
+            'email' => 'guest@mail.com',
+            'pass'  => 'secret',
+        ),
+    );
 
     /**
      * Create a new controller instance.
@@ -43,25 +45,10 @@ class LoginController extends Controller
 
     public function create()
     {
-        /** @var array to store seeder logins for site users */
-        $logins = array(
-            'mod' => array(
-                'email' => 'mod@mail.com',
-                'pass'  => 'secret',
-            ),
-            'vendor' => array(
-                'email' => 'vendor@mail.com',
-                'pass'  => 'secret',
-            ),
-            'guest' => array(
-                'email' => 'guest@mail.com',
-                'pass'  => 'secret',
-            ),
-        );
         return view('login.create', array(
             'title' => 'Login',
             'fromOrder' => request('fromOrder'),
-            'logins' => $logins,
+            'logins' => $this->logins,
         ));
     }
 
@@ -110,6 +97,7 @@ class LoginController extends Controller
                     'title' => 'Login',
                     'input' => $request->input(),
                     'errors' => array('Invalid login credentials provided'),
+                    'logins' => $this->logins,
                 ));
             }
         }
@@ -119,6 +107,7 @@ class LoginController extends Controller
                 'title' => 'Login',
                 'input' => $request->input(),
                 'errors' => $validator->errors()->all(),
+                'logins' => $this->logins,
             ));
         }
     }

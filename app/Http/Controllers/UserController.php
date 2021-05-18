@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Validator;
-use App\User;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -120,7 +121,7 @@ class UserController extends Controller
                     $data['email']      = filter_var($request->input('email'), FILTER_SANITIZE_STRING);
 
                     $slug = User::generateUniqueSlug($data['first_name'] . ' ' . $data['last_name']);
-                    $data['slug'] = str_slug($slug, '-');
+                    $data['slug'] = Str::slug($slug, '-');
 
                     $requestUser->update($data);
 

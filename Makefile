@@ -1,35 +1,36 @@
+rm:
+	./vendor/bin/sail down -v
+
 docker-setup:
-	docker-compose build # let's build our services
-	docker-compose up -d # get services running
+	./vendor/bin/sail up -d # get services running
+	sleep 30
 
 backend-install:
-	@docker exec e-app composer i
+	./vendor/bin/sail composer i
 
 backend-setup:
 	make backend-install
-	@docker exec e-app php artisan key:generate
-	@docker exec e-app php artisan migrate
+	./vendor/bin/sail artisan key:generate
+	./vendor/bin/sail artisan migrate
 
-make backend-seed:
-	@docker exec e-app php artisan db:seed
+backend-seed:
+	./vendor/bin/sail artisan db:seed
 
-clean-js-dep:
-	@docker exec e-app bash -c "\
-		rm -rf node_modules;\
-		rm package-lock.json;\
-		npm cache clean --force"
+frontend-clean:
+	rm -rf node_modules
+	rm package-lock.json
+	./vendor/bin/sail npm cache clean --force
 
-install-js-dep:
-	make clean-js-dep
-	@docker exec e-app npm i
-	@docker exec e-app npm run dev
+frontend-install:
+	make frontend-clean
+	./vendor/bin/sail npm i
+	./vendor/bin/sail npx mix
 
 dev:
 	make docker-setup
-	sleep 30
 	make backend-setup
 	make backend-seed
-	make install-js-dep
+	make frontend-install
 
 watch:
-	@docker exec e-app npm run watch
+	./vendor/bin/sail npx mix watch

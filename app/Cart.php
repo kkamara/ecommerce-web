@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use App\Helpers\SessionCart;
@@ -9,31 +10,33 @@ use Auth;
 
 class Cart extends Model
 {
-    /** 
+    use HasFactory;
+
+    /**
      * This models table name is 'cart' instead of 'carts' so must be set explicitly here.
-     * 
+     *
      * @var string
      */
     protected $table = 'cart';
 
-    /** 
-     * This models immutable values are stored in this array. 
-     * 
+    /**
+     * This models immutable values are stored in this array.
+     *
      * @var array
      */
     protected $guarded = [];
 
-    /** 
+    /**
      * Disable created_at and updated_at columns for this model.
-     * 
+     *
      * @var bool
      */
     public $timestamps = false;
 
     /**
-     * Gets the number of items in the user's session or db cart, 
+     * Gets the number of items in the user's session or db cart,
      * depending on whether the user is authenticated.
-     * 
+     *
      * @return  int
      */
     public static function count()
@@ -61,9 +64,9 @@ class Cart extends Model
     }
 
     /**
-     * Gets the price of the total amount of items in the session or db cart, 
+     * Gets the price of the total amount of items in the session or db cart,
      * depending on whether the user is authenticated.
-     * 
+     *
      * @return  string
      */
     public static function price()
@@ -91,18 +94,18 @@ class Cart extends Model
     }
 
     /**
-     * This model relationship belongs to \App\User.
-     * 
+     * This model relationship belongs to \App\Models\User.
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**
      * This model relationship belongs to \App\Product.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
@@ -112,7 +115,7 @@ class Cart extends Model
 
     /**
      * Gets the products assigned to the authenticated user.
-     * 
+     *
      * @return array|int
      */
     public function getDbCart()

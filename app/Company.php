@@ -2,31 +2,31 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
 {
-    /** This model uses the SoftDeletes trait for a deleted_at datetime column */
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
-    /** 
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = ['name'];
 
-    /** 
+    /**
      * This models immutable date values.
-     * 
+     *
      * @var array
      */
     protected $dates = ['deleted_at'];
 
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
-     * 
+     *
      * @return  string
      */
     public function getPathAttribute()
@@ -35,18 +35,18 @@ class Company extends Model
     }
 
     /**
-     * This model relationship belongs to \App\User.
-     * 
+     * This model relationship belongs to \App\Models\User.
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     /**
      * This model relationship has many \App\Product.
-     * 
+     *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function products()
@@ -66,7 +66,7 @@ class Company extends Model
 
     /**
      * Check if this model relationship belongs to a given user id.
-     * 
+     *
      * @param   int  $userId
      * @return  bool
      */

@@ -1,32 +1,40 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
-$factory->define(App\Company::class, function(Faker $faker) {
-    $name = $faker->company;
-    $user = App\User::inRandomOrder()->first();
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+use App\Models\User;
+use App\Company;
 
-    return [
-        'user_id' => $user->id,
-        'name' => $name,
-        'slug' => str_slug($name, '-'),
-        'phone_number' => $faker->phonenumber,
-        'building_name' => $faker->buildingnumber,
-        'street_address1' => $faker->StreetAddress,
-        'city' => $faker->city,
-        'country' => $faker->country,
-        'postcode' => $faker->postcode,
-    ];
-});
+class CompanyFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Company::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        $name = $this->faker->company;
 
+        return [
+            'user_id' => User::inRandomOrder()->first()->id,
+            'name' => $name,
+            'slug' => Str::slug($name, '-'),
+            'phone_number' => $this->faker->phonenumber,
+            'building_name' => $this->faker->buildingnumber,
+            'street_address1' => $this->faker->StreetAddress,
+            'city' => $this->faker->city,
+            'country' => $this->faker->country,
+            'postcode' => $this->faker->postcode,
+        ];
+    }
+}
