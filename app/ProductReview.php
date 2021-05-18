@@ -2,16 +2,18 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\FlaggedProductReview;
-use App\ProductReview;
 
 class ProductReview extends Model
 {
-    /** 
+    use HasFactory;
+
+    /**
      * This models immutable values.
      *
-     * @var array 
+     * @var array
      */
     protected $guarded = [];
 
@@ -26,13 +28,13 @@ class ProductReview extends Model
     }
 
     /**
-     * This model relationship belongs to \App\User
+     * This model relationship belongs to \App\Models\User
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     /**

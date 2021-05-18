@@ -1,27 +1,33 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
-$factory->define(App\ProductReview::class, function (Faker $faker) {
-    $user = App\User::inRandomOrder()->first();
-    $product = App\Product::inRandomOrder()->first();
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Product;
+use App\ProductReview;
 
-    return [
-        'user_id' => $user->id,
-        'product_id' => $product->id,
-        'score' => mt_rand(0, 5),
-        'content' => (mt_rand(0, 1) === 1) ? $faker->paragraph(mt_rand(0,5)) : null,
-    ];
-});
+class ProductReviewFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ProductReview::class;
 
-
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'user_id' => User::inRandomOrder()->first()->id,
+            'product_id' => Product::inRandomOrder()->first()->id,
+            'score' => mt_rand(0, 5),
+            'content' => mt_rand(0, 1) === 1 ? $this->faker->paragraph(mt_rand(0,5)) : null,
+        ];
+    }
+}

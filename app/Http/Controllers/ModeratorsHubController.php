@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
+
 use App\FlaggedProductReview;
 use Illuminate\Http\Request;
 use App\VendorApplication;
 use App\ProductReview;
 use App\UsersAddress;
 use App\Company;
-use App\User;
+use App\Models\User;
 
 class ModeratorsHubController extends Controller
 {
@@ -118,7 +120,7 @@ class ModeratorsHubController extends Controller
 
                     /** create vendor table row for user who made this application, moving across their details */
                     Company::create([
-                        'slug' => str_slug($vendorApplication->proposed_company_name, '-'),
+                        'slug' => Str::slug($vendorApplication->proposed_company_name, '-'),
                         'user_id' => $vendorApplication->user_id,
                         'name' => $vendorApplication->proposed_company_name,
                         'mobile_number' => $vendorApplicantsAddress->mobile_number ?? NULL,
