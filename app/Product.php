@@ -173,7 +173,9 @@ class Product extends Model
             break;
         }
 
-        $query->orderBy('products.id', 'DESC')->distinct();
+        $query->orderBy('products.id', 'DESC')
+            ->groupBy('products.id')
+            ->distinct();
 
         return $query;
     }
