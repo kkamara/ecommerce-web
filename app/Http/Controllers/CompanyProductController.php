@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
-use App\Company;
-use App\Product;
+use App\Models\Company;
+use App\Models\Product;
 use Validator;
 
 class CompanyProductController extends Controller
@@ -141,7 +141,7 @@ class CompanyProductController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  string  $slug
-     * @param  \App\Product $product
+     * @param  \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function edit($slug, Product $product, Request $request)
@@ -166,7 +166,7 @@ class CompanyProductController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $slug
-     * @param  \App\Product $product
+     * @param  \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function update($slug, Product $product, Request $request)
@@ -251,7 +251,7 @@ class CompanyProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  string  $slug
-     * @param  \App\Product $product
+     * @param  \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function destroy($slug, Product $product, Request $request)

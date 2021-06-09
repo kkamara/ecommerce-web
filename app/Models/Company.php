@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,13 +45,13 @@ class Company extends Model
     }
 
     /**
-     * This model relationship has many \App\Product.
+     * This model relationship has many \App\Models\Product.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function products()
     {
-        return $this->hasMany('App\Product', 'company_id');
+        return $this->hasMany('App\Models\Product', 'company_id');
     }
 
     /**

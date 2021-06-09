@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Str;
 
-use App\FlaggedProductReview;
+use App\Models\FlaggedProductReview;
 use Illuminate\Http\Request;
-use App\VendorApplication;
-use App\ProductReview;
-use App\UsersAddress;
-use App\Company;
+use App\Models\VendorApplication;
+use App\Models\ProductReview;
+use App\Models\UsersAddress;
+use App\Models\Company;
 use App\Models\User;
 
 class ModeratorsHubController extends Controller

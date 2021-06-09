@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\FlaggedProductReview;
-use App\ProductReview;
+use App\Models\FlaggedProductReview;
+use App\Models\ProductReview;
 
 class FlaggedProductReviewController extends Controller
 {

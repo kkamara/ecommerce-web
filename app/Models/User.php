@@ -75,43 +75,43 @@ class User extends Authenticatable
     }
 
     /**
-     * This model relationship has many \App\Cart.
+     * This model relationship has many \App\Models\Cart.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function cart()
     {
-        return $this->hasMany('App\Cart', 'user_id');
+        return $this->hasMany('App\Models\Cart', 'user_id');
     }
 
     /**
-     * This model relationship has one \App\Company.
+     * This model relationship has one \App\Models\Company.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function company()
     {
-        return $this->hasOne('App\Company', 'user_id');
+        return $this->hasOne('App\Models\Company', 'user_id');
     }
 
     /**
-     * This model relationship has many \App\OrderHistory.
+     * This model relationship has many \App\Models\OrderHistory.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
     {
-        return $this->hasMany('App\OrderHistory', 'user_id');
+        return $this->hasMany('App\Models\OrderHistory', 'user_id');
     }
 
     /**
-     * This model relationship has many \App\Product.
+     * This model relationship has many \App\Models\Product.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
     {
-        return $this->hasMany('App\Product', 'user_id');
+        return $this->hasMany('App\Models\Product', 'user_id');
     }
 
     /**
@@ -146,53 +146,53 @@ class User extends Authenticatable
     }
 
     /**
-     * This model relationship has many \App\ProductReview.
+     * This model relationship has many \App\Models\ProductReview.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function productReview()
     {
-        return $this->hasMany('App\ProductReview', 'user_id');
+        return $this->hasMany('App\Models\ProductReview', 'user_id');
     }
 
     /**
-     * This model relationship has many \App\UserPaymentConfig.
+     * This model relationship has many \App\Models\UserPaymentConfig.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userPaymentConfig()
     {
-        return $this->hasMany('App\UserPaymentConfig', 'user_id');
+        return $this->hasMany('App\Models\UserPaymentConfig', 'user_id');
     }
 
     /**
-     * This model relationship has many \App\UsersAddress.
+     * This model relationship has many \App\Models\UsersAddress.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userAddress()
     {
-        return $this->hasMany('App\UsersAddress', 'user_id');
+        return $this->hasMany('App\Models\UsersAddress', 'user_id');
     }
 
     /**
-     * This model relationship has many \App\UsersAddress.
+     * This model relationship has many \App\Models\UsersAddress.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function vendorApplication()
     {
-        return $this->hasOne('App\VendorApplication');
+        return $this->hasOne('App\Models\VendorApplication');
     }
 
     /**
      * Adds a given product to db cart for this user.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      */
     public function addProductToDbCart($product)
     {
-        \App\Cart::create([
+        \App\Models\Cart::create([
             'user_id' => $this->attributes['id'],
             'product_id' => $product->id,
         ]);
@@ -213,7 +213,7 @@ class User extends Authenticatable
             {
                 for($i=0; $i<$cc['amount']; $i++)
                 {
-                    \App\Cart::insert([
+                    \App\Models\Cart::insert([
                         'user_id' => $userId,
                         'product_id' => $cc['product']->id,
                     ]);
@@ -231,7 +231,7 @@ class User extends Authenticatable
      */
     public function getDbCart()
     {
-        $products = \App\Cart::where('user_id', $this->attributes['id'])->get();
+        $products = \App\Models\Cart::where('user_id', $this->attributes['id'])->get();
 
         if(! $products->isEmpty())
         {
@@ -278,7 +278,7 @@ class User extends Authenticatable
             $product_id = $cc['product']->id;
             $amount = $request->get('amount-' . $product_id);
 
-            \App\Cart::where([
+            \App\Models\Cart::where([
                 'user_id' => $this->attributes['id'],
                 'product_id' => $product_id,
             ])->delete();
@@ -288,7 +288,7 @@ class User extends Authenticatable
                 for($i=0; $i<$amount; $i++)
                 {
                     /** Push to $sessionCart the product with new amount value */
-                    \App\Cart::insert([
+                    \App\Models\Cart::insert([
                         'user_id' => $this->attributes['id'],
                         'product_id' => $product_id,
                     ]);
@@ -302,7 +302,7 @@ class User extends Authenticatable
      */
     public function deleteDbCart()
     {
-        \App\Cart::where('user_id', $this->attributes['id'])->delete();
+        \App\Models\Cart::where('user_id', $this->attributes['id'])->delete();
     }
 
     /**

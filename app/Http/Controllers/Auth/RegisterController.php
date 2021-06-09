@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Helpers\SessionCart;
-use App\UserPaymentConfig;
-use App\UsersAddress;
+use App\Models\UserPaymentConfig;
+use App\Models\UsersAddress;
 use App\Models\User;
 use Auth;
 

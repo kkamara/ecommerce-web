@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\ProductReview;
-use App\Product;
+use App\Models\ProductReview;
+use App\Models\Product;
 use Validator;
 
 class ProductReviewController extends Controller

@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\FlaggedProductReview;
+use App\Models\FlaggedProductReview;
 
 class ProductReview extends Model
 {
@@ -18,13 +18,13 @@ class ProductReview extends Model
     protected $guarded = [];
 
     /**
-     * This model relationship has \App\FlaggedProductReview
+     * This model relationship has \App\Models\FlaggedProductReview
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function flaggedProductReview()
     {
-        return $this->hasMany('App\FlaggedProductReview', 'product_reviews_id');
+        return $this->hasMany('App\Models\FlaggedProductReview', 'product_reviews_id');
     }
 
     /**
@@ -38,17 +38,17 @@ class ProductReview extends Model
     }
 
     /**
-     * This model relationship has one to \App\Product
+     * This model relationship has one to \App\Models\Product
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function product()
     {
-        return $this->hasOne('App\Product');
+        return $this->hasOne('App\Models\Product');
     }
 
     /**
-     * Finds whether an \App\ProductReview has been flagged 5 times.
+     * Finds whether an \App\Models\ProductReview has been flagged 5 times.
      *
      * @return bool
      */

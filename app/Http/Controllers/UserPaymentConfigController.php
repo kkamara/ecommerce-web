@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\UserPaymentConfig;
+use App\Models\UserPaymentConfig;
 use Validator;
 
 class UserPaymentConfigController extends Controller
@@ -132,7 +132,7 @@ class UserPaymentConfigController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\UserPaymentConfig  $userPaymentConfig
+     * @param  \App\Models\UserPaymentConfig  $userPaymentConfig
      * @return \Illuminate\Http\Response
      */
     public function show(UserPaymentConfig $userPaymentConfig)
@@ -143,7 +143,7 @@ class UserPaymentConfigController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\UserPaymentConfig  $userPaymentConfig
+     * @param  \App\Models\UserPaymentConfig  $userPaymentConfig
      * @return \Illuminate\Http\Response
      */
     public function edit(UserPaymentConfig $userPaymentConfig)
@@ -166,7 +166,7 @@ class UserPaymentConfigController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UserPaymentConfig  $userPaymentConfig
+     * @param  \App\Models\UserPaymentConfig  $userPaymentConfig
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, UserPaymentConfig $userPaymentConfig)
@@ -274,7 +274,7 @@ class UserPaymentConfigController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\UserPaymentConfig  $userPaymentConfig
+     * @param  \App\Models\UserPaymentConfig  $userPaymentConfig
      * @return \Illuminate\Http\Response
      */
     public function destroy(UserPaymentConfig $userPaymentConfig, Request $request)

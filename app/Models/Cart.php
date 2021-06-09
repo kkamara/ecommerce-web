@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -104,13 +104,13 @@ class Cart extends Model
     }
 
     /**
-     * This model relationship belongs to \App\Product.
+     * This model relationship belongs to \App\Models\Product.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
     {
-        return $this->belongsTo('App\Product');
+        return $this->belongsTo('App\Models\Product');
     }
 
     /**

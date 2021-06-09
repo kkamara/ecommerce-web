@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -48,33 +48,33 @@ class Product extends Model
     }
 
     /**
-     * This model relationship belongs to \App\Company.
+     * This model relationship belongs to \App\Models\Company.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function company()
     {
-        return $this->belongsTo('App\Company', 'company_id');
+        return $this->belongsTo('App\Models\Company', 'company_id');
     }
 
     /**
-     * This model relationship has many to \App\ProductReview.
+     * This model relationship has many to \App\Models\ProductReview.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function productReview()
     {
-        return $this->hasMany('App\ProductReview', 'product_id');
+        return $this->hasMany('App\Models\ProductReview', 'product_id');
     }
 
     /**
-     * This model relationship has many to \App\OrderHistoryProducts.
+     * This model relationship has many to \App\Models\OrderHistoryProducts.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistoryProducts()
     {
-        return $this->hasMany('App\OrderHistoryProducts', 'product_id');
+        return $this->hasMany('App\Models\OrderHistoryProducts', 'product_id');
     }
 
     /**
@@ -229,7 +229,7 @@ class Product extends Model
      */
     public function getReviewAttribute()
     {
-        $review = \App\ProductReview::select(DB::raw('avg(score) as review'))
+        $review = \App\Models\ProductReview::select(DB::raw('avg(score) as review'))
             ->where('product_id', $this->attributes['id'])
             ->groupBy('product_id')
             ->distinct()->first();
@@ -269,7 +269,7 @@ class Product extends Model
     }
 
     /**
-     * Returns an array of errors for \App\Http\Controllers\CompanyProductController requests.
+     * Returns an array of errors for \App\Http\Controllers\Models\CompanyProductController requests.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $request
      * @return array

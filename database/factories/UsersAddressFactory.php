@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\UsersAddress;
+use App\Models\UsersAddress;
 
 class UsersAddressFactory extends Factory
 {

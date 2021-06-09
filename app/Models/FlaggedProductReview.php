@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,20 +18,20 @@ class FlaggedProductReview extends Model
     protected $guarded = [];
 
     /**
-     * This model relationship belongs to \App\ProductReview
+     * This model relationship belongs to \App\Models\ProductReview
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function productReview()
     {
-        return $this->belongsTo('App\ProductReview', 'product_reviews_id');
+        return $this->belongsTo('App\Models\ProductReview', 'product_reviews_id');
     }
 
     /**
      * Find whether a particular IP Address has flagged a product review.
      *
      * @param   string $ipAddress
-     * @param   \App\ProductReview $id
+     * @param   \App\Models\ProductReview $id
      * @return  Illuminate\Support\Collection
      */
     public static function hasIpFlaggedThisReview($ipAddress, $id)
@@ -70,9 +70,9 @@ class FlaggedProductReview extends Model
     }
 
     /**
-     * Gets the number of times an \App\ProductReview has been flagged.
+     * Gets the number of times an \App\Models\ProductReview has been flagged.
      *
-     * @param  \App\ProductReview $id
+     * @param  \App\Models\ProductReview $id
      * @return int
      */
     public static function getFlagCount($id)
@@ -83,7 +83,7 @@ class FlaggedProductReview extends Model
     }
 
     /**
-     * Returns an error in the decision process when a moderator reviews a flagged \App\ProductReview.
+     * Returns an error in the decision process when a moderator reviews a flagged \App\Models\ProductReview.
      *
      * @param  int  $userId, string  $companyName, int  $usersAddressId
      * @return string|false The error text or false implying no errors occurred.

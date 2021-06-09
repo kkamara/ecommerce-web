@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\OrderHistoryProducts;
+use App\Models\OrderHistoryProducts;
 
 class OrderHistory extends Model
 {
@@ -46,43 +46,43 @@ class OrderHistory extends Model
     }
 
     /**
-     * This model relationship belongs to \App\Product.
+     * This model relationship belongs to \App\Models\Product.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
     {
-        return $this->belongs('App\Product');
+        return $this->belongs('App\Models\Product');
     }
 
     /**
-     * This model relationship belongs to \App\UserPaymentConfig.
+     * This model relationship belongs to \App\Models\UserPaymentConfig.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function userPaymentConfig()
     {
-        return $this->belongsTo('App\UserPaymentConfig', 'user_payment_config_id');
+        return $this->belongsTo('App\Models\UserPaymentConfig', 'user_payment_config_id');
     }
 
     /**
-     * This model relationship has many \App\OrderHistoryProducts.
+     * This model relationship has many \App\Models\OrderHistoryProducts.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistoryProducts()
     {
-        return $this->hasMany('App\OrderHistoryProducts', 'order_history_id');
+        return $this->hasMany('App\Models\OrderHistoryProducts', 'order_history_id');
     }
 
     /**
-     * This model relationship belongs to \App\UsersAddress.
+     * This model relationship belongs to \App\Models\UsersAddress.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function usersAddresses()
     {
-        return $this->belongsTo('App\UsersAddress', 'users_addresses_id');
+        return $this->belongsTo('App\Models\UsersAddress', 'users_addresses_id');
     }
 
     /**

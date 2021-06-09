@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,13 +28,13 @@ class UserPaymentConfig extends Model
     }
 
     /**
-     * This model relationship belongs to \App\OrderHistory.
+     * This model relationship belongs to \App\Models\OrderHistory.
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
     {
-        return $this->hasOne('App\OrderHistory');
+        return $this->hasOne('App\Models\OrderHistory');
     }
 
     /**

@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\OrderHistory;
-use App\Product;
+use App\Models\OrderHistory;
+use App\Models\Product;
 
 class OrderHistoryFactory extends Factory
 {

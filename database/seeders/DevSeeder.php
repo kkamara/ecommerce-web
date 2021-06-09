@@ -4,12 +4,12 @@ namespace Database\Seeders;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Seeder;
-use App\UserPaymentConfig;
-use App\ProductReview;
-use App\OrderHistory;
-use App\UsersAddress;
-use App\Product;
-use App\Company;
+use App\Models\UserPaymentConfig;
+use App\Models\ProductReview;
+use App\Models\OrderHistory;
+use App\Models\UsersAddress;
+use App\Models\Product;
+use App\Models\Company;
 use App\Models\User;
 
 class DevSeeder extends Seeder
