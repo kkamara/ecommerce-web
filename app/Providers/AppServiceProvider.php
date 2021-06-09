@@ -6,8 +6,24 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use \App\Cart;
 
+
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * @param String $name
+     * @return Function
+     */
+    private static function renderViewComposer($name) {
+        return match($name) {
+            'cartCount' => function($view) {
+                $view->with('cartCount', Cart::count());
+            },
+            'cartPrice' => function($view) {
+                $view->with('cartPrice', Cart::price());
+            },
+        };
+    }
+
     /**
      * Register any application services.
      *
@@ -17,13 +33,17 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
-        view()->composer(['layouts.navbar', 'cart.show', 'order_history.create'], function($view) {
-            $view->with('cartCount', Cart::count());
-        });
+        /** @var Array[string] $cartCountViewFiles */
+        $cartCountViewFiles = [
+            'order_history.create',
+            'layouts.navbar',
+            'cart.show',
+        ];
+        view()->composer($cartCountViewFiles, self::renderViewComposer('cartCount'));
 
-        view()->composer(['cart.show', 'order_history.create'], function($view) {
-            $view->with('cartPrice', Cart::price());
-        });
+        /** @var Array[string] $cartPriceViewFiles */
+        $cartPriceViewFiles = ['cart.show', 'order_history.create'];
+        view()->composer($cartPriceViewFiles, self::renderViewComposer('cartPrice'));
     }
 
     /**
