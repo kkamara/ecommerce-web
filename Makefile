@@ -11,6 +11,8 @@ backend-install:
 backend-setup:
 	make backend-install
 	./vendor/bin/sail artisan key:generate
+
+backend-migrate:
 	./vendor/bin/sail artisan migrate
 
 backend-seed:
@@ -29,7 +31,6 @@ frontend-install:
 dev:
 	make docker-setup
 	make backend-setup
-	make backend-seed
 	make frontend-install
 
 watch:
