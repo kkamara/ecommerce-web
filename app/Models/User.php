@@ -10,10 +10,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use App\Helpers\SessionCart;
 use Validator;
+use App\Models\User\Traits\UserRelations;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes, HasRoles;
+    use UserRelations;
 
     /**
      * The attributes that are mass assignable.
@@ -75,46 +77,6 @@ class User extends Authenticatable
     }
 
     /**
-     * This model relationship has many \App\Models\Cart\Cart.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function cart()
-    {
-        return $this->hasMany('App\Models\Cart\Cart', 'user_id');
-    }
-
-    /**
-     * This model relationship has one \App\Models\Company\Company.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function company()
-    {
-        return $this->hasOne('App\Models\Company\Company', 'user_id');
-    }
-
-    /**
-     * This model relationship has many \App\Models\Order\OrderHistory.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function orderHistory()
-    {
-        return $this->hasMany('App\Models\Order\OrderHistory', 'user_id');
-    }
-
-    /**
-     * This model relationship has many \App\Models\Product.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function product()
-    {
-        return $this->hasMany('App\Models\Product', 'user_id');
-    }
-
-    /**
      * Get errors in request data.
      *
      * @param  array  $data
@@ -143,46 +105,6 @@ class User extends Authenticatable
         }
 
         return $errors;
-    }
-
-    /**
-     * This model relationship has many \App\Models\Product\ProductReview.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function productReview()
-    {
-        return $this->hasMany('App\Models\Product\ProductReview', 'user_id');
-    }
-
-    /**
-     * This model relationship has many \App\Models\User\UserPaymentConfig.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function userPaymentConfig()
-    {
-        return $this->hasMany('App\Models\User\UserPaymentConfig', 'user_id');
-    }
-
-    /**
-     * This model relationship has many \App\Models\User\UsersAddress.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function userAddress()
-    {
-        return $this->hasMany('App\Models\User\UsersAddress', 'user_id');
-    }
-
-    /**
-     * This model relationship has many \App\Models\User\UsersAddress.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function vendorApplication()
-    {
-        return $this->hasOne('App\Models\Company\VendorApplication');
     }
 
     /**

@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
+use App\Models\Product\Traits\ProductRelations;
+use App\Models\Product\Traits\ProductScopes;
 use Validator;
 
 class Product extends Model
 {
     use SoftDeletes, HasFactory;
+    use ProductRelations, ProductScopes;
 
     /**
      * This models immutable values.
@@ -48,46 +51,6 @@ class Product extends Model
     }
 
     /**
-     * This model relationship belongs to \App\Models\Company\Company.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function company()
-    {
-        return $this->belongsTo('App\Models\Company\Company', 'company_id');
-    }
-
-    /**
-     * This model relationship has many to \App\Models\Product\ProductReview.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function productReview()
-    {
-        return $this->hasMany('App\Models\Product\ProductReview', 'product_id');
-    }
-
-    /**
-     * This model relationship has many to \App\Models\Order\OrderHistoryProducts.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function orderHistoryProducts()
-    {
-        return $this->hasMany('App\Models\Order\OrderHistoryProducts', 'product_id');
-    }
-
-    /**
-     * This model relationship belongs to \App\Models\User.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User', 'user_id');
-    }
-
-    /**
      * Return the formatted cost attribute.
      *
      * @return  string
@@ -105,79 +68,6 @@ class Product extends Model
     public function getCostAttribute()
     {
         return $this->attributes['cost'];
-    }
-
-    /**
-     * Query products using request params.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $query
-     * @param  \Illuminate\Http\Request             $request
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function scopeGetProducts($query, $request)
-    {
-        $querySearch = $request->input('query');
-        $min         = $request->input('min_price');
-        $max         = $request->input('max_price');
-        $sort_by     = $request->input('sort_by');
-
-        $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id',
-                       'products.short_description', 'products.long_description', 'products.product_details',
-                       'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery',
-                       'products.created_at', 'products.updated_at');
-        $whereClause = array();
-
-        if(isset($querySearch))
-        {
-            $querySearch = filter_var($querySearch, FILTER_SANITIZE_STRING);
-            array_push($whereClause, [
-                'products.name', 'LIKE', "$querySearch%"
-            ]);
-        }
-        if(isset($min))
-        {
-            $min = filter_var($min, FILTER_SANITIZE_NUMBER_FLOAT);
-            array_push($whereClause, [
-                'products.cost', '>', $min
-            ]);
-        }
-        if(isset($max))
-        {
-            $max = filter_var($max, FILTER_SANITIZE_NUMBER_FLOAT);
-            array_push($whereClause, [
-                'products.cost', '<', $max
-            ]);
-        }
-
-        if(isset($whereClause)) $query->where($whereClause);
-
-        switch($sort_by)
-        {
-            case 'pop': // most popular
-                $query->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
-                      ->groupBy('order_history_products.product_id');
-            break;
-            case 'top': // top rated
-                $query->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
-                      ->withCount(['productReview as review' => function($query) {
-                        $query->select(DB::raw('avg(product_reviews.score) as average_rating'));
-                      }])->groupBy('product_reviews.product_id')->orderByDesc('review');
-            break;
-            case 'low': // lowest price
-                $query->orderBy('cost', 'ASC');
-            break;
-            case 'hig': // highest price
-                $query->orderBy('cost', 'DESC');
-            break;
-            default:
-            break;
-        }
-
-        $query->orderBy('products.id', 'DESC')
-            ->groupBy('products.id')
-            ->distinct();
-
-        return $query;
     }
 
     /**
@@ -235,17 +125,6 @@ class Product extends Model
             ->distinct()->first();
 
         return isset($review->review) ? number_format((float)$review->review, 2, '.', '') : '0.00';
-    }
-
-    /**
-     * Get products that belong to a given vendor.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model  $query, int  $companyId
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function scopeGetCompanyProducts($query, $companyId)
-    {
-        return $query->where('company_id', '=', $companyId);
     }
 
     /**
