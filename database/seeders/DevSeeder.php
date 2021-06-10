@@ -115,12 +115,12 @@ class DevSeeder extends Seeder
 
     /**
      * @param  String $productId
-     * @param  int $cnt {2000}
+     * @param  int $limit {30}
      * @return void
      */
-    private function makeProductReviews($productId, $cnt=30) {
+    private function makeProductReviews($productId, $limit=30) {
         /** @var Int $count */
-        $count = mt_rand(0, $cnt);
+        $count = mt_rand(0, $limit);
         ProductReview::factory()->count($count)->create([
             'product_id' => $productId,
         ]);
