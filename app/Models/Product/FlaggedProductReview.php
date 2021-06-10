@@ -66,7 +66,7 @@ class FlaggedProductReview extends Model
             $idsArray[] = $id->product_reviews_id;
         }
 
-        return $query->whereIn('product_reviews_id', $idsArray)->groupBy('product_reviews_id');
+        return $query->whereIn('product_reviews_id', $idsArray);
     }
 
     /**
