@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\VendorApplication;
-use App\Models\UsersAddress;
-use App\Models\User;
+use App\Models\Company\VendorApplication;
+use App\Models\User\UsersAddress;
 
 class VendorApplicationController extends Controller
 {

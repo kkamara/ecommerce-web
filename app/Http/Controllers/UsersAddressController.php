@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\UsersAddress;
+use App\Models\User\UsersAddress;
 use Validator;
 
 class UsersAddressController extends Controller

@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
-use App\Models\Company;
-use App\Models\Product;
-use Validator;
+use App\Models\Company\Company;
+use App\Models\Product\Product;
 
 class CompanyProductController extends Controller
 {

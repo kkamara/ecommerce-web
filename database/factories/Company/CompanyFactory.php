@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Company;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\User;
-use App\Models\Company;
+use App\Models\Company\Company;
 
 class CompanyFactory extends Factory
 {

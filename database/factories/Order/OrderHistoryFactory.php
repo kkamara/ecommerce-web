@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Order;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\Models\OrderHistory;
-use App\Models\Product;
+use App\Models\Order\OrderHistory;
+use App\Models\Product\Product;
 
 class OrderHistoryFactory extends Factory
 {

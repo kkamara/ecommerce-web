@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderHistoryProducts;
+use App\Models\Order\OrderHistoryProducts;
 use Illuminate\Http\Request;
-use App\Models\OrderHistory;
-use App\Models\Cart;
+use App\Models\Order\OrderHistory;
+use App\Models\Cart\Cart;
 use Auth;
 
 class OrderHistoryController extends Controller
@@ -141,7 +141,7 @@ class OrderHistoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\OrderHistory  $orderHistory
+     * @param  \App\Models\Order\OrderHistory  $orderHistory
      * @return \Illuminate\Http\Response
      */
     public function show($refNum)
@@ -161,7 +161,7 @@ class OrderHistoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\OrderHistory  $orderHistory
+     * @param  \App\Models\Order\OrderHistory  $orderHistory
      * @return \Illuminate\Http\Response
      */
     public function edit(OrderHistory $orderHistory)
@@ -173,7 +173,7 @@ class OrderHistoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\OrderHistory  $orderHistory
+     * @param  \App\Models\Order\OrderHistory  $orderHistory
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, OrderHistory $orderHistory)
@@ -184,7 +184,7 @@ class OrderHistoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\OrderHistory  $orderHistory
+     * @param  \App\Models\Order\OrderHistory  $orderHistory
      * @return \Illuminate\Http\Response
      */
     public function destroy(OrderHistory $orderHistory)

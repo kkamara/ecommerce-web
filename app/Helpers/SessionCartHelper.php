@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Product\Product;
 
 class SessionCart 
 {

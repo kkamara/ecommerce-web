@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Order;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,13 +17,13 @@ class OrderHistoryProducts extends Model
     protected $guarded = [];
 
     /**
-     * This model instance belongs to \App\Models\OrderHistory.
+     * This model instance belongs to \App\Models\Order\OrderHistory.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
     {
-        return $this->belongsTo('App\Models\OrderHistory', 'order_history_id');
+        return $this->belongsTo('App\Models\Order\OrderHistory', 'order_history_id');
     }
 
     /**

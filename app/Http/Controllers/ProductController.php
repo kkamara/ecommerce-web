@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Helpers\SessionCart;
-use App\Models\Product;
+use App\Models\Product\Product;
 use Auth;
 
 class ProductController extends Controller

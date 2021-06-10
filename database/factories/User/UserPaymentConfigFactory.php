@@ -1,19 +1,19 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\User;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\Models\UsersAddress;
+use App\Models\User\UserPaymentConfig;
 
-class UsersAddressFactory extends Factory
+class UserPaymentConfigFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = UsersAddress::class;
+    protected $model = UserPaymentConfig::class;
 
     /**
      * Define the model's default state.
@@ -22,13 +22,16 @@ class UsersAddressFactory extends Factory
      */
     public function definition()
     {
+        $user = User::inRandomOrder()->first();
+        $param = str_shuffle("00000111112222233333444445555566666777778888899999");
+
         return [
-            'user_id' => User::inRandomOrder()->first()->id,
-            'phone_number_extension' => '+'.mb_substr(
-                str_shuffle("00000111112222233333444445555566666777778888899999"),
-                2,
-                3
-            ),
+            'user_id' => $user->id,
+            'card_holder_name' => strtoupper($user->first_name . ' ' . $user->last_name),
+            'card_number' => mb_substr($param, 0, 16),
+            'expiry_month' => mt_rand(1, 12),
+            'expiry_year' => mt_rand(2020, 2024),
+            'phone_number_extension' => '+'.mb_substr($param, 2, 3),
             'phone_number' => $this->faker->phonenumber,
             'building_name' => $this->faker->buildingnumber,
             'street_address1' => $this->faker->StreetAddress,
