@@ -4,14 +4,14 @@ namespace App\Helpers;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use App\Product;
+use App\Models\Product\Product;
 
 class SessionCart 
 {
     /**
      * Adds a product to the user's session cart.
      * 
-     * @param  \App\Product  $product
+     * @param  \App\Models\Product  $product
      */
     public static function addProductToSessionCart(Product $product)
     {

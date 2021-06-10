@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\User;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\UsersAddress;
+use App\Models\User\UsersAddress;
 
 class UsersAddressFactory extends Factory
 {

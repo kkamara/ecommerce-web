@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,13 +28,13 @@ class UsersAddress extends Model
     }
 
     /**
-     * This model relationship belongs to \App\OrderHistory
+     * This model relationship belongs to \App\Models\Order\OrderHistory
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function orderHistory()
     {
-        return $this->hasMany('App\OrderHistory', 'users_addresses_id');
+        return $this->hasMany('App\Models\Order\OrderHistory', 'users_addresses_id');
     }
 
     /**
