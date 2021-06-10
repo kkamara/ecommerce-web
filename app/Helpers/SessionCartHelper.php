@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Models\Product\Product;
 
-class SessionCart 
+class SessionCartHelper
 {
     /**
      * Adds a product to the user's session cart.

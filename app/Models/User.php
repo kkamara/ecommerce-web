@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
-use App\Helpers\SessionCart;
+use App\Helpers\SessionCartHelper;
 use Validator;
 use App\Models\User\Traits\UserRelations;
 
@@ -143,7 +143,7 @@ class User extends Authenticatable
             }
         }
 
-        SessionCart::clearSessionCart();
+        SessionCartHelper::clearSessionCart();
     }
 
     /**
