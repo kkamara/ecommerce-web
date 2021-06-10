@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\Helpers\SessionCart;
+use App\Helpers\SessionCartHelper;
 use App\Models\User\UserPaymentConfig;
 use App\Models\User\UsersAddress;
 use App\Models\User;
@@ -173,7 +173,7 @@ class RegisterController extends Controller
         UserPaymentConfig::create($data['user_payment_config']);
 
         // // add to cart if cache cart not empty
-        $sessionCart = SessionCart::getSessionCart();
+        $sessionCart = SessionCartHelper::getSessionCart();
         if(!empty($sessionCart))
         {
             $user->moveSessionCartToDbCart($sessionCart);

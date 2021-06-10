@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Helpers\SessionCart;
+use App\Helpers\SessionCartHelper;
 use App\Models\Cart\Cart;
 use Auth;
 
@@ -24,7 +24,7 @@ class CartController extends Controller
         }
         else
         {
-            $cart = SessionCart::getSessionCart();
+            $cart = SessionCartHelper::getSessionCart();
         }
 
         return view('cart.show', compact('cart'))->withTitle('Cart');
@@ -46,7 +46,7 @@ class CartController extends Controller
         }
         else
         {
-            SessionCart::updateSessionCartAmount($request);
+            SessionCartHelper::updateSessionCartAmount($request);
         }
 
         return redirect()->route('cartShow')

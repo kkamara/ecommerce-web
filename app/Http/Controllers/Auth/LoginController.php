@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Helpers\SessionCart;
+use App\Helpers\SessionCartHelper;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
@@ -71,7 +71,7 @@ class LoginController extends Controller
             if(Auth::attempt($creds))
             {
                 $user = auth()->user();
-                $sessionCart = SessionCart::getSessionCart();
+                $sessionCart = SessionCartHelper::getSessionCart();
 
                 /**
                 * login

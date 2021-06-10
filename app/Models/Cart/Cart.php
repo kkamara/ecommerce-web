@@ -5,7 +5,7 @@ namespace App\Models\Cart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
-use App\Helpers\SessionCart;
+use App\Helpers\SessionCartHelper;
 use App\Models\Cart\Traits\CartRelations;
 use Auth;
 
@@ -82,7 +82,7 @@ class Cart extends Model
         }
         else
         {
-            $sessionCart = SessionCart::getSessionCart();
+            $sessionCart = SessionCartHelper::getSessionCart();
         }
 
         if(empty($sessionCart)) return '£0.00';

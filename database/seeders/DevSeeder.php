@@ -103,18 +103,27 @@ class DevSeeder extends Seeder
      * @return Product|Product[]
      */
     private function makeProducts(User $user, Company $company, int $count=1000) {
-        return Product::factory()->count($count)->create([
+        $products = Product::factory()->count($count)->create([
             'user_id' => $user->id,
             'company_id' => $company->id,
         ]);
+        foreach($products as $product) {
+            $this->makeProductReviews($product->id);
+        }
+        return $products;
     }
 
     /**
-     * @param  int $count {2000}
+     * @param  String $productId
+     * @param  int $cnt {2000}
      * @return void
      */
-    private function makeProductReviews($count=2000) {
-        ProductReview::factory()->count($count)->create();
+    private function makeProductReviews($productId, $cnt=30) {
+        /** @var Int $count */
+        $count = mt_rand(0, $cnt);
+        ProductReview::factory()->count($count)->create([
+            'product_id' => $productId,
+        ]);
     }
 
     /**
@@ -154,7 +163,6 @@ class DevSeeder extends Seeder
 
         $company = $this->makeCompany($users['vendor']);
         $this->makeProducts($users['vendor'], $company);
-        $this->makeProductReviews();
         $this->makeOrderHistories([$users['guest']]);
     }
 }
