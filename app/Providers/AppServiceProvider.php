@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
-use \App\Cart;
+use \App\Models\Cart\Cart;
 
 
 class AppServiceProvider extends ServiceProvider

@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models\Company;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\UsersAddress;
-use App\Company;
+use App\Models\User\UsersAddress;
+use App\Models\Company\Company;
 
 class VendorApplication extends Model
 {

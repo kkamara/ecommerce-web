@@ -1,14 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models\Company;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Company\Traits\CompanyRelations;
 
 class Company extends Model
 {
     use SoftDeletes, HasFactory;
+    use CompanyRelations;
 
     /**
      * This models immutable values.
@@ -32,26 +34,6 @@ class Company extends Model
     public function getPathAttribute()
     {
         return url('/companies/'.$this->attributes['slug']);
-    }
-
-    /**
-     * This model relationship belongs to \App\Models\User.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User', 'user_id');
-    }
-
-    /**
-     * This model relationship has many \App\Product.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function products()
-    {
-        return $this->hasMany('App\Product', 'company_id');
     }
 
     /**

@@ -1,16 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models\Cart;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use App\Helpers\SessionCart;
+use App\Models\Cart\Traits\CartRelations;
 use Auth;
 
 class Cart extends Model
 {
     use HasFactory;
+    use CartRelations;
 
     /**
      * This models table name is 'cart' instead of 'carts' so must be set explicitly here.
@@ -91,26 +93,6 @@ class Cart extends Model
         }
 
         return "£".number_format($price, 2);
-    }
-
-    /**
-     * This model relationship belongs to \App\Models\User.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function user()
-    {
-        return $this->belongsTo('App\Models\User');
-    }
-
-    /**
-     * This model relationship belongs to \App\Product.
-     *
-     * @return  \Illuminate\Database\Eloquent\Model
-     */
-    public function product()
-    {
-        return $this->belongsTo('App\Product');
     }
 
     /**
