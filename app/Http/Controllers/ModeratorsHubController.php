@@ -30,8 +30,16 @@ class ModeratorsHubController extends Controller
 
         if($user->hasRole('moderator'))
         {
-            $vendorApplications = VendorApplication::whereFresh()->paginate(5,  ['*'], 'vendorAppPage');
-            $unansweredFlaggedReviews = FlaggedProductReview::whereUnanswered()->paginate(5,  ['*'], 'flaggedReviewPage');
+            $vendorApplications = VendorApplication::whereFresh()->paginate(
+                5,
+                ['*'],
+                'vendorAppPage'
+            );
+            $unansweredFlaggedReviews = FlaggedProductReview::whereUnanswered()->paginate(
+                5, 
+                ['*'],
+                'flaggedReviewPage'
+            );
 
             return view('modhub.index', [
                 'title' => 'Moderator\'s Hub'
