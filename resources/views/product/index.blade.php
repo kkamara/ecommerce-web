@@ -55,7 +55,7 @@
             </div>
 
             <div class="form-group">
-                <input class='form-control btn btn-success' type="submit">
+                <input class='form-control btn btn-success' type="submit" value="Submit">
             </div>
         </form>
     </div>
