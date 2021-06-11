@@ -102,7 +102,7 @@ class DevSeeder extends Seeder
      * @param int $count {1000}
      * @return Product|Product[]
      */
-    private function makeProducts(User $user, Company $company, int $count=1000) {
+    private function makeProducts(User $user, Company $company, int $count=50) {
         $products = Product::factory()->count($count)->create([
             'user_id' => $user->id,
             'company_id' => $company->id,
