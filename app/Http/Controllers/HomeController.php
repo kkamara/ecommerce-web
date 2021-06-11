@@ -17,7 +17,7 @@ class HomeController extends Controller
         $products = Product::getProducts($request)->paginate(7);
 
         return view('home.index')
-                ->withTitle('Home')
-                ->with(compact('products'));
+            ->withTitle('Home')
+            ->with(compact('products'));
     }
 }

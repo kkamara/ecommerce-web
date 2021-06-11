@@ -98,23 +98,10 @@ class UsersAddressController extends Controller
                 ]);
             }
         }
-        else
-        {
-            return redirect()->back()->with([
-                'errors' => $validator->errors()->all(),
-            ]);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        
+        return redirect()->back()->with([
+            'errors' => $validator->errors()->all(),
+        ]);
     }
 
     /**
@@ -132,10 +119,8 @@ class UsersAddressController extends Controller
                 'title' => 'Edit Address',
             ])->with(compact('usersAddress'));
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 
     /**
@@ -203,10 +188,8 @@ class UsersAddressController extends Controller
                 ]);
             }
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 
     public function delete(UsersAddress $usersAddress)
@@ -218,10 +201,8 @@ class UsersAddressController extends Controller
                 'title' => 'Delete Address',
             ])->with(compact('usersAddress'));
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 
     /**
@@ -261,9 +242,7 @@ class UsersAddressController extends Controller
                 return redirect()->back()->with('errors', $validator->errors()->all());
             }
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 }

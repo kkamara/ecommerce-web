@@ -19,10 +19,10 @@ class ProductController extends Controller
         $products = Product::getProducts($request)->paginate(7);
 
         return view('product.index', [
-            'title' => 'Products',
-            'products' => $products->appends(request()->except('page')),
-            'input' => $request->all(),
-        ]);
+                'title' => 'Products',
+                'products' => $products->appends(request()->except('page')),
+                'input' => $request->all(),
+            ]);
     }
 
     /**
@@ -46,19 +46,9 @@ class ProductController extends Controller
             SessionCartHelper::addProductToSessionCart($product);
         }
 
-        return redirect()->route('productShow', $product->id)
-                         ->with('flashSuccess', $product->name.' added to cart');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return redirect()
+            ->route('productShow', $product->id)
+            ->with('flashSuccess', $product->name.' added to cart');
     }
 
     /**
@@ -79,44 +69,12 @@ class ProductController extends Controller
             $permissionToReview = $product->didUserPurchaseProduct($user->id);
 
         return view('product.show', [
-            'title' => $product->name,
-        ])
-        ->with(compact('product'))
-        ->with(compact('reviews'))
-        ->with(compact('permissionToReview'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\r  $r
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(r $r)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\r  $r
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, r $r)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\r  $r
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(r $r)
-    {
-        //
+                'title' => $product->name,
+            ])
+            ->with(compact(
+                'product',
+                'reviews',
+                'permissionToReview',
+            ));
     }
 }

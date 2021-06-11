@@ -127,9 +127,7 @@ class Cart extends Model
 
             return $cart;
         }
-        else
-        {
-            return 0;
-        }
+        
+        return 0;
     }
 }

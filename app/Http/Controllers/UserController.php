@@ -33,10 +33,8 @@ class UserController extends Controller
                 'user'  => $requestUser,
             ]);
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 
     /**
@@ -96,9 +94,7 @@ class UserController extends Controller
                 return redirect()->back()->with('errors', $validator->errors()->all());
             }
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 }

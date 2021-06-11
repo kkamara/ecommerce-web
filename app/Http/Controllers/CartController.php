@@ -49,7 +49,8 @@ class CartController extends Controller
             SessionCartHelper::updateSessionCartAmount($request);
         }
 
-        return redirect()->route('cartShow')
-                ->with('flashSuccess', 'Your cart was successfully updated!');
+        return redirect()
+            ->route('cartShow')
+            ->with('flashSuccess', 'Your cart was successfully updated!');
     }
 }

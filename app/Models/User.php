@@ -178,10 +178,8 @@ class User extends Authenticatable
 
             return $cart;
         }
-        else
-        {
-            return 0;
-        }
+        
+        return 0;
     }
 
     /**

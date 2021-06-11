@@ -29,10 +29,8 @@ class VendorApplicationController extends Controller
                 'title' => 'Become a vendor',
             ])->with(compact('usersAddresses'));
         }
-        else
-        {
-            return redirect()->route('home');
-        }
+        
+        return redirect()->route('home');
     }
 
     /**
@@ -65,10 +63,8 @@ class VendorApplicationController extends Controller
                 return redirect()->back()->with('flashDanger', $applicationError);
             }
         }
-        else
-        {
-            return redirect()->route('home');
-        }
+        
+        return redirect()->route('home');
     }
 
     /**
@@ -87,9 +83,7 @@ class VendorApplicationController extends Controller
                 'title' => 'Application Sent',
             ]);
         }
-        else
-        {
-            return redirect()->route('home');
-        }
+        
+        return redirect()->route('home');
     }
 }

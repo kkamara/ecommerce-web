@@ -275,9 +275,7 @@ class CompanyProductController extends Controller
                 break;
             }
         }
-        else
-        {
-            return abort(404);
-        }
+
+        return abort(404);
     }
 }

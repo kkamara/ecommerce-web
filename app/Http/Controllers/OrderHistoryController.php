@@ -28,9 +28,11 @@ class OrderHistoryController extends Controller
             'user_id' => $user->id,
         ])->paginate(10);
 
-        return view('order_history.index', [
-            'title' => 'Invoices'
-        ])->with(compact('orderHistory'));
+        $title = 'Invoices';
+        return view(
+            'order_history.index',
+            compact('orderHistory', 'title')
+        );
     }
 
     /**
@@ -154,41 +156,7 @@ class OrderHistoryController extends Controller
         ])->firstOrFail();
 
         return view('order_history.show')
-                ->with(compact('orderHistory'))
-                ->withTitle('Invoice');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Order\OrderHistory  $orderHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(OrderHistory $orderHistory)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order\OrderHistory  $orderHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, OrderHistory $orderHistory)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Order\OrderHistory  $orderHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(OrderHistory $orderHistory)
-    {
-        //
+            ->with(compact('orderHistory'))
+            ->withTitle('Invoice');
     }
 }

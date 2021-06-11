@@ -25,8 +25,8 @@ class UserPaymentConfigController extends Controller
         $billingCards = UserPaymentConfig::where('user_id', $user->id)->paginate(10);
 
         return view('user_payment_config.index', [
-            'title' => 'Billing Cards'
-        ])->with(compact('billingCards'));
+                'title' => 'Billing Cards'
+            ])->with(compact('billingCards'));
     }
 
     /**
@@ -37,8 +37,8 @@ class UserPaymentConfigController extends Controller
     public function create()
     {
         return view('user_payment_config.create', [
-            'title' => 'Add Billing Card',
-        ]);
+                'title' => 'Add Billing Card',
+            ]);
     }
 
     /**
@@ -121,23 +121,10 @@ class UserPaymentConfigController extends Controller
                 ]);
             }
         }
-        else
-        {
-            return redirect()->back()->with([
-                'errors' => $validator->errors()->all(),
-            ]);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User\UserPaymentConfig  $userPaymentConfig
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserPaymentConfig $userPaymentConfig)
-    {
-        //
+        
+        return redirect()->back()->with([
+            'errors' => $validator->errors()->all(),
+        ]);
     }
 
     /**
@@ -152,14 +139,12 @@ class UserPaymentConfigController extends Controller
         if($userPaymentConfig['user_id'] === $user->id)
         {
             return view('user_payment_config.edit', [
-            'title' => 'Edit Billing Card',
-            'billingCard' => $userPaymentConfig,
-        ]);
+                'title' => 'Edit Billing Card',
+                'billingCard' => $userPaymentConfig,
+            ]);
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 
     /**
@@ -249,10 +234,8 @@ class UserPaymentConfigController extends Controller
                 ]);
             }
         }
-        else
-        {
-            return abort(404);
-        }
+
+        return abort(404);
     }
 
     public function delete(UserPaymentConfig $userPaymentConfig)
@@ -265,10 +248,8 @@ class UserPaymentConfigController extends Controller
                 'billingCard' => $userPaymentConfig,
             ]);
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 
     /**
@@ -308,10 +289,7 @@ class UserPaymentConfigController extends Controller
                 return redirect()->back()->with('errors', $validator->errors()->all());
             }
         }
-        else
-        {
-            return abort(404);
-        }
+        
+        return abort(404);
     }
 }
-

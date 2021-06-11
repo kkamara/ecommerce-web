@@ -90,15 +90,17 @@ class FlaggedProductReview extends Model
      */
     public static function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
     {
-        if(! isset($reasonGiven))
+        if(! isset($reasonGiven)) {
             return 'Reason not provided.';
-        elseif(strlen($reasonGiven) < 10)
+        } elseif(strlen($reasonGiven) < 10) {
             return 'Reason must be longer than 10 characters.';
-        elseif(strlen($reasonGiven) > 191)
+        } elseif(strlen($reasonGiven) > 191) {
             return 'Reason exceeds maximum length 191.';
+        }
 
-        if(! isset($acceptDecision) && ! isset($declineDecision))
+        if(! isset($acceptDecision) && ! isset($declineDecision)) {
             return 'Error processing that request. Contact system administrator.';
+        }
 
         return FALSE;
     }

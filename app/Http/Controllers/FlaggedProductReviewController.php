@@ -27,9 +27,7 @@ class FlaggedProductReviewController extends Controller
 
             return redirect()->back()->with('flashSuccess', 'Product review has been flagged and will be reviewed by moderators. Thanks!');
         }
-        else
-        {
-            return redirect()->back()->with('flashDanger', 'You have already flagged that review.');
-        }
+        
+        return redirect()->back()->with('flashDanger', 'You have already flagged that review.');
     }
 }

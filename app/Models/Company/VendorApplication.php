@@ -78,20 +78,23 @@ class VendorApplication extends Model
         /**
          * Error if previously applied
          */
-        if(self::hasUserApplied($userId))
+        if(self::hasUserApplied($userId)) {
             return 'Your existing application is being processed.';
+        }
 
         /**
          * Error if previous application rejected
          */
-        if(self::hasApplicationBeenRejected($userId))
+        if(self::hasApplicationBeenRejected($userId)) {
             return 'Unfortunately your previous application was rejected and you cannot apply again. For more information contact administrator.';
+        }
 
         /**
          * Error if no address on file
          */
-        if(UsersAddress::where('user_id', '=', $userId)->get()->isEmpty())
+        if(UsersAddress::where('user_id', '=', $userId)->get()->isEmpty()) {
             return 'You must have at least one address on file.';
+        }
 
         /**
          * Error if company name not given |
@@ -149,15 +152,17 @@ class VendorApplication extends Model
      */
     public static function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
     {
-        if(! isset($reasonGiven))
+        if(! isset($reasonGiven)) {
             return 'Reason not provided.';
-        elseif(strlen($reasonGiven) < 10)
+        } elseif(strlen($reasonGiven) < 10) {
             return 'Reason must be longer than 10 characters.';
-        elseif(strlen($reasonGiven) > 191)
+        } elseif(strlen($reasonGiven) > 191) {
             return 'Reason exceeds maximum length 191.';
+        }
 
-        if(! isset($acceptDecision) && ! isset($declineDecision))
+        if(! isset($acceptDecision) && ! isset($declineDecision)) {
             return 'Error processing that request. Contact system administrator.';
+        }
 
         return FALSE;
     }
