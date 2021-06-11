@@ -3,7 +3,7 @@ rm:
 
 docker-setup:
 	./vendor/bin/sail up -d # get services running
-	sleep 30
+	sleep 120
 
 backend-install:
 	./vendor/bin/sail composer i
