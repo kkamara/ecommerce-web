@@ -108,7 +108,7 @@ class DevSeeder extends Seeder
             'company_id' => $company->id,
         ]);
         foreach($products as $product) {
-            $this->makeProductReviews($product->id);
+            $this->makeProductReviews($product->id, 2);
         }
         return $products;
     }
