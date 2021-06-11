@@ -25,8 +25,8 @@ class AddUniqueIndexToOrderHistoryTableReferenceNumberColumn extends Migration
      */
     public function down()
     {
-        Schema::table('order_history', function($table) {
-            $table->dropUnique('reference_number');
-        });
+        // Schema::table('order_history', function($table) {
+        //     $table->dropUnique('reference_number');
+        // });
     }
 }
