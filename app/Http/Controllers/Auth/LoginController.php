@@ -48,7 +48,7 @@ class LoginController extends Controller
         return view('login.create', array(
             'title' => 'Login',
             'fromOrder' => request('fromOrder'),
-            'logins' => $this->loginEmails,
+            'loginEmails' => $this->loginEmails,
         ));
     }
 
