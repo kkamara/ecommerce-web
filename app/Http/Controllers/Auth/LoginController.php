@@ -61,10 +61,10 @@ class LoginController extends Controller
 
         if(empty($validator->errors()->all()))
         {
-            $email = filter_var(request('email'), FILTER_SANITIZE_EMAIL);
+            $sanitizedEmail = filter_var(request('email'), FILTER_SANITIZE_EMAIL);
 
             $creds = array(
-                'email' => request('email'),
+                'email' => $sanitizedEmail,
                 'password' => request('password'),
             );
 
