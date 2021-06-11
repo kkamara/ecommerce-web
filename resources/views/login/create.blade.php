@@ -21,8 +21,8 @@
 
                                     <p>Logins</p>
                                     <ul>
-                                        @foreach($logins as $role => $login)
-                                            <li>{{$login['email']}}</li>
+                                        @foreach($loginEmails as $loginEmail)
+                                            <li>{{$loginEmail['email']}}</li>
                                         @endforeach
                                     </ul>
 

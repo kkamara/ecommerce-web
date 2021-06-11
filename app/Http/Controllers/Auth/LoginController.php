@@ -18,18 +18,18 @@ class LoginController extends Controller
     protected $redirectTo = '/';
 
     /** @var array to store seeder logins for site users */
-    protected $logins = array(
-        'mod' => array(
+    protected $loginEmails = array(
+        array(
             'email' => 'mod@mail.com',
-            'pass'  => 'secret',
+            'role'  => 'mod',
         ),
-        'vendor' => array(
+        array(
             'email' => 'vendor@mail.com',
-            'pass'  => 'secret',
+            'role'  => 'vendor',
         ),
-        'guest' => array(
+        array(
             'email' => 'guest@mail.com',
-            'pass'  => 'secret',
+            'role'  => 'guest',
         ),
     );
 
@@ -48,7 +48,7 @@ class LoginController extends Controller
         return view('login.create', array(
             'title' => 'Login',
             'fromOrder' => request('fromOrder'),
-            'logins' => $this->logins,
+            'logins' => $this->loginEmails,
         ));
     }
 
@@ -97,7 +97,7 @@ class LoginController extends Controller
                     'title' => 'Login',
                     'input' => $request->input(),
                     'errors' => array('Invalid login credentials provided'),
-                    'logins' => $this->logins,
+                    'logins' => $this->loginEmails,
                 ));
             }
         }
@@ -107,7 +107,7 @@ class LoginController extends Controller
                 'title' => 'Login',
                 'input' => $request->input(),
                 'errors' => $validator->errors()->all(),
-                'logins' => $this->logins,
+                'logins' => $this->loginEmails,
             ));
         }
     }
