@@ -30,7 +30,7 @@ class ProductFactory extends Factory
             'short_description' => substr($this->faker->paragraph(), 0, 191),
             'long_description' => $this->faker->paragraph(4),
             'product_details' => $this->faker->paragraph(5),
-            'image_path' => 'https://lorempixel.com/400/200/',
+            'image_path' => '/image/products/default/not-found.jpg',
             'cost' => $this->faker->randomNumber(2),
             'shippable' => mt_rand(0, 1),
             'free_delivery' => mt_rand(0, 1),
