@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\Models\Company\Company;
 use App\Models\Product\Product;
@@ -86,9 +85,9 @@ class CompanyProductController extends Controller
             {
                 $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
 
-                if(Input::hasFile('image'))
+                if($request->hasFile('image'))
                 {
-                    $file = Input::file('image');
+                    $file = $request->file('image');
                     $imageName = $file->getClientOriginalName();
                 }
 
@@ -181,9 +180,9 @@ class CompanyProductController extends Controller
             {
                 $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
 
-                if(Input::hasFile('image'))
+                if($request->hasFile('image'))
                 {
-                    $file = Input::file('image');
+                    $file = $request->file('image');
                     $imageName = $file->getClientOriginalName();
                 }
 

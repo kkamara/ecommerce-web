@@ -5,7 +5,6 @@ namespace App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product\Traits\ProductRelations;
 use App\Models\Product\Traits\ProductScopes;
@@ -169,14 +168,18 @@ class Product extends Model
         $errors = $validator->errors()->all();
 
         /** If user doesnt want to use a default image but has not uploaded an image */
-        if((bool) $request->input('use_default_image') === FALSE && Input::hasFile('image') === FALSE)
-        {
+        if(
+            (bool) $request->input('use_default_image') === FALSE && 
+            $request->hasFile('image') === FALSE
+        ) {
             $errors[] = 'You have opted to not use a default image but you have not provided one.';
         }
 
         /** If user wants to use default image but has uploaded an image anyway */
-        if((bool) $request->input('use_default_image') === TRUE && Input::hasFile('image') === TRUE)
-        {
+        if(
+            (bool) $request->input('use_default_image') === TRUE && 
+            $request->hasFile('image') === TRUE
+        ) {
             $errors[] = 'You have opted to use a default image but you provided one anyway.';
         }
 
