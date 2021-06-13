@@ -12,6 +12,10 @@ cp .env.example .env
 make dev && make backend-migrate && make backend-seed
 ```
 
+## Misc
+
+The `Makefile` for this project contains useful commands for a Laravel application and can be found at [laravel-makefile](https://github.com/kkamara/laravel-makefile).
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
