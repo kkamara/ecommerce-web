@@ -14,8 +14,9 @@ function getCountriesList()
  * @return bool
  */
 function awsCredsExist() {
-    return isset($_ENV['AWS_ACCESS_KEY_ID']) &&
-        isset($_ENV['AWS_SECRET_ACCESS_KEY']) &&
-        isset($_ENV['AWS_DEFAULT_REGION']) &&
-        isset($_ENV['AWS_BUCKET']);
+    return true === isset($_ENV['AWS_S3_URL']) &&
+        true === isset($_ENV['AWS_ACCESS_KEY_ID']) &&
+        true === isset($_ENV['AWS_SECRET_ACCESS_KEY']) &&
+        true === isset($_ENV['AWS_DEFAULT_REGION']) &&
+        true === isset($_ENV['AWS_BUCKET']);
 }
