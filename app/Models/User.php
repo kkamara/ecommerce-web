@@ -263,7 +263,8 @@ class User extends Authenticatable
      */
     public function hasNoRole()
     {
-        return !$this->hasRole('vendor') && !$this->hasRole('moderator');
+        return false === $this->hasRole('vendor') && 
+            false === $this->hasRole('moderator');
     }
 
     public static function getRegisterErrors(Request $request)
