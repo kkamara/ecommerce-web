@@ -83,23 +83,8 @@ class CompanyProductController extends Controller
 
             if(empty($errors))
             {
-                $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
-
-                if($request->hasFile('image'))
-                {
-                    $file = $request->file('image');
-                    $imageName = $file->getClientOriginalName();
-                }
-
-                /** store image file if provided */
-                if(isset($file) && isset($imageName))
-                {
-                    $imagePath = 'uploads/companies/'.$company->id.'/images/';
-                    $file->move(public_path($imagePath), $imageName);
-
-                    $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
-                }
-
+                /** @var string $imagePath */
+                $imagePath = $product->uploadImage($request);
                 /**
                  * on the following line we use FILTER_SANITIZE_STRING on an expected float,
                  * this is because FILTER_SANITIZE_NUMBER_FLOAT produces unexpected results
@@ -114,11 +99,13 @@ class CompanyProductController extends Controller
                     'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
                     'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
                     'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
-                    'image_path'        => $imagePath ?? NULL,
+                    'image_path'        => $imagePath,
                 );
                 $product = $product->create($data);
 
-                return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Product has been added to your listings.');
+                return redirect()
+                    ->route('productShow', $product->id)
+                    ->with('flashSuccess', 'Product has been added to your listings.');
             }
             else
             {
@@ -178,22 +165,8 @@ class CompanyProductController extends Controller
 
             if(empty($errors))
             {
-                $useDefaultImage  = filter_var($request->input('use_default_image'), FILTER_SANITIZE_NUMBER_INT);
-
-                if($request->hasFile('image'))
-                {
-                    $file = $request->file('image');
-                    $imageName = $file->getClientOriginalName();
-                }
-
-                /** store image file if provided */
-                if(isset($file) && isset($imageName))
-                {
-                    $imagePath = 'uploads/companies/'.$company->id.'/images/';
-                    $file->move(public_path($imagePath), $imageName);
-
-                    $imagePath = '/uploads/companies/'.$company->id.'/images/'.$imageName;
-                }
+                /** @var string $imagePath */
+                $imagePath = $product->uploadImage($request);
 
                 /**
                  * on the following line we use FILTER_SANITIZE_STRING on an expected float,
@@ -207,11 +180,13 @@ class CompanyProductController extends Controller
                     'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
                     'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
                     'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
-                    'image_path'        => $imagePath ?? NULL,
+                    'image_path'        => $imagePath,
                 );
                 $product->update($data);
 
-                return redirect()->route('productShow', $product->id)->with('flashSuccess', 'Product details have been updated.');
+                return redirect()
+                    ->route('productShow', $product->id)
+                    ->with('flashSuccess', 'Product details have been updated.');
             }
             else
             {

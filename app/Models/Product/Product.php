@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product\Traits\ProductRelations;
 use App\Models\Product\Traits\ProductScopes;
+use Illuminate\Http\Request;
 use Validator;
 
 class Product extends Model
@@ -184,5 +185,40 @@ class Product extends Model
         }
 
         return $errors;
+    }
+
+    /**
+     * Stores image file if exists in request.
+     * Will return default product image if request image not detected.
+     * @param \Illuminate\Http\Request $request
+     * @return string
+     */
+    public function uploadImage(Request $request) {
+        $result = '/image/products/default/not-found.jpg';
+
+        if(
+            null === $request->hasFile('image') ||
+            null === $this->company->id
+        ) {
+            return $result;
+        }
+
+        /** @var \Illuminate\Http\UploadedFile|array|null $file */
+        $file = $request->file('image');
+        $imageName = $file->getClientOriginalName();
+
+        if (
+            null === $file ||
+            null === $imageName
+        ) {
+            return $result;
+        }
+
+        $storagePath = '/uploads/companies/'.$this->company->id.'/images/';
+        $file->move(public_path($storagePath), $imageName);
+
+        $result = $storagePath . $imageName;
+
+        return $result;
     }
 }
