@@ -192,8 +192,10 @@ class CompanyProductController extends Controller
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
             'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
             'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
-            'image_path'        => $product->uploadImage($request),
         );
+        if (false !== $request->hasFile('image')) {
+            $data['image_path'] = $product->uploadImage($request);
+        }
         $product->update($data);
 
         return redirect()

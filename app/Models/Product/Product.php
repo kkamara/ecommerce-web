@@ -176,7 +176,7 @@ class Product extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $request
      * @return array
      */
-    public static function getErrors($request)
+    public function getErrors($request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:191',
@@ -194,7 +194,8 @@ class Product extends Model
         /** If user doesnt want to use a default image but has not uploaded an image */
         if(
             (bool) $request->input('use_default_image') === FALSE && 
-            $request->hasFile('image') === FALSE
+            $request->hasFile('image') === FALSE &&
+            null === $this->attributes['image_path']
         ) {
             $errors[] = 'You have opted to not use a default image but you have not provided one.';
         }
