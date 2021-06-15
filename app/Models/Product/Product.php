@@ -48,11 +48,11 @@ class Product extends Model
      */
     public function getImagePathAttribute()
     {
-        $result = '/image/products/default/not-found.jpg';
+        $result = config('filesystems.defaultImagePath');
 
         if (
             null !== $this->attributes['image_path'] &&
-            '/image/products/default/not-found.jpg' !== $this->attributes['image_path'] &&
+            config('filesystems.defaultImagePath') !== $this->attributes['image_path'] &&
             true === awsCredsExist() &&
             true === Storage::disk('s3')->exists($this->attributes['image_path'])
         ) {
@@ -167,7 +167,7 @@ class Product extends Model
      */
     public function usingDefaultImage()
     {
-        return $this->attributes['image_path'] === '/image/products/default/not-found.jpg';
+        return $this->attributes['image_path'] === config('filesystems.defaultImagePath');
     }
 
     /**
@@ -217,7 +217,7 @@ class Product extends Model
      * @return string
      */
     public function uploadImage(Request $request) {
-        $result = '/image/products/default/not-found.jpg';
+        $result = config('filesystems.defaultImagePath');
 
         if(
             null === $request->hasFile('image') ||
