@@ -256,4 +256,20 @@ class Product extends Model
 
         return $result;
     }
+
+    /**
+     * Removes image file if exists in aws s3.
+     * @return void
+     */
+    public function deleteImage() {
+        if (
+            null !== $this->attributes['image_path'] &&
+            null !== $this->company->id &&
+            config('filesystems.defaultImagePath') !== $this->attributes['image_path'] &&
+            true === awsCredsExist() &&
+            true === Storage::disk('s3')->exists($this->attributes['image_path'])
+        ) {
+            Storage::disk('s3')->delete($this->attributes['image_path']);
+        }
+    }
 }
