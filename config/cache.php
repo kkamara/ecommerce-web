@@ -92,6 +92,10 @@ return [
             'driver' => 'octane',
         ],
 
+        's3' => [
+            'driver' => 's3',
+        ],
+
     ],
 
     /*

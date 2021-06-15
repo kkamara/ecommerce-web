@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Product\Traits\ProductRelations;
 use App\Models\Product\Traits\ProductScopes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class Product extends Model
@@ -47,7 +48,29 @@ class Product extends Model
      */
     public function getImagePathAttribute()
     {
-        return $this->attributes['image_path'] ?? '/image/products/default/not-found.jpg';
+        $result = '/image/products/default/not-found.jpg';
+
+        if (
+            null !== $this->attributes['image_path'] &&
+            '/image/products/default/not-found.jpg' !== $this->attributes['image_path'] &&
+            true === awsCredsExist() &&
+            true === Storage::disk('s3')->exists($this->attributes['image_path'])
+        ) {
+            $result = sprintf(
+                '%s%s',
+                $_ENV['AWS_S3_URL'],
+                str_replace(
+                    '//',
+                    '/',
+                    Storage::path($this->attributes['image_path'])
+                ),
+            );
+            if (false !== $result) {
+                return $result;
+            }
+        }
+        
+        return $result;
     }
 
     /**
@@ -144,7 +167,7 @@ class Product extends Model
      */
     public function usingDefaultImage()
     {
-        return $this->attributes['image_path'] === NULL;
+        return $this->attributes['image_path'] === '/image/products/default/not-found.jpg';
     }
 
     /**
@@ -207,6 +230,19 @@ class Product extends Model
         $file = $request->file('image');
         $imageName = $file->getClientOriginalName();
 
+        /**
+         * @var string $storagePath
+         */
+        $storagePath = '/uploads/companies/'.$this->company->id.'/images/';
+        
+        if (true === awsCredsExist()) {
+            /** Note: aws removes the forwarding slash from $storagePath. */
+            $result = $file->storePublicly($storagePath, 's3');
+            if (false !== $result) {
+                return $result;
+            }
+        }
+
         if (
             null === $file ||
             null === $imageName
@@ -214,7 +250,6 @@ class Product extends Model
             return $result;
         }
 
-        $storagePath = '/uploads/companies/'.$this->company->id.'/images/';
         $file->move(public_path($storagePath), $imageName);
 
         $result = $storagePath . $imageName;
