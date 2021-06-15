@@ -109,7 +109,7 @@ class CompanyProductController extends Controller
             'user_id'           => $user->id,
             'company_id'        => $company->id,
             'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
-            'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_NUMBER_FLOAT), 2),
+            'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
             'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
             'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
@@ -186,7 +186,7 @@ class CompanyProductController extends Controller
          */
         $data = array(
             'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
-            'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_NUMBER_FLOAT), 2),
+            'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
             'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
             'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
