@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
+use Spatie\Permission\Traits\HasRoles;
+
 use App\Helpers\SessionCartHelper;
-use Validator;
 use App\Models\User\Traits\UserRelations;
 
 class User extends Authenticatable
@@ -20,7 +21,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @property Array
      */
     protected $fillable = [
         'slug',
@@ -33,7 +34,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @property Array
      */
     protected $hidden = [
         'password',
@@ -43,7 +44,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @property Array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
@@ -52,14 +53,14 @@ class User extends Authenticatable
     /**
      * The attributes that shouldn't be overwritten.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getPathAttribute()
     {
@@ -67,9 +68,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Set a publicily accessible identifier to get the name attribute for this unique instance.
+     * Set a publicily accessible identifier to get the name 
+     * attribute for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getNameAttribute()
     {
@@ -79,8 +81,8 @@ class User extends Authenticatable
     /**
      * Get errors in request data.
      *
-     * @param  array  $data
-     * @return array
+     * @param  Array  $data
+     * @return Array
      */
     public function getOrderHistoryErrors($data)
     {
@@ -123,7 +125,7 @@ class User extends Authenticatable
     /**
      * Moves cache cart to db cart for this user on login.
      *
-     * @param  array  $sessionCart
+     * @param  Array  $sessionCart
      */
     public function moveSessionCartToDbCart($sessionCart)
     {
@@ -143,13 +145,13 @@ class User extends Authenticatable
             }
         }
 
-        SessionCartHelper::clearSessionCart();
+        (new SessionCartHelper)->clearSessionCart();
     }
 
     /**
      * Gets the database cart for this user.
      *
-     * @return array|int
+     * @return Array|Int
      */
     public function getDbCart()
     {
@@ -228,10 +230,10 @@ class User extends Authenticatable
     /**
      * Checks whether a given slug already exists for an instance of this model.
      *
-     * @param  string  $slug
-     * @return bool
+     * @param  String  $slug
+     * @return Bool
      */
-    public static function slugIsUnique($slug)
+    public function slugIsUnique($slug)
     {
         $slugs = User::where('slug', $slug)->get();
 
@@ -241,14 +243,14 @@ class User extends Authenticatable
     /**
      * Checks a given slug is unique and creates a new unique slug if necessary.
      *
-     * @param  string  $slug
-     * @return string
+     * @param  String  $slug
+     * @return String
      */
-    public static function generateUniqueSlug($slug)
+    public function generateUniqueSlug($slug)
     {
         $param = str_shuffle("00000111112222233333444445555566666777778888899999");
 
-        while(! Self::slugIsUnique($slug) )
+        while(! $this->slugIsUnique($slug) )
         {
             $slug .= substr($param, 0, mt_rand(4, 8));
         }
@@ -259,7 +261,7 @@ class User extends Authenticatable
     /**
      * Check if an instance of this model has a role.
      *
-     * @return bool
+     * @return Bool
      */
     public function hasNoRole()
     {
@@ -267,7 +269,13 @@ class User extends Authenticatable
             false === $this->hasRole('moderator');
     }
 
-    public static function getRegisterErrors(Request $request)
+    /**
+     * Gets errors from user registration attempt.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return Array
+     */
+    public function getRegisterErrors(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:191',
@@ -300,14 +308,18 @@ class User extends Authenticatable
         ]);
         $billingErrors = $validator->errors();
 
-        if(false == $basicErrors->isEmpty() || false == $addressErrors->isEmpty() || false == $billingErrors->isEmpty()) {
+        if(
+            false == $basicErrors->isEmpty() || 
+            false == $addressErrors->isEmpty() || 
+            false == $billingErrors->isEmpty()
+        ) {
             $present = true;
         } else {
             $present = false;
         }
 
         return array(
-            'basic' => false == $basicErrors->isEmpty() ? $basicErrors : array(),
+            'basic'   => false == $basicErrors->isEmpty() ? $basicErrors : array(),
             'address' => false == $addressErrors->isEmpty() ? $addressErrors : array(),
             'billing' => false == $billingErrors->isEmpty() ? $billingErrors : array(),
             'present' => $present,

@@ -47,7 +47,9 @@ trait ProductScopes {
             ]);
         }
 
-        if(isset($whereClause)) $query->where($whereClause);
+        if(isset($whereClause)) {
+            $query->where($whereClause);
+        }
 
         switch($sort_by)
         {
@@ -71,17 +73,16 @@ trait ProductScopes {
             break;
         }
 
-        $query->orderBy('products.id', 'DESC')
+        return $query->orderBy('products.id', 'DESC')
             ->groupBy('products.id')
             ->distinct();
-
-        return $query;
     }
 
     /**
      * Get products that belong to a given vendor.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $query, int  $companyId
+     * @param  \Illuminate\Database\Eloquent\Model  $query
+     * @param  \App\Models\Company\Company          $companyId
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function scopeGetCompanyProducts($query, $companyId)

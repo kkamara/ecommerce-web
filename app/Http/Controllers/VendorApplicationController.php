@@ -5,11 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company\VendorApplication;
 use App\Models\User\UsersAddress;
+use App\Models\User;
 
 class VendorApplicationController extends Controller
 {
-    public function __construct()
-    {
+    /** @property User */
+    protected $user;
+
+    /** @property UsersAddress */
+    protected $usersAddress;
+
+    /** @property VendorApplication */
+    protected $vendorApplication;
+
+    public function __construct(
+    ) {
+        $this->user              = new User;
+        $this->usersAddress      = new UsersAddress;
+        $this->vendorApplication = new VendorApplication;
         $this->middleware('auth');
     }
 
@@ -20,14 +33,16 @@ class VendorApplicationController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
-        $usersAddresses = UsersAddress::where('user_id', $user->id)->get();
+        $this->user = auth()->user();
+        $this->usersAddresses = $this->usersAddress
+            ->where('user_id', $this->user->id)
+            ->get();
 
-        if($user->hasNoRole())
-        {
+        if($this->user->hasNoRole()) {
             return view('vendor.create', [
                 'title' => 'Become a vendor',
-            ])->with(compact('usersAddresses'));
+                'usersAddresses' => $this->usersAddresses,
+            ]);
         }
         
         return redirect()->route('home');
@@ -41,49 +56,50 @@ class VendorApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $this->user = auth()->user();
 
         $companyName = filter_var($request->input('company_name'), FILTER_SANITIZE_STRING);
         $usersAddressId = filter_var($request->input('users_address'), FILTER_SANITIZE_NUMBER_INT);
 
-        if($user->hasNoRole())
+        if(false === $this->user->hasNoRole())
         {
-            if(! $applicationError = VendorApplication::getError($user->id, $companyName, $usersAddressId))
-            {
-                VendorApplication::create([
-                    'user_id' => $user->id,
-                    'proposed_company_name' => $companyName,
-                    'users_addresses_id' => $usersAddressId,
-                ]);
-
-                return redirect()->route('vendorShow');
-            }
-            else
-            {
-                return redirect()->back()->with('flashDanger', $applicationError);
-            }
+            return redirect()->route('home');
         }
-        
-        return redirect()->route('home');
+
+        if(
+            $applicationError = $this->vendorApplication->getError(
+                $this->user->id, 
+                $companyName, 
+                $usersAddressId
+            )
+        ) {
+            return redirect()->back()->with('flashDanger', $applicationError);
+        }
+    
+        $this->vendorApplication->create([
+            'user_id' => $this->user->id,
+            'proposed_company_name' => $companyName,
+            'users_addresses_id' => $usersAddressId,
+        ]);
+
+        return redirect()->route('vendorShow');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show()
     {
         $user = auth()->user();
 
-        if(VendorApplication::hasUserApplied($user->id))
-        {
-            return view('vendor.show', [
-                'title' => 'Application Sent',
-            ]);
+        if(false === $this->vendorApplication->hasUserApplied($user->id)) {
+            return redirect()->route('home');
         }
-        
-        return redirect()->route('home');
+    
+        return view('vendor.show', [
+            'title' => 'Application Sent',
+        ]);
     }
 }

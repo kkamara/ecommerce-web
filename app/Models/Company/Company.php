@@ -15,21 +15,21 @@ class Company extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = ['name'];
 
     /**
      * This models immutable date values.
      *
-     * @var array
+     * @property Array
      */
     protected $dates = ['deleted_at'];
 
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getPathAttribute()
     {
@@ -39,7 +39,7 @@ class Company extends Model
     /**
      * Find whether a given company name already exists in this model.
      *
-     * @param  string  $companyName
+     * @param  String  $companyName
      */
     public static function doesCompanyNameExist($companyName)
     {
@@ -49,8 +49,8 @@ class Company extends Model
     /**
      * Check if this model relationship belongs to a given user id.
      *
-     * @param   int  $userId
-     * @return  bool
+     * @param   Int  $userId
+     * @return  Bool
      */
     public function belongsToUser($userId)
     {

@@ -5,42 +5,59 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company\Company;
 use App\Models\Product\Product;
+use App\Models\User;
 
 class CompanyProductController extends Controller
 {
-    public function __construct()
-    {
+    /** @property Company */
+    protected $company;
+
+    /** @property Product */
+    protected $product;
+
+    /** @property User */
+    protected $user;
+
+    /**
+     * @construct
+     */
+    public function __construct(
+    ) {
+        $this->company = new Company;
+        $this->product = new Product;
+        $this->user    = new User;
         $this->middleware('auth');
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param  string  $slug
+     * @param  String                    $slug
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index($slug, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $this->company = $this->company->where('slug', $slug)->first();
+        $this->user = auth()->user();
 
         if(
-            null === $user->hasRole('vendor') || 
-            null === $company || 
-            false === $company->belongsToUser($user->id)
+            null === $this->user->hasRole('vendor') || 
+            null === $this->company || 
+            false === $this->company->belongsToUser($this->user->id)
         ) {
             return abort(404);
         }
 
-        $companyProducts = Product::getProducts($request)
-            ->getCompanyProducts($company->id)
+        $this->product = $this->product->getProducts($request)
+            ->getCompanyProducts($this->company->id)
             ->paginate(7)
             ->appends(request()
             ->except('page'));
 
         return view('company_product.index', [
             'title' => 'My Products',
-            'companyProducts' => $companyProducts,
+            'companyProducts' => $this->product,
             'input' => $request->all(),
         ]);
     }
@@ -48,18 +65,18 @@ class CompanyProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  string  $slug
+     * @param  String  $slug
      * @return \Illuminate\Http\Response
      */
     public function create($slug)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $this->company = $this->company->where('slug', $slug)->first();
+        $this->user = auth()->user();
 
         if(
-            null === $user->hasRole('vendor') || 
-            null === $company || 
-            false === $company->belongsToUser($user->id)
+            null === $this->user->hasRole('vendor') || 
+            null === $this->company || 
+            false === $this->company->belongsToUser($this->user->id)
         ) {
             return abort(404);
         }
@@ -72,25 +89,26 @@ class CompanyProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  string  $slug
+     * @param  String  $slug
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store($slug, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $this->company = $this->company->where('slug', $slug)->first();
+        $this->user = auth()->user();
 
         if(
-            false === $user->hasRole('vendor') || 
-            null === $company || 
-            false === $company->belongsToUser($user->id)
+            false === $this->user->hasRole('vendor') || 
+            null === $this->company || 
+            false === $this->company->belongsToUser($this->user->id)
         ) {
             return abort(404);
         }
 
-        $product = new Product;
-        $errors = $product->getErrors($request);
+        $this->product = new Product;
+        /** @var Array $errors */
+        $errors = $this->product->getErrors($request);
 
         if(0 < sizeof($errors))
         {
@@ -106,8 +124,8 @@ class CompanyProductController extends Controller
          * this is because FILTER_SANITIZE_NUMBER_FLOAT produces unexpected results
          */
         $data = array(
-            'user_id'           => $user->id,
-            'company_id'        => $company->id,
+            'user_id'           => $this->user->id,
+            'company_id'        => $this->company->id,
             'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
             'cost'              => number_format(filter_var($request->input('cost'), FILTER_SANITIZE_STRING), 2),
             'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
@@ -115,66 +133,69 @@ class CompanyProductController extends Controller
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
             'long_description'  => filter_var($request->input('long_description', FILTER_SANITIZE_STRING)),
             'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
-            'image_path'        => $product->uploadImage($request),
+            'image_path'        => $this->product->uploadImage($request),
         );
-        $product = $product->create($data);
+        $this->product = $this->product->create($data);
 
         return redirect()
-            ->route('productShow', $product->id)
+            ->route('productShow', $this->product->id)
             ->with('flashSuccess', 'Product has been added to your listings.');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  string  $slug
-     * @param  \App\Models\Product $product
+     * @param  String                      $slug
+     * @param  \App\Models\Product\Product $product
+     * @param  \Illuminate\Http\Request    $request
      * @return \Illuminate\Http\Response
      */
     public function edit($slug, Product $product, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $this->company = $this->company->where('slug', $slug)->first();
+        $this->user = auth()->user();
 
         if(
-            false === $user->hasRole('vendor') || 
-            null === $company || 
-            false === $company->belongsToUser($user->id)
+            false === $this->user->hasRole('vendor') || 
+            null === $this->company || 
+            false === $this->company->belongsToUser($this->user->id)
         ) {
             return abort(404);
         }
 
         return view('company_product.edit', [
-            'title' => 'Edit '.$product->name,
+            'title' => 'Edit '.$this->product->name,
         ])->with(compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $slug
-     * @param  \App\Models\Product $product
+     * @param  String                      $slug
+     * @param  \App\Models\Product\Product $product
+     * @param  \Illuminate\Http\Request    $request
      * @return \Illuminate\Http\Response
      */
     public function update($slug, Product $product, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $this->product = $product;
+        $this->company = $this->company->where('slug', $slug)->first();
+        $this->user = auth()->user();
 
         if(
-            false === $user->hasRole('vendor') || 
-            null === $company ||
-            false === $company->belongsToUser($user->id)
+            false === $this->user->hasRole('vendor') || 
+            null === $this->company ||
+            false === $this->company->belongsToUser($this->user->id)
         ) {
             return abort(404);
         }
 
-        $errors = $product->getErrors($request);
+        /** @var Array $errors */
+        $errors = $this->product->getErrors($request);
         if(0 < sizeof($errors))
         {
             return redirect()->back()->with([
-                'product' => $product,
+                'product' => $this->product,
                 'errors' => $errors,
                 'input' => $request->input(),
             ]);
@@ -194,73 +215,82 @@ class CompanyProductController extends Controller
             'product_details'   => filter_var($request->input('product_details'), FILTER_SANITIZE_STRING),
         );
         if (false !== $request->hasFile('image')) {
-            $data['image_path'] = $product->uploadImage($request);
+            $data['image_path'] = $this->product->uploadImage($request);
         }
-        $product->update($data);
+        $this->product->update($data);
 
         return redirect()
-            ->route('productShow', $product->id)
+            ->route('productShow', $this->product->id)
             ->with('flashSuccess', 'Product details have been updated.');
     }
 
+    /**
+     * Render the company product delete page.
+     *
+     * @param  String                      $slug
+     * @param  \App\Models\Product\Product $product
+     * @param  \Illuminate\Http\Request    $request
+     * @return \Illuminate\Http\Response
+     */
     public function delete($slug, Product $product, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $this->product = $product;
+        $this->company = $this->company->where('slug', $slug)->first();
+        $this->user = auth()->user();
 
         if(
-            false === $user->hasRole('vendor') || 
-            null === $company || 
-            false === $company->belongsToUser($user->id)
+            false === $this->user->hasRole('vendor') || 
+            null === $this->company || 
+            false === $this->company->belongsToUser($this->user->id)
         ) {
             return abort(404);
         }
 
         return view('company_product.delete', [
-            'title' => 'Delete '.$product->name,
+            'title' => 'Delete '.$this->product->name,
         ])->with(compact('product'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  string  $slug
-     * @param  \App\Models\Product $product
+     * @param  String                      $slug
+     * @param  \App\Models\Product\Product $product
+     * @param  \Illuminate\Http\Request    $request
      * @return \Illuminate\Http\Response
      */
     public function destroy($slug, Product $product, Request $request)
     {
-        $company = Company::where('slug', $slug)->first();
-        $user = auth()->user();
+        $this->product = $product;
+        $this->company = $this->company->where('slug', $slug)->first();
+        $this->user = auth()->user();
 
         if(
-            false === $user->hasRole('vendor') || 
-            null === $company || 
-            false === $company->belongsToUser($user->id)
+            false === $this->user->hasRole('vendor') || 
+            null === $this->company || 
+            false === $this->company->belongsToUser($this->user->id)
         ) {
             return abort(404);
         }
 
-        $resource = compact('product', 'company');
-        $deleteProduct = function () use ($resource) {
-            $resource['product']->delete();
+        switch($request->input('choice')) {
+            case '0':
+                return redirect()
+                    ->route('productShow', $this->product->id)
+                    ->with('flashSuccess', 'Your item listing has not been removed.');
+            case '1':
+                $this->product->delete();
 
-            return redirect()
-                ->route('companyProductHome', $resource['company']->slug)
-                ->with('flashSuccess', 'Your item listing was successfully removed.');
-        };
-
-        return match($request->input('choice')) {
-            '0' => redirect()
-                ->route('productShow', $product->id)
-                ->with('flashSuccess', 'Your item listing has not been removed.'),
-            '1' => $deleteProduct(),
-            default => redirect()
-                ->back()
-                ->with(
-                    'flashDanger', 
-                    'Oops, something went wrong. Contact system administrator.'
-                ),
+                return redirect()
+                    ->route('companyProductHome', $this->company->slug)
+                    ->with('flashSuccess', 'Your item listing was successfully removed.');
+            default:
+                return redirect()
+                    ->back()
+                    ->with(
+                        'flashDanger', 
+                        'Oops, something went wrong. Contact system administrator.'
+                    );
         };
     }
 }

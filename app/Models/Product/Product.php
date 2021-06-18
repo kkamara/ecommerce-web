@@ -10,7 +10,7 @@ use App\Models\Product\Traits\ProductRelations;
 use App\Models\Product\Traits\ProductScopes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class Product extends Model
 {
@@ -20,21 +20,21 @@ class Product extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
     /**
      * This models immutable date values.
      *
-     * @var array
+     * @property Array
      */
     protected $dates = ['deleted_at'];
 
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getPathAttribute()
     {
@@ -44,7 +44,7 @@ class Product extends Model
     /**
      * Set a publicily accessible identifier to get the image path for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getImagePathAttribute()
     {
@@ -76,7 +76,7 @@ class Product extends Model
     /**
      * Return the formatted cost attribute.
      *
-     * @return  string
+     * @return  String
      */
     public function getFormattedCostAttribute()
     {
@@ -86,7 +86,7 @@ class Product extends Model
     /**
      * Return the cost attribute.
      *
-     * @return  string
+     * @return  String
      */
     public function getCostAttribute()
     {
@@ -97,7 +97,7 @@ class Product extends Model
      * Find whether a given user has purchased this product instance.
      *
      * @param  \App\Models\User  $userId
-     * @return bool
+     * @return Bool
      */
     public function didUserPurchaseProduct($userId)
     {
@@ -120,7 +120,7 @@ class Product extends Model
      * Find whether a given user has reviewed this product instance.
      *
      * @param  \App\Models\User  $userId
-     * @return bool
+     * @return Bool
      */
     public function didUserReviewProduct($userId)
     {
@@ -138,7 +138,7 @@ class Product extends Model
     /**
      * Return the review attribute.
      *
-     * @return  string
+     * @return  String
      */
     public function getReviewAttribute()
     {
@@ -147,13 +147,15 @@ class Product extends Model
             ->groupBy('product_id')
             ->distinct()->first();
 
-        return isset($review->review) ? number_format((float)$review->review, 2, '.', '') : '0.00';
+        return isset($review->review) 
+            ? number_format((float)$review->review, 2, '.', '') 
+            : '0.00';
     }
 
     /**
      * Returns boolean indicating if authenticated user owns the current instance of this model.
      *
-     * @return bool
+     * @return Bool
      */
     public function doesUserOwnProduct()
     {
@@ -163,7 +165,7 @@ class Product extends Model
     /**
      * Returns boolean indicating whether this model relationship is using a default image.
      *
-     * @return bool
+     * @return Bool
      */
     public function usingDefaultImage()
     {
@@ -174,7 +176,7 @@ class Product extends Model
      * Returns an array of errors for \App\Http\Controllers\Models\CompanyProductController\Company requests.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $request
-     * @return array
+     * @return Array
      */
     public function getErrors($request)
     {
@@ -215,7 +217,7 @@ class Product extends Model
      * Stores image file if exists in request.
      * Will return default product image if request image not detected.
      * @param \Illuminate\Http\Request $request
-     * @return string
+     * @return String
      */
     public function uploadImage(Request $request) {
         $result = config('filesystems.defaultImagePath');
@@ -258,10 +260,7 @@ class Product extends Model
         return $result;
     }
 
-    /**
-     * Removes image file if exists in aws s3.
-     * @return void
-     */
+    /**  Removes image file if exists in aws s3. */
     public function deleteImage() {
         if (
             null !== $this->attributes['image_path'] &&

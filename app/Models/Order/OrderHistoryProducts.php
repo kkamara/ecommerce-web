@@ -12,7 +12,7 @@ class OrderHistoryProducts extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
@@ -39,7 +39,7 @@ class OrderHistoryProducts extends Model
     /**
      * Return a formatted cost attribute.
      *
-     * @return  string
+     * @return  String
      */
     public function getFormattedCostAttribute()
     {

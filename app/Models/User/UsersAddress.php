@@ -13,7 +13,7 @@ class UsersAddress extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
@@ -38,29 +38,40 @@ class UsersAddress extends Model
     }
 
     /**
-     * Set a publicily accessible identifier to get the formatted phone number for this unique instance.
+     * Set a publicily accessible identifier to get the 
+     * formatted phone number for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getFormattedPhoneNumberAttribute()
     {
-        return $this->attributes['phone_number_extension'] . ' ' . $this->attributes['phone_number'];
+        return sprintf(
+            "%s %s",
+            $this->attributes['phone_number_extension'],
+            $this->attributes['phone_number']
+        );
     }
 
     /**
-     * Set a publicily accessible identifier to get the formatted mobile number for this unique instance.
+     * Set a publicily accessible identifier to get the 
+     * formatted mobile number for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getFormattedMobileNumberAttribute()
     {
-        return $this->attributes['mobile_number_extension'] . ' ' . $this->attributes['mobile_number'];
+        return sprintf(
+            "%s %s",
+            $this->attributes['mobile_number_extension'],
+            $this->attributes['mobile_number']
+        );
     }
 
     /**
-     * Returns each address value in a single line when this model instance is treated as a string.
+     * Returns each address value in a single line when 
+     * this model instance is treated as a string.
      *
-     * @return string
+     * @return String
      */
     public function __tostring()
     {

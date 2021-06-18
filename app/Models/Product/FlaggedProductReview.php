@@ -13,7 +13,7 @@ class FlaggedProductReview extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
@@ -30,11 +30,11 @@ class FlaggedProductReview extends Model
     /**
      * Find whether a particular IP Address has flagged a product review.
      *
-     * @param   string $ipAddress
+     * @param   String                            $ipAddress
      * @param   \App\Models\Product\ProductReview $id
      * @return  Illuminate\Support\Collection
      */
-    public static function hasIpFlaggedThisReview($ipAddress, $id)
+    public function hasIpFlaggedThisReview($ipAddress, $id)
     {
         return self::where([
             'flagged_from_ip' => $ipAddress,
@@ -47,7 +47,7 @@ class FlaggedProductReview extends Model
      *
      * @return Illuminate\Database\Eloquent\Model
      */
-    public static function scopeWhereUnanswered($query)
+    public function scopeWhereUnanswered($query)
     {
         /** Query for unanswered flagged reviews. */
         $ids = DB::Select('SELECT product_reviews_id
@@ -73,9 +73,9 @@ class FlaggedProductReview extends Model
      * Gets the number of times an \App\Models\Product\ProductReview has been flagged.
      *
      * @param  \App\Models\Product\ProductReview $id
-     * @return int
+     * @return Int
      */
-    public static function getFlagCount($id)
+    public function getFlagCount($id)
     {
         return (int) self::where([
             'product_reviews_id' => $id,
@@ -85,10 +85,10 @@ class FlaggedProductReview extends Model
     /**
      * Returns an error in the decision process when a moderator reviews a flagged \App\Models\Product\ProductReview.
      *
-     * @param  int  $userId, string  $companyName, int  $usersAddressId
-     * @return string|false The error text or false implying no errors occurred.
+     * @param  Int  $userId, string  $companyName, int  $usersAddressId
+     * @return String|False The error text or false implying no errors occurred.
      */
-    public static function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
+    public function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
     {
         if(! isset($reasonGiven)) {
             return 'Reason not provided.';

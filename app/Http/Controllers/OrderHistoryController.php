@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order\OrderHistoryProducts;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
+use App\Models\Order\OrderHistoryProducts;
 use App\Models\Order\OrderHistory;
 use App\Models\Cart\Cart;
-use Auth;
+use App\Models\User;
 
 class OrderHistoryController extends Controller
 {
-    public function __construct()
-    {
+    /** @property User */
+    protected $user;
+    
+    /** @property OrderHistoryProducts */
+    protected $orderHistoryProducts;
+    
+    /** @property OrderHistory */
+    protected $orderHistory;
+    
+    /** @property Cart */
+    protected $cart;
+    
+    public function __construct() {
+        $this->user                 = new User;
+        $this->orderHistoryProducts = new OrderHistoryProducts;
+        $this->orderHistory         = new OrderHistory;
+        $this->cart                 = new Cart;
         $this->middleware('auth')->except(['create']);
     }
 
@@ -22,17 +39,16 @@ class OrderHistoryController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
+        $this->user = auth()->user();
 
-        $orderHistory = OrderHistory::where([
-            'user_id' => $user->id,
+        $this->orderHistory = $this->orderHistory->where([
+            'user_id' => $this->user->id,
         ])->paginate(10);
 
-        $title = 'Invoices';
-        return view(
-            'order_history.index',
-            compact('orderHistory', 'title')
-        );
+        return view('order_history.index', [
+            'title' => 'Invoices',
+            'orderHistory' => $this->orderHistory, 
+        ]);
     }
 
     /**
@@ -42,23 +58,31 @@ class OrderHistoryController extends Controller
      */
     public function create()
     {
-        if(Auth::check())
-        {
-            $user = auth()->user();
-            $cart = $user->getDbCart();
+        if(Auth::check()) {
+            $this->user = auth()->user();
+            $this->cart = $this->user->getDbCart();
 
-            if(empty($cart)) return redirect()->back()->with('flashDanger', 'Please add an item to cart before checking out.');
+            if(empty($this->cart)) {
+                return redirect()
+                    ->back()
+                    ->with(
+                        'flashDanger', 
+                        'Please add an item to cart before checking out.'
+                    );
+            }
 
             return view('order_history.create', array(
                 'title' => 'Create Order',
-                'cart' => $cart,
-                'addresses' => $user->userAddress,
-                'billingCards' => $user->userPaymentConfig,
+                'cart' => $this->cart,
+                'addresses' => $this->user->userAddress,
+                'billingCards' => $this->user->userPaymentConfig,
             ));
-        }
-        else
-        {
-            return redirect('login/?fromOrder=true')->with('flashDanger', 'Please login or register to proceed to checkout');
+        } else {
+            return redirect('login/?fromOrder=true')
+                ->with(
+                    'flashDanger', 
+                    'Please login or register to proceed to checkout'
+                );
         }
     }
 
@@ -70,7 +94,7 @@ class OrderHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $this->user = auth()->user();
 
         $input = $request->request;
         $deliveryAddressIds = $billingCardIds = array();
@@ -93,7 +117,10 @@ class OrderHistoryController extends Controller
             }
         }
 
-        $errors = $user->getOrderHistoryErrors(['delivery'=>$deliveryAddressIds, 'billing'=>$billingCardIds]);
+        $errors = $this->user->getOrderHistoryErrors([
+            'delivery'=>$deliveryAddressIds, 
+            'billing'=>$billingCardIds,
+        ]);
 
         if(!empty($errors))
         {
@@ -102,8 +129,7 @@ class OrderHistoryController extends Controller
 
         $billingCVC = request('cvc-'.$billingCardIds[0]);
 
-        if($billingCVC === NULL)
-        {
+        if($billingCVC === NULL) {
             return redirect()->back()->with('errors', [
                 'Missing CVC for chosen billing card.'
             ]);
@@ -114,49 +140,51 @@ class OrderHistoryController extends Controller
         }
 
         // create order history
-        $orderHistory = OrderHistory::create([
-            'user_id' => $user->id,
-            'reference_number' => OrderHistory::generateRefNum(),
-            'cost' => (float) str_replace('£', '', Cart::price()),
+        $this->orderHistory = $this->orderHistory->create([
+            'user_id' => $this->user->id,
+            'reference_number' => $this->orderHistory->generateRefNum(),
+            'cost' => (float) str_replace('£', '', $this->cart->price()),
             'user_payment_config_id' =>$billingCardIds[0],
             'users_addresses_id' => $deliveryAddressIds[0],
         ]);
 
         // create order history products
-        foreach($user->getDbCart() as $cart)
+        foreach($this->user->getDbCart() as $this->cart)
         {
-            OrderHistoryProducts::create([
-                'order_history_id' => $orderHistory->id,
-                'product_id' => $cart['product']->id,
-                'amount' => $cart['amount'],
-                'cost' => $cart['product']->cost,
-                'shippable' => $cart['product']->shippable,
-                'free_delivery' => $cart['product']->free_delivery,
+            $this->orderHistoryProducts->create([
+                'order_history_id' => $this->orderHistory->id,
+                'product_id' => $this->cart['product']->id,
+                'amount' => $this->cart['amount'],
+                'cost' => $this->cart['product']->cost,
+                'shippable' => $this->cart['product']->shippable,
+                'free_delivery' => $this->cart['product']->free_delivery,
             ]);
         }
 
-        $user->deleteDbCart();
+        $this->user->deleteDbCart();
 
-        return redirect()->route('orderShow', $orderHistory->reference_number);
+        return redirect()
+            ->route('orderShow', $this->orderHistory->reference_number);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order\OrderHistory  $orderHistory
+     * @param  String $refNum
      * @return \Illuminate\Http\Response
      */
     public function show($refNum)
     {
-        $user = auth()->user();
+        $this->user = auth()->user();
 
-        $orderHistory = OrderHistory::where([
-            'user_id' => $user->id,
+        $this->orderHistory = $this->orderHistory->where([
+            'user_id'          => $this->user->id,
             'reference_number' => $refNum,
         ])->firstOrFail();
 
-        return view('order_history.show')
-            ->with(compact('orderHistory'))
-            ->withTitle('Invoice');
+        return view('order_history.show', [
+            'title'        => 'Invoice',
+            'orderHistory' => $this->orderHistory,
+        ]);
     }
 }

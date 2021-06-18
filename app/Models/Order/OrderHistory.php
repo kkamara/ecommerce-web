@@ -13,25 +13,26 @@ class OrderHistory extends Model
     use OrderHistoryRelations;
 
     /**
-     * This models table name is 'order_history' instead of 'order_histories' so must be set explicitly here.
+     * This models table name is 'order_history' instead of 
+     * 'order_histories' so must be set explicitly here.
      *
-     * @var string
+     * @property String
      */
     protected $table = 'order_history';
 
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
     /**
      * Generates a new reference number.
      *
-     * @return string
+     * @return String
      */
-    public static function generateRefNum()
+    public function generateRefNum()
     {
         $param = str_shuffle("00000111112222233333444445555566666777778888899999");
         return substr($param, 0, 8);
@@ -40,19 +41,20 @@ class OrderHistory extends Model
     /**
      * Gets total price of items in a single order.
      *
-     * @return  int
+     * @return  Int
      */
     public function getAmountTotalAttribute()
     {
         return (int) OrderHistoryProducts::where([
-            'order_history_id' => $this->attributes['id'],
-        ])->sum('amount');
+                'order_history_id' => $this->attributes['id'],
+            ])
+                ->sum('amount');
     }
 
     /**
      * Return the formatted cost attribute.
      *
-     * @return  string
+     * @return  String
      */
     public function getFormattedCostAttribute()
     {

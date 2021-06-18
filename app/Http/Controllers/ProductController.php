@@ -2,13 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Helpers\SessionCartHelper;
 use App\Models\Product\Product;
-use Auth;
+use App\Models\Product\ProductReview;
+use App\Models\User;
 
 class ProductController extends Controller
 {
+    /** @property User */
+    protected $user;
+
+    /** @property SessionCartHelper */
+    protected $sessionCartHelper;
+
+    /** @property Product */
+    protected $product;
+
+    /** @property ProductReview */
+    protected $productReviews;
+
+    /**
+     * @construct
+     */
+    public function __construct() {
+        $this->user              = new User;
+        $this->sessionCartHelper = new SessionCartHelper;
+        $this->product           = new Product;
+        $this->productReviews    = new ProductReview;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,11 +40,15 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::getProducts($request)->paginate(7);
+        $this->products = $this->product
+            ->getProducts($request)
+            ->paginate(7)
+            ->appends(request()
+            ->except('page'));
 
         return view('product.index', [
                 'title' => 'Products',
-                'products' => $products->appends(request()->except('page')),
+                'products' => $this->products,
                 'input' => $request->all(),
             ]);
     }
@@ -32,23 +60,30 @@ class ProductController extends Controller
      */
     public function create(Product $product)
     {
+        $this->product = $product;
+        
         if(Auth::check())
         {
-            $user = auth()->user();
+            $this->user = auth()->user();
 
-            if($user->id === $product->company->user_id)
-                return redirect()->back()->with('flashDanger', 'Unable to perform add to cart action on your own product.');
+            if($this->user->id === $this->product->company->user_id)
+                return redirect()
+                    ->back()
+                    ->with(
+                        'flashDanger', 
+                        'Unable to perform add to cart action on your own product.'
+                    );
 
-            $user->addProductToDbCart($product);
+            $this->user->addProductToDbCart($this->product);
         }
         else
         {
-            SessionCartHelper::addProductToSessionCart($product);
+            $this->sessionCartHelper->addProductToSessionCart($this->product);
         }
 
         return redirect()
-            ->route('productShow', $product->id)
-            ->with('flashSuccess', $product->name.' added to cart');
+            ->route('productShow', $this->product->id)
+            ->with('flashSuccess', $this->product->name.' added to cart');
     }
 
     /**
@@ -59,22 +94,21 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $user = auth()->user();
-
-        $reviews = $product->productReview()->get();
+        $this->user = auth()->user();
+        $this->product = $product;
+        $this->productReviews = $this->product->productReview()->get();
 
         $permissionToReview = FALSE;
 
-        if(isset($user))
-            $permissionToReview = $product->didUserPurchaseProduct($user->id);
+        if(null !== $this->user) {
+            $permissionToReview = $this->product->didUserPurchaseProduct($this->user->id);
+        }
 
         return view('product.show', [
                 'title' => $product->name,
-            ])
-            ->with(compact(
-                'product',
-                'reviews',
-                'permissionToReview',
-            ));
+                'product' => $this->product,
+                'reviews' => $this->productReviews,
+                'permissionToReview' => $permissionToReview,
+            ]);
     }
 }

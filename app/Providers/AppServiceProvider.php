@@ -13,13 +13,13 @@ class AppServiceProvider extends ServiceProvider
      * @param String $name
      * @return Function
      */
-    private static function renderViewComposer($name) {
+    protected static function renderViewComposer($name) {
         return match($name) {
             'cartCount' => function($view) {
-                $view->with('cartCount', Cart::count());
+                $view->with('cartCount', (new Cart)->count());
             },
             'cartPrice' => function($view) {
-                $view->with('cartPrice', Cart::price());
+                $view->with('cartPrice', (new Cart)->price());
             },
         };
     }

@@ -4,6 +4,7 @@ namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product\FlaggedProductReview;
 
 class ProductReview extends Model
 {
@@ -12,9 +13,21 @@ class ProductReview extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
+
+    /** @property FlaggedProductReview */
+    protected $flaggedProductReview;
+
+    /**
+     * @construct
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->flaggedProductReview = new FlaggedProductReview;
+    }
 
     /**
      * This model relationship has \App\Models\Product\FlaggedProductReview
@@ -49,23 +62,26 @@ class ProductReview extends Model
     /**
      * Finds whether an \App\Models\Product\ProductReview has been flagged 5 times.
      *
-     * @return bool
+     * @return Bool
      */
     public function isFlaggedFiveTimes()
     {
-        return FlaggedProductReview::getFlagCount($this->attributes['id']) > 4;
+        return $this->flaggedProductReview
+            ->getFlagCount($this->attributes['id']) > 4;
     }
 
     /**
      * Gets a shortened content attribute from current model instance.
      *
-     * @return string
+     * @return String
      */
     public function getShortContentAttribute()
     {
         $content = $this->attributes['content'];
         $limit = mt_rand(150, 200);
 
-        return strlen($content) > $limit ? substr($content, 0, $limit) . '...' : $content;
+        return strlen($content) > $limit 
+            ? substr($content, 0, $limit) . '...' 
+            : $content;
     }
 }

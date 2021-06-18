@@ -5,9 +5,10 @@ namespace App\Models\Cart;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+
 use App\Helpers\SessionCartHelper;
 use App\Models\Cart\Traits\CartRelations;
-use Auth;
 
 class Cart extends Model
 {
@@ -17,31 +18,42 @@ class Cart extends Model
     /**
      * This models table name is 'cart' instead of 'carts' so must be set explicitly here.
      *
-     * @var string
+     * @property String
      */
     protected $table = 'cart';
 
     /**
      * This models immutable values are stored in this array.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
     /**
      * Disable created_at and updated_at columns for this model.
      *
-     * @var bool
+     * @property Bool
      */
     public $timestamps = false;
+
+    /** @property SessionCartHelper */
+    protected $sessionCartHelper;
+    
+    /**
+     * @construct
+     */
+    public function __construct() {
+        parent::__construct();
+        $this->sessionCartHelper = new SessionCartHelper;
+    }
 
     /**
      * Gets the number of items in the user's session or db cart,
      * depending on whether the user is authenticated.
      *
-     * @return  int
+     * @return  Int
      */
-    public static function count()
+    public function count()
     {
         $count = 0;
 
@@ -55,7 +67,9 @@ class Cart extends Model
             $sessionCart = Session::get('cc');
         }
 
-        if(empty($sessionCart)) return 0;
+        if(empty($sessionCart)) {
+            return 0;
+        }
 
         foreach($sessionCart as $cc)
         {
@@ -69,9 +83,9 @@ class Cart extends Model
      * Gets the price of the total amount of items in the session or db cart,
      * depending on whether the user is authenticated.
      *
-     * @return  string
+     * @return  String
      */
-    public static function price()
+    public function price()
     {
         $price = 0;
 
@@ -82,7 +96,7 @@ class Cart extends Model
         }
         else
         {
-            $sessionCart = SessionCartHelper::getSessionCart();
+            $sessionCart = $this->sessionCartHelper->getSessionCart();
         }
 
         if(empty($sessionCart)) return '£0.00';
@@ -98,7 +112,7 @@ class Cart extends Model
     /**
      * Gets the products assigned to the authenticated user.
      *
-     * @return array|int
+     * @return Array|Int
      */
     public function getDbCart()
     {

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
 use App\Helpers\SessionCartHelper;
 use App\Models\User\UserPaymentConfig;
 use App\Models\User\UsersAddress;
 use App\Models\User;
-use Auth;
 
 class RegisterController extends Controller
 {
@@ -22,13 +22,29 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/';
 
+    /** @property User */
+    protected $user;
+
+    /** @property UsersAddress */
+    protected $usersAddress;
+
+    /** @property UserPaymentConfig */
+    protected $userPaymentConfig;
+
+    /** @property SessionCartHelper */
+    protected $sessionCartHelper;    
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct(
+    ) {
+        $this->user              = new User;
+        $this->usersAddress      = new UsersAddress;
+        $this->userPaymentConfig = new UserPaymentConfig;
+        $this->sessionCartHelper = new SessionCartHelper;
         $this->middleware('guest');
     }
 
@@ -55,24 +71,34 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        return $this->user->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
     }
 
-    public function createUser(Request $request)
+    /**
+     * Returns registration page.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function createUser()
     {
         return view('register.create', array(
             'title' => 'Register'
         ));
     }
 
+    /**
+     * Registers a user to our db records.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function storeUser(Request $request)
     {
-        $registerErrors = User::getRegisterErrors($request);
-
+        $registerErrors = $this->user->getRegisterErrors($request);
         $input = $request->input();
 
         if(true === $registerErrors['present'])
@@ -118,9 +144,9 @@ class RegisterController extends Controller
 
         $slug = Str::slug($firstName . ' ' . $lastName, '-');
 
-        if(! User::slugIsUnique($slug))
+        if(! $this->user->slugIsUnique($slug))
         {
-            $slug = User::generateUniqueSlug($slug);
+            $slug = $this->user->generateUniqueSlug($slug);
         }
 
         $expiryMonth = mt_rand(0, 13);
@@ -158,29 +184,27 @@ class RegisterController extends Controller
                 'expiry_year' => mt_rand(2024, 2030),
             ),
         );
-        $data['user_payment_config'] = array_merge($data['user_address'], $data['user_payment_config']);
 
-        // create user
-        $user = User::create($data['user']);
+        $this->user = $this->user->create($data['user']);
 
-        $data['user_address']['user_id'] = $user->id;
-        $data['user_payment_config']['user_id'] = $user->id;
+        $data['user_payment_config'] = array_merge(
+            $data['user_address'], 
+            $data['user_payment_config'],
+        );
+        $data['user_payment_config']['user_id'] = $this->user->id;
+        $data['user_address']['user_id'] = $this->user->id;
 
-        // create user address
-        UsersAddress::create($data['user_address']);
+        $this->usersAddress->create($data['user_address']);
+        $this->userPaymentConfig->create($data['user_payment_config']);
 
-        // create user payment config
-        UserPaymentConfig::create($data['user_payment_config']);
-
-        // // add to cart if cache cart not empty
-        $sessionCart = SessionCartHelper::getSessionCart();
+        $sessionCart = $this->sessionCartHelper->getSessionCart();
         if(!empty($sessionCart))
         {
-            $user->moveSessionCartToDbCart($sessionCart);
+            $this->user->moveSessionCartToDbCart($sessionCart);
         }
 
         Auth::attempt([
-            'email' => $user->email,
+            'email' => $this->user->email,
             'password' => request('password')
         ], 1);
 

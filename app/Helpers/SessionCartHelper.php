@@ -13,7 +13,7 @@ class SessionCartHelper
      * 
      * @param  \App\Models\Product  $product
      */
-    public static function addProductToSessionCart(Product $product)
+    public function addProductToSessionCart(Product $product)
     {
         /** Cookie will expire in 120 minutes */
         $expiresAt = now()->addMinutes(120);
@@ -62,7 +62,7 @@ class SessionCartHelper
      * 
      * @return  array
      */
-    public static function getSessionCart()
+    public function getSessionCart()
     {
         $sessionCart = Session::get('cc');
         $array = array();
@@ -89,7 +89,7 @@ class SessionCartHelper
      * 
      * @param  \Illuminate\Http\Request  $request
      */
-    public static function updateSessionCartAmount(Request $request)
+    public function updateSessionCartAmount(Request $request)
     {
         /** Get existing session cart */
         $sessionCart = self::getSessionCart();
@@ -119,7 +119,7 @@ class SessionCartHelper
     /**
      * Remove the session cart cookie.
      */
-    public static function clearSessionCart()
+    public function clearSessionCart()
     {
         Session::forget('cc');
     }

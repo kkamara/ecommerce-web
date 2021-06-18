@@ -14,9 +14,25 @@ class VendorApplication extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property array
      */
     protected $guarded = [];
+
+    /** @property Company */
+    protected $company;
+
+    /** @property UsersAddress */
+    protected $usersAddress;
+
+    /**
+     * @construct
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->company      = new Company;
+        $this->usersAddress = new UsersAddress;
+    }
 
     /**
      * Checks if a given user has applied with no response.
@@ -24,12 +40,14 @@ class VendorApplication extends Model
      * @param  \App\Models\User  $userId
      * @return bool
      */
-    public static function hasUserApplied($userId)
+    public function hasUserApplied($userId)
     {
-        return ! Self::where([
-            'user_id' => $userId,
-            'accepted' => null
-        ])->get()->isEmpty();
+        return false === $this->where([
+                'user_id' => $userId,
+                'accepted' => null
+            ])
+            ->get()
+            ->isEmpty();
     }
 
     /**
@@ -38,12 +56,14 @@ class VendorApplication extends Model
      * @param   \App\Models\User  $userId
      * @return  bool
      */
-    public static function hasApplicationBeenRejected($userId)
+    public function hasApplicationBeenRejected($userId)
     {
-        return ! Self::where([
-            'user_id' => $userId,
-            'accepted' => 0
-        ])->get()->isEmpty();
+        return ! $this->where([
+                'user_id' => $userId,
+                'accepted' => 0
+            ])
+            ->get()
+            ->isEmpty();
     }
 
     /**
@@ -52,7 +72,7 @@ class VendorApplication extends Model
      * @param  \Illuminate\Database\Eloquent\Model  $query
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public static function scopeWhereFresh($query)
+    public function scopeWhereFresh($query)
     {
         return $query->where('accepted', '=', NULL);
     }
@@ -70,29 +90,31 @@ class VendorApplication extends Model
     /**
      * Returns an error in the application creation process.
      *
-     * @param  int  $userId, string  $companyName, int  $usersAddressId
-     * @return string|false The error text or false implying no errors occurred.
+     * @param  Int     $userId
+     * @param  String  $companyName
+     * @param  Int     $usersAddressId
+     * @return String|False The error text or false implying no errors occurred.
      */
-    public static function getError($userId, $companyName, $usersAddressId)
+    public function getError($userId, $companyName, $usersAddressId)
     {
         /**
          * Error if previously applied
          */
-        if(self::hasUserApplied($userId)) {
+        if($this->hasUserApplied($userId)) {
             return 'Your existing application is being processed.';
         }
 
         /**
          * Error if previous application rejected
          */
-        if(self::hasApplicationBeenRejected($userId)) {
+        if($this->hasApplicationBeenRejected($userId)) {
             return 'Unfortunately your previous application was rejected and you cannot apply again. For more information contact administrator.';
         }
 
         /**
          * Error if no address on file
          */
-        if(UsersAddress::where('user_id', '=', $userId)->get()->isEmpty()) {
+        if($this->usersAddress->where('user_id', '=', $userId)->get()->isEmpty()) {
             return 'You must have at least one address on file.';
         }
 
@@ -104,8 +126,10 @@ class VendorApplication extends Model
         {
             return 'Company name not provided.';
         }
-        elseif(self::doesCompanyNameExist($companyName) || Company::doesCompanyNameExist($companyName))
-        {
+        elseif(
+            $this->doesCompanyNameExist($companyName) || 
+            $this->company->doesCompanyNameExist($companyName)
+        ) {
             return 'Company Name already exists.';
         }
         elseif(strlen($companyName) > 191)
@@ -117,40 +141,51 @@ class VendorApplication extends Model
          * Error if address not given |
          * Error if address doesn't exist
          */
-        if(! isset($usersAddressId) || ! is_numeric($usersAddressId))
-        {
+        if(
+            ! isset($usersAddressId) || 
+            ! is_numeric($usersAddressId)
+        ) {
             return 'Address not provided.';
-        }
-        else
-        {
-            if(UsersAddress::where([
-                'id' => $usersAddressId,'user_id' => $userId,
-                ])->get()->isEmpty())
-            {
-                return 'Address not provided.';
-            }
+        } else if(
+            $this->usersAddress->where([
+                'id' => $usersAddressId,
+                'user_id' => $userId,
+            ])
+                ->get()
+                ->isEmpty()
+        ) {
+            return 'Address not provided.';
         }
 
         return FALSE;
     }
 
     /**
-     * Find whether a given company name already exists in this model.
+     * Find whether a given company name already exists for $this.
      *
-     * @param  string  $companyName
+     * @param  String  $companyName
      */
-    public static function doesCompanyNameExist($companyName)
+    public function doesCompanyNameExist($companyName)
     {
-        return ! self::where('proposed_company_name', '=', $companyName)->get()->isEmpty();
+        return false === $this->where(
+                'proposed_company_name', 
+                '=', 
+                $companyName
+            )
+            ->get()
+            ->isEmpty();
     }
 
     /**
-     * Returns an error in the decision process when a moderator reviews an instance of this model.
+     * Returns an error in the decision process when a mod
+     * reviews an instance of $this.
      *
-     * @param  int  $userId, string  $companyName, int  $usersAddressId
-     * @return string|false The error text or false implying no errors occurred.
+     * @param  Int     $userId, 
+     * @param  String  $companyName
+     * @param  Int     $usersAddressId
+     * @return String|False The error text or false implying no errors occurred.
      */
-    public static function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
+    public function getModDecisionError($reasonGiven, $acceptDecision, $declineDecision)
     {
         if(! isset($reasonGiven)) {
             return 'Reason not provided.';

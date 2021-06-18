@@ -2,13 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Helpers\SessionCartHelper;
 use App\Models\Cart\Cart;
-use Auth;
+use App\Models\User;
 
 class CartController extends Controller
-{    
+{
+    /** @property SessionCartHelper */
+    protected $sessionCartHelper;
+
+    /** @property User */
+    protected $user;
+
+    /** @property Cart */
+    protected $cart;
+
+    /**
+     * @construct
+     */
+    public function __construct() {
+        $this->sessionCartHelper = new SessionCartHelper;
+        $this->user              = new User;
+        $this->cart              = new Cart;
+    }
+
     /**
      * Display the specified resource.
      *
@@ -19,15 +38,18 @@ class CartController extends Controller
     {
         if(Auth::check())
         {
-            $user = auth()->user();
-            $cart = $user->getDbCart();
+            $this->user = auth()->user();
+            $this->cart = $this->user->getDbCart();
         }
         else
         {
-            $cart = SessionCartHelper::getSessionCart();
+            $this->cart = $this->sessionCartHelper->getSessionCart();
         }
 
-        return view('cart.show', compact('cart'))->withTitle('Cart');
+        return view('cart.show', [
+                'title' => 'Cart',
+                'cart' => $this->cart,
+            ]);
     }
 
     /**
@@ -41,12 +63,12 @@ class CartController extends Controller
     {
         if(Auth::check())
         {
-            $user = auth()->user();
-            $user->updateDbCartAmount($request);
+            $this->user = auth()->user();
+            $this->user->updateDbCartAmount($request);
         }
         else
         {
-            SessionCartHelper::updateSessionCartAmount($request);
+            $this->sessionCartHelper->updateSessionCartAmount($request);
         }
 
         return redirect()

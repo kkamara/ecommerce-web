@@ -13,7 +13,7 @@ class UserPaymentConfig extends Model
     /**
      * This models immutable values.
      *
-     * @var array
+     * @property Array
      */
     protected $guarded = [];
 
@@ -40,12 +40,11 @@ class UserPaymentConfig extends Model
     /**
      * Set a publicily accessible identifier to get the hidden cart number for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getHiddenCardNumberAttribute()
     {
         $cardNumber = $this->attributes['card_number'];
-        $length = strlen($cardNumber);
 
         $cardNumber = substr($cardNumber, -4, strlen($cardNumber));
         $cardNumber = str_pad($cardNumber, 16, "*", STR_PAD_LEFT);
@@ -60,7 +59,12 @@ class UserPaymentConfig extends Model
      */
     public function getExpiryDateAttribute()
     {
-        return Carbon::createFromDate($this->attributes['expiry_year'], $this->attributes['expiry_month'], 1)->format('m/Y');
+        return Carbon::createFromDate(
+                $this->attributes['expiry_year'], 
+                $this->attributes['expiry_month'], 
+                1
+            )
+            ->format('m/Y');
     }
 
     /**
@@ -70,26 +74,41 @@ class UserPaymentConfig extends Model
      */
     public function getEditExpiryDateAttribute()
     {
-        return Carbon::createFromDate($this->attributes['expiry_year'], $this->attributes['expiry_month'], 1)->format('Y-m');
+        return Carbon::createFromDate(
+                $this->attributes['expiry_year'], 
+                $this->attributes['expiry_month'], 
+                1
+            )
+            ->format('Y-m');
     }
 
     /**
-     * Set a publicily accessible identifier to get the edit expiry date for this unique instance.
+     * Set a publicily accessible identifier to get the edit 
+     * expiry date for this unique instance.
      *
      * @return  \Carbon\Carbon
      */
     public function getFormattedPhoneNumberAttribute()
     {
-        return $this->attributes['phone_number_extension'] . ' ' . $this->attributes['phone_number'];
+        return sprintf(
+            "%s %s",
+            $this->attributes['phone_number_extension'],
+            $this->attributes['phone_number']
+        );
     }
 
     /**
-     * Set a publicily accessible identifier to get the formatted mobile number for this unique instance.
+     * Set a publicily accessible identifier to get the 
+     * formatted mobile number for this unique instance.
      *
-     * @return  string
+     * @return  String
      */
     public function getFormattedMobileNumberAttribute()
     {
-        return $this->attributes['mobile_number_extension'] . ' ' . $this->attributes['mobile_number'];
+        return sprintf(
+            "%s %s",
+            $this->attributes['mobile_number_extension'],
+            $this->attributes['mobile_number']
+        );
     }
 }
