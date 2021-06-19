@@ -17,18 +17,6 @@ class ProductReview extends Model
      */
     protected $guarded = [];
 
-    /** @property FlaggedProductReview */
-    protected $flaggedProductReview;
-
-    /**
-     * @construct
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->flaggedProductReview = new FlaggedProductReview;
-    }
-
     /**
      * This model relationship has \App\Models\Product\FlaggedProductReview
      *
@@ -66,7 +54,7 @@ class ProductReview extends Model
      */
     public function isFlaggedFiveTimes()
     {
-        return $this->flaggedProductReview
+        return (new FlaggedProductReview)
             ->getFlagCount($this->attributes['id']) > 4;
     }
 

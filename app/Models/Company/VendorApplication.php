@@ -18,22 +18,6 @@ class VendorApplication extends Model
      */
     protected $guarded = [];
 
-    /** @property Company */
-    protected $company;
-
-    /** @property UsersAddress */
-    protected $usersAddress;
-
-    /**
-     * @construct
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->company      = new Company;
-        $this->usersAddress = new UsersAddress;
-    }
-
     /**
      * Checks if a given user has applied with no response.
      *
@@ -114,7 +98,7 @@ class VendorApplication extends Model
         /**
          * Error if no address on file
          */
-        if($this->usersAddress->where('user_id', '=', $userId)->get()->isEmpty()) {
+        if((new UsersAddress)->where('user_id', '=', $userId)->get()->isEmpty()) {
             return 'You must have at least one address on file.';
         }
 
@@ -128,7 +112,7 @@ class VendorApplication extends Model
         }
         elseif(
             $this->doesCompanyNameExist($companyName) || 
-            $this->company->doesCompanyNameExist($companyName)
+            (new Company)->doesCompanyNameExist($companyName)
         ) {
             return 'Company Name already exists.';
         }
@@ -147,7 +131,7 @@ class VendorApplication extends Model
         ) {
             return 'Address not provided.';
         } else if(
-            $this->usersAddress->where([
+            (new UsersAddress)->where([
                 'id' => $usersAddressId,
                 'user_id' => $userId,
             ])

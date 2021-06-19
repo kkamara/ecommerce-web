@@ -36,17 +36,6 @@ class Cart extends Model
      */
     public $timestamps = false;
 
-    /** @property SessionCartHelper */
-    protected $sessionCartHelper;
-    
-    /**
-     * @construct
-     */
-    public function __construct() {
-        parent::__construct();
-        $this->sessionCartHelper = new SessionCartHelper;
-    }
-
     /**
      * Gets the number of items in the user's session or db cart,
      * depending on whether the user is authenticated.
@@ -96,7 +85,7 @@ class Cart extends Model
         }
         else
         {
-            $sessionCart = $this->sessionCartHelper->getSessionCart();
+            $sessionCart = (new SessionCartHelper)->getSessionCart();
         }
 
         if(empty($sessionCart)) return '£0.00';
