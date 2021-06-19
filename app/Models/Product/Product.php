@@ -80,7 +80,13 @@ class Product extends Model
      */
     public function getFormattedCostAttribute()
     {
-        return "£".number_format($this->attributes['cost'], 2);
+        return sprintf(
+            "£%s",
+            number_format(
+                ((float) $this->attributes['cost']) / 100, 
+                2
+            )
+        );
     }
 
     /**

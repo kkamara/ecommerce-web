@@ -31,7 +31,7 @@ class ProductFactory extends Factory
             'long_description' => $this->faker->paragraph(4),
             'product_details' => $this->faker->paragraph(5),
             'image_path' => config('filesystems.defaultImagePath'),
-            'cost' => $this->faker->randomNumber(2),
+            'cost' => $this->faker->randomNumber(3),
             'shippable' => mt_rand(0, 1),
             'free_delivery' => mt_rand(0, 1),
         ];

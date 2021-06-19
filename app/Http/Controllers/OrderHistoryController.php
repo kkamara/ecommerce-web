@@ -143,7 +143,7 @@ class OrderHistoryController extends Controller
         $this->orderHistory = $this->orderHistory->create([
             'user_id' => $this->user->id,
             'reference_number' => $this->orderHistory->generateRefNum(),
-            'cost' => (float) str_replace('£', '', $this->cart->price()),
+            'cost' => ((float) str_replace('£', '', $this->cart->price())) * 100,
             'user_payment_config_id' =>$billingCardIds[0],
             'users_addresses_id' => $deliveryAddressIds[0],
         ]);

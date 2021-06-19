@@ -88,14 +88,24 @@ class Cart extends Model
             $sessionCart = (new SessionCartHelper)->getSessionCart();
         }
 
-        if(empty($sessionCart)) return '£0.00';
+        if(empty($sessionCart)) {
+            return '£0.00';
+        }
 
         foreach($sessionCart as $cc)
         {
             $price += $cc['product']->cost * $cc['amount'];
         }
 
-        return "£".number_format($price, 2);
+        $result = sprintf(
+            "£%s",
+            number_format(
+                ((float) $price) / 100, 
+                2
+            )
+        );
+
+        return $result;
     }
 
     /**

@@ -27,13 +27,13 @@ class OrderHistoryProducts extends Model
     }
 
     /**
-     * This model instance belongs to \App\Models\Product.
+     * This model instance belongs to \App\Models\Product\Product.
      *
      * @return  \Illuminate\Database\Eloquent\Model
      */
     public function product()
     {
-        return $this->belongsTo('App\Models\Product', 'product_id');
+        return $this->belongsTo('App\Models\Product\Product', 'product_id');
     }
 
     /**

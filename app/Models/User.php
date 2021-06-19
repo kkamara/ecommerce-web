@@ -185,7 +185,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Updates the respective number of products in the user's database cart.
+     * Updates the respective number of products in user's db cart.
      *
      * @param  \Illuminate\Http\Request  $request
      */
@@ -196,7 +196,7 @@ class User extends Authenticatable
 
         foreach($sessionCart as $cc)
         {
-            /** Check if an amount value for this product was given in the request */
+            /** Checks if product amount exists in request */
             $product_id = $cc['product']->id;
             $amount = $request->get('amount-' . $product_id);
 
@@ -207,9 +207,9 @@ class User extends Authenticatable
 
             if($amount !== NULL && $amount != 0)
             {
+                /** Push product to $sessionCart with updated amounts */
                 for($i=0; $i<$amount; $i++)
                 {
-                    /** Push to $sessionCart the product with new amount value */
                     \App\Models\Cart\Cart::insert([
                         'user_id' => $this->attributes['id'],
                         'product_id' => $product_id,
