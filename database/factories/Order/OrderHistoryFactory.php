@@ -30,7 +30,7 @@ class OrderHistoryFactory extends Factory
             'cost' => Product::inRandomOrder()->first()->cost,
             'user_payment_config_id' => $user->userPaymentConfig[0]->id,
             'users_addresses_id' => $user->userAddress[0]->id,
-            'reference_number' => OrderHistory::generateRefNum(),
+            'reference_number' => (new OrderHistory)->generateRefNum(),
         ];
     }
 }
