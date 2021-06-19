@@ -92,7 +92,7 @@ class SessionCartHelper
     public function updateSessionCartAmount(Request $request)
     {
         /** Get existing session cart */
-        $sessionCart = self::getSessionCart();
+        $sessionCart = $this->getSessionCart();
         $array     = array();
 
         foreach($sessionCart as $cc)
