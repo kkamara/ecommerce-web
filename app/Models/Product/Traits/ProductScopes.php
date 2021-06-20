@@ -15,16 +15,15 @@ trait ProductScopes {
     public function scopeGetProducts($query, $request)
     {
         $querySearch = $request->input('query');
-        $min         = is_numeric($request->input('min_price'))
-                        ? ((float) $request->input('min_price') * 100)
-                        : null;
-        $max         = is_numeric($request->input('max_price'))
-                        ? ((float) $request->input('max_price') * 100)
-                        : null;
-        $sort_by         = is_numeric($request->input('sort_by'))
-                        ? ((float) $request->input('sort_by') * 100)
-                        : null;
+        $sort_by     = $request->input('sort_by');
 
+        $min = is_numeric($request->input('min_price'))
+            ? ((float) $request->input('min_price') * 100)
+            : null;
+        $max = is_numeric($request->input('max_price'))
+            ? ((float) $request->input('max_price') * 100)
+            : null;
+        
         $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id',
                        'products.short_description', 'products.long_description', 'products.product_details',
                        'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery',
