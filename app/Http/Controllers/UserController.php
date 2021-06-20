@@ -24,6 +24,7 @@ class UserController extends Controller
      */
     public function edit($slug)
     {
+        /** @var User */
         $authUser = auth()->user();
         $this->user = $this->user->where('slug', '=', $slug)->first();
 
@@ -49,6 +50,7 @@ class UserController extends Controller
      */
     public function update($slug, Request $request)
     {
+        /** @var User */
         $authUser = auth()->user();
         $this->user = $this->user->where('slug', '=', $slug)->first();
 

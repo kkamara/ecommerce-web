@@ -39,6 +39,7 @@ class OrderHistoryController extends Controller
      */
     public function index()
     {
+        /** @var User */
         $this->user = auth()->user();
 
         $this->orderHistory = $this->orderHistory->where([
@@ -59,6 +60,7 @@ class OrderHistoryController extends Controller
     public function create()
     {
         if(Auth::check()) {
+            /** @var User */
             $this->user = auth()->user();
             $this->cart = $this->user->getDbCart();
 
@@ -94,6 +96,7 @@ class OrderHistoryController extends Controller
      */
     public function store(Request $request)
     {
+        /** @var User */
         $this->user = auth()->user();
 
         $input = $request->request;
@@ -175,6 +178,7 @@ class OrderHistoryController extends Controller
      */
     public function show($refNum)
     {
+        /** @var User */
         $this->user = auth()->user();
 
         $this->orderHistory = $this->orderHistory->where([

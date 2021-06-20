@@ -28,6 +28,7 @@ class UserPaymentConfigController extends Controller
      */
     public function index()
     {
+        /** @var User */
         $this->user = auth()->user();
 
         $this->userPaymentConfig = $this->userPaymentConfig
@@ -60,6 +61,7 @@ class UserPaymentConfigController extends Controller
      */
     public function store(Request $request)
     {
+        /** @var User */
         $this->user = auth()->user();
 
         $validator = Validator::make($request->all(), [
@@ -147,6 +149,7 @@ class UserPaymentConfigController extends Controller
     public function edit(UserPaymentConfig $userPaymentConfig)
     {
         $this->userPaymentConfig = $userPaymentConfig;
+        /** @var User */
         $this->user = auth()->user();
 
         return match($this->userPaymentConfig['user_id']) {
@@ -168,6 +171,7 @@ class UserPaymentConfigController extends Controller
     public function update(Request $request, UserPaymentConfig $userPaymentConfig)
     {
         $this->userPaymentConfig = $userPaymentConfig;
+        /** @var User */
         $this->user = auth()->user();
 
         if(
@@ -263,6 +267,7 @@ class UserPaymentConfigController extends Controller
     public function delete(UserPaymentConfig $userPaymentConfig)
     {
         $this->userPaymentConfig = $userPaymentConfig;
+        /** @var User */
         $this->user = auth()->user();
 
         if($this->userPaymentConfig['user_id'] !== $this->user->id)
@@ -286,6 +291,7 @@ class UserPaymentConfigController extends Controller
     public function destroy(UserPaymentConfig $userPaymentConfig, Request $request)
     {
         $this->userPaymentConfig = $userPaymentConfig;
+        /** @var User */
         $this->user = auth()->user();
 
         if(

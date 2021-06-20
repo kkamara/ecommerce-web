@@ -48,6 +48,7 @@ class Cart extends Model
 
         if(Auth::check())
         {
+            /** @var User */
             $user = auth()->user();
             $sessionCart = $user->getDbCart();
         }
@@ -80,6 +81,7 @@ class Cart extends Model
 
         if(Auth::check())
         {
+            /** @var User */
             $user = auth()->user();
             $sessionCart = $user->getDbCart();
         }

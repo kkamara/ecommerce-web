@@ -33,6 +33,7 @@ class VendorApplicationController extends Controller
      */
     public function create()
     {
+        /** @var User */
         $this->user = auth()->user();
         $this->usersAddresses = $this->usersAddress
             ->where('user_id', $this->user->id)
@@ -56,6 +57,7 @@ class VendorApplicationController extends Controller
      */
     public function store(Request $request)
     {
+        /** @var User */
         $this->user = auth()->user();
 
         $companyName = filter_var($request->input('company_name'), FILTER_SANITIZE_STRING);
@@ -92,6 +94,7 @@ class VendorApplicationController extends Controller
      */
     public function show()
     {
+        /** @var User */
         $user = auth()->user();
 
         if(false === $this->vendorApplication->hasUserApplied($user->id)) {

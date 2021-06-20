@@ -28,6 +28,7 @@ class UsersAddressController extends Controller
      */
     public function index()
     {
+        /** @var User */
         $this->user = auth()->user();
         $this->usersAddress = $this->usersAddress
             ->where('user_id', $this->user->id)
@@ -59,6 +60,7 @@ class UsersAddressController extends Controller
      */
     public function store(Request $request)
     {
+        /** @var User */
         $this->user = auth()->user();
 
         $validator = Validator::make($request->all(), [
@@ -123,6 +125,7 @@ class UsersAddressController extends Controller
     public function edit(UsersAddress $usersAddress)
     {
         $this->usersAddress = $usersAddress;
+        /** @var User */
         $this->user = auth()->user();
         
         if($this->usersAddress['user_id'] !== $this->user->id)
@@ -146,6 +149,7 @@ class UsersAddressController extends Controller
     public function update(UsersAddress $usersAddress, Request $request)
     {
         $this->usersAddress = $usersAddress;
+        /** @var User */
         $this->user = auth()->user();
 
         if($this->usersAddress['user_id'] !== $this->user->id)
@@ -218,6 +222,7 @@ class UsersAddressController extends Controller
     public function delete(UsersAddress $usersAddress)
     {
         $this->usersAddress = $usersAddress;
+        /** @var User */
         $this->user = auth()->user();
 
         if($this->usersAddress['user_id'] !== $this->user->id)
@@ -241,6 +246,7 @@ class UsersAddressController extends Controller
     public function destroy(UsersAddress $usersAddress, Request $request)
     {
         $this->usersAddress = $usersAddress;
+        /** @var User */
         $this->user = auth()->user();
         
         if($this->usersAddress['user_id'] !== $this->user->id) {

@@ -38,6 +38,7 @@ class CartController extends Controller
     {
         if(Auth::check())
         {
+            /** @var User */
             $this->user = auth()->user();
             $this->cart = $this->user->getDbCart();
         }
@@ -63,6 +64,7 @@ class CartController extends Controller
     {
         if(Auth::check())
         {
+            /** @var User */
             $this->user = auth()->user();
             $this->user->updateDbCartAmount($request);
         }

@@ -32,6 +32,7 @@ class ProductReviewController extends Controller
      */
     public function store(Product $product, Request $request)
     {
+        /** @var User */
         $this->user = auth()->user();
         $this->product = $product;
 

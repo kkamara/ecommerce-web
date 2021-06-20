@@ -64,6 +64,7 @@ class ProductController extends Controller
         
         if(Auth::check())
         {
+            /** @var User */
             $this->user = auth()->user();
 
             if($this->user->id === $this->product->company->user_id)
@@ -94,6 +95,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        /** @var User */
         $this->user = auth()->user();
         $this->product = $product;
         $this->productReviews = $this->product->productReview()->get();

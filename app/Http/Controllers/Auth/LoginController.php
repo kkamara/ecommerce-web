@@ -106,6 +106,7 @@ class LoginController extends Controller
             ));
         }
 
+        /** @var User */
         $this->user              = auth()->user();
         $this->sessionCartHelper = $this->sessionCartHelper->getSessionCart();
 

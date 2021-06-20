@@ -58,6 +58,7 @@ class ModeratorsHubController extends Controller
      */
     public function index()
     {
+        /** @var User */
         $this->user = auth()->user();
 
         if(false === $this->user->hasRole('moderator'))
@@ -97,6 +98,7 @@ class ModeratorsHubController extends Controller
     public function storeFlaggedReviewDecision(ProductReview $productReview, Request $request)
     {
         $this->productReview = $productReview;
+        /** @var User */
         $this->user = auth()->user();
 
         $reasonGiven     = filter_var($request->input('reason'), FILTER_SANITIZE_STRING);
@@ -165,6 +167,7 @@ class ModeratorsHubController extends Controller
         Request $request
     ) {
         $this->vendorApplication = $vendorApplication;
+        /** @var User */
         $this->user = auth()->user();
 
         $reasonGiven     = filter_var($request->input('reason_given'), FILTER_SANITIZE_STRING);

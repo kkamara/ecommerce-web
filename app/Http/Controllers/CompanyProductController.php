@@ -39,6 +39,7 @@ class CompanyProductController extends Controller
     public function index($slug, Request $request)
     {
         $this->company = $this->company->where('slug', $slug)->first();
+        /** @var User */
         $this->user = auth()->user();
 
         if(
@@ -71,6 +72,7 @@ class CompanyProductController extends Controller
     public function create($slug)
     {
         $this->company = $this->company->where('slug', $slug)->first();
+        /** @var User */
         $this->user = auth()->user();
 
         if(
@@ -96,6 +98,7 @@ class CompanyProductController extends Controller
     public function store($slug, Request $request)
     {
         $this->company = $this->company->where('slug', $slug)->first();
+        /** @var User */
         $this->user = auth()->user();
 
         if(
@@ -156,6 +159,7 @@ class CompanyProductController extends Controller
     public function edit($slug, Product $product, Request $request)
     {
         $this->company = $this->company->where('slug', $slug)->first();
+        /** @var User */
         $this->user = auth()->user();
 
         if(
@@ -183,6 +187,7 @@ class CompanyProductController extends Controller
     {
         $this->product = $product;
         $this->company = $this->company->where('slug', $slug)->first();
+        /** @var User */
         $this->user = auth()->user();
 
         if(
@@ -242,6 +247,7 @@ class CompanyProductController extends Controller
     {
         $this->product = $product;
         $this->company = $this->company->where('slug', $slug)->first();
+        /** @var User */
         $this->user = auth()->user();
 
         if(
@@ -269,6 +275,7 @@ class CompanyProductController extends Controller
     {
         $this->product = $product;
         $this->company = $this->company->where('slug', $slug)->first();
+        /** @var User */
         $this->user = auth()->user();
 
         if(
