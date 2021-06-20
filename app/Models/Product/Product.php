@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use App\Models\Product\Traits\ProductRelations;
-use App\Models\Product\Traits\ProductScopes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Product\Traits\ProductRelations;
+use App\Models\Product\Traits\ProductScopes;
+use \App\Models\Product\ProductReview;
 
 class Product extends Model
 {
@@ -130,7 +131,7 @@ class Product extends Model
      */
     public function didUserReviewProduct($userId)
     {
-        foreach($this->productReview()->get() as $review){
+        foreach(ProductReview::get() as $review){
 
             if($review->user_id == $userId)
             {
@@ -148,7 +149,7 @@ class Product extends Model
      */
     public function getReviewAttribute()
     {
-        $review = \App\Models\Product\ProductReview::select(DB::raw('avg(score) as review'))
+        $review = ProductReview::select(DB::raw('avg(score) as review'))
             ->where('product_id', $this->attributes['id'])
             ->groupBy('product_id')
             ->distinct()->first();
