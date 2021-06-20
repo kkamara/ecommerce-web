@@ -128,9 +128,9 @@ class CompanyProductController extends Controller
             'company_id'        => $this->company->id,
             'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
             'cost'              => ((float) filter_var(
-                $request->input('cost'), 
-                FILTER_SANITIZE_STRING
-            )) * 100,
+                                            $request->input('cost'), 
+                                            FILTER_SANITIZE_STRING
+                                        )) * 100,
             'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
             'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
@@ -211,9 +211,9 @@ class CompanyProductController extends Controller
         $data = array(
             'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
             'cost'              => ((float) filter_var(
-                    $request->input('cost'), 
-                    FILTER_SANITIZE_STRING
-                )) * 100,
+                                            $request->input('cost'), 
+                                            FILTER_SANITIZE_STRING
+                                        )) * 100,
             'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
             'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),

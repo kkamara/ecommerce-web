@@ -81,7 +81,8 @@ trait ProductScopes {
                                 );
                             }
                         ])
-                            ->groupBy('product_reviews.product_id')->orderByDesc('review');
+                            ->groupBy('product_reviews.product_id')
+                            ->orderByDesc('review');
             break;
             case 'low': // lowest price
                 $query->orderBy('cost', 'ASC');

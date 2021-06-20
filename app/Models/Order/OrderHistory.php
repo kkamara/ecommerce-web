@@ -58,10 +58,16 @@ class OrderHistory extends Model
      */
     public function getFormattedCostAttribute()
     {
+        $cost = 0;
+        
+        foreach($this->orderHistoryProducts as $orderHistoryProducts) {
+            $cost += $orderHistoryProducts->cost;
+        }
+
         return sprintf(
             "£%s",
             number_format(
-                ((float) $this->attributes['cost']) / 100, 
+                ((float) $cost) / 100, 
                 2
             )
         );
