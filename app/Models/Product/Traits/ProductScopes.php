@@ -60,14 +60,29 @@ trait ProductScopes {
         switch($sort_by)
         {
             case 'pop': // most popular
-                $query->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id')
+                $query->leftJoin(
+                        'order_history_products', 
+                        'products.id', 
+                        '=', 
+                        'order_history_products.product_id'
+                    )
                       ->groupBy('order_history_products.product_id');
             break;
             case 'top': // top rated
-                $query->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
-                      ->withCount(['productReview as review' => function($query) {
-                        $query->select(DB::raw('avg(product_reviews.score) as average_rating'));
-                      }])->groupBy('product_reviews.product_id')->orderByDesc('review');
+                $query->leftJoin(
+                        'product_reviews', 
+                        'products.id', 
+                        '=', 
+                        'product_reviews.product_id'
+                    )
+                      ->withCount([
+                            'productReview as review' => function($query) {
+                                $query->select(
+                                    DB::raw('avg(product_reviews.score) as average_rating')
+                                );
+                            }
+                        ])
+                            ->groupBy('product_reviews.product_id')->orderByDesc('review');
             break;
             case 'low': // lowest price
                 $query->orderBy('cost', 'ASC');
