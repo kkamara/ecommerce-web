@@ -3,9 +3,10 @@
 namespace Database\Factories\Order;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
+use App\Models\Order\OrderHistoryProducts;
 use App\Models\Order\OrderHistory;
 use App\Models\Product\Product;
+use App\Models\User;
 
 class OrderHistoryFactory extends Factory
 {
@@ -15,6 +16,25 @@ class OrderHistoryFactory extends Factory
      * @var string
      */
     protected $model = OrderHistory::class;
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        $orderHistoryProducts = new OrderHistoryProducts;
+        return $this->afterCreating(function (OrderHistory $orderHistory) use ($orderHistoryProducts) {
+            $count = mt_rand(1,10);
+
+            $orderHistoryProducts->factory()
+                ->count($count)
+                ->create([
+                    'order_history_id' => $orderHistory->id,
+                ]);
+        });
+    }
 
     /**
      * Define the model's default state.
