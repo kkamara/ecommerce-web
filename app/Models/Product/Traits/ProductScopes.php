@@ -27,7 +27,8 @@ trait ProductScopes {
         $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id',
                        'products.short_description', 'products.long_description', 'products.product_details',
                        'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery',
-                       'products.created_at', 'products.updated_at');
+                       'products.created_at', 'products.updated_at',
+                       'order_history_products.product_id',);
         $whereClause = array();
 
         if(isset($querySearch))
@@ -56,47 +57,55 @@ trait ProductScopes {
             $query->where($whereClause);
         }
 
+        $query->leftJoin(
+            'order_history_products', 
+            'products.id', 
+            '=', 
+            'order_history_products.product_id'
+        );
+
         switch($sort_by)
         {
             case 'pop': // most popular
-                $query->leftJoin(
-                        'order_history_products', 
-                        'products.id', 
-                        '=', 
-                        'order_history_products.product_id'
-                    )
-                      ->groupBy('order_history_products.product_id');
-            break;
+                return $query
+                    ->where('order_history_products.product_id', '!=', null)
+                    ->groupBy('order_history_products.product_id')
+                    ->orderBy(DB::raw('count(order_history_products.product_id)'), 'DESC');
             case 'top': // top rated
-                $query->leftJoin(
+                return $query->leftJoin(
                         'product_reviews', 
                         'products.id', 
                         '=', 
                         'product_reviews.product_id'
                     )
-                      ->withCount([
-                            'productReview as review' => function($query) {
-                                $query->select(
-                                    DB::raw('avg(product_reviews.score) as average_rating')
-                                );
-                            }
-                        ])
-                            ->groupBy('product_reviews.product_id')
-                            ->orderByDesc('review');
-            break;
+                    ->withCount([
+                        'productReview as review' => function($query) {
+                            $query->select(
+                                DB::raw('avg(product_reviews.score) as average_rating')
+                            );
+                        }
+                    ])
+                    ->groupBy('product_reviews.product_id')
+                    ->orderByDesc('review')
+                    ->orderBy('products.id', 'DESC')
+                    ->groupBy('products.id')
+                    ->distinct();
             case 'low': // lowest price
-                $query->orderBy('cost', 'ASC');
-            break;
+                return $query->orderBy('cost', 'ASC')
+                    ->orderBy('products.id', 'DESC')
+                    ->groupBy('products.id')
+                    ->distinct();
             case 'hig': // highest price
-                $query->orderBy('cost', 'DESC');
-            break;
+                return $query->orderBy('cost', 'DESC')
+                    ->orderBy('products.id', 'DESC')
+                    ->groupBy('products.id')
+                    ->distinct();
             default:
-            break;
+                return $query
+                    ->orderBy('products.id', 'DESC')
+                    ->groupBy('products.id')
+                    ->distinct();
         }
-
-        return $query->orderBy('products.id', 'DESC')
-            ->groupBy('products.id')
-            ->distinct();
     }
 
     /**
