@@ -13,8 +13,7 @@
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "~1.0",
-        "spatie/laravel-permission": "^4.0",
-        "ext-apcu": "*"
+        "spatie/laravel-permission": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -64,8 +63,7 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-        "classmap-authoritative": true,
-        "apcu-autoloader": true
+        "classmap-authoritative": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
