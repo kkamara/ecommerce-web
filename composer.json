@@ -62,7 +62,9 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "classmap-authoritative": true,
+        "apcu-autoloader": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
