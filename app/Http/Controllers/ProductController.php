@@ -40,8 +40,12 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $this->products = $this->product
-            ->getProducts($request)
+        $this->products = $this->product->getProducts(
+            $request->only('query'),
+            $request->only('sort_by'),
+            $request->only('min_price'),
+            $request->only('max_price'),
+        )
             ->paginate(7)
             ->appends(request()
             ->except('page'));

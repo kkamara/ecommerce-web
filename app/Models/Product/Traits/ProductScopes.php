@@ -9,19 +9,27 @@ trait ProductScopes {
      * Query products using request params.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $query
-     * @param  \Illuminate\Http\Request             $request
+     * @param  String                               $rQuery
+     * @param  String                               $rSortBy,
+     * @param  Float                                $rMinPrice,
+     * @param  Float                                $rMaxPrice,
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function scopeGetProducts($query, $request)
-    {
-        $querySearch = $request->input('query');
-        $sort_by     = $request->input('sort_by');
+    public function scopeGetProducts(
+        $query, 
+        $rQuery='',
+        $rSortBy='',
+        $rMinPrice=null,
+        $rMaxPrice=null,
+    ) {
+        $querySearch = $rQuery;
+        $sort_by     = $rSortBy;
 
-        $min = is_numeric($request->input('min_price'))
-            ? ((float) $request->input('min_price') * 100)
+        $min = is_numeric($rMinPrice)
+            ? ((float) $rMinPrice * 100)
             : null;
-        $max = is_numeric($request->input('max_price'))
-            ? ((float) $request->input('max_price') * 100)
+        $max = is_numeric($rMaxPrice)
+            ? ((float) $rMaxPrice * 100)
             : null;
         
         $query->select('products.id', 'products.name', 'products.user_id', 'products.company_id',

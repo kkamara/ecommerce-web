@@ -50,7 +50,12 @@ class CompanyProductController extends Controller
             return abort(404);
         }
 
-        $this->product = $this->product->getProducts($request)
+        $this->product = $this->product->getProducts(
+            $request->only('query'),
+            $request->only('sort_by'),
+            $request->only('min_price'),
+            $request->only('max_price'),
+        )
             ->getCompanyProducts($this->company->id)
             ->paginate(7)
             ->appends(request()
