@@ -58,6 +58,26 @@ class User extends Authenticatable
     protected $guarded = [];
 
     /**
+     * @return Array
+     */
+    public static function getTestUsers() {
+        return [
+            'mod' => [
+                'email' => 'mod@mail.com',
+                'password' => 'secret',
+            ],
+            'vendor' => [
+                'email' => 'vendor@mail.com',
+                'password' => 'secret',
+            ],
+            'guest' => [
+                'email' => 'guest@mail.com',
+                'password' => 'secret',
+            ],
+        ];
+    }
+
+    /**
      * Set a publicily accessible identifier to get the path for this unique instance.
      *
      * @return  String

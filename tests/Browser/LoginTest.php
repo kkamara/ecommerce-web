@@ -16,11 +16,12 @@ class LoginTest extends DuskTestCase
      */
     public function testAuthenticatedUserCannotAccessRegisterPage()
     {
-        $user = User::where('email', 'guest@mail.com')->first();
+        $guestUserCreds = User::getTestUsers()['guest'];
+        $guest = User::where('email', $guestUserCreds['email'])->first();
 
-        $this->browse(function (Browser $browser) use ($user) {
-            $browser->loginAs($user)
-                ->visit('/register')
+        $this->browse(function (Browser $browser) use ($guest) {
+            $browser->loginAs($guest)
+                ->visitRoute('registerHome')
                 ->assertPathIs('/');
         });
     }
