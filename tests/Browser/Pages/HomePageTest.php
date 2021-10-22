@@ -48,6 +48,22 @@ class HomePageTest extends DuskTestCase
     }
 
     /**
+     * Test empty search message
+     *
+     * @return void
+     */
+    public function testEmptySearchProducts()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visitRoute('home');
+            $browser->type('@search-products-in', 11111);
+            $browser->click('@search-products-btn');
+
+            $browser->assertSee('There are no products currently available.');
+        });
+    }
+
+    /**
      * Test products are viewable via most pop filter
      *
      * @return void
