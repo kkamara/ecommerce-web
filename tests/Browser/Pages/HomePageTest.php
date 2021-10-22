@@ -27,6 +27,27 @@ class HomePageTest extends DuskTestCase
     }
 
     /**
+     * Test products are searchable
+     *
+     * @return void
+     */
+    public function testSearchProducts()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visitRoute('home');
+            $product = Product::inRandomOrder()->first();
+            $browser->type('@search-products-in', substr(
+                $product->name,
+                0,
+                mt_rand(5, 15),
+            ));
+            $browser->click('@search-products-btn');
+
+            $browser->assertSee($product->name);
+        });
+    }
+
+    /**
      * Test products are viewable via most pop filter
      *
      * @return void
