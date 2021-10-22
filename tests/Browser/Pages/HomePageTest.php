@@ -2,7 +2,6 @@
 
 namespace Tests\Browser\Pages;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use App\Models\Product\Product;
@@ -19,9 +18,45 @@ class HomePageTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visitRoute('home');
 
-            $HomePageProducts = Product::getProducts()->paginate(7);
+            $products = Product::getProducts()->paginate(7);
 
-            foreach ($HomePageProducts as $product) {
+            foreach ($products as $product) {
+                $browser->assertSee($product->name);
+            }
+        });
+    }
+
+    /**
+     * Test products are viewable via most pop filter
+     *
+     * @return void
+     */
+    public function testSeeProductsMostPop()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/products?sort_by=pop');
+
+            $products = Product::getProducts('', 'pop')->paginate(7);
+
+            foreach ($products as $product) {
+                $browser->assertSee($product->name);
+            }
+        });
+    }
+
+    /**
+     * Test products are viewable via top rated filter
+     *
+     * @return void
+     */
+    public function testSeeProductsTopRated()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/products?sort_by=top');
+
+            $products = Product::getProducts('', 'top')->paginate(7);
+
+            foreach ($products as $product) {
                 $browser->assertSee($product->name);
             }
         });
