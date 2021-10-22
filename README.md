@@ -6,11 +6,18 @@ Extensive ecommerce site built with ability to add to cart without being logged 
 
 Have [docker](https://docs.docker.com/engine/install/) & [docker-compose](https://docs.docker.com/compose/install/) installed on your operating system.
 
-
 ```bash
 cp .env.example .env
 make dev && make backend-migrate && make backend-seed
 ```
+
+## To run browser tests
+
+```bash
+vendor/bin/sail dusk
+```
+
+View browser test code: [/tree/develop/tests/Browser](https://github.com/kkamara/ecommerce/tree/develop/tests/Browser)
 
 ## Misc
 
