@@ -18,11 +18,7 @@ class HomePageTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visitRoute('home');
 
-            $products = Product::getProducts()->paginate(7);
-
-            foreach ($products as $product) {
-                $browser->assertSee($product->name);
-            }
+            $this->assertProductsOnPage($browser);
         });
     }
 
@@ -71,13 +67,9 @@ class HomePageTest extends DuskTestCase
     public function testSeeProductsMostPop()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/products?sort_by=pop');
-
-            $products = Product::getProducts('', 'pop')->paginate(7);
-
-            foreach ($products as $product) {
-                $browser->assertSee($product->name);
-            }
+            $sortBy = 'pop';
+            $browser->visit('/products?sort_by='.$sortBy);
+            $this->assertProductsOnPage($browser, $sortBy);
         });
     }
 
@@ -89,13 +81,25 @@ class HomePageTest extends DuskTestCase
     public function testSeeProductsTopRated()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/products?sort_by=top');
-
-            $products = Product::getProducts('', 'top')->paginate(7);
-
-            foreach ($products as $product) {
-                $browser->assertSee($product->name);
-            }
+            $sortBy = 'top';
+            $browser->visit('/products?sort_by='.$sortBy);
+            $this->assertProductsOnPage($browser, $sortBy);
         });
+    }
+    
+    /**
+     * Test products are viewable via top rated filter
+     *
+     * @param Browser $browser
+     * @param String  $sortBy (optional)
+     * @return void
+     */
+    private function assertProductsOnPage(Browser $browser, String $sortBy='')
+    {
+        $products = Product::getProducts('', $sortBy)->paginate(7);
+
+        foreach ($products as $product) {
+            $browser->assertSee($product->name);
+        }
     }
 }
