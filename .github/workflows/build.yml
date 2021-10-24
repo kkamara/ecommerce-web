@@ -27,7 +27,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, dom, fileinfo, mysql
-          coverage: xdebug #optional
+          coverage: none
       - name: Start mysql service
         run: sudo /etc/init.d/mysql start
       - name: Get composer cache directory
@@ -43,15 +43,17 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install Composer dependencies
         run: composer install -q --no-progress --prefer-dist --optimize-autoloader
-      - name: Copy Env File
-        run: cp .env.example .env
+      - name: Setup Env Variables
+        run: |
+            cp .env.example .env
+            sed -i -e "s/APP_URL=http:\/\/localhost/APP_URL=http:\/\/127.0.0.1:8000/g" .env
+            sed -i -e "s/3306/${{ job.services.mysql.ports['3306'] }}/g" .env
+            sed -i -e "s/DB_HOST=mysql/DB_HOST=127.0.0.1/g" .env
+            sed -i -e "s/local/testing/g" .env
       - name: Generate key
         run: php artisan key:generate -q -n
       - name: Migrate & Seed Database
         run: php artisan migrate --seed --force
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DB_HOST: 127.0.0.1
       - name: Change Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Upgrade Chrome Driver
@@ -62,17 +64,9 @@ jobs:
         run: ./vendor/laravel/dusk/bin/chromedriver-linux &
       - name: Run Laravel Server
         run: php artisan serve --no-reload &
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DB_HOST: 127.0.0.1
       - name: curl to localhost
         run: curl localhost:8000 &
       - name: Run Browser Tests
-        env:
-          APP_URL: "http://127.0.0.1:8000"
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DB_HOST: 127.0.0.1
-          APP_ENV: testing
         run: php artisan dusk --debug
       - name: Upload Screenshots
         if: failure()
