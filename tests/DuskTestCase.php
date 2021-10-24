@@ -40,8 +40,14 @@ abstract class DuskTestCase extends BaseTestCase
             ]);
         })->all());
 
+        if ('testing' === config('app.env')) {
+            $seleniumServerURL = 'http://localhost:9515';
+        } else {
+            $seleniumServerURL = sprintf($_ENV['DUSK_DRIVER_URL'], $_ENV['FORWARD_SELENIUM_PORT']);
+        }
+        
         return RemoteWebDriver::create(
-            sprintf($_ENV['DUSK_DRIVER_URL'], $_ENV['FORWARD_SELENIUM_PORT']),
+            $seleniumServerURL,
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             )
