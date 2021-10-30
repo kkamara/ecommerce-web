@@ -39,14 +39,14 @@ class RegisterPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visitRoute('registerHome');
             
-            $firstName        = $this->faker->firstName();
-            $lastName         = $this->faker->lastName();
-            $email            = $this->faker->freeEmail();
-            $date             = Carbon::now()->addYears(3);
+            $firstName = $this->faker->firstName();
+            $lastName  = $this->faker->lastName();
+            $email     = $this->faker->freeEmail();
+            $date      = Carbon::now()->addYears(3);
             
             $browser->type('@first-name', $firstName);
             $browser->type('@last-name', $lastName);
-            $browser->type('@email', $this->faker->freeEmail());
+            $browser->type('@email', $email);
             $browser->type('@password', $this->password);
             $browser->type('@password-confirm', $this->password);
             $browser->type('@building-number', $this->faker->buildingNumber());
