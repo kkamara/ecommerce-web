@@ -20,7 +20,7 @@ class LoginPageTest extends DuskTestCase
     }
 
     /**
-     * Test register page renders.
+     * Test login page renders.
      *
      * @return void
      */
@@ -35,7 +35,7 @@ class LoginPageTest extends DuskTestCase
     }
 
     /**
-     * Test register page action.
+     * Test login page action.
      *
      * @return void
      */
