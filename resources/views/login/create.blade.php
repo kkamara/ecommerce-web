@@ -31,6 +31,7 @@
                                     <div class="form-group">
                                         <label for="email">Email</label>
                                         <input
+                                            dusk="email"
                                             type="text"
                                             class='form-control'
                                             name='email'
@@ -40,6 +41,7 @@
                                     <div class="form-group">
                                         <label for="password">Password</label>
                                         <input
+                                            dusk="password"
                                             type="password"
                                             class='form-control'
                                             name='password'
@@ -49,7 +51,11 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <input type="submit" class='btn btn-success pull-right' value='Login'>
+                                <input 
+                                    dusk="login-btn" 
+                                    type="submit" 
+                                    class='btn btn-success pull-right' value='Login'
+                                />
                                 <div class="clearfix"></div>
                             </div>
                         </form>
