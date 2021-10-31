@@ -66,7 +66,11 @@
 
                                     <div class="form-group">
                                         <label>Choose this address
-                                            <input name='address-{{ $address['id'] }}' type="checkbox">
+                                            <input 
+                                                dusk="choose-this-address-checkbox"
+                                                name='address-{{ $address['id'] }}' 
+                                                type="checkbox"
+                                            />
                                         </label>
                                     </div>
                                 </div>
@@ -87,7 +91,7 @@
                 </div>
                 <div class="col-md-12">
                     <div class="row">
-                        @forelse($billingCards as $card)
+                        @forelse($billingCards as $key => $card)
                         <div class="col-md-4">
                             <div class="card" style="width: 18rem;">
                                 <div class="card-body">
@@ -97,13 +101,22 @@
 
                                     <div class="form-group">
                                         <label>CCV / CVC Number
-                                            <input type="password" maxlength='3' name='cvc-{{ $card['id'] }}'>
+                                            <input 
+                                                dusk="ccv-number-{{ $key + 1 }}"
+                                                type="password" 
+                                                maxlength='3' 
+                                                name='cvc-{{ $card['id'] }}'
+                                            />
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Choose this card
-                                            <input name='card-{{ $card['id'] }}' type="checkbox">
+                                            <input 
+                                                dusk="choose-this-card-checkbox-{{ $key + 1 }}"
+                                                name='card-{{ $card['id'] }}' 
+                                                type="checkbox"
+                                            />
                                         </label>
                                     </div>
                                 </div>
@@ -125,7 +138,13 @@
                 </li>
                 <li class="list-group-item">
 
-                        <input type='submit' value="Pay Your Order" class='btn btn-success' style='display:block;margin:0px auto;'>
+                    <input 
+                        dusk="pay-your-order-btn"
+                        type='submit' 
+                        value="Pay Your Order" 
+                        class='btn btn-success' 
+                        style='display:block;margin:0px auto;'
+                    />
 
                 </li>
             </ul>

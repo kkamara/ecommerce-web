@@ -5,9 +5,13 @@
 
     <div class="list-group">
 
-        @forelse($products as $product)
+        @forelse($products as $key => $product)
 
-        <a href="{{ $product->path }}" class="list-group-item list-group-item-action flex-column align-items-start">
+        <a 
+            dusk="product-{{ $key + 1 }}"
+            href="{{ $product->path }}" 
+            class="list-group-item list-group-item-action flex-column align-items-start"
+        >
             <div class="d-flex w-100 justify-content-between">
             <img style='max-height:100px' src="{{ $product->image_path }}" class='img-responsive'>
             <h5 class="mb-1">{{ $product->name }}</h5>

@@ -8,7 +8,7 @@
                     <tr class='text-center'>
                         <th scope='row' colspan='2'>
                             <img style='max-height:100px' src="{{ $product->image_path }}" class='img-responsive'/>
-                            <h4>
+                            <h4 dusk="product-name">
                                 {{ $product->name }}
                             </h4>
                         </th>
@@ -59,7 +59,10 @@
                             Delete item
                         </a>
                     @else
-                        <a href='{{ route('productAdd', $product->id) }}' class='btn btn-primary btn-sm'>
+                        <a 
+                            dusk="add-to-cart-btn"
+                            href='{{ route('productAdd', $product->id) }}' 
+                            class='btn btn-primary btn-sm'>
                             Add to cart
                         </a>
                     @endif

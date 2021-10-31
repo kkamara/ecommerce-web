@@ -58,7 +58,12 @@
         <div class="col-md-4">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <a href='{{ route('orderCreate') }}' class='btn btn-success' style='display:block;'>
+                    <a 
+                        dusk="proceed-to-checkout-btn"
+                        href='{{ route('orderCreate') }}' 
+                        class='btn btn-success' 
+                        style='display:block;'
+                    >
                         Proceed to checkout
                     </a>
                 </li>
