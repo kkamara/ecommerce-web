@@ -65,12 +65,13 @@ class CartPageTest extends DuskTestCase
                 ->type('@ccv-number-1', 444)
                 ->click('@choose-this-card-checkbox-1')
                 ->click('@pay-your-order-btn');
-            $orderHistory = $this->orderHistoryProducts
+            $OrderHistoryProduct = $this->orderHistoryProducts
                 ->latest()
-                ->first()
-                ->orderHistory;
+                ->first();
+            $orderHistory = $OrderHistoryProduct->orderHistory;
             $browser->assertSee($productName)
                 ->assertSee('For Your Reference: '.$orderHistory->reference_number);
+            $OrderHistoryProduct->delete();
             $orderHistory->delete();
         });
     }
