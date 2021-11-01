@@ -23,10 +23,13 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $faker = \Faker\Factory::create();
+        $faker->addProvider(new \Bezhanov\Faker\Provider\Commerce($faker));
+
         return [
             'user_id' => User::inRandomOrder()->first()->id,
             'company_id' => Company::inRandomOrder()->first()->id,
-            'name' => $this->faker->company,
+            'name' => $faker->productName,
             'short_description' => substr($this->faker->paragraph(), 0, 191),
             'long_description' => $this->faker->paragraph(4),
             'product_details' => $this->faker->paragraph(5),
