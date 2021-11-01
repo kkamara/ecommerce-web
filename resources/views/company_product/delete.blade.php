@@ -17,7 +17,11 @@
                 <div class="card-text text-center">
                     <div class="form-group">
                         <label>Are you sure you want to delete this item from your product listings?
-                            <select name="choice" class='form-control'>
+                            <select 
+                                dusk="choice" 
+                                name="choice" 
+                                class='form-control'
+                            >
                                 <option value="0">No</option>
                                 <option value="1">Yes</option>
                             </select>
@@ -32,7 +36,7 @@
                 </div>
 
                 <div class="form-group pull-right">
-                    <input type="submit" class='btn btn-primary'>
+                    <input dusk="submit-btn" type="submit" class='btn btn-primary'>
                 </div>
 
             </div>

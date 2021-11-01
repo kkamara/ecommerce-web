@@ -19,7 +19,13 @@
                     <div class="form-group">
                         <label>
                             Listing Name:
-                            <input type="text" class='form-control' name='name' value="{{ $product->name }}">
+                            <input 
+                                dusk="product-name"
+                                type="text" 
+                                class='form-control' 
+                                name='name' 
+                                value="{{ $product->name }}"
+                            />
                         </label>
                     </div>
 
@@ -90,7 +96,7 @@
                 </div>
 
                 <div class="form-group pull-right">
-                    <input type="submit" class='btn btn-primary'>
+                    <input dusk="submit-btn" type="submit" class='btn btn-primary'>
                 </div>
 
             </div>

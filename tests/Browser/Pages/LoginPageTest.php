@@ -27,7 +27,7 @@ class LoginPageTest extends DuskTestCase
     public function testRender()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visitRoute('login')
+            $browser->logout()->visitRoute('login')
                 ->assertTitleContains('Login')
                 ->assertSee('Email')
                 ->assertSee('Password');

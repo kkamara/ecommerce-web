@@ -52,10 +52,18 @@
                 </li>
                 <li class="list-group-item">
                     @if(Auth::check() && $product->doesUserOwnProduct())
-                        <a href='{{ route('companyProductEdit', [$product->company->slug, $product->id]) }}' class='btn btn-warning btn-sm pull-left'>
+                        <a 
+                            dusk="edit-btn"
+                            href='{{ route('companyProductEdit', [$product->company->slug, $product->id]) }}' 
+                            class='btn btn-warning btn-sm pull-left'
+                        >
                             Edit item
                         </a>
-                        <a href='{{ route('companyProductDelete', [$product->company->slug, $product->id]) }}' class='btn btn-danger btn-sm pull-right'>
+                        <a 
+                            dusk="delete-btn"
+                            href='{{ route('companyProductDelete', [$product->company->slug, $product->id]) }}' 
+                            class='btn btn-danger btn-sm pull-right'
+                        >
                             Delete item
                         </a>
                     @else
@@ -132,7 +140,7 @@
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <label>
-                                    <select name="rating" class='form-control'>
+                                    <select dusk="rating" name="rating" class='form-control'>
                                         <option value="">Choose a rating</option>
                                         <option value="0">0</option>
                                         <option value="1">1</option>
@@ -145,11 +153,20 @@
                             </div>
 
                             <div class="form-group">
-                                <textarea class='form-control' name='content' type="text" placeholder="Your review..."></textarea>
+                                <textarea 
+                                    dusk="content"
+                                    class='form-control' 
+                                    name='content' 
+                                    type="text" 
+                                    placeholder="Your review..."></textarea>
                             </div>
 
                             <div class="form-group pull-right">
-                                <input type="submit" class='form-group btn btn-primary'>
+                                <input 
+                                    dusk="submit-btn"
+                                    type="submit" 
+                                    class='form-group btn btn-primary'
+                                />
                             </div>
                         </form>
                     @endif
