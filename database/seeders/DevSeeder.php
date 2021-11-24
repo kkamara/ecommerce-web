@@ -57,11 +57,9 @@ class DevSeeder extends Seeder
      */
     private function setupPaymentConfigs($users) {
         foreach($users as $user) {
-            Log::debug($user);
-            UserPaymentConfig::factory()->create([
-                'user_id' => $user->id,
-                'card_holder_name' => $user->name
-            ]);
+            UserPaymentConfig::factory()
+                ->for($user)
+                ->create(['card_holder_name' => $user->name]);
         }
     }
 
@@ -70,10 +68,9 @@ class DevSeeder extends Seeder
      * @return void
      */
     private function setupPaymentConfig($user) {
-        return UserPaymentConfig::factory()->create([
-            'user_id' => $user->id,
-            'card_holder_name' => $user->name
-        ]);
+        return UserPaymentConfig::factory()
+            ->for($user)
+            ->create(['card_holder_name' => $user->name]);
     }
 
     /**
@@ -82,9 +79,7 @@ class DevSeeder extends Seeder
      */
     private function setupAddressConfigs($users) {
         foreach($users as $user) {
-            UsersAddress::factory()->create([
-                'user_id' => $user->id,
-            ]);
+            UsersAddress::factory()->for($user)->create();
         }
     }
 
@@ -93,7 +88,7 @@ class DevSeeder extends Seeder
      * @return Company
      */
     private function makeCompany(User $user) {
-        return Company::factory()->create(['user_id' => $user->id,]);
+        return Company::factory()->for($user)->create();
     }
 
     /**
@@ -103,27 +98,26 @@ class DevSeeder extends Seeder
      * @return Product|Product[]
      */
     private function makeProducts(User $user, Company $company, int $count=50) {
-        $products = Product::factory()->count($count)->create([
-            'user_id' => $user->id,
-            'company_id' => $company->id,
-        ]);
+        $products = Product::factory()
+            ->count($count)
+            ->for($user)
+            ->for($company)
+            ->create();
         foreach($products as $product) {
-            $this->makeProductReviews($product->id, 2);
+            $this->makeProductReviews($product, 2);
         }
         return $products;
     }
 
     /**
-     * @param  String $productId
+     * @param  Product $product
      * @param  int $limit {30}
      * @return void
      */
-    private function makeProductReviews($productId, $limit=30) {
+    private function makeProductReviews($product, $limit=30) {
         /** @var Int $count */
         $count = mt_rand(0, $limit);
-        ProductReview::factory()->count($count)->create([
-            'product_id' => $productId,
-        ]);
+        ProductReview::factory()->for($product)->count($count)->create();
     }
 
     /**
@@ -138,10 +132,12 @@ class DevSeeder extends Seeder
                 ->inRandomOrder()
                 ->first() ?:
                 $this->setupPaymentConfig($user);
-            OrderHistory::factory()->count($count)->create([
-                'user_id' => $user->id,
-                'user_payment_config_id' => $usersPaymentConfig->id,
-            ]);
+            
+            OrderHistory::factory()
+                ->count($count)
+                ->for($user)
+                ->for($usersPaymentConfig)
+                ->create();
         }
     }
 
