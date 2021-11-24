@@ -43,7 +43,7 @@ trait ProductScopes {
         {
             $querySearch = filter_var($querySearch, FILTER_SANITIZE_STRING);
             array_push($whereClause, [
-                'products.name', 'LIKE', "$querySearch%"
+                'products.name', 'LIKE', "%$querySearch%"
             ]);
         }
         if(isset($min))
@@ -61,9 +61,9 @@ trait ProductScopes {
             ]);
         }
 
-        if(isset($whereClause)) {
-            $query->where($whereClause);
-        }
+        $query->when($whereClause, function ($query, $whereClause) {
+            return $query->where($whereClause);
+        });
 
         $query->leftJoin(
             'order_history_products', 
