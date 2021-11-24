@@ -43,7 +43,7 @@ trait ProductScopes {
         {
             $querySearch = filter_var($querySearch, FILTER_SANITIZE_STRING);
             array_push($whereClause, [
-                'products.name', 'LIKE', "$querySearch%"
+                'products.name', 'LIKE', "%$querySearch%"
             ]);
         }
         if(isset($min))
