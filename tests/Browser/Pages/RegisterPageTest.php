@@ -64,7 +64,6 @@ class RegisterPageTest extends DuskTestCase
             $browser->click('@register-btn');
 
             $browser->assertRouteIs('home');
-            $browser->screenshot('test-register-action');
 
             User::where('email', $email)->delete();
         });

@@ -80,7 +80,6 @@ class ProductPageTest extends DuskTestCase
                 ->click('@delete-btn')
                 ->select('@choice', 1)
                 ->click('@submit-btn')
-                ->screenshot('test-delete-product-by-vendor-user')
                 ->assertRouteIs('companyProductHome', [$product->company->slug])
                 ->assertSee('Your item listing was successfully removed.');
         });
@@ -104,7 +103,6 @@ class ProductPageTest extends DuskTestCase
                 ->select('@rating', $rating)
                 ->type('@content', $content)
                 ->click('@submit-btn')
-                ->screenshot('creating-a-product-review-2')
                 ->assertSee('We appreciate your review of this item.')
                 ->assertSee($content)
                 ->assertSee('Product Rated '.$rating.' / 5 by you');

@@ -31,7 +31,6 @@ class HomePageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visitRoute('home');
-            $browser->screenshot('test-search-products');
 
             $product = Product::inRandomOrder()->first();
             $browser->type('@search-products-in', substr(
