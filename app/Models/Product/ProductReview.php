@@ -44,7 +44,7 @@ class ProductReview extends Model
      */
     public function product()
     {
-        return $this->hasOne('App\Models\Product\Product');
+        return $this->belongsTo('App\Models\Product\Product');
     }
 
     /**
