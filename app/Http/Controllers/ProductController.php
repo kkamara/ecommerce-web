@@ -107,7 +107,7 @@ class ProductController extends Controller
         $permissionToReview = FALSE;
 
         if(null !== $this->user) {
-            $permissionToReview = $this->product->didUserPurchaseProduct($this->user->id);
+            $permissionToReview = $this->product->didUserPurchaseProduct($this->user);
         }
 
         return view('product.show', [

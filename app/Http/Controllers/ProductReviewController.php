@@ -47,7 +47,7 @@ class ProductReviewController extends Controller
                 );
         }
 
-        if(false === $this->product->didUserPurchaseProduct($this->user->id))
+        if(false === $this->product->didUserPurchaseProduct($this->user))
         {
             return abort(404);
         }

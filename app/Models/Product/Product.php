@@ -106,21 +106,13 @@ class Product extends Model
      * @param  \App\Models\User  $userId
      * @return Bool
      */
-    public function didUserPurchaseProduct($userId)
+    public function didUserPurchaseProduct($user)
     {
-        foreach($this->orderHistoryProducts()->get() as $product){
-            $orderHistory = $product->orderHistory()->get();
-
-            foreach($orderHistory as $order)
-            {
-                if($order->user_id == $userId)
-                {
-                    return TRUE;
-                }
-            }
-        }
-
-        return FALSE;
+        $id = $this->id;
+        return collect(Product::boughtBy($user)->get()->toArray())
+            ->contains(function ($data) use ($id) {
+                return $data['id'] == $id;
+            });
     }
 
     /**

@@ -95,7 +95,7 @@ class ProductPageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $guest = User::where('email', $this->guest['email'])->first();
-            $product = Product::inRandomOrder()->first();
+            $product = Product::boughtBy($guest)->inRandomOrder()->first();
             $content = $this->faker->paragraph();
             $rating = mt_rand(0, 5);
 
@@ -104,9 +104,9 @@ class ProductPageTest extends DuskTestCase
                 ->select('@rating', $rating)
                 ->type('@content', $content)
                 ->click('@submit-btn')
+                ->screenshot('creating-a-product-review-2')
                 ->assertSee('We appreciate your review of this item.')
                 ->assertSee($content)
-                ->assertSee('Posted 1 second ago')
                 ->assertSee('Product Rated '.$rating.' / 5 by you');
         });
     }

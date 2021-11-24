@@ -127,4 +127,24 @@ trait ProductScopes {
     {
         return $query->where('company_id', '=', $companyId);
     }
+
+    /**
+     * Find whether a given user has purchased this product instance.
+     *
+     * @param  \Illuminate\Database\Eloquent\Model  $query
+     * @param  \App\Models\User                     $user
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function scopeBoughtBy($query, $user)
+    {
+        return $query
+            ->leftJoin('order_history_products', 'products.id', '=','order_history_products.product_id',)
+            ->leftJoin('order_history', 'order_history_products.order_history_id', '=', 'order_history.id',)
+            ->leftJoin('users', 'order_history.user_id', '=', 'users.id',)
+            ->where(
+                'users.email', 
+                '=',
+                $user['email'],
+            );
+    }
 }
