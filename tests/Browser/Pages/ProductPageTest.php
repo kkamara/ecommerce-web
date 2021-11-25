@@ -94,7 +94,10 @@ class ProductPageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $guest = User::where('email', $this->guest['email'])->first();
-            $product = Product::boughtBy($guest)->inRandomOrder()->first();
+            $product = Product::select('products.id')
+                ->boughtBy($guest)
+                ->inRandomOrder()
+                ->first();
             $content = $this->faker->paragraph();
             $rating = mt_rand(0, 5);
 

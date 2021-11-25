@@ -108,11 +108,9 @@ class Product extends Model
      */
     public function didUserPurchaseProduct($user)
     {
-        $id = $this->id;
-        return collect(Product::boughtBy($user)->get()->toArray())
-            ->contains(function ($data) use ($id) {
-                return $data['id'] == $id;
-            });
+        return null !== $this->boughtBy($user)
+            ->where('products.id', $this->id)
+            ->first();
     }
 
     /**
