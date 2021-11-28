@@ -13,10 +13,7 @@ backend-setup:
 	./vendor/bin/sail artisan key:generate
 
 backend-migrate:
-	./vendor/bin/sail artisan migrate
-
-backend-seed:
-	./vendor/bin/sail artisan db:seed
+	./vendor/bin/sail artisan migrate --seed
 
 frontend-clean:
 	@rm -rf node_modules 2>/dev/null || true
