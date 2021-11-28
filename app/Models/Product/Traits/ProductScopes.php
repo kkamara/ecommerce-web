@@ -61,9 +61,7 @@ trait ProductScopes {
             ]);
         }
 
-        $query->when($whereClause, function ($query, $whereClause) {
-            return $query->where($whereClause);
-        });
+        $query->when($whereClause, fn ($query, $whereClause) => $query->where($whereClause));
 
         $query->leftJoin(
             'order_history_products', 
