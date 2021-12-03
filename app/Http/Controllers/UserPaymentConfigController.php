@@ -9,13 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserPaymentConfigController extends Controller
 {
-    /** @property User */
-    protected $user;
-
-    /** @property UserPaymentConfig */
-    protected $userPaymentConfig;
-
-    public function __construct() {
+    public function __construct(protected ?User $user, protected ?UserPaymentConfig $userPaymentConfig) {
         $this->user              = new User;
         $this->userPaymentConfig = new UserPaymentConfig;
         $this->middleware('auth');
@@ -28,17 +22,12 @@ class UserPaymentConfigController extends Controller
      */
     public function index()
     {
-        /** @var User */
-        $this->user = auth()->user();
-
-        $this->userPaymentConfig = $this->userPaymentConfig
-            ->where('user_id', $this->user->id)
-            ->paginate(10);
-
         return view('user_payment_config.index', [
-                'title' => 'Billing Cards',
-                'billingCards' => $this->userPaymentConfig,
-            ]);
+            'title' => 'Billing Cards', 
+            'billingCards' => $this->userPaymentConfig
+                ->where('user_id', auth()->user())
+                ->paginate(10),
+        ]);
     }
 
     /**
@@ -48,9 +37,7 @@ class UserPaymentConfigController extends Controller
      */
     public function create()
     {
-        return view('user_payment_config.create', [
-                'title' => 'Add Billing Card',
-            ]);
+        return view('user_payment_config.create', ['title' => 'Add Billing Card']);
     }
 
     /**
@@ -61,9 +48,6 @@ class UserPaymentConfigController extends Controller
      */
     public function store(Request $request)
     {
-        /** @var User */
-        $this->user = auth()->user();
-
         $validator = Validator::make($request->all(), [
             'card_holder_name' => 'required|min: 6|max: 191',
             'card_number' => 'required|digits: 16',
@@ -111,7 +95,7 @@ class UserPaymentConfigController extends Controller
         }
 
         $data = array(
-            'user_id' => $this->user->id,
+            'user_id' => auth()->user()->id,
             'card_holder_name' => request('card_holder_name'),
             'card_number' => request('card_number'),
             'expiry_month' => $expiry_month,
@@ -148,14 +132,10 @@ class UserPaymentConfigController extends Controller
      */
     public function edit(UserPaymentConfig $userPaymentConfig)
     {
-        $this->userPaymentConfig = $userPaymentConfig;
-        /** @var User */
-        $this->user = auth()->user();
-
-        return match($this->userPaymentConfig['user_id']) {
-            $this->user->id => view('user_payment_config.edit', [
+        return match($userPaymentConfig['user_id']) {
+            auth()->user()->id => view('user_payment_config.edit', [
                 'title' => 'Edit Billing Card',
-                'billingCard' => $this->userPaymentConfig,
+                'billingCard' => $userPaymentConfig,
             ]),
             default => abort(404),
         };
@@ -170,12 +150,8 @@ class UserPaymentConfigController extends Controller
      */
     public function update(Request $request, UserPaymentConfig $userPaymentConfig)
     {
-        $this->userPaymentConfig = $userPaymentConfig;
-        /** @var User */
-        $this->user = auth()->user();
-
         if(
-            $this->userPaymentConfig['user_id'] !== $this->user->id
+            $userPaymentConfig['user_id'] !== auth()->user()->id
         ) {
             return abort(404);
         }
@@ -266,18 +242,14 @@ class UserPaymentConfigController extends Controller
      */
     public function delete(UserPaymentConfig $userPaymentConfig)
     {
-        $this->userPaymentConfig = $userPaymentConfig;
-        /** @var User */
-        $this->user = auth()->user();
-
-        if($this->userPaymentConfig['user_id'] !== $this->user->id)
+        if($userPaymentConfig['user_id'] !== auth()->user()->id)
         {
             return abort(404);
         }
 
         return view('user_payment_config.delete', [
             'title' => 'Delete Billing Card',
-            'billingCard' => $this->userPaymentConfig,
+            'billingCard' => $userPaymentConfig,
         ]);
     }
 
@@ -290,12 +262,8 @@ class UserPaymentConfigController extends Controller
      */
     public function destroy(UserPaymentConfig $userPaymentConfig, Request $request)
     {
-        $this->userPaymentConfig = $userPaymentConfig;
-        /** @var User */
-        $this->user = auth()->user();
-
         if(
-            $this->userPaymentConfig['user_id'] !== $this->user->id
+            $userPaymentConfig['user_id'] !== auth()->user()->id
         ) {
             return abort(404);
         }
@@ -313,7 +281,7 @@ class UserPaymentConfigController extends Controller
 
         switch($choice) {
             case true:
-                $this->userPaymentConfig->destroy($userPaymentConfig->id);
+                $userPaymentConfig->delete();
 
                 return redirect()
                     ->route('billingHome')

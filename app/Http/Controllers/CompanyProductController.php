@@ -9,19 +9,13 @@ use App\Models\User;
 
 class CompanyProductController extends Controller
 {
-    /** @property Company */
-    protected $company;
-
-    /** @property Product */
-    protected $product;
-
-    /** @property User */
-    protected $user;
-
     /**
      * @construct
      */
     public function __construct(
+        protected ?Company $company,
+        protected ?Product $product,
+        protected ?User $user,
     ) {
         $this->company = new Company;
         $this->product = new Product;
@@ -50,7 +44,7 @@ class CompanyProductController extends Controller
             return abort(404);
         }
 
-        $this->product = $this->product->getProducts(
+        $product = $this->product->getProducts(
             $request->get('query'),
             $request->get('sort_by'),
             $request->get('min_price'),
@@ -63,7 +57,7 @@ class CompanyProductController extends Controller
 
         return view('company_product.index', [
             'title' => 'My Products',
-            'companyProducts' => $this->product,
+            'companyProducts' => $product,
             'input' => $request->all(),
         ]);
     }
@@ -114,7 +108,6 @@ class CompanyProductController extends Controller
             return abort(404);
         }
 
-        $this->product = new Product;
         /** @var Array $errors */
         $errors = $this->product->getErrors($request);
 
@@ -135,10 +128,7 @@ class CompanyProductController extends Controller
             'user_id'           => $this->user->id,
             'company_id'        => $this->company->id,
             'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
-            'cost'              => ((float) filter_var(
-                                            $request->input('cost'), 
-                                            FILTER_SANITIZE_STRING
-                                        )) * 100,
+            'cost'              => ((float) filter_var($request->input('cost'), FILTER_SANITIZE_STRING)) * 100,
             'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
             'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
@@ -220,10 +210,7 @@ class CompanyProductController extends Controller
          */
         $data = array(
             'name'              => filter_var($request->input('name'), FILTER_SANITIZE_STRING),
-            'cost'              => ((float) filter_var(
-                                            $request->input('cost'), 
-                                            FILTER_SANITIZE_STRING
-                                        )) * 100,
+            'cost'              => ((float) filter_var($request->input('cost'), FILTER_SANITIZE_STRING)) * 100,
             'shippable'         => (bool) filter_var($request->input('shippable'), FILTER_SANITIZE_NUMBER_INT),
             'free_delivery'     => (bool) filter_var($request->input('free_delivery'), FILTER_SANITIZE_NUMBER_INT),
             'short_description' => filter_var($request->input('short_description', FILTER_SANITIZE_STRING)),
@@ -250,7 +237,6 @@ class CompanyProductController extends Controller
      */
     public function delete($slug, Product $product, Request $request)
     {
-        $this->product = $product;
         $this->company = $this->company->where('slug', $slug)->first();
         /** @var User */
         $this->user = auth()->user();
@@ -264,7 +250,7 @@ class CompanyProductController extends Controller
         }
 
         return view('company_product.delete', [
-            'title' => 'Delete '.$this->product->name,
+            'title' => 'Delete '.$product->name,
         ])->with(compact('product'));
     }
 
@@ -278,7 +264,6 @@ class CompanyProductController extends Controller
      */
     public function destroy($slug, Product $product, Request $request)
     {
-        $this->product = $product;
         $this->company = $this->company->where('slug', $slug)->first();
         /** @var User */
         $this->user = auth()->user();
@@ -294,10 +279,10 @@ class CompanyProductController extends Controller
         switch($request->input('choice')) {
             case '0':
                 return redirect()
-                    ->route('productShow', $this->product->id)
+                    ->route('productShow', $product->id)
                     ->with('flashSuccess', 'Your item listing has not been removed.');
             case '1':
-                $this->product->delete();
+                $product->delete();
 
                 return redirect()
                     ->route('companyProductHome', $this->company->slug)

@@ -20,19 +20,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
-
-    /** @property User */
-    protected $user;
-
-    /** @property UsersAddress */
-    protected $usersAddress;
-
-    /** @property UserPaymentConfig */
-    protected $userPaymentConfig;
-
-    /** @property SessionCartHelper */
-    protected $sessionCartHelper;    
+    protected $redirectTo = '/'; 
 
     /**
      * Create a new controller instance.
@@ -40,6 +28,10 @@ class RegisterController extends Controller
      * @return void
      */
     public function __construct(
+        protected ?User $user,
+        protected ?UsersAddress $usersAddress,
+        protected ?UserPaymentConfig $userPaymentConfig,
+        protected ?SessionCartHelper $sessionCartHelper,   
     ) {
         $this->user              = new User;
         $this->usersAddress      = new UsersAddress;

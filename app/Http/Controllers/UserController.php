@@ -8,10 +8,7 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    /** @property User */
-    protected $user;
-    
-    public function __construct() {
+    public function __construct(protected User $user) {
         $this->user = new User;
         $this->middleware('auth');
     }
@@ -25,12 +22,12 @@ class UserController extends Controller
     public function edit($slug)
     {
         /** @var User */
-        $authUser = auth()->user();
-        $this->user = $this->user->where('slug', '=', $slug)->first();
+        $this->user = auth()->user();
+        $urlUser = $this->user->where('slug', '=', $slug)->first();
 
         if(
             null === $this->user->id || 
-            $authUser->id !== $this->user->id
+            $urlUser->id !== $this->user->id
         ) {
             return abort(404);
         }
@@ -51,10 +48,10 @@ class UserController extends Controller
     public function update($slug, Request $request)
     {
         /** @var User */
-        $authUser = auth()->user();
-        $this->user = $this->user->where('slug', '=', $slug)->first();
+        $this->user = auth()->user();
+        $urlUser = $this->user->where('slug', '=', $slug)->first();
 
-        if(null === $authUser || null === $this->user) {
+        if(null === $urlUser || null === $this->user) {
             return abort(404);
         }
 

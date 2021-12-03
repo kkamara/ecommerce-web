@@ -11,20 +11,13 @@ use App\Models\Cart\Cart;
 use App\Models\User;
 
 class OrderHistoryController extends Controller
-{
-    /** @property User */
-    protected $user;
-    
-    /** @property OrderHistoryProducts */
-    protected $orderHistoryProducts;
-    
-    /** @property OrderHistory */
-    protected $orderHistory;
-    
-    /** @property Cart */
-    protected $cart;
-    
-    public function __construct() {
+{    
+    public function __construct(
+        protected ?User $user,
+        protected ?OrderHistoryProducts $orderHistoryProducts,
+        protected ?OrderHistory $orderHistory,
+        protected ?Cart $cart,
+    ) {
         $this->user                 = new User;
         $this->orderHistoryProducts = new OrderHistoryProducts;
         $this->orderHistory         = new OrderHistory;
@@ -39,16 +32,11 @@ class OrderHistoryController extends Controller
      */
     public function index()
     {
-        /** @var User */
-        $this->user = auth()->user();
-
-        $this->orderHistory = $this->orderHistory->where([
-            'user_id' => $this->user->id,
-        ])->paginate(10);
-
         return view('order_history.index', [
             'title' => 'Invoices',
-            'orderHistory' => $this->orderHistory, 
+            'orderHistory' => $this->orderHistory->where([
+                    'user_id' => auth()->user()->id,
+                ])->paginate(10), 
         ]);
     }
 
@@ -62,9 +50,9 @@ class OrderHistoryController extends Controller
         if(Auth::check()) {
             /** @var User */
             $this->user = auth()->user();
-            $this->cart = $this->user->getDbCart();
+            $cart = $this->user->getDbCart();
 
-            if(empty($this->cart)) {
+            if(empty($cart)) {
                 return redirect()
                     ->back()
                     ->with(
@@ -75,7 +63,7 @@ class OrderHistoryController extends Controller
 
             return view('order_history.create', array(
                 'title' => 'Create Order',
-                'cart' => $this->cart,
+                'cart' => $cart,
                 'addresses' => $this->user->userAddress,
                 'billingCards' => $this->user->userPaymentConfig,
             ));
@@ -98,25 +86,25 @@ class OrderHistoryController extends Controller
     {
         /** @var User */
         $this->user = auth()->user();
-
-        $input = $request->request;
         $deliveryAddressIds = $billingCardIds = array();
 
-        foreach($input as $k => $v)
+        foreach($request->request as $k => $v)
         {
             if(strpos($k, 'address-') === 0)
             {
                 $id = str_replace('address-', '', $k);
 
-                if(is_numeric($id))
+                if(is_numeric($id)) {
                     array_push($deliveryAddressIds, (int) $id);
+                }
             }
             elseif(strpos($k, 'card-') === 0)
             {
                 $id = str_replace('card-', '', $k);
 
-                if(is_numeric($id))
+                if(is_numeric($id)) {
                     array_push($billingCardIds, (int) $id);
+                }
             }
         }
 
@@ -152,15 +140,15 @@ class OrderHistoryController extends Controller
         ]);
 
         // create order history products
-        foreach($this->user->getDbCart() as $this->cart)
+        foreach($this->user->getDbCart() as $cart)
         {
             $this->orderHistoryProducts->create([
                 'order_history_id' => $this->orderHistory->id,
-                'product_id' => $this->cart['product']->id,
-                'amount' => $this->cart['amount'],
-                'cost' => $this->cart['product']->cost,
-                'shippable' => $this->cart['product']->shippable,
-                'free_delivery' => $this->cart['product']->free_delivery,
+                'product_id' => $cart['product']->id,
+                'amount' => $cart['amount'],
+                'cost' => $cart['product']->cost,
+                'shippable' => $cart['product']->shippable,
+                'free_delivery' => $cart['product']->free_delivery,
             ]);
         }
 
@@ -178,11 +166,8 @@ class OrderHistoryController extends Controller
      */
     public function show($refNum)
     {
-        /** @var User */
-        $this->user = auth()->user();
-
         $this->orderHistory = $this->orderHistory->where([
-            'user_id'          => $this->user->id,
+            'user_id'          => auth()->user()->id,
             'reference_number' => $refNum,
         ])->firstOrFail();
 

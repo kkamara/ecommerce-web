@@ -14,33 +14,19 @@ use App\Models\User;
 use Carbon\Carbon;
 
 class ModeratorsHubController extends Controller
-{
-    /** @property Carbon */
-    protected $carbon;
-
-    /** @property User */
-    protected $user;
-
-    /** @property FlaggedProductReview */
-    protected $flaggedProductReview;
-
-    /** @property VendorApplication */
-    protected $vendorApplication;
-
-    /** @property ProductReview */
-    protected $productReview;
-
-    /** @property UsersAddress */
-    protected $usersAddress;
-
-    /** @property Company */
-    protected $company;
-    
+{    
     /**
      * @construct
      */
-    public function __construct()
-    {
+    public function __construct(
+        protected ?Carbon $carbon,
+        protected ?User $user,
+        protected ?FlaggedProductReview $flaggedProductReview,
+        protected ?VendorApplication $vendorApplication,
+        protected ?ProductReview $productReview,
+        protected ?UsersAddress $usersAddress,
+        protected ?Company $company,
+    ) {
         $this->carbon               = new Carbon;
         $this->user                 = new User;
         $this->flaggedProductReview = new FlaggedProductReview;
@@ -59,33 +45,34 @@ class ModeratorsHubController extends Controller
     public function index()
     {
         /** @var User */
-        $this->user = auth()->user();
-
-        if(false === $this->user->hasRole('moderator'))
+        $user = auth()->user();
+        if(false === $user->hasRole('moderator'))
         {
             return abort(404);
         }
 
-        $this->vendorApplication = $this->vendorApplication
+        $vendorApplications = $this->vendorApplication
             ->whereFresh()
             ->paginate(
                 5,
                 ['*'],
                 'vendorAppPage'
             );
-        $this->productReview = $this->flaggedProductReview
+        $unansweredFlaggedReviews = $this->flaggedProductReview
             ->whereUnanswered()
             ->paginate(
                 5, 
                 ['*'],
                 'flaggedReviewPage'
             );
+        
+        $title = 'Moderator\'s Hub';
 
-        return view('modhub.index', [
-            'title'                    => 'Moderator\'s Hub',
-            'vendorApplications'       => $this->vendorApplication,
-            'unansweredFlaggedReviews' => $this->productReview,
-        ]);
+        return view('modhub.index', compact(
+            'title', 
+            'vendorApplications', 
+            'unansweredFlaggedReviews',
+        ));
     }
 
     /**
@@ -97,7 +84,6 @@ class ModeratorsHubController extends Controller
      */
     public function storeFlaggedReviewDecision(ProductReview $productReview, Request $request)
     {
-        $this->productReview = $productReview;
         /** @var User */
         $this->user = auth()->user();
 
@@ -122,7 +108,7 @@ class ModeratorsHubController extends Controller
 
         $this->flaggedProductReview->where(
             'product_reviews_id', 
-            $this->productReview->id
+            $productReview->id
         )->delete();
 
         /** @var Array stores flash success / failure msg to display to user */
@@ -130,7 +116,7 @@ class ModeratorsHubController extends Controller
 
         if( (bool) $acceptDecision === TRUE ) /** if accepted */
         {
-            $this->productReview->update([
+            $productReview->update([
                 'flagged_review_decided_by' => $this->user->id,
                 'flagged_review_decision_reason' => $reasonGiven,
                 'updated_at' => $this->carbon->now()->format('Y-m-d H:i:s'),
@@ -140,7 +126,7 @@ class ModeratorsHubController extends Controller
         }
         else /** if declined */
         {
-            $this->productReview->update([
+            $productReview->update([
                 'flagged_review_decided_by' => $this->user->id,
                 'flagged_review_decision_reason' => $reasonGiven,
                 'updated_at' => $this->carbon->now()->format('Y-m-d H:i:s'),
@@ -162,11 +148,7 @@ class ModeratorsHubController extends Controller
      * @param \IlluminateHttp\Request               $request
      * @return \Illuminate\Http\Response
      */
-    public function storeVendorApplicantDecision(
-        VendorApplication $vendorApplication, 
-        Request $request
-    ) {
-        $this->vendorApplication = $vendorApplication;
+    public function storeVendorApplicantDecision(VendorApplication $vendorApplication, Request $request) {
         /** @var User */
         $this->user = auth()->user();
 
@@ -180,7 +162,7 @@ class ModeratorsHubController extends Controller
         }
 
         if(
-            $decisionError = $this->vendorApplication->getModDecisionError(
+            $decisionError = $vendorApplication->getModDecisionError(
                 $reasonGiven, 
                 $acceptDecision, 
                 $declineDecision

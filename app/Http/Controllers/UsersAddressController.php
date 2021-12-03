@@ -9,13 +9,7 @@ use App\Models\User;
 
 class UsersAddressController extends Controller
 {
-    /** @property User */
-    protected $user;
-
-    /** @property UsersAddress */
-    protected $usersAddress;
-
-    public function __construct() {
+    public function __construct(protected ?User $user, protected ?UsersAddress $usersAddress) {
         $this->user         = new User;
         $this->usersAddress = new UsersAddress;
         $this->middleware('auth');
@@ -28,15 +22,11 @@ class UsersAddressController extends Controller
      */
     public function index()
     {
-        /** @var User */
-        $this->user = auth()->user();
-        $this->usersAddress = $this->usersAddress
-            ->where('user_id', $this->user->id)
-            ->paginate(10);
-
         return view('users_address.index', [
             'title' => 'Addresses',
-            'usersAddresses' => $this->usersAddress,
+            'usersAddresses' => $this->usersAddress
+                ->where('user_id', auth()->user()->id)
+                ->paginate(10),
         ]);
     }
 
@@ -60,9 +50,6 @@ class UsersAddressController extends Controller
      */
     public function store(Request $request)
     {
-        /** @var User */
-        $this->user = auth()->user();
-
         $validator = Validator::make($request->all(), [
             'building_name' => 'required|string|max:191',
             'street_address1' => 'required|max:191',
@@ -91,7 +78,7 @@ class UsersAddressController extends Controller
         }
 
         $data = array(
-            'user_id' => $this->user->id,
+            'user_id' => auth()->user()->id,
             'building_name' => request('building_name'),
             'street_address1' => request('street_address1'),
             'street_address2' => request('street_address2'),
@@ -124,18 +111,14 @@ class UsersAddressController extends Controller
      */
     public function edit(UsersAddress $usersAddress)
     {
-        $this->usersAddress = $usersAddress;
-        /** @var User */
-        $this->user = auth()->user();
-        
-        if($this->usersAddress['user_id'] !== $this->user->id)
+        if($usersAddress['user_id'] !== auth()->user()->id)
         {
             return abort(404);
         }
 
         return view('users_address.edit', [
             'title' => 'Edit Address',
-            'usersAddress' => $this->usersAddress,
+            'usersAddress' => $usersAddress,
         ]);
     }
 
@@ -148,11 +131,7 @@ class UsersAddressController extends Controller
      */
     public function update(UsersAddress $usersAddress, Request $request)
     {
-        $this->usersAddress = $usersAddress;
-        /** @var User */
-        $this->user = auth()->user();
-
-        if($this->usersAddress['user_id'] !== $this->user->id)
+        if($usersAddress['user_id'] !== auth()->user()->id)
         {
             return abort(404);
         }
@@ -221,18 +200,14 @@ class UsersAddressController extends Controller
      */
     public function delete(UsersAddress $usersAddress)
     {
-        $this->usersAddress = $usersAddress;
-        /** @var User */
-        $this->user = auth()->user();
-
-        if($this->usersAddress['user_id'] !== $this->user->id)
+        if($usersAddress['user_id'] !== auth()->user()->id)
         {
             return abort(404);
         }
 
         return view('users_address.delete', [
             'title' => 'Delete Address',
-            'usersAddress' => $this->usersAddress,
+            'usersAddress' => $usersAddress,
         ]);
     }
 
@@ -245,11 +220,7 @@ class UsersAddressController extends Controller
      */
     public function destroy(UsersAddress $usersAddress, Request $request)
     {
-        $this->usersAddress = $usersAddress;
-        /** @var User */
-        $this->user = auth()->user();
-        
-        if($this->usersAddress['user_id'] !== $this->user->id) {
+        if($usersAddress['user_id'] !== auth()->user()->id) {
             return abort(404);
         }
 
@@ -265,7 +236,7 @@ class UsersAddressController extends Controller
         $choice = (bool) $request->input('choice');
 
         if($choice !== FALSE) {
-            $this->usersAddress->destroy($this->usersAddress->id);
+            $usersAddress->delete();
 
             return redirect()
                 ->route('addressHome')

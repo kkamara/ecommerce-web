@@ -8,10 +8,7 @@ use App\Models\Product\ProductReview;
 
 class FlaggedProductReviewController extends Controller
 {
-    /** @property FlaggedProductReview */
-    protected $flaggedProductReview;
-
-    public function __construct() {
+    public function __construct(protected FlaggedProductReview $flaggedProductReview) {
         $this->flaggedProductReview = new FlaggedProductReview;
     }
 
@@ -24,17 +21,16 @@ class FlaggedProductReviewController extends Controller
      */
     public function store(ProductReview $productReview, Request $request)
     {
-        $this->productReview = $productReview;
         $ip = $request->ip();
 
         if(
             $this->flaggedProductReview->hasIpFlaggedThisReview(
                 $ip, 
-                $this->productReview->id
+                $productReview->id,
             )->isEmpty()
         ) {
             $this->flaggedProductReview->create([
-                'product_reviews_id' => $this->productReview->id,
+                'product_reviews_id' => $productReview->id,
                 'flagged_from_ip'    => $ip,
             ]);
 

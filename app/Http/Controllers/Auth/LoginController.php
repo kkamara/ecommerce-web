@@ -18,18 +18,12 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/';
 
-    /** @property SessionCartHelper */
-    protected $sessionCartHelper;
-
-    /** @property User */
-    protected $user;
-
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(protected ?SessionCartHelper $sessionCartHelper, protected ?User $user)
     {
         $this->sessionCartHelper = new SessionCartHelper;
         $this->user              = new User;
@@ -73,15 +67,12 @@ class LoginController extends Controller
             ));
         }
 
-        $sanitizedEmail = filter_var(request('email'), FILTER_SANITIZE_EMAIL);
-
-        $creds = array(
-            'email' => $sanitizedEmail,
-            'password' => request('password'),
-        );
-
-        if(false === Auth::attempt($creds))
-        {
+        if(
+            false === Auth::attempt(array(
+                'email' => filter_var(request('email'), FILTER_SANITIZE_EMAIL),
+                'password' => request('password'),
+            ))
+        ) {
             return view('login.create', array(
                 'title' => 'Login',
                 'input' => $request->input(),
@@ -90,9 +81,10 @@ class LoginController extends Controller
             ));
         }
 
-        /** @var User */
-        $this->user              = auth()->user();
-        $this->sessionCartHelper = $this->sessionCartHelper->getSessionCart();
+        /**
+         * @var Array
+         */
+        $sessionCart = $this->sessionCartHelper->getSessionCart();
 
         /**
         * login
@@ -100,8 +92,10 @@ class LoginController extends Controller
         * if normal login then redirect to home
         * redirect back if false
         */
-        if (0 < count($this->sessionCartHelper)) {
-            $this->user->moveSessionCartToDbCart($this->sessionCartHelper);
+        if (0 < count($sessionCart)) {
+            /** @var User */
+            $user = auth()->user();
+            $user->moveSessionCartToDbCart($sessionCart);
             return redirect()->route('orderCreate');
         } else {
             return redirect()->route('home');

@@ -9,16 +9,10 @@ use App\Models\User;
 
 class ProductReviewController extends Controller
 {
-    /** @property User */
-    protected $user;
-
-    /** @property Product */
-    protected $product;
-    
     /**
      * @constructor
      */
-    public function __construct() {
+    public function __construct(protected ?User $user, protected ?Product $product) {
         $this->user    = new User;
         $this->product = new Product;
     }

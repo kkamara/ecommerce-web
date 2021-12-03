@@ -11,22 +11,15 @@ use App\Models\User;
 
 class ProductController extends Controller
 {
-    /** @property User */
-    protected $user;
-
-    /** @property SessionCartHelper */
-    protected $sessionCartHelper;
-
-    /** @property Product */
-    protected $product;
-
-    /** @property ProductReview */
-    protected $productReviews;
-
     /**
      * @construct
      */
-    public function __construct() {
+    public function __construct(
+        protected ?User $user,    
+        protected ?SessionCartHelper $sessionCartHelper,    
+        protected ?Product $product,    
+        protected ?ProductReview $productReviews,    
+    ) {
         $this->user              = new User;
         $this->sessionCartHelper = new SessionCartHelper;
         $this->product           = new Product;
@@ -40,7 +33,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $this->products = $this->product->getProducts(
+        $products = $this->product->getProducts(
             $request->get('query'),
             $request->get('sort_by'),
             $request->get('min_price'),
@@ -52,7 +45,7 @@ class ProductController extends Controller
 
         return view('product.index', [
                 'title' => 'Products',
-                'products' => $this->products,
+                'products' => $products,
                 'input' => $request->all(),
             ]);
     }
@@ -63,15 +56,13 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Product $product)
-    {
-        $this->product = $product;
-        
+    {        
         if(Auth::check())
         {
             /** @var User */
             $this->user = auth()->user();
 
-            if($this->user->id === $this->product->company->user_id)
+            if($this->user->id === $product->company->user_id)
                 return redirect()
                     ->back()
                     ->with(
@@ -79,16 +70,16 @@ class ProductController extends Controller
                         'Unable to perform add to cart action on your own product.'
                     );
 
-            $this->user->addProductToDbCart($this->product);
+            $this->user->addProductToDbCart($product);
         }
         else
         {
-            $this->sessionCartHelper->addProductToSessionCart($this->product);
+            $this->sessionCartHelper->addProductToSessionCart($product);
         }
 
         return redirect()
-            ->route('productShow', $this->product->id)
-            ->with('flashSuccess', $this->product->name.' added to cart');
+            ->route('productShow', $product->id)
+            ->with('flashSuccess', $product->name.' added to cart');
     }
 
     /**
@@ -101,19 +92,18 @@ class ProductController extends Controller
     {
         /** @var User */
         $this->user = auth()->user();
-        $this->product = $product;
-        $this->productReviews = $this->product->productReview()->get();
+        $productReviews = $product->productReview()->get();
 
         $permissionToReview = FALSE;
 
         if(null !== $this->user) {
-            $permissionToReview = $this->product->didUserPurchaseProduct($this->user);
+            $permissionToReview = $product->didUserPurchaseProduct($this->user);
         }
 
         return view('product.show', [
                 'title' => $product->name,
-                'product' => $this->product,
-                'reviews' => $this->productReviews,
+                'product' => $product,
+                'reviews' => $productReviews,
                 'permissionToReview' => $permissionToReview,
             ]);
     }

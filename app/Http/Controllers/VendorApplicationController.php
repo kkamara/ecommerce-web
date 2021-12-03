@@ -9,16 +9,10 @@ use App\Models\User;
 
 class VendorApplicationController extends Controller
 {
-    /** @property User */
-    protected $user;
-
-    /** @property UsersAddress */
-    protected $usersAddress;
-
-    /** @property VendorApplication */
-    protected $vendorApplication;
-
     public function __construct(
+        protected ?User $user,
+        protected ?UsersAddress $usersAddress,
+        protected ?VendorApplication $vendorApplication,
     ) {
         $this->user              = new User;
         $this->usersAddress      = new UsersAddress;
@@ -33,16 +27,14 @@ class VendorApplicationController extends Controller
      */
     public function create()
     {
-        /** @var User */
-        $this->user = auth()->user();
-        $this->usersAddresses = $this->usersAddress
-            ->where('user_id', $this->user->id)
+        $usersAddresses = $this->usersAddress
+            ->where('user_id', auth()->user()->id)
             ->get();
 
         if($this->user->hasNoRole()) {
             return view('vendor.create', [
                 'title' => 'Become a vendor',
-                'usersAddresses' => $this->usersAddresses,
+                'usersAddresses' => $usersAddresses,
             ]);
         }
         
@@ -57,9 +49,6 @@ class VendorApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        /** @var User */
-        $this->user = auth()->user();
-
         $companyName = filter_var($request->input('company_name'), FILTER_SANITIZE_STRING);
         $usersAddressId = filter_var($request->input('users_address'), FILTER_SANITIZE_NUMBER_INT);
 
@@ -79,7 +68,7 @@ class VendorApplicationController extends Controller
         }
     
         $this->vendorApplication->create([
-            'user_id' => $this->user->id,
+            'user_id' => auth()->user()->id,
             'proposed_company_name' => $companyName,
             'users_addresses_id' => $usersAddressId,
         ]);
@@ -94,10 +83,7 @@ class VendorApplicationController extends Controller
      */
     public function show()
     {
-        /** @var User */
-        $user = auth()->user();
-
-        if(false === $this->vendorApplication->hasUserApplied($user->id)) {
+        if(false === $this->vendorApplication->hasUserApplied(auth()->user()->id)) {
             return redirect()->route('home');
         }
     

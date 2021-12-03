@@ -10,19 +10,14 @@ use App\Models\User;
 
 class CartController extends Controller
 {
-    /** @property SessionCartHelper */
-    protected $sessionCartHelper;
-
-    /** @property User */
-    protected $user;
-
-    /** @property Cart */
-    protected $cart;
-
     /**
      * @construct
      */
-    public function __construct() {
+    public function __construct(
+        protected ?SessionCartHelper $sessionCartHelper,
+        protected ?User $user,
+        protected ?Cart $cart,
+    ) {
         $this->sessionCartHelper = new SessionCartHelper;
         $this->user              = new User;
         $this->cart              = new Cart;
@@ -40,17 +35,17 @@ class CartController extends Controller
         {
             /** @var User */
             $this->user = auth()->user();
-            $this->cart = $this->user->getDbCart();
+            $cart = $this->user->getDbCart();
         }
         else
         {
-            $this->cart = $this->sessionCartHelper->getSessionCart();
+            $cart = $this->sessionCartHelper->getSessionCart();
         }
 
         return view('cart.show', [
-                'title' => 'Cart',
-                'cart' => $this->cart,
-            ]);
+            'title' => 'Cart',
+            'cart' => $cart,
+        ]);
     }
 
     /**
@@ -64,8 +59,6 @@ class CartController extends Controller
     {
         if(Auth::check())
         {
-            /** @var User */
-            $this->user = auth()->user();
             $this->user->updateDbCartAmount($request);
         }
         else

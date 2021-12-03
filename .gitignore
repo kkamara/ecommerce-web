@@ -13,4 +13,5 @@ npm-debug.log
 yarn-error.log
 public/uploads/*
 tests/Browser/screenshots/*
+tests/Browser/.DS_Store
 tests/.DS_Store
