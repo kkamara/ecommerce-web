@@ -99,7 +99,7 @@ class UsersAddressController extends Controller
             ->route('addressHome')
             ->with(
                 'flashSuccess', 
-                'Address successfully created.'
+                config('flash.users_address.store_success'),
             );
     }
 
@@ -188,7 +188,7 @@ class UsersAddressController extends Controller
             ->route('addressHome')
             ->with(
                 'flashSuccess', 
-                'Address successfully updated.'
+                config('flash.users_address.update_success'),
             );
     }
 
@@ -242,14 +242,14 @@ class UsersAddressController extends Controller
                 ->route('addressHome')
                 ->with(
                     'flashSuccess', 
-                    'Address has been deleted successfully.'
+                    config('flash.users_address.destroy_y'),
                 );
         } else {
             return redirect()
                 ->route('addressHome')
                 ->with(
                     'flashSuccess', 
-                    'Address has not been deleted.'
+                    config('flash.users_address.destroy_n'),
                 );
         }
     }

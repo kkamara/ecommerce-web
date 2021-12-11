@@ -57,7 +57,7 @@ class OrderHistoryController extends Controller
                     ->back()
                     ->with(
                         'flashDanger', 
-                        'Please add an item to cart before checking out.'
+                        config('flash.order_history.create_danger_1'),
                     );
             }
 
@@ -71,7 +71,7 @@ class OrderHistoryController extends Controller
             return redirect('login/?fromOrder=true')
                 ->with(
                     'flashDanger', 
-                    'Please login or register to proceed to checkout'
+                    config('flash.order_history.create_danger_2'),
                 );
         }
     }

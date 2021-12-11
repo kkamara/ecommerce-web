@@ -94,7 +94,7 @@ class UserController extends Controller
             ->back()
             ->with(
                 'flashSuccess', 
-                'Your settings have been successfully updated.'
+                config('flash.user.update_success'),
             );
     }
 }

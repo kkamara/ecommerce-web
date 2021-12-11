@@ -140,7 +140,7 @@ class CompanyProductController extends Controller
 
         return redirect()
             ->route('productShow', $this->product->id)
-            ->with('flashSuccess', 'Product has been added to your listings.');
+            ->with('flashSuccess', config('flash.company_product.store_success'));
     }
 
     /**
@@ -224,7 +224,7 @@ class CompanyProductController extends Controller
 
         return redirect()
             ->route('productShow', $this->product->id)
-            ->with('flashSuccess', 'Product details have been updated.');
+            ->with('flashSuccess', config('flash.company_product.update_success'));
     }
 
     /**
@@ -280,19 +280,19 @@ class CompanyProductController extends Controller
             case '0':
                 return redirect()
                     ->route('productShow', $product->id)
-                    ->with('flashSuccess', 'Your item listing has not been removed.');
+                    ->with('flashSuccess', config('flash.company_product.destroy_n'));
             case '1':
                 $product->delete();
 
                 return redirect()
                     ->route('companyProductHome', $this->company->slug)
-                    ->with('flashSuccess', 'Your item listing was successfully removed.');
+                    ->with('flashSuccess', config('flash.company_product.destroy_y'));
             default:
                 return redirect()
                     ->back()
                     ->with(
                         'flashDanger', 
-                        'Oops, something went wrong. Contact system administrator.'
+                        config('flash.oops'),
                     );
         };
     }

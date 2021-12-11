@@ -122,7 +122,7 @@ class ModeratorsHubController extends Controller
                 'updated_at' => $this->carbon->now()->format('Y-m-d H:i:s'),
             ]);
 
-            $flashMessage = ['flashSuccess' => "Review has been restored."];
+            $flashMessage = ['flashSuccess' => config('flash.moderators_hub.store_flagged_review_decision_success')];
         }
         else /** if declined */
         {
@@ -133,7 +133,7 @@ class ModeratorsHubController extends Controller
                 'deleted_at' => $this->carbon->now()->format('Y-m-d H:i:s'),
             ]);
 
-            $flashMessage = ['flashDanger' => "Review has been deleted."];
+            $flashMessage = ['flashDanger' => config('flash.moderators_hub.store_flagged_review_decision_danger')];
         }
 
         return redirect()
@@ -209,7 +209,7 @@ class ModeratorsHubController extends Controller
                 ->find($vendorApplication->user_id)
                 ->assignRole('vendor');
 
-            $flashMessage = ['flashSuccess' => "Vendor application has been approved."];
+            $flashMessage = ['flashSuccess' => config('flash.moderators_hub.store_vendor_application_decision_success')];
         }
         else /** if declined */
         {
@@ -220,7 +220,7 @@ class ModeratorsHubController extends Controller
                 'updated_at' => $this->carbon->now()->format('Y-m-d H:i:s'),
             ]);
 
-            $flashMessage = ['flashDanger' => "Vendor application has been declined."];
+            $flashMessage = ['flashDanger' => config('flash.moderators_hub.store_vendor_application_decision_danger')];
         }
 
         return redirect()->route('modHubHome')->with($flashMessage);

@@ -120,7 +120,7 @@ class UserPaymentConfigController extends Controller
             ->route('billingHome')
             ->with(
                 'flashSuccess', 
-                'Billing card successfully created.'
+                config('flash.user_payment_config.store_success'),
             );
     }
 
@@ -230,7 +230,7 @@ class UserPaymentConfigController extends Controller
             ->route('billingHome')
             ->with(
                 'flashSuccess', 
-                'Billing card successfully updated.'
+                config('flash.user_payment_config.update_success'),
             );
     }
 
@@ -287,7 +287,7 @@ class UserPaymentConfigController extends Controller
                     ->route('billingHome')
                     ->with(
                         'flashSuccess', 
-                        'Billing card has been deleted successfully.'
+                        config('user_payment_config.destroy_y'),
                     );
                 break;
             default:
@@ -295,7 +295,7 @@ class UserPaymentConfigController extends Controller
                     ->route('billingHome')
                     ->with(
                         'flashSuccess', 
-                        'Billing card has not been deleted.'
+                        config('user_payment_config.destroy_n'),
                     );
                 break;
         }

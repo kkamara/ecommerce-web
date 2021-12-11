@@ -68,6 +68,6 @@ class CartController extends Controller
 
         return redirect()
             ->route('cartShow')
-            ->with('flashSuccess', 'Your cart was successfully updated!');
+            ->with('flashSuccess', config('flash.cart.update_success'));
     }
 }

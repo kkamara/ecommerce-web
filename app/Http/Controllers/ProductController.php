@@ -67,7 +67,7 @@ class ProductController extends Controller
                     ->back()
                     ->with(
                         'flashDanger', 
-                        'Unable to perform add to cart action on your own product.'
+                        config('flash.product.create_danger'),
                     );
 
             $this->user->addProductToDbCart($product);
@@ -79,7 +79,7 @@ class ProductController extends Controller
 
         return redirect()
             ->route('productShow', $product->id)
-            ->with('flashSuccess', $product->name.' added to cart');
+            ->with('flashSuccess', sprintf(config('flash.product.create_success'), $product->name));
     }
 
     /**

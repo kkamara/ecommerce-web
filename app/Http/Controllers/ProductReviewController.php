@@ -37,7 +37,7 @@ class ProductReviewController extends Controller
                 ->back()
                 ->with(
                     'flashDanger', 
-                    'You have already reviewed this product.'
+                    config('flash.product_review.store_danger'),
                 );
         }
 
@@ -72,7 +72,7 @@ class ProductReviewController extends Controller
             ->back()
             ->with(
                 'flashSuccess', 
-                'We appreciate your review of this item.'
+                config('flash.product_review.store_success'),
             );
     }
 }
