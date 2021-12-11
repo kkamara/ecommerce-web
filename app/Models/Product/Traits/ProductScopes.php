@@ -15,13 +15,7 @@ trait ProductScopes {
      * @param  Float                                $rMaxPrice,
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function scopeGetProducts(
-        $query, 
-        $rQuery='',
-        $rSortBy='',
-        $rMinPrice=null,
-        $rMaxPrice=null,
-    ) {
+    public function scopeGetProducts($query, $rQuery='', $rSortBy='', $rMinPrice=null, $rMaxPrice=null,) {
         $querySearch = $rQuery;
         $sort_by     = $rSortBy;
 

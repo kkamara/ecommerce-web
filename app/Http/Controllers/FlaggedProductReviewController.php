@@ -38,7 +38,7 @@ class FlaggedProductReviewController extends Controller
                 ->back()
                 ->with(
                     'flashSuccess', 
-                    'Product review has been flagged and will be reviewed by moderators. Thanks!'
+                    config('flash.flagged_product_review.store_success'),
                 );
         }
         
@@ -46,7 +46,7 @@ class FlaggedProductReviewController extends Controller
             ->back()
             ->with(
                 'flashDanger', 
-                'You have already flagged that review.'
+                config('flash.flagged_product_review.store_danger'),
             );
     }
 }

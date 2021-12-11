@@ -60,7 +60,7 @@ class ProductPageTest extends DuskTestCase
                 ->type('@product-name', $product->name. ' Test')
                 ->click('@submit-btn')
                 ->assertRouteIs('productShow', [$product->id])
-                ->assertSee('Product details have been updated.')
+                ->assertSee(config('flash.company_product.update_success'))
                 ->assertSee($product->name.' Test');
         });
     }
@@ -81,7 +81,7 @@ class ProductPageTest extends DuskTestCase
                 ->select('@choice', 1)
                 ->click('@submit-btn')
                 ->assertRouteIs('companyProductHome', [$product->company->slug])
-                ->assertSee('Your item listing was successfully removed.');
+                ->assertSee(config('flash.company_product.destroy_y'));
         });
     }
 
@@ -106,7 +106,7 @@ class ProductPageTest extends DuskTestCase
                 ->select('@rating', $rating)
                 ->type('@content', $content)
                 ->click('@submit-btn')
-                ->assertSee('We appreciate your review of this item.')
+                ->assertSee(config('flash.product_review.store_success'))
                 ->assertSee($content)
                 ->assertSee('Product Rated '.$rating.' / 5 by you');
         });
