@@ -1,3 +1,5 @@
+![ecommerce.gif](https://raw.githubusercontent.com/kkamara/ecommerce/develop/public/ecommerce.gif)
+
 # ecommerce
 
 Extensive ecommerce site built with ability to add to cart without being logged in. Upgraded to Laravel 8.x 
