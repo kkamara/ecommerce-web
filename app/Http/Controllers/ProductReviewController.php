@@ -10,12 +10,11 @@ use App\Models\User;
 class ProductReviewController extends Controller
 {
     /**
-     * @constructor
+     * @param ?User $user
+     * @param Product $product
+     * @return void
      */
-    public function __construct(protected ?User $user, protected ?Product $product) {
-        $this->user    = new User;
-        $this->product = new Product;
-    }
+    public function __construct(protected ?User $user = new User, protected Product $product = new Product) {}
 
     /**
      * Store a newly created resource in storage.

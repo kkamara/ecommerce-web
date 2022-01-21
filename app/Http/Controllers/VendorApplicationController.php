@@ -9,14 +9,17 @@ use App\Models\User;
 
 class VendorApplicationController extends Controller
 {
+    /**
+     * @param ?User $user
+     * @param UsersAddress $usersAddress
+     * @param VendorApplication $vendorApplication
+     * @return void
+     */
     public function __construct(
-        protected ?User $user,
-        protected ?UsersAddress $usersAddress,
-        protected ?VendorApplication $vendorApplication,
+        protected ?User $user = new User,
+        protected UsersAddress $usersAddress = new UsersAddress,
+        protected VendorApplication $vendorApplication = new VendorApplication,
     ) {
-        $this->user              = new User;
-        $this->usersAddress      = new UsersAddress;
-        $this->vendorApplication = new VendorApplication;
         $this->middleware('auth');
     }
 

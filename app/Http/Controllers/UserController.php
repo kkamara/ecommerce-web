@@ -8,8 +8,11 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function __construct(protected User $user) {
-        $this->user = new User;
+    /**
+     * @param ?User $user
+     * @return void
+     */
+    public function __construct(protected ?User $user = new User) {
         $this->middleware('auth');
     }
 

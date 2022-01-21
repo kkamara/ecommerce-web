@@ -8,11 +8,9 @@ use App\Models\Product\Product;
 class HomeController extends Controller
 {
     /**
-     * @construct
+     * @param Product $product
      */
-    public function __construct(protected ?Product $product) {
-        $this->product = new Product;
-    }
+    public function __construct(protected Product $product = new Product) {}
 
     /**
      * Show the application dashboard.

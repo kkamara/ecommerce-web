@@ -40,18 +40,24 @@ abstract class DuskTestCase extends BaseTestCase
             ]);
         })->all());
 
-        if ('testing' === config('app.env')) {
-            $seleniumServerURL = 'http://localhost:9515';
-        } else {
-            $seleniumServerURL = sprintf($_ENV['DUSK_DRIVER_URL'], $_ENV['FORWARD_SELENIUM_PORT']);
-        }
         
         return RemoteWebDriver::create(
-            $seleniumServerURL,
+            $this->getServerURL(),
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             )
         );
+    }
+
+    /**
+     * @return String
+     */
+    private function getServerURL() {
+        if ('testing' === config('app.env')) {
+            return 'http://localhost:9515';
+        }
+
+        return sprintf($_ENV['DUSK_DRIVER_URL'], $_ENV['FORWARD_SELENIUM_PORT']);
     }
 
     /**

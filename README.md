@@ -10,7 +10,7 @@ Have [docker](https://docs.docker.com/engine/install/) & [docker-compose](https:
 
 ```bash
 cp .env.example .env
-make dev && make backend-migrate && make backend-seed
+make dev && make backend-migrate
 ```
 
 ## To run browser tests

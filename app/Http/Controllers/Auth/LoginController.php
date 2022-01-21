@@ -21,12 +21,14 @@ class LoginController extends Controller
     /**
      * Create a new controller instance.
      *
+     * @param SessionCartHelper $sessionCartHelper
+     * @param ?User             $user
      * @return void
      */
-    public function __construct(protected ?SessionCartHelper $sessionCartHelper, protected ?User $user)
-    {
-        $this->sessionCartHelper = new SessionCartHelper;
-        $this->user              = new User;
+    public function __construct(
+        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper, 
+        protected ?User $user = new User,
+    ) {
         $this->middleware('guest')->except('delete');
     }
 

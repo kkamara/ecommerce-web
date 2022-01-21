@@ -8,9 +8,11 @@ use App\Models\Product\ProductReview;
 
 class FlaggedProductReviewController extends Controller
 {
-    public function __construct(protected FlaggedProductReview $flaggedProductReview) {
-        $this->flaggedProductReview = new FlaggedProductReview;
-    }
+    /**
+     * @param FlaggedProductReview $flaggedProductReview
+     * @return void
+     */
+    public function __construct(protected FlaggedProductReview $flaggedProductReview = new FlaggedProductReview) {}
 
     /**
      * Store a newly created resource in storage.

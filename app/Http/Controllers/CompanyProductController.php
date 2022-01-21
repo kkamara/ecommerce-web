@@ -10,16 +10,16 @@ use App\Models\User;
 class CompanyProductController extends Controller
 {
     /**
-     * @construct
+     * @param Company $company
+     * @param Product $product
+     * @param ?User $user
+     * @return void
      */
     public function __construct(
-        protected ?Company $company,
-        protected ?Product $product,
-        protected ?User $user,
+        protected Company $company = new Company,
+        protected Product $product = new Product,
+        protected ?User $user = new User,
     ) {
-        $this->company = new Company;
-        $this->product = new Product;
-        $this->user    = new User;
         $this->middleware('auth');
     }
 

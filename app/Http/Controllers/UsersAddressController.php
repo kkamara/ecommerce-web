@@ -9,9 +9,12 @@ use App\Models\User;
 
 class UsersAddressController extends Controller
 {
-    public function __construct(protected ?User $user, protected ?UsersAddress $usersAddress) {
-        $this->user         = new User;
-        $this->usersAddress = new UsersAddress;
+    /**
+     * @param ?User $user
+     * @param UsersAddress $usersAddress
+     * @return void
+     */
+    public function __construct(protected ?User $user = new User, protected UsersAddress $usersAddress = new UsersAddress) {
         $this->middleware('auth');
     }
 

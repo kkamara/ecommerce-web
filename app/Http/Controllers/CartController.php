@@ -11,17 +11,16 @@ use App\Models\User;
 class CartController extends Controller
 {
     /**
-     * @construct
+     * @param SessionCartHelper $sessionCartHelper
+     * @param ?User $user
+     * @param Cart $cart
+     * @return void
      */
     public function __construct(
-        protected ?SessionCartHelper $sessionCartHelper,
-        protected ?User $user,
-        protected ?Cart $cart,
-    ) {
-        $this->sessionCartHelper = new SessionCartHelper;
-        $this->user              = new User;
-        $this->cart              = new Cart;
-    }
+        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper,
+        protected ?User $user = new User,
+        protected Cart $cart = new Cart,
+    ) {}
 
     /**
      * Display the specified resource.

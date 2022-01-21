@@ -12,16 +12,19 @@ use App\Models\User;
 
 class OrderHistoryController extends Controller
 {    
+    /**
+     * @param ?User $user
+     * @param OrderHistoryProducts $orderHistoryProducts
+     * @param OrderHistory $orderHistory
+     * @param Cart $cart
+     * @return void
+     */
     public function __construct(
-        protected ?User $user,
-        protected ?OrderHistoryProducts $orderHistoryProducts,
-        protected ?OrderHistory $orderHistory,
-        protected ?Cart $cart,
+        protected ?User $user = new User,
+        protected OrderHistoryProducts $orderHistoryProducts = new OrderHistoryProducts,
+        protected OrderHistory $orderHistory = new OrderHistory,
+        protected Cart $cart = new Cart,
     ) {
-        $this->user                 = new User;
-        $this->orderHistoryProducts = new OrderHistoryProducts;
-        $this->orderHistory         = new OrderHistory;
-        $this->cart                 = new Cart;
         $this->middleware('auth')->except(['create']);
     }
 

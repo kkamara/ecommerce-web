@@ -16,24 +16,24 @@ use Carbon\Carbon;
 class ModeratorsHubController extends Controller
 {    
     /**
-     * @construct
+     * @param Carbon $carbon
+     * @param ?User $user
+     * @param FlaggedProductReview $flaggedProductReview
+     * @param VendorApplication $vendorApplication
+     * @param ProductReview $productReview
+     * @param UsersAddress $usersAddress
+     * @param Company $company
+     * @return void
      */
     public function __construct(
-        protected ?Carbon $carbon,
-        protected ?User $user,
-        protected ?FlaggedProductReview $flaggedProductReview,
-        protected ?VendorApplication $vendorApplication,
-        protected ?ProductReview $productReview,
-        protected ?UsersAddress $usersAddress,
-        protected ?Company $company,
+        protected Carbon $carbon = new Carbon,
+        protected ?User $user = new User,
+        protected FlaggedProductReview $flaggedProductReview = new FlaggedProductReview,
+        protected VendorApplication $vendorApplication = new VendorApplication,
+        protected ProductReview $productReview = new ProductReview,
+        protected UsersAddress $usersAddress = new UsersAddress,
+        protected Company $company = new Company,
     ) {
-        $this->carbon               = new Carbon;
-        $this->user                 = new User;
-        $this->flaggedProductReview = new FlaggedProductReview;
-        $this->vendorApplication    = new VendorApplication;
-        $this->productReview        = new ProductReview;
-        $this->usersAddress         = new UsersAddress;
-        $this->company              = new Company;
         $this->middleware('auth');
     }
 

@@ -25,18 +25,18 @@ class RegisterController extends Controller
     /**
      * Create a new controller instance.
      *
+     * @param User $user
+     * @param UsersAddress $usersAddress
+     * @param UserPaymentConfig $userPaymentConfig
+     * @param SessionCartHelper $sessionCartHelper
      * @return void
      */
     public function __construct(
-        protected ?User $user,
-        protected ?UsersAddress $usersAddress,
-        protected ?UserPaymentConfig $userPaymentConfig,
-        protected ?SessionCartHelper $sessionCartHelper,   
+        protected User $user = new User,
+        protected UsersAddress $usersAddress = new UsersAddress,
+        protected UserPaymentConfig $userPaymentConfig = new UserPaymentConfig,
+        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper,   
     ) {
-        $this->user              = new User;
-        $this->usersAddress      = new UsersAddress;
-        $this->userPaymentConfig = new UserPaymentConfig;
-        $this->sessionCartHelper = new SessionCartHelper;
         $this->middleware('guest');
     }
 

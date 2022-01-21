@@ -12,19 +12,18 @@ use App\Models\User;
 class ProductController extends Controller
 {
     /**
-     * @construct
+     * @param ?User $user
+     * @param SessionCarthelper $sessionCartHelper
+     * @param Product $product
+     * @param ProductReview $productReviews
+     * @return void
      */
     public function __construct(
-        protected ?User $user,    
-        protected ?SessionCartHelper $sessionCartHelper,    
-        protected ?Product $product,    
-        protected ?ProductReview $productReviews,    
-    ) {
-        $this->user              = new User;
-        $this->sessionCartHelper = new SessionCartHelper;
-        $this->product           = new Product;
-        $this->productReviews    = new ProductReview;
-    }
+        protected ?User $user = new User,
+        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper,
+        protected Product $product = new Product,
+        protected ProductReview $productReviews = new ProductReview,
+    ) {}
 
     /**
      * Display a listing of the resource.

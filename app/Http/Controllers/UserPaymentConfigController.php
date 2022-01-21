@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UserPaymentConfigController extends Controller
 {
-    public function __construct(protected ?User $user, protected ?UserPaymentConfig $userPaymentConfig) {
-        $this->user              = new User;
-        $this->userPaymentConfig = new UserPaymentConfig;
+    /**
+     * @param User $user
+     * @param UserPaymentConfig $userPaymentConfig
+     * @return void
+     */
+    public function __construct(protected User $user = new User, protected UserPaymentConfig $userPaymentConfig = new UserPaymentConfig) {
         $this->middleware('auth');
     }
 

@@ -1,11 +1,12 @@
 {
     "name": "kkamara/ecommerce",
+    "version": "2.2.0",
     "type": "project",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "license": "BSD",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.1",
         "doctrine/dbal": "^3.1",
         "fakerphp/faker": "^1.16",
         "fideloper/proxy": "^4.4",
@@ -59,7 +60,10 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-        "classmap-authoritative": true
+        "classmap-authoritative": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

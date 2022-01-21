@@ -18,11 +18,12 @@ backend-migrate:
 frontend-clean:
 	@rm -rf node_modules 2>/dev/null || true
 	@rm package-lock.json 2>/dev/null || true
-	./vendor/bin/sail npm cache clean --force
+	@rm yarn.lock 2>/dev/null || true
+	./vendor/bin/sail yarn cache clean
 
 frontend-install:
 	make frontend-clean
-	./vendor/bin/sail npm i
+	./vendor/bin/sail yarn install
 	./vendor/bin/sail npx mix
 
 dev:
