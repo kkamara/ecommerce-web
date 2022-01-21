@@ -23,12 +23,20 @@ class OrderHistoryProductsFactory extends Factory
      */
     public function definition()
     {
+        $orderHistory = OrderHistory::inRandomOrder()->first();
+        if (!$orderHistory) {
+            $orderHistory = OrderHistory::factory()->create();
+        }
         $product = Product::inRandomOrder()->first();
+        if (!$product) {
+            $product = Product::factory()->create();
+        }
+        
         $amount  = mt_rand(1, 4);
         $cost    = $amount * $product->cost;
 
         return [
-            'order_history_id' => OrderHistory::inRandomOrder()->first()->id,
+            'order_history_id' => $orderHistory->id,
             'product_id'       => $product->id,
             'amount'           => $amount,
             'cost'             => $cost,
