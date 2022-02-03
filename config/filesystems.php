@@ -14,7 +14,7 @@ return [
     */
     'defaultImagePath' => '/image/products/default/not-found.jpg',
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DISK', 'local'),
 
     /*
     |--------------------------------------------------------------------------
