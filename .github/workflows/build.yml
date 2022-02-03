@@ -15,6 +15,15 @@ jobs:
         ports:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
     strategy:
       fail-fast: false
       matrix:
@@ -46,10 +55,14 @@ jobs:
       - name: Setup Env Variables
         run: |
             cp .env.example .env
-            sed -i -e "s/APP_URL=http:\/\/localhost/APP_URL=http:\/\/127.0.0.1:8000/g" .env
-            sed -i -e "s/3306/${{ job.services.mysql.ports['3306'] }}/g" .env
-            sed -i -e "s/DB_HOST=mysql/DB_HOST=127.0.0.1/g" .env
-            sed -i -e "s/local/testing/g" .env
+            sed -i "s/APP_URL=http:\/\/localhost/APP_URL=http:\/\/127.0.0.1:8000/g" .env
+            sed -i "s/3306/${{ job.services.mysql.ports['3306'] }}/g" .env
+            sed -i "s/DB_HOST=mysql/DB_HOST=127.0.0.1/g" .env
+            sed -i "s/@redis/@localhost/g" .env
+            sed -i "s/APP_ENV=local/APP_ENV=testing/g" .env
+            cat .env
+      - name: Clear config cache
+        run: php artisan config:clear
       - name: Generate key
         run: php artisan key:generate -q -n
       - name: Migrate & Seed Database
