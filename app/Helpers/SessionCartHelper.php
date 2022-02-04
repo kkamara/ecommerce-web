@@ -9,17 +9,40 @@ use App\Models\Product\Product;
 class SessionCartHelper
 {
     /**
+     * @param String $key
+     * @param Mixed $default (optional)
+     * @return Mixed
+     */
+    public function get(string $key, $default = null): mixed {
+        return Session::get($key, $default);
+    }
+
+    /**
+     * @param String|Array $key
+     * @param Mixed $value (optional)
+     * @return Mixed
+     */
+    public function put(string $key, $value = null): mixed {
+        return Session::put($key, $value);
+    }
+
+    /**
+     * @param String|Array $keys
+     * @return mixed
+     */
+    public function forget(string $keys): mixed {
+        return Session::forget($keys);
+    }
+
+    /**
      * Adds a product to the user's session cart.
      * 
      * @param  \App\Models\Product  $product
      */
     public function addProductToSessionCart(Product $product)
     {
-        /** Cookie will expire in 120 minutes */
-        $expiresAt = now()->addMinutes(120);
-
         /** Get existing session cookie if set  */
-        $sessionCart = Session::get('cc');
+        $sessionCart = $this->get('cc');
 
         /** Check is existing cookie is present */
         if($sessionCart !== NULL && is_array($sessionCart))
@@ -41,7 +64,7 @@ class SessionCartHelper
                     'amount'  => 1,
                 );
                 array_push($sessionCart, $newItem);
-                Session::put('cc', $sessionCart, $expiresAt);
+                $this->put('cc', $sessionCart);
             }
         }
         else
@@ -53,7 +76,7 @@ class SessionCartHelper
                     'amount'  => 1,
                 )
             );
-            Session::put('cc', $sessionCart, $expiresAt);
+            $this->put('cc', $sessionCart);
         }
     }
 
@@ -64,7 +87,7 @@ class SessionCartHelper
      */
     public function getSessionCart()
     {
-        $sessionCart = Session::get('cc');
+        $sessionCart = $this->get('cc');
         $array = array();
 
         if(isset($sessionCart))
@@ -112,8 +135,7 @@ class SessionCartHelper
         }
 
         /** Set session cart equal to our updated products array */
-        $expiresAt = now()->addMinutes(120);
-        Session::put('cc', $array, $expiresAt);
+        $this->put('cc', $array);
     }
 
     /**
@@ -121,6 +143,6 @@ class SessionCartHelper
      */
     public function clearSessionCart()
     {
-        Session::forget('cc');
+        $this->forget('cc');
     }
 }
