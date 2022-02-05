@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Helpers\SessionCartHelper;
+use App\Helpers\RedisCartHelper;
 use App\Models\User;
 
 class LoginController extends Controller
@@ -21,12 +21,12 @@ class LoginController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param SessionCartHelper $sessionCartHelper
+     * @param RedisCartHelper $redisClient
      * @param ?User             $user
      * @return void
      */
     public function __construct(
-        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper, 
+        protected RedisCartHelper $redisClient = new RedisCartHelper, 
         protected ?User $user = new User,
     ) {
         $this->middleware('guest')->except('delete');
@@ -86,7 +86,7 @@ class LoginController extends Controller
         /**
          * @var Array
          */
-        $sessionCart = $this->sessionCartHelper->getSessionCart();
+        $sessionCart = $this->redisClient->getSessionCart();
 
         /**
         * login

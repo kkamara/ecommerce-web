@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-use App\Helpers\SessionCartHelper;
+use App\Helpers\RedisCartHelper;
 use App\Models\Cart\Traits\CartRelations;
 
 class Cart extends Model
@@ -35,11 +35,11 @@ class Cart extends Model
      */
     public $timestamps = false;
 
-    /** @property SessionCartHelper $session */
-    protected SessionCartHelper $session;
+    /** @property RedisCartHelper $session */
+    protected RedisCartHelper $session;
 
     public function __construct() {
-        $this->session = new SessionCartHelper;
+        $this->redisClient = new RedisCartHelper;
     }
 
     /**
@@ -60,7 +60,7 @@ class Cart extends Model
         }
         else
         {
-            $sessionCart = $this->session->get('cc');
+            $sessionCart = $this->redisClient->getRedisCart();
         }
 
         if(empty($sessionCart)) {
@@ -93,7 +93,7 @@ class Cart extends Model
         }
         else
         {
-            $sessionCart = $this->session->getSessionCart();
+            $sessionCart = $this->redisClient->getSessionCart();
         }
 
         if(empty($sessionCart)) {

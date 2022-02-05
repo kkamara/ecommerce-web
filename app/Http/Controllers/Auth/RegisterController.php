@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use App\Helpers\SessionCartHelper;
+use App\Helpers\RedisCartHelper;
 use App\Models\User\UserPaymentConfig;
 use App\Models\User\UsersAddress;
 use App\Models\User;
@@ -28,14 +28,14 @@ class RegisterController extends Controller
      * @param User $user
      * @param UsersAddress $usersAddress
      * @param UserPaymentConfig $userPaymentConfig
-     * @param SessionCartHelper $sessionCartHelper
+     * @param RedisCartHelper $redisClient
      * @return void
      */
     public function __construct(
         protected User $user = new User,
         protected UsersAddress $usersAddress = new UsersAddress,
         protected UserPaymentConfig $userPaymentConfig = new UserPaymentConfig,
-        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper,   
+        protected RedisCartHelper $redisClient = new RedisCartHelper,   
     ) {
         $this->middleware('guest');
     }
@@ -189,7 +189,7 @@ class RegisterController extends Controller
         $this->usersAddress->create($data['user_address']);
         $this->userPaymentConfig->create($data['user_payment_config']);
 
-        $sessionCart = $this->sessionCartHelper->getSessionCart();
+        $sessionCart = $this->redisClient->getSessionCart();
         if(!empty($sessionCart))
         {
             $this->user->moveSessionCartToDbCart($sessionCart);
