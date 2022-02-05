@@ -4,10 +4,9 @@ namespace App\Models\Cart;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
-use App\Helpers\SessionCartHelper;
+use App\Helpers\RedisCartHelper;
 use App\Models\Cart\Traits\CartRelations;
 
 class Cart extends Model
@@ -36,6 +35,13 @@ class Cart extends Model
      */
     public $timestamps = false;
 
+    /** @property RedisCartHelper $session */
+    protected RedisCartHelper $session;
+
+    public function __construct() {
+        $this->redisClient = new RedisCartHelper;
+    }
+
     /**
      * Gets the number of items in the user's session or db cart,
      * depending on whether the user is authenticated.
@@ -54,7 +60,7 @@ class Cart extends Model
         }
         else
         {
-            $sessionCart = Session::get('cc');
+            $sessionCart = $this->redisClient->getRedisCart();
         }
 
         if(empty($sessionCart)) {
@@ -87,7 +93,7 @@ class Cart extends Model
         }
         else
         {
-            $sessionCart = (new SessionCartHelper)->getSessionCart();
+            $sessionCart = $this->redisClient->getSessionCart();
         }
 
         if(empty($sessionCart)) {

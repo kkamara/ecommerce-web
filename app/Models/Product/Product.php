@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Product\Traits\ProductRelations;
 use App\Models\Product\Traits\ProductScopes;
-use \App\Models\Product\ProductReview;
+use App\Models\Product\ProductReview;
 
 class Product extends Model
 {

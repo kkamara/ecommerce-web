@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use Spatie\Permission\Traits\HasRoles;
 
-use App\Helpers\SessionCartHelper;
+use App\Helpers\RedisCartHelper;
 use App\Models\User\Traits\UserRelations;
 
 class User extends Authenticatable
@@ -165,7 +165,7 @@ class User extends Authenticatable
             }
         }
 
-        (new SessionCartHelper)->clearSessionCart();
+        (new RedisCartHelper)->clearSessionCart();
     }
 
     /**
@@ -175,6 +175,7 @@ class User extends Authenticatable
      */
     public function getDbCart()
     {
+        // dd($this->attributes);
         $products = \App\Models\Cart\Cart::where('user_id', $this->attributes['id'])->get();
 
         if(! $products->isEmpty())

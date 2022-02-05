@@ -2,36 +2,80 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Predis\Client;
 use App\Models\Product\Product;
+use function App\Helpers\fingerprint;
 
-class SessionCartHelper
+class RedisCartHelper
 {
     /**
-     * @param String $key
-     * @param Mixed $default (optional)
-     * @return Mixed
+     * Use caching service for querying guest user identifier
+     * @param Client $client
      */
-    public function get(string $key, $default = null): mixed {
-        return Session::get($key, $default);
+    public function __construct(protected ?Client $client = null) {
+        $this->client = new Client(config('database.redis.default.url'));
     }
 
     /**
-     * @param String|Array $key
-     * @param Mixed $value (optional)
+     * @param Mixed $key
      * @return Mixed
      */
-    public function put(string $key, $value = null): mixed {
-        return Session::put($key, $value);
+    public function get($key): mixed {
+        if (!$this->client->exists($key)) {
+            return null;
+        }
+        $result = $this->client->get($key);
+        return json_decode($result, 1);
     }
 
     /**
-     * @param String|Array $keys
-     * @return mixed
+     * @param Mixed $key
+     * @param Mixed $value
+     * @return Mixed
      */
-    public function forget(string $keys): mixed {
-        return Session::forget($keys);
+    public function set($key, $value): mixed {
+        return $this->client->set(
+            $key,
+            json_encode($value),
+            'EX', 
+            config('session.lifetime'),
+        );
+    }
+
+    /**
+     * @param Array|String $keys
+     * @return Integer
+     */
+    public function del(string $keys): int {
+        if (!$this->client->exists($keys)) {
+            return 0;
+        }
+        return $this->client->del($keys);
+    }
+
+    /**
+     * @return Mixed
+     */
+    public function getRedisCart(): mixed {
+        return $this->get($this->getGuestIdentifier());
+    }
+
+    /**
+     * @return Mixed
+     */
+    public function getGuestIdentifier(): string {
+        return fingerprint();
+    }
+
+    /**
+     * @param Mixed $value
+     * @return Mixed
+     */
+    private function setGuestIdentifier($value): mixed {
+        return true;
     }
 
     /**
@@ -42,7 +86,7 @@ class SessionCartHelper
     public function addProductToSessionCart(Product $product)
     {
         /** Get existing session cookie if set  */
-        $sessionCart = $this->get('cc');
+        $sessionCart = $this->get($this->getGuestIdentifier());
 
         /** Check is existing cookie is present */
         if($sessionCart !== NULL && is_array($sessionCart))
@@ -64,7 +108,7 @@ class SessionCartHelper
                     'amount'  => 1,
                 );
                 array_push($sessionCart, $newItem);
-                $this->put('cc', $sessionCart);
+                $this->set($this->getGuestIdentifier(), $sessionCart);
             }
         }
         else
@@ -76,7 +120,7 @@ class SessionCartHelper
                     'amount'  => 1,
                 )
             );
-            $this->put('cc', $sessionCart);
+            $this->set($this->getGuestIdentifier(), $sessionCart);
         }
     }
 
@@ -87,7 +131,7 @@ class SessionCartHelper
      */
     public function getSessionCart()
     {
-        $sessionCart = $this->get('cc');
+        $sessionCart = $this->get($this->getGuestIdentifier());
         $array = array();
 
         if(isset($sessionCart))
@@ -135,7 +179,7 @@ class SessionCartHelper
         }
 
         /** Set session cart equal to our updated products array */
-        $this->put('cc', $array);
+        $this->set($this->getGuestIdentifier(), $array);
     }
 
     /**
@@ -143,6 +187,6 @@ class SessionCartHelper
      */
     public function clearSessionCart()
     {
-        $this->forget('cc');
+        $this->del($this->getGuestIdentifier());
     }
 }

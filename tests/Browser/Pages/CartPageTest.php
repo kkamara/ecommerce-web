@@ -38,7 +38,8 @@ class CartPageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visitRoute('cartShow')
-                ->assertTitleContains('Cart')
+            ->screenshot('cart-show')
+            ->assertTitleContains('Cart')
                 ->assertSee('Your Cart')
                 ->assertSee('Your cart is empty.');
         });
@@ -61,6 +62,7 @@ class CartPageTest extends DuskTestCase
                 ->click('@proceed-to-checkout-btn')
                 ->type('@email', $this->user['email'])
                 ->click('@login-btn')
+                ->screenshot('address-checkbox')
                 ->click('@choose-this-address-checkbox')
                 ->type('@ccv-number-1', 444)
                 ->click('@choose-this-card-checkbox-1')

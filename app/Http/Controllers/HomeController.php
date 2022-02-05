@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product\Product;
+use App\Helpers\RedisCartHelper;
 
 class HomeController extends Controller
 {
     /**
      * @param Product $product
+     * @param RedisCartHelper $redisClient
      */
-    public function __construct(protected Product $product = new Product) {}
+    public function __construct(
+        protected Product $product = new Product,
+        protected RedisCartHelper $redisClient = new RedisCartHelper,
+    ) {}
 
     /**
      * Show the application dashboard.

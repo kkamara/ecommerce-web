@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "~1.0",
         "mbezhanov/faker-provider-collection": "^2.0",
+        "predis/predis": "^1.1",
         "spatie/laravel-permission": "^4.0"
     },
     "require-dev": {
