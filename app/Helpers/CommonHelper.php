@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Helpers;
+
+use RuntimeException;
+
 /**
  * Returns an alphabetical map of country values 
  * with the respective abbreviations as keys.
@@ -19,4 +23,23 @@ function awsCredsExist() {
         true === isset($_ENV['AWS_SECRET_ACCESS_KEY']) &&
         true === isset($_ENV['AWS_DEFAULT_REGION']) &&
         true === isset($_ENV['AWS_BUCKET']);
+}
+
+/**
+ * Get a unique fingerprint for the request / route / IP address.
+ *
+ * @throws \RuntimeException
+ * @return string
+ */
+function fingerprint()
+{
+    $request = request();
+    
+    if (! $route = $request->route()) {
+        throw new RuntimeException('Unable to generate fingerprint. Route unavailable.');
+    }
+
+    return sha1(implode('|', [
+        $route->getDomain(), $request->ip()
+    ]));
 }
