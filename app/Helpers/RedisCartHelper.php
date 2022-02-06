@@ -24,7 +24,7 @@ class RedisCartHelper
      * @return Mixed
      */
     public function get($key): mixed {
-        if (!$this->client->exists($key)) {
+        if (0 === $this->client->exists($key)) {
             return null;
         }
         $result = $this->client->get($key);
@@ -50,7 +50,7 @@ class RedisCartHelper
      * @return Integer
      */
     public function del(string $keys): int {
-        if (!$this->client->exists($keys)) {
+        if (0 === $this->client->exists($keys)) {
             return 0;
         }
         return $this->client->del($keys);
@@ -66,7 +66,7 @@ class RedisCartHelper
     /**
      * @return Mixed
      */
-    public function getGuestIdentifier(): string {
+    private function getGuestIdentifier(): string {
         return fingerprint();
     }
 
