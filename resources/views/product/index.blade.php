@@ -58,6 +58,10 @@
                 <input class='form-control btn btn-success' type="submit" value="Submit">
             </div>
         </form>
+
+        <div class="float-right">
+            Showing {{ $products->count() }} of {{ $products->total() }}
+        </div>
     </div>
     <div class="card-body">
 
@@ -100,9 +104,6 @@
                 {{ $products->links() }}
             </div>
 
-            <div class="float-right">
-                Showing {{ $products->count() }} of {{ $products->total() }}
-            </div>
         @endif
     </div>
 </div>
