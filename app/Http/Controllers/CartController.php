@@ -4,20 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Helpers\SessionCartHelper;
+use App\Helpers\RedisCartHelper;
 use App\Models\Cart\Cart;
 use App\Models\User;
 
 class CartController extends Controller
 {
     /**
-     * @param SessionCartHelper $sessionCartHelper
+     * @param RedisCartHelper $redisClient
      * @param ?User $user
      * @param Cart $cart
      * @return void
      */
     public function __construct(
-        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper,
+        protected RedisCartHelper $redisClient = new RedisCartHelper,
         protected ?User $user = new User,
         protected Cart $cart = new Cart,
     ) {}
@@ -38,7 +38,7 @@ class CartController extends Controller
         }
         else
         {
-            $cart = $this->sessionCartHelper->getSessionCart();
+            $cart = $this->redisClient->getSessionCart();
         }
 
         return view('cart.show', [
@@ -62,7 +62,7 @@ class CartController extends Controller
         }
         else
         {
-            $this->sessionCartHelper->updateSessionCartAmount($request);
+            $this->redisClient->updateSessionCartAmount($request);
         }
 
         return redirect()

@@ -1,6 +1,6 @@
 {
     "name": "kkamara/ecommerce",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "type": "project",
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
@@ -15,7 +15,8 @@
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "~3.0.2",
         "mbezhanov/faker-provider-collection": "^2.0",
-        "spatie/laravel-permission": "^5.0"
+        "spatie/laravel-permission": "^5.0",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",

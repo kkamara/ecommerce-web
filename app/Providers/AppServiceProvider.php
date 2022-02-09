@@ -5,8 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
-use \App\Models\Cart\Cart;
-
+use Predis\Autoloader;
+use App\Models\Cart\Cart;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +33,18 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         Paginator::useBootstrap();
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Schema::defaultStringLength(191);
+
+        Autoloader::register();
 
         /** @var Array[string] $cartCountViewFiles */
         $cartCountViewFiles = [
@@ -45,15 +57,5 @@ class AppServiceProvider extends ServiceProvider
         /** @var Array[string] $cartPriceViewFiles */
         $cartPriceViewFiles = ['cart.show', 'order_history.create'];
         view()->composer($cartPriceViewFiles, self::renderViewComposer('cartPrice'));
-    }
-
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Schema::defaultStringLength(191);
     }
 }

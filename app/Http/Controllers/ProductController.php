@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Helpers\SessionCartHelper;
+use App\Helpers\RedisCartHelper;
 use App\Models\Product\Product;
 use App\Models\Product\ProductReview;
 use App\Models\User;
@@ -13,14 +13,14 @@ class ProductController extends Controller
 {
     /**
      * @param ?User $user
-     * @param SessionCarthelper $sessionCartHelper
+     * @param RedisCartHelper $redisClient
      * @param Product $product
      * @param ProductReview $productReviews
      * @return void
      */
     public function __construct(
         protected ?User $user = new User,
-        protected SessionCartHelper $sessionCartHelper = new SessionCartHelper,
+        protected RedisCartHelper $redisClient = new RedisCartHelper,
         protected Product $product = new Product,
         protected ProductReview $productReviews = new ProductReview,
     ) {}
@@ -73,7 +73,7 @@ class ProductController extends Controller
         }
         else
         {
-            $this->sessionCartHelper->addProductToSessionCart($product);
+            $this->redisClient->addProductToSessionCart($product);
         }
 
         return redirect()

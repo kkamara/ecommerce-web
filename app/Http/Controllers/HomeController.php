@@ -9,6 +9,7 @@ class HomeController extends Controller
 {
     /**
      * @param Product $product
+     * @param RedisCartHelper $redisClient
      */
     public function __construct(protected Product $product = new Product) {}
 
