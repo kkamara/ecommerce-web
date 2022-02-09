@@ -4,6 +4,8 @@ use Illuminate\Support\Str;
 
 return [
 
+    'serialization' => 'php',
+
     /*
     |--------------------------------------------------------------------------
     | Default Session Driver

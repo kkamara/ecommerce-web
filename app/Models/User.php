@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Http\Request;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 use App\Helpers\RedisCartHelper;
 use App\Models\User\Traits\UserRelations;
@@ -80,22 +81,26 @@ class User extends Authenticatable
     /**
      * Set a publicily accessible identifier to get the path for this unique instance.
      *
-     * @return  String
+     * @return  Attribute
      */
-    public function getPathAttribute()
+    public function path(): Attribute
     {
-        return url('/users/'.$this->attributes['slug']);
+        return new Attribute(
+            get: fn ($value, $attributes) => url('/users/'.$attributes['slug']),
+        );
     }
 
     /**
      * Set a publicily accessible identifier to get the name 
      * attribute for this unique instance.
      *
-     * @return  String
+     * @return  Attribute
      */
-    public function getNameAttribute()
+    public function name(): Attribute
     {
-        return $this->attributes['first_name'] .' ' . $this->attributes['last_name'];
+        return new Attribute(
+            get: fn ($value, $attributes) => $attributes['first_name'] .' ' . $attributes['last_name'],
+        );
     }
 
     /**
