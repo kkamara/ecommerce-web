@@ -4,6 +4,7 @@ namespace App\Models\Order;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class OrderHistoryProducts extends Model
 {
@@ -41,8 +42,10 @@ class OrderHistoryProducts extends Model
      *
      * @return  String
      */
-    public function getFormattedCostAttribute()
+    public function formattedCost(): Attribute
     {
-        return "£".number_format($this->attributes['cost'], 2);
+        return new Attribute(
+            fn ($value, $attributes) => "£".number_format($attributes['cost'], 2)
+        );
     }
 }

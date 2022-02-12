@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Carbon\Carbon;
 
 class UserPaymentConfig extends Model
@@ -42,14 +43,14 @@ class UserPaymentConfig extends Model
      *
      * @return  String
      */
-    public function getHiddenCardNumberAttribute()
+    public function hiddenCardNumber(): Attribute
     {
         $cardNumber = $this->attributes['card_number'];
 
         $cardNumber = substr($cardNumber, -4, strlen($cardNumber));
         $cardNumber = str_pad($cardNumber, 16, "*", STR_PAD_LEFT);
 
-        return $cardNumber;
+        return new Attribute(fn () => $cardNumber);
     }
 
     /**
@@ -57,14 +58,15 @@ class UserPaymentConfig extends Model
      *
      * @return  \Carbon\Carbon
      */
-    public function getExpiryDateAttribute()
+    public function expiryDate(): Attribute
     {
-        return Carbon::createFromDate(
-                $this->attributes['expiry_year'], 
-                $this->attributes['expiry_month'], 
-                1
-            )
-            ->format('m/Y');
+        return new Attribute(
+            fn ($value, $attributes) => Carbon::createFromDate(
+                $attributes['expiry_year'], 
+                $attributes['expiry_month'], 
+                1,
+            )->format('m/Y'),
+        );
     }
 
     /**
@@ -72,14 +74,15 @@ class UserPaymentConfig extends Model
      *
      * @return  \Carbon\Carbon
      */
-    public function getEditExpiryDateAttribute()
+    public function editExpiryDate(): Attribute
     {
-        return Carbon::createFromDate(
-                $this->attributes['expiry_year'], 
-                $this->attributes['expiry_month'], 
-                1
-            )
-            ->format('Y-m');
+        return new Attribute(
+            fn ($value, $attributes) => Carbon::createFromDate(
+                $attributes['expiry_year'], 
+                $attributes['expiry_month'], 
+                1,
+            )->format('Y-m'),
+        );
     }
 
     /**
@@ -88,12 +91,14 @@ class UserPaymentConfig extends Model
      *
      * @return  \Carbon\Carbon
      */
-    public function getFormattedPhoneNumberAttribute()
+    public function formattedPhoneNumber(): Attribute
     {
-        return sprintf(
-            "%s %s",
-            $this->attributes['phone_number_extension'],
-            $this->attributes['phone_number']
+        return new Attribute(
+            fn ($value, $attributes) => sprintf(
+                "%s %s",
+                $attributes['phone_number_extension'],
+                $attributes['phone_number'],
+            )
         );
     }
 
@@ -103,12 +108,14 @@ class UserPaymentConfig extends Model
      *
      * @return  String
      */
-    public function getFormattedMobileNumberAttribute()
+    public function formattedMobileNumber(): Attribute
     {
-        return sprintf(
-            "%s %s",
-            $this->attributes['mobile_number_extension'],
-            $this->attributes['mobile_number']
+        return new Attribute(
+            fn ($value, $attributes) => sprintf(
+                "%s %s",
+                $attributes['mobile_number_extension'],
+                $attributes['mobile_number'],
+            )
         );
     }
 }

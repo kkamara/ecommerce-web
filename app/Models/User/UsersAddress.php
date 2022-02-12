@@ -5,6 +5,7 @@ namespace App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class UsersAddress extends Model
 {
@@ -43,12 +44,14 @@ class UsersAddress extends Model
      *
      * @return  String
      */
-    public function getFormattedPhoneNumberAttribute()
+    public function formattedPhoneNumber(): Attribute
     {
-        return sprintf(
-            "%s %s",
-            $this->attributes['phone_number_extension'],
-            $this->attributes['phone_number']
+        return new Attribute(
+            fn ($value, $attributes) => sprintf(
+                "%s %s",
+                $attributes['phone_number_extension'],
+                $attributes['phone_number'],
+            )
         );
     }
 
@@ -58,12 +61,14 @@ class UsersAddress extends Model
      *
      * @return  String
      */
-    public function getFormattedMobileNumberAttribute()
+    public function formattedMobileNumber(): Attribute
     {
-        return sprintf(
-            "%s %s",
-            $this->attributes['mobile_number_extension'],
-            $this->attributes['mobile_number']
+        return new Attribute(
+            fn ($value, $attributes) => sprintf(
+                "%s %s",
+                $attributes['mobile_number_extension'],
+                $attributes['mobile_number'],
+            )
         );
     }
 

@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Product\Traits\ProductRelations;
 use App\Models\Product\Traits\ProductScopes;
 use App\Models\Product\ProductReview;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
+use function App\Helpers\awsCredsExist;
 
 class Product extends Model
 {
@@ -37,9 +40,11 @@ class Product extends Model
      *
      * @return  String
      */
-    public function getPathAttribute()
+    public function path(): Attribute
     {
-        return url('/products/'.$this->attributes['id']);
+        return new Attribute(
+            fn ($value, $attributes) => url('/products/'.$attributes['id'])
+        );
     }
 
     /**
@@ -79,14 +84,10 @@ class Product extends Model
      *
      * @return  String
      */
-    public function getFormattedCostAttribute()
+    public function formattedCost(): Attribute
     {
-        return sprintf(
-            "£%s",
-            number_format(
-                ((float) $this->attributes['cost']) / 100, 
-                2
-            )
+        return new Attribute(
+            fn ($value, $attributes) => sprintf("£%s", number_format(((float) $attributes['cost']) / 100, 2))
         );
     }
 
@@ -95,9 +96,9 @@ class Product extends Model
      *
      * @return  String
      */
-    public function getCostAttribute()
+    public function cost(): Attribute
     {
-        return $this->attributes['cost'];
+        return new Attribute(fn ($value, $attributes) => $attributes['cost']);
     }
 
     /**
@@ -137,16 +138,18 @@ class Product extends Model
      *
      * @return  String
      */
-    public function getReviewAttribute()
+    public function review(): Attribute
     {
         $review = ProductReview::select(DB::raw('avg(score) as review'))
             ->where('product_id', $this->attributes['id'])
             ->groupBy('product_id')
             ->distinct()->first();
 
-        return isset($review->review) 
+        return new Attribute(
+            fn () => isset($review->review) 
             ? number_format((float)$review->review, 2, '.', '') 
-            : '0.00';
+                : '0.00'
+        );
     }
 
     /**

@@ -41,7 +41,7 @@ class VendorApplicationController extends Controller
             ]);
         }
         
-        return redirect()->route('home');
+        return to_route('home');
     }
 
     /**
@@ -57,7 +57,7 @@ class VendorApplicationController extends Controller
 
         if(false === $this->user->hasNoRole())
         {
-            return redirect()->route('home');
+            return to_route('home');
         }
 
         if(
@@ -76,7 +76,7 @@ class VendorApplicationController extends Controller
             'users_addresses_id' => $usersAddressId,
         ]);
 
-        return redirect()->route('vendorShow');
+        return to_route('vendorShow');
     }
 
     /**
@@ -87,7 +87,7 @@ class VendorApplicationController extends Controller
     public function show()
     {
         if(false === $this->vendorApplication->hasUserApplied(auth()->user()->id)) {
-            return redirect()->route('home');
+            return to_route('home');
         }
     
         return view('vendor.show', [

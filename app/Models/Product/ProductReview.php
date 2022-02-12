@@ -4,6 +4,7 @@ namespace App\Models\Product;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Product\FlaggedProductReview;
 
 class ProductReview extends Model
@@ -63,13 +64,15 @@ class ProductReview extends Model
      *
      * @return String
      */
-    public function getShortContentAttribute()
+    public function shortContent(): Attribute
     {
         $content = $this->attributes['content'];
         $limit = mt_rand(150, 200);
 
-        return strlen($content) > $limit 
-            ? substr($content, 0, $limit) . '...' 
-            : $content;
+        return new Attribute(
+            fn () => strlen($content) > $limit 
+                ? substr($content, 0, $limit) . '...' 
+                : $content
+        );
     }
 }

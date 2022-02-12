@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User\UserPaymentConfig;
 use App\Models\User;
 
+use function App\Helpers\getCountriesList;
+
 class UserPaymentConfigController extends Controller
 {
     /**
@@ -28,7 +30,7 @@ class UserPaymentConfigController extends Controller
         return view('user_payment_config.index', [
             'title' => 'Billing Cards', 
             'billingCards' => $this->userPaymentConfig
-                ->where('user_id', auth()->user())
+                ->where('user_id', auth()->user()->id)
                 ->paginate(10),
         ]);
     }

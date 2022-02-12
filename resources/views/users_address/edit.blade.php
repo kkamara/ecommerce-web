@@ -87,7 +87,7 @@
                                                     <div class="form-group">
                                                         <label>Country*:
                                                             <select name="country" class='form-control'>
-                                                                @foreach(getCountriesList() as $shortName => $longName)
+                                                                @foreach(\App\Helpers\getCountriesList() as $shortName => $longName)
                                                                     @if($usersAddress->country === $longName)
                                                                         <option selected value="{{ $longName }}">{{ $longName }}</option>
                                                                     @else

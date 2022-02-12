@@ -98,9 +98,9 @@ class LoginController extends Controller
             /** @var User */
             $user = auth()->user();
             $user->moveSessionCartToDbCart($sessionCart);
-            return redirect()->route('orderCreate');
+            return to_route('orderCreate');
         } else {
-            return redirect()->route('home');
+            return to_route('home');
         }
     }
 
@@ -108,6 +108,6 @@ class LoginController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('home');
+        return to_route('home');
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User\UsersAddress;
 use App\Models\User;
 
+use function App\Helpers\getCountriesList;
+
 class UsersAddressController extends Controller
 {
     /**

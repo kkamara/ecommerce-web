@@ -223,6 +223,6 @@ class ModeratorsHubController extends Controller
             $flashMessage = ['flashDanger' => config('flash.moderators_hub.store_vendor_application_decision_danger')];
         }
 
-        return redirect()->route('modHubHome')->with($flashMessage);
+        return to_route('modHubHome')->with($flashMessage);
     }
 }

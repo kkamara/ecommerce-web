@@ -85,9 +85,7 @@ class User extends Authenticatable
      */
     public function path(): Attribute
     {
-        return new Attribute(
-            get: fn ($value, $attributes) => url('/users/'.$attributes['slug']),
-        );
+        return new Attribute(fn ($value, $attributes) => url('/users/'.$attributes['slug']));
     }
 
     /**
@@ -99,7 +97,7 @@ class User extends Authenticatable
     public function name(): Attribute
     {
         return new Attribute(
-            get: fn ($value, $attributes) => $attributes['first_name'] .' ' . $attributes['last_name'],
+            fn ($value, $attributes) => $attributes['first_name'] .' ' . $attributes['last_name'],
         );
     }
 

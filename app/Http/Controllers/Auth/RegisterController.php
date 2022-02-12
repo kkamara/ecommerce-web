@@ -200,6 +200,6 @@ class RegisterController extends Controller
             'password' => request('password')
         ], 1);
 
-        return redirect()->route('home');
+        return to_route('home');
     }
 }

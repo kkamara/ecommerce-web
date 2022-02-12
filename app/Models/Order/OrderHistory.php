@@ -3,6 +3,7 @@
 namespace App\Models\Order;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order\OrderHistoryProducts;
 use App\Models\Order\Traits\OrderHistoryRelations;
@@ -43,12 +44,11 @@ class OrderHistory extends Model
      *
      * @return  Int
      */
-    public function getAmountTotalAttribute()
+    public function amountTotal(): Attribute
     {
-        return (int) OrderHistoryProducts::where([
-                'order_history_id' => $this->attributes['id'],
-            ])
-                ->sum('amount');
+        return new Attribute(
+            fn ($value, $attributes) => (int) OrderHistoryProducts::where(['order_history_id' => $attributes['id']])->sum('amount'),
+        );
     }
 
     /**
@@ -56,7 +56,7 @@ class OrderHistory extends Model
      *
      * @return  String
      */
-    public function getFormattedCostAttribute()
+    public function formattedCost(): Attribute
     {
         $cost = 0;
         
@@ -64,12 +64,8 @@ class OrderHistory extends Model
             $cost += $orderHistoryProducts->cost;
         }
 
-        return sprintf(
-            "£%s",
-            number_format(
-                ((float) $cost) / 100, 
-                2
-            )
+        return new Attribute(
+            fn () => sprintf("£%s", number_format(((float) $cost) / 100, 2)),
         );
     }
 }

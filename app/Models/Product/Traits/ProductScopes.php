@@ -56,7 +56,12 @@ trait ProductScopes {
             fn ($query, $whereClause) => $query->where($whereClause),
         );
 
-        $query->leftJoin('order_history_products', 'products.id', '=', 'order_history_products.product_id',);
+        $query->leftJoin(
+            'order_history_products', 
+            'products.id', 
+            '=',
+            'order_history_products.product_id',
+        );
 
         return match($sort_by) {
             // most popular
