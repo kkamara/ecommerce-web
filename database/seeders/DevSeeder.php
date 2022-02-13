@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Seeder;
 use App\Models\User\UserPaymentConfig;
 use App\Models\Product\ProductReview;
@@ -11,6 +10,7 @@ use App\Models\User\UsersAddress;
 use App\Models\Product\Product;
 use App\Models\Company\Company;
 use App\Models\User;
+use App\Models\Product\FlaggedProductReview;
 
 class DevSeeder extends Seeder
 {
@@ -142,6 +142,16 @@ class DevSeeder extends Seeder
     }
 
     /**
+     * @param  int $limit {30}
+     * @return void
+     */
+    private function makeFlaggedReviews($limit=30) {
+        /** @var Int $count */
+        $count = mt_rand(1, $limit);
+        FlaggedProductReview::factory()->count($count)->create();
+    }
+
+    /**
      * Run the database seeds.
      *
      * @return void
@@ -160,5 +170,7 @@ class DevSeeder extends Seeder
         $company = $this->makeCompany($users['vendor']);
         $this->makeProducts($users['vendor'], $company);
         $this->makeOrderHistories([$users['guest']]);
+
+        $this->makeFlaggedReviews();
     }
 }
