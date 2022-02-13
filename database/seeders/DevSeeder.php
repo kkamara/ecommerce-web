@@ -143,20 +143,20 @@ class DevSeeder extends Seeder
     }
 
     /**
-     * @param  int $limit {30}
+     * @param  int $limit (optional)
      * @return void
      */
-    private function makeFlaggedReviews($limit=30) {
+    private function makeFlaggedReviews($limit=20) {
         /** @var Int $count */
         $count = mt_rand(1, $limit);
         FlaggedProductReview::factory()->count($count)->create();
     }
 
     /**
-     * @param  int $limit {30}
+     * @param  int $limit (optional)
      * @return void
      */
-    private function makeVendorApplications($limit=200) {
+    private function makeVendorApplications($limit=20) {
         /** @var Int $count */
         $count = mt_rand(1, $limit);
         VendorApplication::factory()->count($count)->create();

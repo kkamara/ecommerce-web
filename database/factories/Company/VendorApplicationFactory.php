@@ -57,24 +57,14 @@ class VendorApplicationFactory extends Factory
         if (!$address) {
             $address = UsersAddress::factory()->create();
         }
-        $accepted = $decidedBy = $reasonGiven= null;
-        if (1 == mt_rand(0, 1)) {
-            $accepted = true;
-            $decidedBy = $this->makeModerator();
-            $reasonGiven = $this->faker->sentence();
-        } else if (1 == mt_rand(0, 1)) {
-            $accepted = false;
-            $decidedBy = $this->makeModerator();
-            $reasonGiven = $this->faker->sentence();
-        }
 
         return [
             'user_id' => $this->makeGuest(),
             'proposed_company_name' => $this->faker->company,
             'users_addresses_id' => $address->id,
-            'decided_by' => $decidedBy,
-            'reason_given' => $reasonGiven,
-            'accepted' => $accepted,
+            'decided_by' => null,
+            'reason_given' => null,
+            'accepted' => null,
         ];
     }
 }

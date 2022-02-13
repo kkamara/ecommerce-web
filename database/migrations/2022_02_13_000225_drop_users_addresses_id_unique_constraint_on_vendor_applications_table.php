@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('vendor_applications', function (Blueprint $table) {
-            $table->integer('users_addresses_id')->unique()->change();
+            // $table->integer('users_addresses_id')->unique()->change();
         });
     }
 };
