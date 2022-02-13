@@ -11,6 +11,7 @@ use App\Models\Product\Product;
 use App\Models\Company\Company;
 use App\Models\User;
 use App\Models\Product\FlaggedProductReview;
+use App\Models\Company\VendorApplication;
 
 class DevSeeder extends Seeder
 {
@@ -152,6 +153,16 @@ class DevSeeder extends Seeder
     }
 
     /**
+     * @param  int $limit {30}
+     * @return void
+     */
+    private function makeVendorApplications($limit=200) {
+        /** @var Int $count */
+        $count = mt_rand(1, $limit);
+        VendorApplication::factory()->count($count)->create();
+    }
+
+    /**
      * Run the database seeds.
      *
      * @return void
@@ -172,5 +183,6 @@ class DevSeeder extends Seeder
         $this->makeOrderHistories([$users['guest']]);
 
         $this->makeFlaggedReviews();
+        $this->makeVendorApplications();
     }
 }
