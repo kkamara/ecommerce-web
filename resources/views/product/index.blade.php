@@ -2,6 +2,9 @@
 
 @section('content')
 
+<div class="">
+    Showing {{ $products->count() }} of {{ $products->total() }}
+</div>
 
 <div class="card">
 
@@ -58,10 +61,6 @@
                 <input class='form-control btn btn-success' type="submit" value="Submit">
             </div>
         </form>
-
-        <div class="float-right">
-            Showing {{ $products->count() }} of {{ $products->total() }}
-        </div>
     </div>
     <div class="card-body">
 
