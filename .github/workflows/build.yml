@@ -10,8 +10,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: 'secret'
           MYSQL_DATABASE: 'ecommerce'
-          MYSQL_USER: 'e_user'
-          MYSQL_PASSWORD: '.secret@'
+          MYSQL_USER: 'user'
+          MYSQL_PASSWORD: 'secret'
         ports:
           - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -57,7 +57,7 @@ jobs:
             cp .env.example .env
             sed -i "s/APP_URL=http:\/\/localhost/APP_URL=http:\/\/127.0.0.1:8000/g" .env
             sed -i "s/3306/${{ job.services.mysql.ports['3306'] }}/g" .env
-            sed -i "s/DB_HOST=mysql/DB_HOST=127.0.0.1/g" .env
+            sed -i "s/mysql\//127.0.0.1\//g" .env
             sed -i "s/@redis/@localhost/g" .env
             sed -i "s/APP_ENV=local/APP_ENV=testing/g" .env
             cat .env

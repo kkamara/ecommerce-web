@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Str;
 
+$mysql = [ 'remoteURL' => env('CLEARDB_DATABASE_URL'), ];
+$mysql['url'] = $mysql['remoteURL'] ? $mysql['remoteURL'] : env('DATABASE_URL');
+
 return [
 
     /*
@@ -45,7 +48,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
+            'url' => $mysql['url'],
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
