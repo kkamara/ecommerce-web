@@ -10,11 +10,11 @@ class ProductCard extends Component
     /**
      * Create a new component instance.
      *
-     * @param String $key
+     * @param Int $key
      * @param Product $product
      * @return void
      */
-    public function __construct(public string $key, public Product $product) {}
+    public function __construct(public int $key, public Product $product) {}
 
     /**
      * Get the view / contents that represent the component.
