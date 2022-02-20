@@ -38,7 +38,7 @@ class ProductController extends Controller
             $request->get('min_price'),
             $request->get('max_price'),
         )
-            ->paginate(7)
+            ->paginate(20)
             ->appends(request()
             ->except('page'));
 

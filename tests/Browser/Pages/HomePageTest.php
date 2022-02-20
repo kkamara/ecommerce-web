@@ -97,7 +97,7 @@ class HomePageTest extends DuskTestCase
      */
     private function assertProductsOnPage(Browser $browser, String $sortBy='')
     {
-        $products = Product::getProducts('', $sortBy)->paginate(7);
+        $products = Product::getProducts('', $sortBy)->paginate(20);
 
         foreach ($products as $product) {
             $browser->assertSee($product->name);

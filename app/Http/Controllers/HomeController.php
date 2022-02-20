@@ -28,7 +28,7 @@ class HomeController extends Controller
                     $request->get('sort_by'),
                     $request->get('min_price'),
                     $request->get('max_price'),
-                )->paginate(7),
+                )->paginate(20),
         ]);
     }
 }

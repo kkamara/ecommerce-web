@@ -51,7 +51,7 @@ class CompanyProductController extends Controller
             $request->get('max_price'),
         )
             ->getCompanyProducts($this->company->id)
-            ->paginate(7)
+            ->paginate(20)
             ->appends(request()
             ->except('page'));
 
