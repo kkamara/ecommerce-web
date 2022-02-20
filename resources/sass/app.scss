@@ -41,6 +41,10 @@ img {
     .product-card {
         max-width:100%;
         margin-bottom: 40px;
+
+        img {
+            max-height: 300px;
+        }
     }
     .block {
         display: none;
