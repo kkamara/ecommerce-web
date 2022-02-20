@@ -12,3 +12,37 @@
 img {
     cursor:pointer;
 }
+
+.product-card {
+    max-width:250px;
+    display: inline-block;
+
+    .product-title {
+        margin-top: 20px;
+        font-size: 15px;
+    }
+
+    img {
+        max-height:209px;
+        display:block;
+    }
+
+    .product-price {
+        text-align: right;
+    }
+}
+
+.block {
+    height: 30px;
+    display: block;
+}
+
+@media screen and (max-width: 650px) {
+    .product-card {
+        max-width:100%;
+        margin-bottom: 40px;
+    }
+    .block {
+        display: none;
+    }
+}
