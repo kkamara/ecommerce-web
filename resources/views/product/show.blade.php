@@ -7,7 +7,7 @@
                 <tbody>
                     <tr class='text-center'>
                         <th scope='row' colspan='2'>
-                            <img style='max-height:100px' src="{{ $product->image_path }}" class='img-responsive'/>
+                            <img src="{{ $product->image_path }}" class='img-responsive'/>
                             <h4 dusk="product-name">
                                 {{ $product->name }}
                             </h4>
