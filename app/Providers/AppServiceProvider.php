@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
 use Predis\Autoloader;
 use App\Models\Cart\Cart;
+use Illuminate\Routing\UrlGenerator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,22 +41,25 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(UrlGenerator $url)
     {
+        if (in_array(config('app.env'), ['production', 'staging',])) {
+            $url->forceScheme('https');
+        }
+
         Schema::defaultStringLength(191);
 
         Autoloader::register();
 
-        /** @var Array[string] $cartCountViewFiles */
-        $cartCountViewFiles = [
-            'order_history.create',
-            'layouts.navbar',
-            'cart.show',
-        ];
-        view()->composer($cartCountViewFiles, self::renderViewComposer('cartCount'));
+        view()->composer(
+            [
+                'order_history.create',
+                'layouts.navbar',
+                'cart.show',
+            ], 
+            self::renderViewComposer('cartCount')
+        );
 
-        /** @var Array[string] $cartPriceViewFiles */
-        $cartPriceViewFiles = ['cart.show', 'order_history.create'];
-        view()->composer($cartPriceViewFiles, self::renderViewComposer('cartPrice'));
+        view()->composer(['cart.show', 'order_history.create'], self::renderViewComposer('cartPrice'));
     }
 }
