@@ -17,6 +17,14 @@ use App\Http\Controllers\CompanyProductController;
 use App\Http\Controllers\VendorApplicationController;
 use App\Http\Controllers\ModeratorsHubController;
 
+Route::prefix('react')->group(function () {
+    Route::view('/{path?}', 'layouts.app')->where('path', '.*');
+});
+
+Route::fallback(function() {
+    return abort(404);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Home Routes
