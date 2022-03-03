@@ -26,8 +26,7 @@
         "redux": "^4.0.5",
         "resolve-url-loader": "^4.0.0",
         "sass": "^1.32.11",
-        "sass-loader": "^11.0.1",
-        "web-vitals": "^0.2.4"
+        "sass-loader": "^11.0.1"
     },
     "dependencies": {
         "@material-ui/core": "^4.12.3",
