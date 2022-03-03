@@ -4,7 +4,7 @@ import {
   compose,
 } from 'redux'
 import thunk from 'redux-thunk'
-import RootReducer from "./reducers/RootReducer"
+import RootReducer from "./reducers/index"
 
 let store
 
@@ -25,6 +25,4 @@ if (window.__REDUX_DEVTOOLS_EXTENSION__) {
   )
 }
 
-export {
-  store,
-}
+export default store

@@ -1,34 +1,31 @@
 import React from 'react'
-import { Button } from '@material-ui/core'
-import { useStyles } from '../../styles/styles'
-import { useHistory } from 'react-router-dom' 
+import { Button, } from '@material-ui/core'
+import { makeStyles, } from '@material-ui/core/styles'
+import { useHistory, } from 'react-router-dom'
 
-import { url } from '../../utils/config'
-
-function HomeComponent() {
-  const history = useHistory()  
-  const classes = useStyles()
-  const gotToDashboard = (e, url) => {
-      history.push(url)
-  }
-
+export default function HomeComponent() {
+  const history = useHistory()
+  
   return (
     <>
-      <div className={classes.homeRoot}>
-        <div className={classes.containerDiv}>
-          <Button 
-            variant="contained" 
-            className={classes.extraBtnStyle} 
-            onClick={e => gotToDashboard(e, url('/user'))} 
-            size="large" 
-            color="primary"
-          >
-            User Dashboard
-          </Button>  
-        </div>
+      <div className={styles.body}>
+        <h1>Test</h1>
+        <Button 
+          variant="contained" 
+          // className={styles.extraBtnStyle} 
+          onClick={() => {}} 
+          size="large" 
+          color="primary"
+        >
+          Test button
+        </Button>
       </div>
     </>       
   )
 } 
 
-export default HomeComponent
+const styles = makeStyles({
+  body: {
+    backgroundcolor: 'yellow',
+  },
+})

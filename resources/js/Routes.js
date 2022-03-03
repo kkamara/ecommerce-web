@@ -11,8 +11,6 @@ import { Guard } from './Guard'
 import Header from './components/layouts/Header'
 
 import Home from "./components/pages/HomeComponent"
-import Login from "./components/pages/LoginComponent"
-import Register from "./components/pages/RegisterComponent"
 
 import { url } from './utils/config'
 
@@ -21,21 +19,15 @@ function Routes(){
     <>
       <Header/>
       <Switch>
-        <Route exact path={url("/")} render={props => (
-            <Redirect to={{ pathname: url('/home') }} />
-        )}/>
-
-        <Route path={url("/home")} component={Home}/>
-        <Route path={url("/user/login")} component={Login}/>
-        <Route path={url("/user/register")} component={Register}/>      
+        <Route path={url("/")} component={Home}/>  
 
         {/*Redirect if not authenticated */} 
-        <Guard 
+        {/* <Guard 
             path={url("/user" )}
             token="user-token" 
             routeRedirect={url("/user/login" )}
             component={PrivateRoute}
-        />
+        /> */}
       </Switch>
     </>
   )

@@ -5,16 +5,16 @@ import {
   Redirect,
 } from 'react-router-dom'
 
-import Profile from './components/pages/ProfileComponent'
+import Home from './components/pages/HomeComponent'
 
-export default function PrivateRoutes(props) {
+export default function PrivateRoute(props) {
   return (
     <div>
       {/*<Header/>*/}
        <Switch>
-          <Route exact path={`${props.match.path}/view-profile`} component={Profile}/>
+          <Route exact path={`${props.match.path}/`} component={Home}/>
           <Route exact path={props.match.path} render={props=> (
-            <Redirect to={{ pathname: `${props.match.path}/view-profile` }} />
+            <Redirect to={{ pathname: `${props.match.path}/` }} />
           )} />
        </Switch>
     </div>

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import App from './App'
-import { store } from './redux/CreateStore'
+import store from './redux/store'
 import reportWebVitals from './reportWebVitals'
 
 import './index.css'
