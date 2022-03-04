@@ -2,19 +2,14 @@ import React from 'react'
 
 import splash from '../assets/splash.jpg'
 
+import './Loader.css'
+
 export default function Loader() {
   return (
     <img 
-      style={styles.image} 
+      className='loader'
       src={splash} 
       alt='Loading'
     />
   )
-}
-
-const styles = {
-  image: {
-    marginTop: 30,
-    borderRadius: 10,
-  },
 }
