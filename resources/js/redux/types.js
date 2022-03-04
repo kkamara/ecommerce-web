@@ -1,3 +1,4 @@
+import React from 'react'
 
 export const LOAD_PRODUCTS_SUCCESS = 'LOAD_PRODUCTS_SUCCESS'
 export const LOAD_PRODUCTS_ERROR = 'LOAD_PRODUCTS_ERROR'

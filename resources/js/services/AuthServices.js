@@ -1,3 +1,4 @@
+import React from 'react'
 import HttpService from './HttpService'
 
 export const RegisterUserService = (credentials) => {

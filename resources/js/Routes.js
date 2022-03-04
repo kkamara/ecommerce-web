@@ -9,6 +9,7 @@ import PrivateRoute from './PrivateRoute'
 import { Guard } from './Guard'
 
 import Header from './components/layouts/Header'
+import Footer from './components/layouts/Footer'
 
 import Home from "./components/pages/HomeComponent"
 
@@ -29,6 +30,7 @@ function Routes(){
             component={PrivateRoute}
         /> */}
       </Switch>
+      <Footer/>
     </>
   )
 }

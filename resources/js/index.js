@@ -6,6 +6,9 @@ import { Helmet } from 'react-helmet'
 import App from './App'
 import store from './redux/store'
 
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+
 import './index.css'
 import favicon from './favicon.png'
 

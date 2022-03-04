@@ -10,16 +10,13 @@
 
     <!-- Styles -->
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    {{-- <link rel='stylesheet' href="/css/app.css"> --}}
-    <link rel='stylesheet' href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    @section('styles') @show
 </head>
 <body>
 
     <div id="app"></div>
 
-    @include('layouts.scripts')
-    @section('scripts') @show
+    {{-- @include('layouts.scripts') --}}
+    {{-- @section('scripts') @show --}}
     <script src="/js/bootstrap.js" defer></script>
 </body>
 </html>

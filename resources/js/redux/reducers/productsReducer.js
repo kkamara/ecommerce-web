@@ -1,9 +1,10 @@
+import React from 'react'
 import * as types from '../types'
 
 const initState = {
-  data: [],
+  data: {},
   error: false,
-  loading: false,
+  loading: true,
 }
 
 export default function productsReducer (state = initState, action) {
@@ -12,7 +13,7 @@ export default function productsReducer (state = initState, action) {
     case types.LOAD_PRODUCTS_PENDING:
       return {
         ...state,
-        loading: action.payload,
+        loading: true,
       }
 
     case types.LOAD_PRODUCTS_SUCCESS:
@@ -33,4 +34,3 @@ export default function productsReducer (state = initState, action) {
       return state
   }
 }
-  

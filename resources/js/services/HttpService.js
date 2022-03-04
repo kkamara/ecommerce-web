@@ -1,11 +1,13 @@
+import React from 'react'
+
 export default class HttpService
 {
     url = "https://cartcommerce.herokuapp.com/api"
     // url = "http://localhost:80/api"
 
-    postData = async (item, added_url, tokenId="") => {
+    postData = async (item, added_url, tokenId) => {
         let requestOptions = this.postRequestOptions({ item, })
-        if (!tokenId.length) {
+        if (tokenId) {
             const token = await localStorage.getItem(tokenId)
             requestOptions = this.postRequestOptions({ token, item, })
         }
@@ -15,9 +17,9 @@ export default class HttpService
         )
     }
 
-    getData = async (added_url, tokenId="") => {
+    getData = async (added_url, tokenId) => {
         let requestOptions = this.getRequestOptions()
-        if (!tokenId.length) {
+        if (tokenId) {
             const token = await localStorage.getItem(tokenId)
             requestOptions = this.getRequestOptions(token)
         }
@@ -32,7 +34,7 @@ export default class HttpService
             method: 'GET',
             headers: { 'Content-type' : 'application/json', }
         }
-        if (!token.length) {
+        if (token) {
             requestOptions.headers.Authorization = 'Bearer ' +token
         }
         return requestOptions
@@ -44,7 +46,7 @@ export default class HttpService
             headers: { 'Content-type' : 'application/json', },
             body : JSON.stringify(item)
         }
-        if (!token.length) {
+        if (token) {
             requestOptions.headers.Authorization = 'Bearer ' +token
         }
         return requestOptions
