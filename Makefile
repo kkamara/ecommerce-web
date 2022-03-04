@@ -1,35 +1,48 @@
-rm:
-	./vendor/bin/sail down -v
 
+
+sail := vendor/bin/sail
+
+.PHONY: rm
+rm:
+	$(sail) down -v
+
+.PHONY: docker-setup
 docker-setup:
-	./vendor/bin/sail up -d # get services running
+	$(sail) up -d # get services running
 	sleep 120
 
+.PHONY: backend-install
 backend-install:
-	./vendor/bin/sail composer i
+	$(sail) composer i
 
+.PHONY: backend-setup
 backend-setup:
 	make backend-install
-	./vendor/bin/sail artisan key:generate
+	$(sail) artisan key:generate
 
+.PHONY: backend-migrate
 backend-migrate:
-	./vendor/bin/sail artisan migrate --seed
+	$(sail) artisan migrate --seed
 
+.PHONY: frontend-clean
 frontend-clean:
-	@rm -rf node_modules 2>/dev/null || true
-	@rm package-lock.json 2>/dev/null || true
-	@rm yarn.lock 2>/dev/null || true
-	./vendor/bin/sail yarn cache clean
+	rm -rf node_modules 2>/dev/null || true
+	rm package-lock.json 2>/dev/null || true
+	rm yarn.lock 2>/dev/null || true
+	$(sail) yarn cache clean
 
+.PHONY: frontend-install
 frontend-install:
 	make frontend-clean
-	./vendor/bin/sail yarn install
-	./vendor/bin/sail npx mix
+	$(sail) yarn install
+	$(sail) npx mix
 
+.PHONY: dev
 dev:
 	make docker-setup
 	make backend-setup
 	make frontend-install
 
+.PHONY: watch
 watch:
-	./vendor/bin/sail npx mix watch
+	$(sail) npx mix watch
