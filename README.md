@@ -1,6 +1,6 @@
 App link at https://cartcommerce.herokuapp.com/
 
-Follow task [Add reactjs with new theme (#67)](https://github.com/kkamara/ecommerce/issues/67) at https://cartcommerce.herokuapp.com/react
+Follow task [Add reactjs with new theme (#67)](https://github.com/kkamara/ecommerce/issues/67) at https://cartcommerce.herokuapp.com/v4
 
 ![ecommerce.gif](https://raw.githubusercontent.com/kkamara/ecommerce/develop/public/ecommerce.gif)
 
