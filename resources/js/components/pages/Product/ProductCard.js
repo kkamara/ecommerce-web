@@ -10,6 +10,7 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import { url, } from '../../../utils/config'
 
 export default function ProductCard({ product, index, }) {
   const { 
@@ -23,7 +24,7 @@ export default function ProductCard({ product, index, }) {
   } = product
 
   return (
-    <Link dusk={`product-${index}`} to={PRODUCT.replace(':id', id)}>
+    <Link dusk={`product-${index}`} to={url(PRODUCT.replace(':id', id))}>
       <Card sx={styles.product}>
         <CardHeader
           title={name}
