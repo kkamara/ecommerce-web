@@ -5,6 +5,7 @@ import { makeStyles, } from '@material-ui/core'
 import { APP_NAME, } from '../../utils/config'
 import { HOME, } from '../../utils/pageRoutes'
 import Switch from '../Switch'
+import { url, } from '../../utils/config'
 
 export default function Header(props) {
   const history = useHistory()
@@ -14,11 +15,11 @@ export default function Header(props) {
 
   const logOut = () => {
     // dispatch(LogoutAction())
-    history.push("/login")
+    history.push(url("/login"))
   }
 
   const login = () => {
-    history.push("/login")
+    history.push(url("/login"))
   }
 
   const token = localStorage.getItem('user-token')
@@ -36,7 +37,7 @@ export default function Header(props) {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
-        <a className="navbar-brand" href={HOME}>{APP_NAME}</a>
+        <a className="navbar-brand" href={url(HOME)}>{APP_NAME}</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
         </button>
@@ -44,12 +45,12 @@ export default function Header(props) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
-              <a className="nav-link" href={HOME}>Home <span className="sr-only">(current)</span></a>
+              <a className="nav-link" href={url(HOME)}>Home <span className="sr-only">(current)</span></a>
             </li>
             <div className="nav-item">
               <a 
                 className="nav-link" 
-                href="products/?sort_by=pop"
+                href={url("products/?sort_by=pop")}
                 dusk="most-popular"
               >
                 Most Popular
@@ -58,7 +59,7 @@ export default function Header(props) {
             <div className="nav-item">
               <a 
                 className="nav-link" 
-                href="products/?sort_by=top"
+                href={url("products/?sort_by=top")}
                 dusk="top-rated"
               >
                 Top Rated
@@ -87,33 +88,33 @@ export default function Header(props) {
           <ul className="navbar-nav mr-right">
               {/* when authenticated */}
             <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a className="nav-link dropdown-toggle" href={url("#")} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   My Stuff
                 </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a className="dropdown-item" href="billingHome">Billing Cards</a>
-                <a className="dropdown-item" href="addressHome">Addresses</a>
+                <a className="dropdown-item" href={url("billingHome")}>Billing Cards</a>
+                <a className="dropdown-item" href={url("addressHome")}>Addresses</a>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="orderHome">Order History</a>
+                <a className="dropdown-item" href={url("orderHome")}>Order History</a>
                 <div className="dropdown-divider"></div>
                 {/* when vendor role */}
-                <a className="dropdown-item" href="route('companyProductCreate', auth()->user()->company->slug)">Add a Product</a>
-                <a className="dropdown-item" href="route('companyProductHome', auth()->user()->company->slug)">My Products</a>
+                <a className="dropdown-item" href={url("route('companyProductCreate', auth()->user()->company->slug)")}>Add a Product</a>
+                <a className="dropdown-item" href={url("route('companyProductHome', auth()->user()->company->slug)")}>My Products</a>
                 {/* endwhen */}
                 {/* when mod role */}
-                <a className="dropdown-item" href="route('modHubHome')">Moderator's Hub</a>
+                <a className="dropdown-item" href={url("route('modHubHome')")}>Moderator's Hub</a>
                 {/* endwhen */}
                 {/* when guest user */}
-                <a className="dropdown-item" href="route('vendorCreate')">Become a vendor</a>
+                <a className="dropdown-item" href={url("route('vendorCreate')")}>Become a vendor</a>
                 {/* endwhen */}
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="route('userEdit', auth()->user()->slug)">User Settings</a>
-                <a className="dropdown-item" href="route('logout')">Logout</a>
+                <a className="dropdown-item" href={url("route('userEdit', auth()->user()->slug)")}>User Settings</a>
+                <a className="dropdown-item" href={url("route('logout')")}>Logout</a>
               </div>
             </li>
             {/* elsewhen */}
             <li className="nav-item">
-                <a className="nav-link" href="route('login')">
+                <a className="nav-link" href={url("route('login')")}>
                   <span>
                       <i className="fa fa-sign-in" aria-hidden="true"></i>
                   </span>
@@ -122,9 +123,9 @@ export default function Header(props) {
             </li>
             {/* endwhen */}
             <li className="nav-item">
-              <a className="nav-link" href="route('cartShow')">
+              <a className="nav-link" href={url("route('cartShow')")}>
               <span>
-              <i className="fa fa-cart-plus" aria-hidden="true"></i>
+                <i className="fa fa-cart-plus" aria-hidden="true"></i>
               </span>
               <span>Cart (cartCount)</span>
               </a>
