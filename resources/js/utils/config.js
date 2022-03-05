@@ -1,10 +1,15 @@
 import React from 'react'
 
+/**
+ * 
+ * @param {string} path
+ * @returns {string}
+ */
 export function url(path) {
   if (path[0] === '/') {
-    return `/react${path}`
+    return `/v4${path}`
   }
-  return `/react/${path}`
+  return `/v4/${path}`
 }
 
 export const APP_NAME = 'Ecommerce'

@@ -17,7 +17,7 @@ use App\Http\Controllers\CompanyProductController;
 use App\Http\Controllers\VendorApplicationController;
 use App\Http\Controllers\ModeratorsHubController;
 
-Route::prefix('react')->group(function () {
+Route::prefix('v4')->group(function () {
     Route::view('/{path?}', 'layouts.app')->where('path', '.*');
 });
 
