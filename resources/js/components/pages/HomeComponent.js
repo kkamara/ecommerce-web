@@ -56,6 +56,13 @@ export default function HomeComponent() {
   return (
     <>
       <div className={'container'}>
+        <br />
+        <div className="text-left">
+          <div><strong>Page:</strong> {data.meta.current_page}</div>
+          <div><strong>Page Count:</strong> {data.meta.last_page}</div>
+          <div><strong>Displayed Items:</strong> {data.meta.per_page}</div>
+          <div><strong>Items:</strong> {data.meta.total}</div>
+        </div>
         <div className="list-group">
           <div className="container">
             {renderProducts()}
