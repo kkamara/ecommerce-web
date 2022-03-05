@@ -15,6 +15,7 @@ import { url, } from '../../../utils/config'
 export default function ProductCard({ product, index, }) {
   const { 
     id,
+    slug,
     name,
     formatted_cost,
     company,
@@ -22,9 +23,9 @@ export default function ProductCard({ product, index, }) {
     image_path,
     short_description,
   } = product
-
+  
   return (
-    <Link dusk={`product-${index}`} to={url(PRODUCT.replace(':id', id))}>
+    <Link dusk={`product-${index}`} to={url(PRODUCT.replace(':slug', slug))}>
       <Card sx={styles.product}>
         <CardHeader
           title={name}

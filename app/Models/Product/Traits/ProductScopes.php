@@ -23,7 +23,7 @@ trait ProductScopes {
         $max = is_numeric($rMaxPrice) ? ((float) $rMaxPrice * 100) : 0;
         
         $query->select(
-            'products.id', 'products.name', 'products.user_id', 'products.company_id',
+            'products.id', 'products.slug', 'products.name', 'products.user_id', 'products.company_id',
             'products.short_description', 'products.long_description', 'products.product_details',
             'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery',
             'products.created_at', 'products.updated_at', 'order_history_products.product_id',
