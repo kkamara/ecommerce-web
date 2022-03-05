@@ -14,4 +14,4 @@ export function url(path) {
 
 export const APP_NAME = 'Ecommerce'
 export const APP_RELEASE_YEAR = '2018'
-export const APP_VERSION = '3.0.0'
+export const APP_VERSION = '4.0.1'
