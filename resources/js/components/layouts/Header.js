@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { APP_NAME, } from '../../utils/config'
@@ -8,6 +8,7 @@ import { url, } from '../../utils/config'
 
 export default function Header(props) {
   const history = useHistory()
+  const [theme, setTheme] = useState('')
   
 //   const dispatch = useDispatch()
 //   const authResponse = useSelector(state => state.auth)
@@ -22,7 +23,15 @@ export default function Header(props) {
   }
 
   const token = localStorage.getItem('user-token')
-  //console.log(token)
+  //console.log(token) 
+  
+  useEffect(() => {
+    const theme = localStorage.getItem('theme')
+    if (typeof theme !== 'object' && null !== theme) {
+      setTheme(theme)
+    }
+  })
+  
 
   // useEffect(() => {
   //   if(authResponse !== "" && authResponse.success === true){
@@ -33,8 +42,17 @@ export default function Header(props) {
   //   return () => {}
   // }, [authResponse])
 
+  function handleThemeToggle(event) {
+    let theme = 'light'
+    if (event.target.checked) {
+      theme = 'dark'
+    }
+    localStorage.setItem('theme', theme)
+    setTheme(theme)
+  }
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className={`navbar navbar-expand-lg navbar-${theme} bg-${theme}`}>
       <div className="container">
         <a className="navbar-brand" href={url(HOME)}>{APP_NAME}</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,6 +151,7 @@ export default function Header(props) {
               <li className="nav-item">
               <span>
                   <Switch 
+                    onChange={handleThemeToggle}
                     defaultChecked={false}
                   />
               </span>
