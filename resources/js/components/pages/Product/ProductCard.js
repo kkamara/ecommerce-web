@@ -26,7 +26,7 @@ export default function ProductCard({ product, index, }) {
 
   function renderTheme() {
     if ('dark' === state.theme.data) {
-      styles.productName.color = '#fff'
+      styles.productColor = '#fff'
       styles.companyName.color = '#67676f'
       styles.product.backgroundColor = '#000'
       styles.product.color = '#fff'
@@ -35,7 +35,7 @@ export default function ProductCard({ product, index, }) {
       styles.cost.color = '#fff'
       styles.cartIcon.color = 'lightgray'
     } else {
-      styles.productName.color = '#000'
+      styles.productColor = '#000'
       styles.companyName.color = '#67676f'
       styles.product.backgroundColor = '#fff'
       styles.shortDesc.color = '#67676f'
@@ -60,21 +60,21 @@ export default function ProductCard({ product, index, }) {
   return (
     <Link dusk={`product-${index}`} to={url(PRODUCT.replace(':slug', slug))}>
       <Card sx={styles.product}>
-        <CardHeader
-          title={name}
-          subheader={company.name}
-          titleTypographyProps={{
-            sx: { color: styles.productName, }
-          }}
-          subheaderTypographyProps={{
-            sx: { color: styles.companyName, }
-          }}
-        />
         <CardMedia
           component="img"
           height="194"
           image={image_path}
           alt={name}
+        />
+        <CardHeader
+          title={<p style={styles.productName}>{name}</p>}
+          subheader={company.name}
+          titleTypographyProps={{
+            sx: { color: styles.productColor, }
+          }}
+          subheaderTypographyProps={{
+            sx: { color: styles.companyName, }
+          }}
         />
         <CardContent>
           <Typography 
@@ -83,13 +83,6 @@ export default function ProductCard({ product, index, }) {
             sx={{ color: styles.cost, }}
           >
             {formatted_cost}
-          </Typography>
-          <Typography 
-            variant="body2" 
-            color="text.secondary"
-            sx={{ color: styles.shortDesc, }}
-          >
-            {short_description}
           </Typography>
         </CardContent>
         <CardActions style={styles.cardActions} disableSpacing>
@@ -120,11 +113,20 @@ const styles = {
   cardActions: {
     justifyContent: 'space-between',
   },
-  productName: {
+  productColor: {
     color: '#000',
+  },
+  productName: {
+    fontSize: 18,
+    textAlign: 'left',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    width: 165,
   },
   companyName: {
     color: '#67676f',
+    fontSize: 12,
   },
   cost: {
     color: '#000',
