@@ -1,0 +1,11 @@
+
+.loader {
+  margin-top: 30px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 650px) {
+  .loader {
+    max-height: 155px;
+  }
+}

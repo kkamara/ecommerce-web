@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 use App\Models\Company\Company;
 use App\Models\Product\Product;
+use Illuminate\Support\Str;
 
 class ProductFactory extends Factory
 {
@@ -25,11 +26,13 @@ class ProductFactory extends Factory
     {
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \Bezhanov\Faker\Provider\Commerce($faker));
+        $productName = $faker->productName;
 
         return [
             'user_id' => User::inRandomOrder()->first()->id,
             'company_id' => Company::inRandomOrder()->first()->id,
-            'name' => $faker->productName,
+            'slug' => Str::slug($productName),
+            'name' => $productName,
             'short_description' => substr($this->faker->paragraph(), 0, 191),
             'long_description' => $this->faker->paragraph(4),
             'product_details' => $this->faker->paragraph(5),

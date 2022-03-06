@@ -15,15 +15,15 @@ trait ProductScopes {
      * @param  Float                                $rMaxPrice,
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function scopeGetProducts($query, $rQuery='', $rSortBy='', $rMinPrice=null, $rMaxPrice=null,) {
+    public function scopeGetProducts($query, $rQuery='', $rSortBy='', $rMinPrice=0, $rMaxPrice=0,) {
         $querySearch = $rQuery;
         $sort_by     = $rSortBy;
 
-        $min = is_numeric($rMinPrice) ? ((float) $rMinPrice * 100) : null;
-        $max = is_numeric($rMaxPrice) ? ((float) $rMaxPrice * 100) : null;
+        $min = is_numeric($rMinPrice) ? ((float) $rMinPrice * 100) : 0;
+        $max = is_numeric($rMaxPrice) ? ((float) $rMaxPrice * 100) : 0;
         
         $query->select(
-            'products.id', 'products.name', 'products.user_id', 'products.company_id',
+            'products.id', 'products.slug', 'products.name', 'products.user_id', 'products.company_id',
             'products.short_description', 'products.long_description', 'products.product_details',
             'products.image_path', 'products.cost', 'products.shippable', 'products.free_delivery',
             'products.created_at', 'products.updated_at', 'order_history_products.product_id',
@@ -40,12 +40,12 @@ trait ProductScopes {
             $querySearch = filter_var($querySearch, FILTER_SANITIZE_STRING);
             array_push($whereClause, ['products.name', 'LIKE', "%$querySearch%",]);
         }
-        if(isset($min))
+        if(0 != $min)
         {
             $min = filter_var($min, FILTER_SANITIZE_NUMBER_FLOAT);
             array_push($whereClause, ['products.cost', '>', $min,]);
         }
-        if(isset($max))
+        if(0 != $max)
         {
             $max = filter_var($max, FILTER_SANITIZE_NUMBER_FLOAT);
             array_push($whereClause, ['products.cost', '<', $max,]);
