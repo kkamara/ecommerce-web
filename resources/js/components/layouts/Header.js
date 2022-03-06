@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
-import { useHistory } from 'react-router-dom' 
-import { makeStyles, } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
 import { APP_NAME, } from '../../utils/config'
 import { HOME, } from '../../utils/pageRoutes'
 import Switch from '../Switch'
@@ -77,6 +76,7 @@ export default function Header(props) {
                 dusk="search-products-in"
               />
               <button 
+                style={styles.search}
                 className="btn btn-outline-success my-2 my-sm-0" 
                 type="submit"
                 dusk="search-products-btn"
@@ -144,8 +144,8 @@ export default function Header(props) {
   )
 }
 
-const styles = makeStyles({
-  body: {
-
+const styles = {
+  search: {
+    margin: '0px auto',
   },
-})
+}
