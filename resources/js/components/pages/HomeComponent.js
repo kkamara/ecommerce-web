@@ -2,26 +2,43 @@ import React, { useEffect, Fragment, } from 'react'
 import { useHistory, Redirect, } from 'react-router-dom'
 import { useDispatch, useSelector, } from 'react-redux'
 import { getProducts, } from '../../redux/actions/productActions'
+import { getTheme, } from '../../redux/actions/themeActions'
 import ProductCard from './Product/ProductCard'
 import { ERROR, } from '../../utils/pageRoutes'
-import Pagination from '@mui/material/Pagination';
 import Loader from '../Loader'
+import Paginator from '../Paginator'
 
 export default function HomeComponent() {
   const history = useHistory()
   
   const dispatch = useDispatch()
-  const products = useSelector(state => state.products)
+  const state = useSelector(state => ({
+    products: state.products,
+    theme: state.theme,
+  }))
 
   const { 
     data, 
     error, 
     loading, 
-  } = products
+  } = state.products
 
   useEffect(() => {
     dispatch(getProducts())
+    dispatch(getTheme())
   }, [])
+
+  renderTheme()
+
+  function renderTheme() {
+    if ('dark' === state.theme.data) {    
+      document.body.style.backgroundColor = '#1a2027'
+      document.body.style.color = 'rgb(178, 186, 194)'
+    } else {
+      document.body.style.backgroundColor = '#fff'
+      document.body.style.color = '#000'
+    }
+  }
 
   if (loading) {
     return <Loader />
@@ -52,7 +69,7 @@ export default function HomeComponent() {
       </Fragment>
     )
   }
-  
+
   return (
     <>
       <div className={'container'}>
@@ -71,15 +88,11 @@ export default function HomeComponent() {
 
         <br/>
         
-        <div className="text-center">
-          <Pagination 
-            onChange={onPageChange}
-            page={data.meta.current_page}
-            count={data.meta.last_page} 
-            showFirstButton 
-            showLastButton
-          />
-        </div>
+        <Paginator
+          onChange={onPageChange}
+          page={data.meta.current_page}
+          count={data.meta.last_page} 
+        />
       </div>
     </>       
   )

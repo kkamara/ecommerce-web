@@ -1,17 +1,30 @@
-import React, { useEffect, useState, } from 'react'
+import React, { useEffect, } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { APP_NAME, } from '../../utils/config'
 import { HOME, } from '../../utils/pageRoutes'
 import Switch from '../Switch'
 import { url, } from '../../utils/config'
+import { setTheme, getTheme, } from '../../redux/actions/themeActions'
 
 export default function Header(props) {
   const history = useHistory()
-  const [theme, setTheme] = useState('')
   
-//   const dispatch = useDispatch()
-//   const authResponse = useSelector(state => state.auth)
+  const dispatch = useDispatch()
+  const state = useSelector(state => ({ theme: state.theme, }))
+  
+  useEffect(() => {
+    dispatch(getTheme())
+  }, [])
+  
+  // useEffect(() => {
+  //   if(authResponse !== "" && authResponse.success === true){
+  //       alert(authResponse.message)
+  //       localStorage.removeItem('user-token')
+  //       //history.push("/user/login")    
+  //   } 
+  //   return () => {}
+  // }, [authResponse])
 
   const logOut = () => {
     // dispatch(LogoutAction())
@@ -22,37 +35,31 @@ export default function Header(props) {
     history.push(url("/login"))
   }
 
-  const token = localStorage.getItem('user-token')
-  //console.log(token) 
-  
-  useEffect(() => {
-    const theme = localStorage.getItem('theme')
-    if (typeof theme !== 'object' && null !== theme) {
-      setTheme(theme)
-    }
-  })
-  
-
-  // useEffect(() => {
-  //   if(authResponse !== "" && authResponse.success === true){
-  //       alert(authResponse.message)
-  //       localStorage.removeItem('user-token')
-  //       //history.push("/user/login")    
-  //   } 
-  //   return () => {}
-  // }, [authResponse])
-
   function handleThemeToggle(event) {
     let theme = 'light'
     if (event.target.checked) {
       theme = 'dark'
     }
-    localStorage.setItem('theme', theme)
-    setTheme(theme)
+    dispatch(setTheme(theme))
+  }
+
+  function renderSwitch() {
+    let switchValue = false
+
+    if (null === state.theme.data) {
+      dispatch(getTheme())
+    }
+    if ('dark' === state.theme.data) {
+      switchValue = 'on'
+    }
+    return <Switch 
+      onChange={handleThemeToggle}
+      defaultChecked={switchValue}
+    />
   }
 
   return (
-    <nav className={`navbar navbar-expand-lg navbar-${theme} bg-${theme}`}>
+    <nav className={`navbar navbar-expand-lg navbar-${state.theme.data} bg-${state.theme.data}`}>
       <div className="container">
         <a className="navbar-brand" href={url(HOME)}>{APP_NAME}</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -149,12 +156,7 @@ export default function Header(props) {
               </a>
               </li>
               <li className="nav-item">
-              <span>
-                  <Switch 
-                    onChange={handleThemeToggle}
-                    defaultChecked={false}
-                  />
-              </span>
+              <span>{renderSwitch()}</span>
             </li>
           </ul>
         </div>
