@@ -133,7 +133,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    @if($permissionToReview)
+                    {{-- @if($permissionToReview) --}}
                         @include('layouts.errors')
 
                         <form action="{{ route('reviewCreate', $product->id) }}" method='POST'>
@@ -169,7 +169,7 @@
                                 />
                             </div>
                         </form>
-                    @endif
+                    {{-- @endif --}}
                 </div>
             </div>
         </div>

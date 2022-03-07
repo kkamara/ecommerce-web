@@ -16,8 +16,8 @@ ReactDOM.render(
   <React.StrictMode>
     <Helmet>
       <link 
-        rel="icon" 
-        type="image/png"
+        rel='icon' 
+        type='image/png'
         href={favicon}
       />
     </Helmet>
