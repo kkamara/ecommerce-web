@@ -1,18 +1,29 @@
-import React, { useState, useEffect, } from 'react'
+import React, { 
+  useState, 
+  useEffect, 
+  Fragment,
+} from 'react'
 import { url, } from '../../../utils/config'
 import Error from '../../Error'
 import Loader from '../../Loader'
+import moment from 'moment'
 
 export default function ProductComponent({ match }) {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false)
+  //   }, 2000)
+  // }, [])
 
   function handleCreateRating() {}
+
+  function formatReviewContent(content) {
+    return content.split('<br/>').map((text, index) => (
+      <Fragment key={index}>{text}<br/></Fragment>
+    ))
+  }
 
   if (loading) {
     return <Loader />
@@ -45,7 +56,7 @@ export default function ProductComponent({ match }) {
         id: 249,
         has_been_flagged_five_times: false,
         created_at: 1629921145000,
-        content: `Minim est sit officia magna nisi qui ea sit nulla. Amet nulla enim laboris sunt aliquip deserunt voluptate. Eu id ea adipisicing velit eu do dolor. Minim anim fugiat incididunt aliquip nostrud deserunt nisi ullamco nulla cillum incididunt laboris nostrud. Aliquip fugiat nostrud elit minim nulla amet laborum Lorem.\nDo labore anim fugiat sunt officia do. Esse sint veniam exercitation consectetur nulla id deserunt fugiat. Est minim consequat consequat mollit sunt mollit irure nisi minim et aliquip. Nostrud incididunt velit in minim magna est cillum ea irure ex amet id consequat esse. Minim aliqua proident nulla duis irure anim pariatur mollit enim sint. Est qui nostrud culpa anim reprehenderit ipsum velit eu. Cillum quis exercitation cillum culpa aliqua exercitation velit anim occaecat voluptate ad ex sint.\nNulla nulla dolor fugiat dolore eu eiusmod. Sunt mollit id consequat ullamco. Eu commodo Lorem cupidatat nulla aliquip. Aliquip minim cillum et magna tempor consectetur veniam adipisicing excepteur ex ullamco dolor in. Et qui est id pariatur minim ex labore qui cillum. Quis dolore nostrud duis ea qui tempor consectetur sint. Duis commodo occaecat consequat exercitation enim ut aute aliquip pariatur ipsum cillum et in.\nTempor nulla adipisicing culpa minim nulla ad magna aliquip pariatur duis. Nostrud fugiat incididunt laboris adipisicing ex proident sint quis sunt tempor do. Pariatur nostrud Lorem non elit.\nIpsum id duis tempor labore in est est proident dolor ipsum enim voluptate cillum. Sunt occaecat officia culpa exercitation nisi aliqua ad ea elit irure qui exercitation ut et. Excepteur sit nulla reprehenderit cupidatat Lorem nulla eu proident eu sint aliquip. Commodo fugiat proident esse deserunt enim eiusmod labore laboris qui aliquip mollit reprehenderit aliquip. Amet minim tempor eu cillum.`,
+        content: `Minim est sit officia magna nisi qui ea sit nulla. Amet nulla enim laboris sunt aliquip deserunt voluptate. Eu id ea adipisicing velit eu do dolor. Minim anim fugiat incididunt aliquip nostrud deserunt nisi ullamco nulla cillum incididunt laboris nostrud. Aliquip fugiat nostrud elit minim nulla amet laborum Lorem.<br/>Do labore anim fugiat sunt officia do. Esse sint veniam exercitation consectetur nulla id deserunt fugiat. Est minim consequat consequat mollit sunt mollit irure nisi minim et aliquip. Nostrud incididunt velit in minim magna est cillum ea irure ex amet id consequat esse. Minim aliqua proident nulla duis irure anim pariatur mollit enim sint. Est qui nostrud culpa anim reprehenderit ipsum velit eu. Cillum quis exercitation cillum culpa aliqua exercitation velit anim occaecat voluptate ad ex sint.<br/>Nulla nulla dolor fugiat dolore eu eiusmod. Sunt mollit id consequat ullamco. Eu commodo Lorem cupidatat nulla aliquip. Aliquip minim cillum et magna tempor consectetur veniam adipisicing excepteur ex ullamco dolor in. Et qui est id pariatur minim ex labore qui cillum. Quis dolore nostrud duis ea qui tempor consectetur sint. Duis commodo occaecat consequat exercitation enim ut aute aliquip pariatur ipsum cillum et in.<br/>Tempor nulla adipisicing culpa minim nulla ad magna aliquip pariatur duis. Nostrud fugiat incididunt laboris adipisicing ex proident sint quis sunt tempor do. Pariatur nostrud Lorem non elit.<br/>Ipsum id duis tempor labore in est est proident dolor ipsum enim voluptate cillum. Sunt occaecat officia culpa exercitation nisi aliqua ad ea elit irure qui exercitation ut et. Excepteur sit nulla reprehenderit cupidatat Lorem nulla eu proident eu sint aliquip. Commodo fugiat proident esse deserunt enim eiusmod labore laboris qui aliquip mollit reprehenderit aliquip. Amet minim tempor eu cillum.`,
         user: {
           made_by_user_logged_in: true,
         },
@@ -89,14 +100,14 @@ export default function ProductComponent({ match }) {
                     null}
                 </div>
                 <div className='float-right'>
-                  Posted { review.created_at }
+                  Posted { moment(review.created_at).format('YYYY-MM-DD hh:mm') }
                 </div>
 
                 <br/>
                 <br/>
 
                 <p>
-                  { review.content }
+                  { formatReviewContent(review.content) }
                 </p>
 
               </div>
@@ -104,7 +115,7 @@ export default function ProductComponent({ match }) {
             <div className='card-footer'>
               <a
                 onChange={() => {}}
-                className='pull-right btn btn-sm btn-default'
+                className='float-right btn btn-sm btn-default'
               >
                 <small>Flag this review</small>
               </a>
@@ -167,8 +178,8 @@ export default function ProductComponent({ match }) {
               null}
             </li>
             <li className='list-group-item'>
-              {product.user.is_logged_in && product.user._is_product_owner ?
-                <>
+              {/* {product.user.is_logged_in && product.user._is_product_owner ?
+                <> */}
                   <a 
                     dusk='edit-btn'
                     href={url(`company/${product.user.company.id}/product/${product.id}]`)}
@@ -183,8 +194,8 @@ export default function ProductComponent({ match }) {
                   >
                     Delete item
                   </a>
-                </> :
-                <>
+                {/* </> :
+                <> */}
                   <a 
                     dusk='add-to-cart-btn'
                     className='btn btn-primary btn-sm'
@@ -192,7 +203,7 @@ export default function ProductComponent({ match }) {
                   >
                     Add to cart
                   </a>
-                </>}
+                {/* </>} */}
             </li>
           </ul>
         </div>
