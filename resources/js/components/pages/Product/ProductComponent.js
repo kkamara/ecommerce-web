@@ -77,7 +77,7 @@ export default function ProductComponent({ match }) {
   function getProductReviews() {
     return product.reviews.map((review, key) => (
       <div key={key} className='card'>
-        {review.has_been_flagged_five_times ? 
+        {false === review.has_been_flagged_five_times ? 
           <>
             <div className='card-body'>
               <div className='card-text'>
