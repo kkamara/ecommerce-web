@@ -49,7 +49,7 @@ export default function ProductComponent({ match }) {
       has_permission_to_review: true,
       company: {
         id: 496,
-        slug: 'Kessler, Windler and Hessel',
+        slug: 'kessler-windler-and-hessel',
       },
     },
     review: '2.33',
@@ -131,14 +131,17 @@ export default function ProductComponent({ match }) {
   }
 
   return (
-    <div className='container' id='product'>
+    <div className='container product'>
       <div className='row'>
         <div className='col-md-9'>
           <table className='table table-striped'>
             <tbody>
               <tr className='text-center'>
                 <th scope='row' colSpan='2'>
-                  <img src={product.image_path} className='img-responsive'/>
+                  <img 
+                    src={product.image_path} 
+                    className='img-responsive product-image'
+                  />
                   <h4 dusk='product-name'>
                     { product.name }
                   </h4>
@@ -215,7 +218,7 @@ export default function ProductComponent({ match }) {
           <div className='card'>
             <div className='card-header'>
               <div className='lead'>
-                Reviews {product.review !== '0.00' ? `(Average  ${ product.review })` : null}
+                Reviews {product.review !== '£0.00' ? `(Average  ${ product.review })` : null}
               </div>
             </div>
             <div className='card-body'>
