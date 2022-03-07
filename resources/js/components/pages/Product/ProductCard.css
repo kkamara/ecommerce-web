@@ -1,0 +1,9 @@
+.product-container {
+  background-color: 'yellow';
+}
+
+@media screen and (max-width: 650px) {
+  .product-container {
+    margin-left: 17%;
+  }
+}
