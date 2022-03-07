@@ -11,13 +11,13 @@ import moment from 'moment'
 import './ProductComponent.css'
 
 export default function ProductComponent({ match }) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false)
-  //   }, 2000)
-  // }, [])
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
 
   function handleCreateRating() {}
 
