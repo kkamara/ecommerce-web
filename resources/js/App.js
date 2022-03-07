@@ -1,12 +1,12 @@
 import React from 'react'
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
-import Routes from "./Routes"
+import Routes from './Routes'
 
 function App() {
   return (
    <BrowserRouter>
-      <div className="App">
+      <div className='App'>
         <Routes/>
       </div>
    </BrowserRouter>

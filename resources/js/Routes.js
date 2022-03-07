@@ -11,7 +11,8 @@ import { Guard } from './Guard'
 import Header from './components/layouts/Header'
 import Footer from './components/layouts/Footer'
 
-import Home from "./components/pages/HomeComponent"
+import Home from './components/pages/HomeComponent'
+import Product from './components/pages/Product/ProductComponent'
 
 import { url } from './utils/config'
 
@@ -20,13 +21,14 @@ function Routes(){
     <>
       <Header/>
       <Switch>
-        <Route path={url("/")} component={Home}/>  
+        <Route path={url('/products/:productSlug')} component={Product}/>  
+        <Route path={url('/')} component={Home}/>  
 
         {/*Redirect if not authenticated */} 
         {/* <Guard 
-            path={url("/user" )}
-            token="user-token" 
-            routeRedirect={url("/user/login" )}
+            path={url('/user' )}
+            token='user-token' 
+            routeRedirect={url('/user/login' )}
             component={PrivateRoute}
         /> */}
       </Switch>

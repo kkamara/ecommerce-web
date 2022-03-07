@@ -6,10 +6,14 @@ import './Loader.css'
 
 export default function Loader() {
   return (
-    <img 
-      className='loader'
-      src={splash} 
-      alt='Loading'
-    />
+    <div className='container' id='app'>
+      <div className="text-center">
+        <img 
+          className='loader'
+          src={splash} 
+          alt='Loading'
+        />
+      </div>
+    </div>
   )
 }

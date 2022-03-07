@@ -1,6 +1,6 @@
 import React, { useEffect, } from 'react'
 import Pagination from '@mui/material/Pagination'
-import { makeStyles, } from "@material-ui/core"
+import { makeStyles, } from '@material-ui/core'
 import { useDispatch, useSelector, } from 'react-redux'
 import { getTheme, } from '../redux/actions/themeActions'
 
@@ -22,7 +22,7 @@ export default function Paginator({
     return (
       <Pagination 
         classes={classes}
-        color="secondary"
+        color='secondary'
         onChange={onChange}
         page={page}
         count={count} 
@@ -45,8 +45,8 @@ export default function Paginator({
 
 const useStyles = makeStyles(() => ({
   ul: {
-    "& .MuiPaginationItem-root": {
-      color: "yellow"
+    '& .MuiPaginationItem-root': {
+      color: 'yellow'
     }
   },
 }));

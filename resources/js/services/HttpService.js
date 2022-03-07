@@ -2,8 +2,8 @@ import React from 'react'
 
 export default class HttpService
 {
-    url = "https://cartcommerce.herokuapp.com/api"
-    // url = "http://localhost:80/api"
+    url = 'https://cartcommerce.herokuapp.com/api'
+    // url = 'http://localhost:80/api'
 
     postData = async (item, added_url, tokenId) => {
         let requestOptions = this.postRequestOptions({ item, })
@@ -12,7 +12,7 @@ export default class HttpService
             requestOptions = this.postRequestOptions({ token, item, })
         }
 
-        return fetch(this.url+"/"+added_url,requestOptions).then(
+        return fetch(this.url+'/'+added_url,requestOptions).then(
             response=>response.json()
         )
     }
@@ -24,7 +24,7 @@ export default class HttpService
             requestOptions = this.getRequestOptions(token)
         }
 
-        return fetch(this.url+"/"+added_url,requestOptions).then(
+        return fetch(this.url+'/'+added_url,requestOptions).then(
             response=>response.json()
         )
     }

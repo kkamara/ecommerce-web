@@ -61,8 +61,8 @@ export default function ProductCard({ product, index, }) {
     <Link dusk={`product-${index}`} to={url(PRODUCT.replace(':slug', slug))}>
       <Card sx={styles.product}>
         <CardMedia
-          component="img"
-          height="194"
+          component='img'
+          height='194'
           image={image_path}
           alt={name}
         />
@@ -79,7 +79,7 @@ export default function ProductCard({ product, index, }) {
         <CardContent>
           <Typography 
             className='text-right' 
-            variant="body1" 
+            variant='body1' 
             sx={{ color: styles.cost, }}
           >
             {formatted_cost}
@@ -88,11 +88,11 @@ export default function ProductCard({ product, index, }) {
         <CardActions style={styles.cardActions} disableSpacing>
           <Typography 
             sx={{ color: styles.review, }}
-            variant="body1" 
-            color="CaptionText">
+            variant='body1' 
+            color='CaptionText'>
             {'0.00' !== review ? `Rated ${review}` : null}
           </Typography>
-          <IconButton variant="contained" aria-label="add to card">
+          <IconButton variant='contained' aria-label='add to card'>
             <AddShoppingCartIcon sx={{ color: styles.cartIcon.color }}/>
           </IconButton>
         </CardActions>
