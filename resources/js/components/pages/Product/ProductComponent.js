@@ -131,14 +131,17 @@ export default function ProductComponent({ match }) {
   }
 
   return (
-    <div className='container' id='product'>
+    <div className='container product'>
       <div className='row'>
         <div className='col-md-9'>
           <table className='table table-striped'>
             <tbody>
               <tr className='text-center'>
                 <th scope='row' colSpan='2'>
-                  <img src={product.image_path} className='img-responsive'/>
+                  <img 
+                    src={product.image_path} 
+                    className='img-responsive product-image'
+                  />
                   <h4 dusk='product-name'>
                     { product.name }
                   </h4>
