@@ -8,6 +8,8 @@ import Error from '../../Error'
 import Loader from '../../Loader'
 import moment from 'moment'
 
+import './ProductComponent.css'
+
 export default function ProductComponent({ match }) {
   const [loading, setLoading] = useState(false)
 
@@ -129,7 +131,7 @@ export default function ProductComponent({ match }) {
   }
 
   return (
-    <div className='container' id='app'>
+    <div className='container' id='product'>
       <div className='row'>
         <div className='col-md-9'>
           <table className='table table-striped'>

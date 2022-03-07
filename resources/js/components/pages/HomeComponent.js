@@ -72,7 +72,7 @@ export default function HomeComponent() {
 
   return (
     <>
-      <div className={'container'} id='app'>
+      <div className={'container'} id='home'>
         <br />
         <div className='text-left'>
           <div><strong>Page:</strong> {data.meta.current_page}</div>
