@@ -14,6 +14,8 @@ import { url, } from '../../../utils/config'
 import { useDispatch, useSelector, } from 'react-redux'
 import { getTheme, } from '../../../redux/actions/themeActions'
 
+import './ProductCard.css'
+
 export default function ProductCard({ product, index, }) {  
   const dispatch = useDispatch()
   const state = useSelector(state => ({ theme: state.theme, }))
@@ -54,11 +56,14 @@ export default function ProductCard({ product, index, }) {
     company,
     review,
     image_path,
-    short_description,
   } = product
   
   return (
-    <Link dusk={`product-${index}`} to={url(PRODUCT.replace(':slug', slug))}>
+    <Link 
+      className='product-container'
+      dusk={`product-${index}`} 
+      to={url(PRODUCT.replace(':slug', slug))}
+    >
       <Card sx={styles.product}>
         <CardMedia
           component='img'

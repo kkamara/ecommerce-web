@@ -101,7 +101,6 @@ export default function Header(props) {
                 dusk='search-products-in'
               />
               <button 
-                style={styles.search}
                 className='btn btn-outline-success my-2 my-sm-0' 
                 type='submit'
                 dusk='search-products-btn'
@@ -165,8 +164,4 @@ export default function Header(props) {
   )
 }
 
-const styles = {
-  search: {
-    margin: '0px auto',
-  },
-}
+const styles = {}
