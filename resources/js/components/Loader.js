@@ -1,6 +1,6 @@
 import React from 'react'
 
-import splash from '../assets/splash.jpg'
+import splash from '../assets/splash.min.jpg'
 
 import './Loader.css'
 
