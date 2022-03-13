@@ -1,12 +1,8 @@
-App link at https://cartcommerce.herokuapp.com/
-
-Follow task [Add reactjs with new theme (#67)](https://github.com/kkamara/ecommerce/issues/67) at https://cartcommerce.herokuapp.com/v4
-
 ![ecommerce.gif](https://raw.githubusercontent.com/kkamara/ecommerce/develop/public/ecommerce.gif)
 
-# ecommerce
+# ecommerce-web
 
-Extensive ecommerce site built with ability to add to cart without being logged in. Upgraded to Laravel 8.x 
+Extensive ecommerce site built with ability to add to cart without being logged in. Upgraded to Laravel 9.x 
 
 ## To run locally
 
@@ -24,6 +20,10 @@ vendor/bin/sail dusk
 ```
 
 View browser test code: [/tree/develop/tests/Browser](https://github.com/kkamara/ecommerce/tree/develop/tests/Browser)
+
+## Follow version 4
+
+[Add reactjs with new theme (#67)](https://github.com/kkamara/ecommerce/issues/67) at https://cartcommerce.herokuapp.com/v4
 
 ## Api Documentation
 
