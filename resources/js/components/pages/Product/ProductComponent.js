@@ -40,7 +40,7 @@ export default function ProductComponent({ match }) {
     long_description: 'Dolore laboris fugiat laborum ex quis irure velit officia.',
     product_details: 'Irure irure exercitation velit consequat labore.',
     formatted_cost: '£2.69',
-    image_path: 'https://www.backmarket.co.uk/cdn-cgi/image/format=auto,quality=75,width=640/https://d1eh9yux7w8iql.cloudfront.net/product_images/None_6ca6aa3e-b703-49da-b392-bf30944fae79.jpg',
+    image_path: '/image/products/default/not-found.jpg',
     shippable: true,
     free_delivery: true,
     user: {
