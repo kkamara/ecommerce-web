@@ -1,4 +1,4 @@
-import React, { useEffect, } from 'react'
+import React, { useEffect, useState, } from 'react'
 import { useDispatch, useSelector, } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { APP_NAME, } from '../../utils/config'
@@ -12,11 +12,16 @@ export default function Header(props) {
   
   const dispatch = useDispatch()
   const state = useSelector(state => ({ theme: state.theme, }))
+  const [switchValue, setSwitchValue] = useState(false)
   
   useEffect(() => {
     dispatch(getTheme())
   }, [])
-  
+
+  useEffect(() => {
+    renderSwitch()
+  }, [state.theme.data])
+
   // useEffect(() => {
   //   if(authResponse !== '' && authResponse.success === true){
   //       alert(authResponse.message)
@@ -44,18 +49,14 @@ export default function Header(props) {
   }
 
   function renderSwitch() {
-    let switchValue = false
-
-    if (null === state.theme.data) {
-      dispatch(getTheme())
+    if (
+      'dark' === state.theme.data && 
+      switchValue !== 'on'
+    ) {
+      setSwitchValue(true)
+    } else if (switchValue !== false) {
+      setSwitchValue(false)
     }
-    if ('dark' === state.theme.data) {
-      switchValue = 'on'
-    }
-    return <Switch 
-      onChange={handleThemeToggle}
-      defaultChecked={switchValue}
-    />
   }
 
   return (
@@ -155,7 +156,12 @@ export default function Header(props) {
               </a>
               </li>
               <li className='nav-item'>
-              <span>{renderSwitch()}</span>
+              <span>
+                <Switch 
+                  onChange={handleThemeToggle}
+                  checked={switchValue}
+                />  
+              </span>
             </li>
           </ul>
         </div>
@@ -163,5 +169,3 @@ export default function Header(props) {
     </nav>
   )
 }
-
-const styles = {}
