@@ -7,6 +7,7 @@ import { url, } from '../../../utils/config'
 import Error from '../../Error'
 import Loader from '../../Loader'
 import moment from 'moment'
+import tinycron from 'tinycron'
 
 import './ProductComponent.css'
 
@@ -102,7 +103,8 @@ export default function ProductComponent({ match }) {
                     null}
                 </div>
                 <div className='float-right'>
-                  Posted { moment(review.created_at).format('YYYY-MM-DD hh:mm') }
+                  Posted { (new tinycron(moment(review.created_at).toDate())).toNow().toLowerCase() }&nbsp;
+                  ({moment(review.created_at).format('Y-MM-DD H:m')})
                 </div>
 
                 <br/>
