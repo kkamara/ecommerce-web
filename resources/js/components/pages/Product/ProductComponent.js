@@ -10,15 +10,16 @@ import moment from 'moment'
 import tinycron from 'tinycron'
 
 import './ProductComponent.css'
+import EditProduct from './EditProduct'
 
 export default function ProductComponent({ match }) {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false)
+  //   }, 2000)
+  // }, [])
 
   function handleCreateRating() {}
 
@@ -32,7 +33,6 @@ export default function ProductComponent({ match }) {
     return <Loader />
   }
 
-  console.log('params', match.params)
   const product = {
     id: 939,
     name: 'Aute sint ullamco nulla voluptate irure.',
@@ -136,7 +136,7 @@ export default function ProductComponent({ match }) {
     <div className='container product'>
       <div className='row'>
         <div className='col-md-9'>
-          <table className='table table-striped'>
+          <table className='table-light'>
             <tbody>
               <tr className='text-center'>
                 <th scope='row' colSpan='2'>
@@ -187,13 +187,7 @@ export default function ProductComponent({ match }) {
             <li className='list-group-item'>
               {/* {product.user.is_logged_in && product.user._is_product_owner ?
                 <> */}
-                  <a 
-                    dusk='edit-btn'
-                    href={url(`company/${product.user.company.id}/product/${product.id}]`)}
-                    className='btn btn-warning btn-sm pull-left'
-                  >
-                    Edit item
-                  </a>
+                  <EditProduct product={product}/>
                   <a 
                     dusk='delete-btn'
                     href={url(`company/${product.user.company.slug}/product/${product.slug}]`)}
