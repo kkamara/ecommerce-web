@@ -3,23 +3,25 @@ import React, {
   useEffect, 
   Fragment,
 } from 'react'
+import moment from 'moment'
+import tinycron from 'tinycron'
+import { useSelector, } from 'react-redux'
 import { url, } from '../../../utils/config'
 import Error from '../../Error'
 import Loader from '../../Loader'
-import moment from 'moment'
-import tinycron from 'tinycron'
 
 import './ProductComponent.css'
 import EditProduct from './EditProduct'
 
 export default function ProductComponent({ match }) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const theme = useSelector(state => state.theme)
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false)
-  //   }, 2000)
-  // }, [])
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
 
   function handleCreateRating() {}
 
@@ -136,7 +138,7 @@ export default function ProductComponent({ match }) {
     <div className='container product'>
       <div className='row'>
         <div className='col-md-9'>
-          <table className='table-light'>
+          <table className={theme.data === 'light' ? 'table-light' : 'table-dark'}>
             <tbody>
               <tr className='text-center'>
                 <th scope='row' colSpan='2'>
