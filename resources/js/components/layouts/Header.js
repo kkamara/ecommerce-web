@@ -70,7 +70,15 @@ export default function Header(props) {
             }
           `}</style>
         </Helmet>
-      ) : null}
+      ) : (
+        <Helmet>
+          <style type="text/css">{`
+            body {
+              background-color: #fff !important;
+            }
+          `}</style>
+        </Helmet>
+      )}
       <nav className={`navbar navbar-expand-lg navbar-${state.theme.data} bg-${state.theme.data}`}>
         <div className='container'>
           <a className='navbar-brand' href={url(HOME)}>{APP_NAME}</a>
