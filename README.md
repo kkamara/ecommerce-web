@@ -1,4 +1,4 @@
-![ecommerce.gif](https://raw.githubusercontent.com/kkamara/ecommerce/develop/public/ecommerce.gif)
+![v4-ecommerce.png](https://raw.githubusercontent.com/kkamara/ecommerce/develop/public/v4-ecommerce.png)
 
 # ecommerce-web
 
