@@ -13,13 +13,13 @@ import Card from '../../layouts/Card'
 import ProductReviews from './ProductReviews'
 
 export default function ProductComponent({ match }) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const theme = useSelector(state => state.theme)
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   setLoading(false)
-    // }, 2000)
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
   }, [])
 
   let styles
