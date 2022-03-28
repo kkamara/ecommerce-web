@@ -1,35 +1,38 @@
-import React, { 
-  useState, 
-  useEffect, 
-  Fragment,
-} from 'react'
-import moment from 'moment'
-import tinycron from 'tinycron'
+import React, { useState, useEffect, } from 'react'
 import { useSelector, } from 'react-redux'
-import { url, } from '../../../utils/config'
-import Error from '../../Error'
+import CardActions from '@mui/material/CardActions'
+import Typography from '@mui/material/Typography'
 import Loader from '../../Loader'
 
+import { capitalize, } from '../../../utils/config'
 import './ProductComponent.css'
 import EditProduct from './EditProduct'
 import DeleteProduct from './DeleteProduct'
+import AddToCart from './AddToCart'
+import Card from '../../layouts/Card'
+import ProductReviews from './ProductReviews'
 
 export default function ProductComponent({ match }) {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const theme = useSelector(state => state.theme)
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
+    // setTimeout(() => {
+    //   setLoading(false)
+    // }, 2000)
   }, [])
 
-  function handleCreateRating() {}
-
-  function formatReviewContent(content) {
-    return content.split('<br/>').map((text, index) => (
-      <Fragment key={index}>{text}<br/></Fragment>
-    ))
+  let styles
+  
+  switch (theme.data) {
+    case 'light':
+      styles = {...lightStyles}
+      break
+    case 'dark':
+      styles = {...darkStyles}
+      break
+    default:
+      return null
   }
 
   if (loading) {
@@ -38,7 +41,7 @@ export default function ProductComponent({ match }) {
 
   const product = {
     id: 939,
-    name: 'Aute sint ullamco nulla voluptate irure.',
+    name: capitalize('Aute sint ullamco nulla voluptate'),
     short_description: 'Minim reprehenderit anim laboris occaecat laborum deserunt quis elit do ex.',
     long_description: 'Dolore laboris fugiat laborum ex quis irure velit officia.',
     product_details: 'Irure irure exercitation velit consequat labore.',
@@ -91,69 +94,24 @@ export default function ProductComponent({ match }) {
     ],
   }
 
-  function getProductReviews() {
-    return product.reviews.map((review, key) => (
-      <div key={key} className='card'>
-        {false === review.has_been_flagged_five_times ? 
-          <>
-            <div className='card-body'>
-              <div className='card-text'>
-                <div className='float-left'>
-                  Product Rated { review.score } / 5
-                  {product.user.is_logged_in && 
-                    product.user.id === review.user.id ?
-                    `by <strong>you</strong>` :
-                    null}
-                </div>
-                <div className='float-right'>
-                  Posted { (new tinycron(moment(review.created_at).toDate())).toNow().toLowerCase() }&nbsp;
-                  ({moment(review.created_at).format('Y-MM-DD H:m')})
-                </div>
-
-                <br/>
-                <br/>
-
-                <p>
-                  { formatReviewContent(review.content) }
-                </p>
-
-              </div>
-            </div>
-            <div className='card-footer'>
-              <a
-                onChange={() => {}}
-                className='float-right btn btn-sm btn-default'
-              >
-                <small>Flag this review</small>
-              </a>
-            </div> 
-          </> :
-          <div className='card-body'>
-            <small>This comment is currently under review.</small>
-          </div>}
-      </div>
-    ))
-  }
-
   return (
-    <div className='container product'>
+    <div className='container product' style={styles.container}>
       <div className='row'>
         <div className='col-md-9'>
           <table className={theme.data === 'light' ? 'table-light' : 'table-dark'}>
             <tbody>
               <tr className='text-center'>
-                <th scope='row' colSpan='2'>
+                <th scope='row' colSpan='3'>
                   <img 
                     src={product.image_path} 
                     className='img-responsive product-image'
                   />
-                  <h4 dusk='product-name'>
-                    { product.name }
-                  </h4>
+                  <Typography dusk='product-name' variant='h4'>{product.name}</Typography>
                 </th>
               </tr>
               <tr>
                 <td scope='row'>Description</td>
+                <td width={150}></td>
                 <td>
                   { product.short_description }
                   <br/>
@@ -163,6 +121,7 @@ export default function ProductComponent({ match }) {
               </tr>
               <tr>
                 <td scope='row'>Product Details</td>
+                <td width={150}></td>
                 <td>
                 { product.product_details }
                 </td>
@@ -172,98 +131,47 @@ export default function ProductComponent({ match }) {
         </div>
 
         <div className='col-md-3'>
-          <ul className='list-group'>
-            <li className='list-group-item'>
-            <h3>
-              { product.formatted_cost }
-            </h3>
-            <small>
+          <Card>            
+            <Typography variant='h3'>{product.formatted_cost}</Typography>
+            <br />
+            <Typography variant='subtitle1'>
               {product.shippable ?
                 'This item is shippable' :
                 'This item is <strong>not</strong> shippable'}
-            </small>
-            <br/>
+            </Typography>
             {product.free_delivery ?
-              <small>Free Delivery</small> :
+              <Typography variant='subtitle1'>Free Delivery</Typography> :
               null}
-            </li>
-            <li className='list-group-item'>
-              {/* {product.user.is_logged_in && product.user._is_product_owner ?
-                <> */}
-                  <EditProduct product={product}/>
-                  <DeleteProduct product={product}/>
-                {/* </> :
-                <> */}
-                  <a 
-                    dusk='add-to-cart-btn'
-                    className='btn btn-primary btn-sm'
-                    onChange={() => {}}
-                  >
-                    Add to cart
-                  </a>
-                {/* </>} */}
-            </li>
-          </ul>
+            <br/>
+            <hr />
+            <CardActions style={styles.cardActions} disableSpacing>
+              <div className='d-flex align-items-end"'>
+                <AddToCart product={product}/>
+              </div>
+              <div className='d-flex align-items-end"'>
+                <EditProduct product={product}/>
+                <DeleteProduct product={product}/>
+              </div>
+            </CardActions>
+          </Card>
         </div>
       </div>
+      <br />
       <div className='row'>
         <div className='col-md-12'>
-          <div className='card'>
-            <div className='card-header'>
-              <div className='lead'>
-                Reviews {product.review !== '£0.00' ? `(Average  ${ product.review })` : null}
-              </div>
-            </div>
-            <div className='card-body'>
-              <div className='card-text'>
-                {product.reviews.length ?
-                  getProductReviews() :
-                  'No reviews for this product.'}
-              </div>
-            </div>
-            <div className='card-footer'>
-              {product.user.has_permission_to_review ?
-                <>
-                  <Error message='Missing rating' />
-                  <br />
-                  <form onSubmit={handleCreateRating}>
-                    <div className='form-group float-left'>
-                      <label>
-                        <select dusk='rating' name='rating' className='form-control'>
-                          <option value=''>Choose a rating</option>
-                          <option value='0'>0</option>
-                          <option value='1'>1</option>
-                          <option value='2'>2</option>
-                          <option value='3'>3</option>
-                          <option value='4'>4</option>
-                          <option value='5'>5</option>
-                        </select>
-                      </label>
-                    </div>
-
-                    <div className='form-group'>
-                      <textarea 
-                        dusk='content'
-                        className='form-control' 
-                        name='content' 
-                        type='text' 
-                        placeholder='Your review...'></textarea>
-                    </div>
-
-                    <div className='form-group float-right'>
-                      <input 
-                        dusk='submit-btn'
-                        type='submit' 
-                        className='form-group btn btn-primary'
-                      />
-                    </div>
-                  </form>
-                </> : 
-                null}
-            </div>
-          </div>
+          <ProductReviews product={product}/>
         </div>
       </div>
     </div>
   )
+}
+
+const lightStyles = {
+  container: null,
+}
+
+const darkStyles = {
+  container: {
+    backgroundColor: 'rgb(52 58 64)',
+  },
 }

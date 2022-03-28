@@ -2,7 +2,10 @@ import React, { useState, } from 'react'
 import { useSelector, } from 'react-redux'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
+import EditIcon from '@mui/icons-material/Edit'
+import IconButton from '@mui/material/IconButton'
 import RightDrawer from '../../layouts/RightDrawer'
+import { iconStyles, } from '../../../theme'
 
 export default function EditProduct({ product, }) {  
   const [open, setOpen] = useState(false)
@@ -23,13 +26,14 @@ export default function EditProduct({ product, }) {
   
   return (
     <>
-      <a 
+      <IconButton 
         dusk='edit-btn'
         onClick={() => setOpen(true)}
-        className='btn btn-warning btn-sm pull-left'
+        variant='contained' 
+        aria-label='edit icon'
       >
-        Edit item
-      </a>
+        <EditIcon color='warning' sx={iconStyles}/>
+      </IconButton>
       <RightDrawer open={open} onClose={() => setOpen(false)}
       >
         <ListItem 

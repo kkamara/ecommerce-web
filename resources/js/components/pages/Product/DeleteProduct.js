@@ -2,7 +2,10 @@ import React, { useState, } from 'react'
 import { useSelector, } from 'react-redux'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
+import DeleteIcon from '@mui/icons-material/Delete'
 import RightDrawer from '../../layouts/RightDrawer'
+import IconButton from '@mui/material/IconButton'
+import { iconStyles, } from '../../../theme'
 
 export default function DeleteProduct({ product, }) {  
   const [open, setOpen] = useState(false)
@@ -23,13 +26,14 @@ export default function DeleteProduct({ product, }) {
   
   return (
     <>
-      <a 
+      <IconButton 
         dusk='delete-btn'
         onClick={() => setOpen(true)}
-        className='btn btn-danger btn-sm pull-right'
+        variant='contained' 
+        aria-label='delete icon'
       >
-        Delete item
-      </a>
+        <DeleteIcon color='error' sx={[iconStyles, styles.delIcon]}/>
+      </IconButton>
       <RightDrawer open={open} onClose={() => setOpen(false)}
       >
         <ListItem 

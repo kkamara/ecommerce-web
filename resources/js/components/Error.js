@@ -6,7 +6,14 @@ export default function Error({ message, }) {
     variant="outlined" 
     severity="error"
     onClose={() => {}}
+    style={styles.container}
   >
     {message}
   </Alert>
+}
+
+const styles = {
+  container: {
+    fontSize: 18,
+  },
 }
