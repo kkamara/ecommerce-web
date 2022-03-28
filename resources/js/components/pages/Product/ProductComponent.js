@@ -12,6 +12,7 @@ import Loader from '../../Loader'
 
 import './ProductComponent.css'
 import EditProduct from './EditProduct'
+import DeleteProduct from './DeleteProduct'
 
 export default function ProductComponent({ match }) {
   const [loading, setLoading] = useState(true)
@@ -190,13 +191,7 @@ export default function ProductComponent({ match }) {
               {/* {product.user.is_logged_in && product.user._is_product_owner ?
                 <> */}
                   <EditProduct product={product}/>
-                  <a 
-                    dusk='delete-btn'
-                    href={url(`company/${product.user.company.slug}/product/${product.slug}]`)}
-                    className='btn btn-danger btn-sm pull-right'
-                  >
-                    Delete item
-                  </a>
+                  <DeleteProduct product={product}/>
                 {/* </> :
                 <> */}
                   <a 

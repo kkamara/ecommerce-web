@@ -4,7 +4,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import RightDrawer from '../../layouts/RightDrawer'
 
-export default function EditProduct({ product, }) {  
+export default function DeleteProduct({ product, }) {  
   const [open, setOpen] = useState(false)
   const theme = useSelector(state => state.theme)
 
@@ -24,11 +24,11 @@ export default function EditProduct({ product, }) {
   return (
     <>
       <a 
-        dusk='edit-btn'
+        dusk='delete-btn'
         onClick={() => setOpen(true)}
-        className='btn btn-warning btn-sm pull-left'
+        className='btn btn-danger btn-sm pull-right'
       >
-        Edit item
+        Delete item
       </a>
       <RightDrawer open={open} onClose={() => setOpen(false)}
       >
