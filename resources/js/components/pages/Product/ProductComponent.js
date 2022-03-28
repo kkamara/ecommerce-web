@@ -167,11 +167,14 @@ export default function ProductComponent({ match }) {
 }
 
 const lightStyles = {
-  container: null,
+  container: {
+    color: '#000',
+  },
 }
 
 const darkStyles = {
   container: {
     backgroundColor: 'rgb(52 58 64)',
+    color: '#fff',
   },
 }
