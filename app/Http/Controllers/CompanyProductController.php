@@ -160,7 +160,8 @@ class CompanyProductController extends Controller
         if(
             false === $this->user->hasRole('vendor') || 
             null === $this->company || 
-            false === $this->company->belongsToUser($this->user->id)
+            false === $this->company->belongsToUser($this->user->id) ||
+            !$product->doesUserOwnProduct()
         ) {
             return abort(404);
         }
@@ -188,7 +189,8 @@ class CompanyProductController extends Controller
         if(
             false === $this->user->hasRole('vendor') || 
             null === $this->company ||
-            false === $this->company->belongsToUser($this->user->id)
+            false === $this->company->belongsToUser($this->user->id) ||
+            !$product->doesUserOwnProduct()
         ) {
             return abort(404);
         }
@@ -244,7 +246,8 @@ class CompanyProductController extends Controller
         if(
             false === $this->user->hasRole('vendor') || 
             null === $this->company || 
-            false === $this->company->belongsToUser($this->user->id)
+            false === $this->company->belongsToUser($this->user->id) ||
+            !$product->doesUserOwnProduct()
         ) {
             return abort(404);
         }
