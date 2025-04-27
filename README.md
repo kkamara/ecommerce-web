@@ -2,7 +2,32 @@
 
 # ecommerce-web
 
-Extensive ecommerce site built with ability to add to cart without being logged in. Upgraded to Laravel 9.x 
+Extensive ecommerce site built with ability to add to cart without being logged in. Upgraded to Laravel 9.x.
+
+* [Using Postman?](#postman)
+
+* [To run locally](#to-run-locally)
+
+* [To run browser tests](#to-run-browser-tests)
+
+* [Follow version 4](#follow-version-4)
+
+* [Api Documentation](#api-documentation)
+
+* [Misc](#misc)
+
+* [Contributing](#contributing)
+
+* [License](#license)
+
+<a name="postman"></a>
+## Using Postman?
+
+[Get Postman HTTP client](https://www.postman.com).
+
+[Postman API Collection for Ecommerce Web](https://github.com/kkamara/ecommerce-web/blob/main/database/ecommerce.postman_collection.json).
+
+[Postman API Environment for Ecommerce Web](https://github.com/kkamara/ecommerce-web/blob/main/database/ecommerce.postman_environment.json).
 
 ## To run locally
 
