@@ -2,7 +2,7 @@
 
 # ecommerce-web
 
-(2018) Extensive ecommerce site built with ability to add to cart without being logged in. Upgraded to Laravel 9.x.
+(13-May-2018) Extensive ecommerce site built with ability to add to cart without being logged in. Upgraded to Laravel 9.x.
 
 * [Using Postman?](#postman)
 
